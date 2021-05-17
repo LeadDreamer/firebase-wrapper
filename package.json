@@ -15,24 +15,13 @@
     "email": "tracy@dreamsandlogic.com",
     "url": "http://dreamsandlogic.com"
   },
-  "files": ["FirebaseWrapper.js", "/**", "/**/dist", "dist"],
-  "main": "./dist/FirebaseWrapper.js",
+  "main": "./dist/index.js",
   "scripts": {
+    "transpile": "babel src --out-dir dist --ignore \"functions/node_modules/**/*\"",
+    "build": "yarn rimraf dist && yarn run transpile",
     "docs": "./node_modules/.bin/jsdoc2md --template README.hbs --files *.js ./*/*.js > ./README.md",
-    "docs_auth": "./node_modules/.bin/jsdoc2md --template README.hbs --files ./FirebaseAuthWrapper/*.js > ./FirebaseAuthWrapper/README.md",
-    "docs_functions": "./node_modules/.bin/jsdoc2md --template README.hbs --files ./FirebaseCloudFunctionsWrapper/*.js > ./FirebaseCloudFunctionsWrapper/README.md",
-    "docs_store": "./node_modules/.bin/jsdoc2md --template README.hbs --files ./FirebaseFirestoreWrapper/*.js > ./FirebaseFirestoreWrapper/README.md",
-    "docs_storage": "./node_modules/.bin/jsdoc2md --template README.hbs --files ./FirebaseStorageWrapper/*.js > ./FirebaseStorageWrapper/README.md",
-    "docs_all": "npm run docs_auth && npm run docs_functions && npm run docs_store && npm run docs_storage && npm run docs",
-    "publish_store": "npm publish FirebaseFirestoreWrapper --access public",
     "publish_package": "npm publish --access public",
-    "publish_dry_package": "npm publish --access public --dry-run",
-    "transpile_auth": "babel ./FirebaseAuthWrapper/*.js --out-dir ./dist/FirebaseAuthWrapper",
-    "transpile_functions": "babel ./FirebaseCloudFunctionsWrapper/*.js --out-dir ./dist/FirebaseCloudFunctionsWrapper",
-    "transpile_store": "babel ./FirebaseFirestoreWrapper/*.js --out-dir ./dist/FirebaseFirestoreWrapper",
-    "transpile_storage": "babel FirebaseStorageWrapper/*.js --out-dir ./dist/FirebaseStorageWrapper",
-    "transpile_top": "babel FirebaseWrapper.js --out-dir ./dist",
-    "transpile_all": "npm run transpile_auth && npm run transpile_functions && npm run transpile_store && npm run transpile_storage && npm run transpile_top"
+    "publish_dry": "npm publish --access public --dry-run"
   },
   "publishConfig": {
     "access": "public"
