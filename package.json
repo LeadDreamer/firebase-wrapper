@@ -1,0 +1,96 @@
+{
+  "name": "@leaddreamer/firestore-wrapper",
+  "type": "module",
+  "version": "1.0.31",
+  "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another.",
+  "repository": "LeadDreamer/firebase-wrappers",
+  "homepage": "https://github.com/LeadDreamer/firebase-wrappers#readme",
+  "bugs": {
+    "url": "https://github.com/LeadDreamer/firebase-wrappers/issues",
+    "email": "info@dreamsandlogic.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Tracy R. Hall, Dreams and Logic",
+    "email": "tracy@dreamsandlogic.com",
+    "url": "http://dreamsandlogic.com"
+  },
+  "files": ["FirebaseWrapper.js", "/**", "/**/dist", "dist"],
+  "main": "./dist/FirebaseWrapper.js",
+  "scripts": {
+    "docs": "./node_modules/.bin/jsdoc2md --template README.hbs --files *.js ./*/*.js > ./README.md",
+    "docs_auth": "./node_modules/.bin/jsdoc2md --template README.hbs --files ./FirebaseAuthWrapper/*.js > ./FirebaseAuthWrapper/README.md",
+    "docs_functions": "./node_modules/.bin/jsdoc2md --template README.hbs --files ./FirebaseCloudFunctionsWrapper/*.js > ./FirebaseCloudFunctionsWrapper/README.md",
+    "docs_store": "./node_modules/.bin/jsdoc2md --template README.hbs --files ./FirebaseFirestoreWrapper/*.js > ./FirebaseFirestoreWrapper/README.md",
+    "docs_storage": "./node_modules/.bin/jsdoc2md --template README.hbs --files ./FirebaseStorageWrapper/*.js > ./FirebaseStorageWrapper/README.md",
+    "docs_all": "npm run docs_auth && npm run docs_functions && npm run docs_store && npm run docs_storage && npm run docs",
+    "publish_store": "npm publish FirebaseFirestoreWrapper --access public",
+    "publish_package": "npm publish --access public",
+    "publish_dry_package": "npm publish --access public --dry-run",
+    "transpile_auth": "babel ./FirebaseAuthWrapper/*.js --out-dir ./dist/FirebaseAuthWrapper",
+    "transpile_functions": "babel ./FirebaseCloudFunctionsWrapper/*.js --out-dir ./dist/FirebaseCloudFunctionsWrapper",
+    "transpile_store": "babel ./FirebaseFirestoreWrapper/*.js --out-dir ./dist/FirebaseFirestoreWrapper",
+    "transpile_storage": "babel FirebaseStorageWrapper/*.js --out-dir ./dist/FirebaseStorageWrapper",
+    "transpile_top": "babel FirebaseWrapper.js --out-dir ./dist",
+    "transpile_all": "npm run transpile_auth && npm run transpile_functions && npm run transpile_store && npm run transpile_storage && npm run transpile_top"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "firebase": "^8.6.1"
+  },
+  "peerDependencies": {
+    "firebase-admin": "^9.4.1",
+    "firebase": "^8.4.3"
+  },
+  "peerDependenciesMeta": {
+    "firebase-admin": {
+      "optional": true
+    },
+    "firebase": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@babel/cli": "7.12.1",
+    "@babel/core": "7.12.3",
+    "@babel/plugin-proposal-class-properties": "7.12.1",
+    "@babel/plugin-transform-runtime": "7.12.1",
+    "@babel/preset-env": "7.12.1",
+    "jsdoc-to-markdown": "^7.0.1",
+    "nodemon": "1.18.4",
+    "rimraf": "^3.0.2"
+  },
+  "keywords": [
+    "firebase",
+    "firestore",
+    "firebase firestore",
+    "auth",
+    "firebase auth",
+    "functions",
+    "firebase functions",
+    "cloud functions",
+    "firebase cloud functions",
+    "Cloud Functions",
+    "Firebase Cloud Functions",
+    "CloudFunctions",
+    "Firebase CloudFunctions",
+    "storage",
+    "firebase storage",
+    "firebase wrapper",
+    "firestore wrapper"
+  ],
+  "babel": {
+    "presets": ["@babel/preset-env"],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ],
+      ["@babel/plugin-transform-runtime"]
+    ]
+  }
+}

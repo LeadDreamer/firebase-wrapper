@@ -1,0 +1,49 @@
+{
+  "name": "@leaddreamer/firebaseauthwrapper",
+  "type": "module",
+  "version": "1.0.24",
+  "description": "A set of helper-wrapper functions around firebase storage.  Intent is to treat Firestore Storage as a hierarchical storage, similar to a custom Firestore scheme; originally conceived to port from one database to another.",
+  "repository": "LeadDreamer/firebase-wrappers",
+  "homepage": "https://github.com/LeadDreamer/firebase-wrappers#readme",
+  "bugs": {
+    "url": "https://github.com/LeadDreamer/firebase-wrappers/issues",
+    "email": "info@dreamsandlogic.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Tracy R. Hall, Dreams and Logic",
+    "email": "tracy@dreamsandlogic.com",
+    "url": "http://dreamsandlogic.com"
+  },
+  "files": ["*.js", "dist"],
+  "main": "./dist/index.js",
+  "scripts": {
+    "docs": "../node_modules/.bin/jsdoc2md --template ../README.hbs --files *.js ./*/*.js > README.md",
+    "transpile": "babel *.js --out-dir ../dist/FirebaseAuthWrapper",
+    "build": "npm run docs && npm run transpile"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.12.1",
+    "@babel/core": "7.12.3",
+    "@babel/plugin-proposal-class-properties": "7.12.1",
+    "@babel/preset-env": "7.12.1",
+    "@babel/plugin-transform-runtime": "7.12.1",
+    "jsdoc-to-markdown": "^7.0.1"
+  },
+  "peerDependencies": {
+    "firebase": "^8.4.3"
+  },
+  "keywords": ["firebase", "firebase Auth", "Auth"],
+  "babel": {
+    "presets": ["@babel/preset-env"],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ],
+      ["@babel/plugin-transform-runtime"]
+    ]
+  }
+}
