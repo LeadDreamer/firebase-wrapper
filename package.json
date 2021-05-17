@@ -1,7 +1,7 @@
 {
   "name": "@leaddreamer/firebase-wrapper",
   "type": "module",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another.",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -20,25 +20,20 @@
   "exports": {
     ".": "./dist/index.js",
     "./FirebaseAuthWrapper": "./dist/FirebaseAuthWrapper/index.js",
+    "./FirebaseAuthWrapper/*": "./dist/FirebaseAuthWrapper/*.js",
     "./FirebaseCloudFunctionsWrapper": "./dist/FirebaseCloudFunctionsWrapper/index.js",
+    "./FirebaseCloudFunctionsWrapper/*": "./dist/FirebaseCloudFunctionsWrapper/*.js",
     "./FirebaseFirestoreWrapper": "./dist/FirebaseFirestoreWrapper/index.js",
+    "./FirebaseFirestoreWrapper/*": "./dist/FirebaseFirestoreWrapper/*.js",
     "./FirebaseStorageWrapper": "./dist/FirebaseStorageWrapper/index.js",
-    "FirebaseWrapper": "./dist/index.js",
-    "FirebaseWrapper/FirebaseAuthWrapper": "./dist/FirebaseAuthWrapper/index.js",
-    "FirebaseWrapper/FirebaseCloudFunctionsWrapper": "./dist/FirebaseCloudFunctionsWrapper/index.js",
-    "FirebaseWrapper/FirebaseFirestoreWrapper": "./dist/FirebaseFirestoreWrapper/index.js",
-    "FirebaseWrapper/FirebaseStorageWrapper": "./dist/FirebaseStorageWrapper/index.js",
-    "firebase-wrapper": "./dist/index.js",
-    "firebase-wrapper/FirebaseAuthWrapper": "./dist/FirebaseAuthWrapper/index.js",
-    "firebase-wrapper/FirebaseCloudFunctionsWrapper": "./dist/FirebaseCloudFunctionsWrapper/index.js",
-    "firebase-wrapper/FirebaseFirestoreWrapper": "./dist/FirebaseFirestoreWrapper/index.js",
-    "firebase-wrapper/FirebaseStorageWrapper": "./dist/FirebaseStorageWrapper/index.js"
+    "./FirebaseStorageWrapper/*": "./dist/FirebaseStorageWrapper/*.js"
   },
   "scripts": {
     "transpile": "babel src --out-dir dist",
-    "build": "yarn rimraf dist && yarn run transpile",
+    "build": "yarn rimraf dist && npm run transpile",
+    "prepublishOnly": "yarn rimraf dist && yarn run transpile",
     "docs": "./node_modules/.bin/jsdoc2md --template README.hbs --files src/*.js src/*/*.js > README.md",
-    "publish_package": "npm run build && npm publish --access public",
+    "publish_package": "npm publish --access public",
     "publish_dry": "npm publish --access public --dry-run"
   },
   "publishConfig": {
