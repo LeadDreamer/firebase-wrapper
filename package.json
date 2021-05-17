@@ -37,7 +37,7 @@
     "transpile": "babel src --out-dir dist",
     "build": "yarn rimraf dist && yarn run transpile",
     "docs": "./node_modules/.bin/jsdoc2md --template README.hbs --files src/*.js src/*/*.js > README.md",
-    "publish_package": "npm publish --access public",
+    "publish_package": "npm run build && npm publish --access public",
     "publish_dry": "npm publish --access public --dry-run"
   },
   "publishConfig": {
