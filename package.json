@@ -19,7 +19,7 @@
   "scripts": {
     "transpile": "babel src --out-dir dist --ignore \"functions/node_modules/**/*\"",
     "build": "yarn rimraf dist && yarn run transpile",
-    "docs": "./node_modules/.bin/jsdoc2md --template README.hbs --files *.js ./*/*.js > ./README.md",
+    "docs": "./node_modules/.bin/jsdoc2md --template README.hbs --files src/*.js src/*/*.js > README.md",
     "publish_package": "npm publish --access public",
     "publish_dry": "npm publish --access public --dry-run"
   },
