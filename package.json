@@ -1,7 +1,7 @@
 {
   "name": "@leaddreamer/firebase-wrapper",
   "type": "module",
-  "version": "1.0.3",
+  "version": "1.0.6",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another.",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -21,7 +21,17 @@
     "./FirebaseAuthWrapper": "./dist/FirebaseAuthWrapper/index.js",
     "./FirebaseCloudFunctionsWrapper": "./dist/FirebaseCloudFunctionsWrapper/index.js",
     "./FirebaseFirestoreWrapper": "./dist/FirebaseFirestoreWrapper/index.js",
-    "./FirebaseStorageWrapper": "./dist/FirebaseStorageWrapper/index.js"
+    "./FirebaseStorageWrapper": "./dist/FirebaseStorageWrapper/index.js",
+    "FirebaseWrapper": "./dist/index.js",
+    "FirebaseWrapper/FirebaseAuthWrapper": "./dist/FirebaseAuthWrapper/index.js",
+    "FirebaseWrapper/FirebaseCloudFunctionsWrapper": "./dist/FirebaseCloudFunctionsWrapper/index.js",
+    "FirebaseWrapper/FirebaseFirestoreWrapper": "./dist/FirebaseFirestoreWrapper/index.js",
+    "FirebaseWrapper/FirebaseStorageWrapper": "./dist/FirebaseStorageWrapper/index.js",
+    "firebase-wrapper": "./dist/index.js",
+    "firebase-wrapper/FirebaseAuthWrapper": "./dist/FirebaseAuthWrapper/index.js",
+    "firebase-wrapper/FirebaseCloudFunctionsWrapper": "./dist/FirebaseCloudFunctionsWrapper/index.js",
+    "firebase-wrapper/FirebaseFirestoreWrapper": "./dist/FirebaseFirestoreWrapper/index.js",
+    "firebase-wrapper/FirebaseStorageWrapper": "./dist/FirebaseStorageWrapper/index.js"
   },
   "scripts": {
     "transpile": "babel src --out-dir dist",
