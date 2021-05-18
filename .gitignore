@@ -2,3 +2,5 @@ dist/
 dist/**
 dist/**/*
 dist/**/*.*
+src/**/dist
+src/**/node_modules
