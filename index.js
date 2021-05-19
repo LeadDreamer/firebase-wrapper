@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/storage";
 import "firebase/auth";
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import "firebase/functions";
 
 import FirebaseFirestore from "./FirebaseFirestoreWrapper";
@@ -66,7 +67,7 @@ export default function FirebaseWrapper(config) {
   }
   FirebaseFirestore(firebase);
   FirebaseStorage(firebase);
-  FirebaseAuthWrapper(firebase);
+  FirebaseAuthWrapper(firebase, StyledFirebaseAuth);
   FirebaseCloudFunctions(firebase);
 }
 

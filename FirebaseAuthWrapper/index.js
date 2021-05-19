@@ -30,7 +30,7 @@
  * })(config)
  * ```
  */
-export default function FirebaseAuthWrapper(firebase) {
+export default function FirebaseAuthWrapper(firebase, styled) {
   FirebaseAuth = firebase.auth();
   FirebaseAuthSignInOptions = [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -39,6 +39,7 @@ export default function FirebaseAuthWrapper(firebase) {
     //firebase.auth.TwitterAuthProvider.PROVIDER_ID
   ];
   FirebaseAuthPersistence = firebase.auth.Auth.Persistence.LOCAL;
+  AuthComponent = styled;
 }
 
 /**
@@ -57,6 +58,8 @@ let FirebaseAuthPersistence;
  * ID codes for 3rd party Auth providers
  */
 export let FirebaseAuthSignInOptions;
+
+let AuthComponent;
 
 /**
  * ----------------------------------------------------------------------
@@ -170,3 +173,18 @@ export const attachAuthUserListener = (next, fallback) => {
 export const setPersistence = () => {
   FirebaseAuth.setPersistence(FirebaseAuthPersistence);
 };
+
+export function MyStyledFirebaseAuth(props) {
+  let { uiConfig } = props;
+  return (
+    AuthComponent &&
+    AuthComponent({
+      uiCallback: (ui) => {
+        setPersistence();
+        ui.disableAutoSignIn();
+      },
+      uiConfig: uiConfig,
+      firebaseAuth: FirebaseAuth
+    })
+  );
+}
