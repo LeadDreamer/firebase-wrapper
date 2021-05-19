@@ -19,7 +19,7 @@
   "main": "/dist/index.js",
   "exports": {
     ".": "./dist/index.js",
-    "/*": "./dist/*/"
+    "/*": "./*/dist/index.js"
   },
   "scripts": {
     "transpile": "babel . --out-dir dist",
