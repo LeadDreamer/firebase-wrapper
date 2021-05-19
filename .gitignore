@@ -2,5 +2,7 @@ dist/
 dist/**
 dist/**/*
 dist/**/*.*
-src/**/dist
-src/**/node_modules
+./**/dist
+node_modules
+./node_modules
+./**/node_modules
