@@ -14,8 +14,8 @@
     "email": "tracy@dreamsandlogic.com",
     "url": "http://dreamsandlogic.com"
   },
-  "files": ["*.js", "./dist/*.js", "*.md"],
-  "main": "./dist/index.js",
+  "files": ["*.js", "dist/*.js", "*.md"],
+  "main": "dist/index.js",
   "scripts": {
     "transpile": "babel --root-mode upward * --out-dir dist",
     "build": "yarn rimraf dist && npm run transpile",
