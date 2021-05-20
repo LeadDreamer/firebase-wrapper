@@ -177,14 +177,15 @@ export const setPersistence = () => {
 export function MyStyledFirebaseAuth(props) {
   let { uiConfig } = props;
   return (
-    AuthComponent &&
-    AuthComponent({
-      uiCallback: (ui) => {
-        setPersistence();
-        ui.disableAutoSignIn();
-      },
-      uiConfig: uiConfig,
-      firebaseAuth: FirebaseAuth
-    })
+    AuthComponent && (
+      <AuthComponent
+        uiCallback={(ui) => {
+          setPersistence();
+          ui.disableAutoSignIn();
+        }}
+        uiConfig={uiConfig}
+        firebaseAuth={FirebaseAuth}
+      />
+    )
   );
 }
