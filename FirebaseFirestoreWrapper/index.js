@@ -819,9 +819,11 @@ const sortQuery = (query, sortArray = null) => {
  * @description sets up a listener for changes to a single record
  * @param {!string} tablePath string describing relative path to document
  * @param {?string} refPath string describing path to parent document
- * @param {QuerySnapshot} dataCallback function to be called with changes to record
- * @param {callback} errCallback function to be called when an error
+ * @callback  dataCallback function to be called with changes to record
+ * @param {QuerySnapshot} response
+ * @callback errCallback function to be called when an error
  * occurs in listener
+ * @param {callback}  response
  * @returns {callback} function to be called to release subscription
  */
 export const ListenRecords = (
@@ -1567,3 +1569,430 @@ export class PaginatedListener {
     this.unsubscriber = null;
   }
 }
+
+//////////////////////////////////////////////////////////////////////
+// convenience functions
+/**
+ * @function ownerFilter
+ * @static
+ * Contructs a filter that selects only the "owner" section of a
+ * collectionGroup query - in other words, descendents of a particular
+ * top=level document.  This takes advantage of Firestore's indexing,
+ * which "names"/indexes all documents using the FULL PATH to the
+ * document, starting from the top-most, i.e.:
+ * TOP_COLLECTION/{dociId}/NEXT_COLLECTION/{docId}/NEXT_NEXT_COLLECTION/{etc}
+ * This functions knowns NOTHING about the actual schema; it simply uses
+ * the path of the indicated "owner" as starting portion of ALL the
+ * "child" documents of the owner. It also takes advantage of the
+ * strictly alpha-numeric nature of the path string.
+ * As such, ALL children paths strings MUST be "greater than" the owner
+ * bare path, and MUST be LESS THAN the alpha-numerically "next" value:
+ * e.g. if the "owner" path is TOP_COLLECTION/abcdefg, then
+ *
+ * /TOP_COLLECTION/abcdefh > __name__ > //TOP_COLLECTION/abcdefg
+ * (assuming LEXICAL SORT)
+ * IMPORTANT NOTE:
+ * Because this filter uses an INEQUALITY, .sortBy() and .limit() conditions
+ * are not supported
+ * @param {!Record} owner
+ * @param {!string} refPath - string representing the full path to the
+ * Firestore document.
+ * @param {?filterObject} queryFilter additional filter parameters
+ *
+ * @returns {filterObject}
+ */
+export const ownerFilter = (owner, queryFilter = null) => {
+  const ownerPath = owner.refPath;
+  let nextPath = ownerPath.slice();
+  const nextLength = nextPath.length;
+  let lastChar = nextPath.charCodeAt(nextLength - 1);
+  nextPath = nextPath
+    .slice(0, nextLength - 1)
+    .concat(String.fromCharCode(lastChar + 1));
+
+  const ownerParts = [
+    {
+      fieldRef: "__name__",
+      opStr: ">",
+      value: ownerPath
+    },
+    {
+      fieldRef: "__name__",
+      opStr: "<",
+      value: nextPath
+    }
+  ];
+  return queryFilter ? ownerParts.concat(queryFilter) : ownerParts;
+};
+
+/**
+ * @function listenSlice
+ * @static
+ * Uses the ownerFilter (above) to establish a listener to "just" the
+ * parts of a collectionGroup that are descendants of the passed "owner"
+ * record.
+ * @param {!Record} owner
+ * @param {!string} owner.refPath - string representing the full path to the
+ * Firestore document.
+ * @param {!string} collectionName name of the desired collectionGroup
+ * @callback  dataCallback function to be called with changes to record
+ * @param {QuerySnapshot} response
+ * @callback errCallback function to be called when an error
+ * occurs in listener
+ * @param {string}  response
+ * @returns {callback} function to be called to release subscription
+ *
+ */
+export const listenSlice = (
+  owner,
+  collectionName,
+  dataCallBack,
+  errCallBack
+) => {
+  try {
+    return ListenCollectionGroupQuery(
+      collectionName,
+      ownerFilter(owner),
+      null, //no sort query conditions
+      dataCallBack,
+      errCallBack
+    );
+  } catch (err) {
+    console.log(`failed:listenSlice setup ${collectionName} err: ${err}`);
+  }
+};
+
+/**
+ * @async
+ * @function fetchSlice
+ * @static
+ * Wrapper around database fetch, using ownerFilter above to
+ * select/fetch just an "owner" parent document's descendants from a
+ * collectionGroup
+ * @param {!Record} owner
+ * @param {!string} owner.refPath - string representing the full path to the
+ * Firestore document.
+ * @param {!string} collectionName name of the desired collectionGroup
+ * @returns {QuerySnapshot} response
+ */
+export const fetchSlice = (owner, collectionName) => {
+  try {
+    return collectRecordsInGroupByFilter(collectionName, ownerFilter(owner));
+  } catch (err) {
+    console.log(`failed:fetchSlice setup ${collectionName} err: ${err}`);
+  }
+};
+
+/**
+ * @async
+ * @function querySlice
+ * @static
+ * Wrapper around database fetch, using ownerFilter above to
+ * select/fetch just an "owner" parent document's descendants from a
+ * collectionGroup
+ * @param {!Record} owner
+ * @param {!string} owner.refPath - string representing the full path to the
+ * Firestore document.
+ * @param {!string} collectionName name of the desired collectionGroup
+ * @param {?filterObject} queryFilter filter parameters
+ * @returns {QuerySnapshot} response
+ */
+export const querySlice = (owner, collectionName, filterArray) => {
+  try {
+    return collectRecordsInGroupByFilter(
+      collectionName,
+      ownerFilter(owner, filterArray)
+    );
+  } catch (err) {
+    console.log(`failed:querySlice ${collectionName} err: ${err}`);
+  }
+};
+
+/**
+ * @function listenQuerySlice
+ * @static
+ * Uses the ownerFilter (above) to establish a listener to "just" the
+ * parts of a collectionGroup that are descendants of the passed "owner"
+ * record.
+ * @param {!Record} owner
+ * @param {!string} owner.refPath - string representing the full path to the
+ * Firestore document.
+ * @param {!string} collectionName name of the desired collectionGroup
+ * @param {?filterObject} filterArray filter parameters
+ * @callback  dataCallback function to be called with changes to record
+ * @param {QuerySnapshot} response
+ * @callback errCallback function to be called when an error
+ * occurs in listener
+ * @param {string}  response
+ * @returns {callback} function to be called to release subscription
+ *
+ */
+export const listenQuerySlice = (
+  owner,
+  collectionName,
+  filterArray,
+  dataCallBack,
+  errCallBack
+) => {
+  try {
+    return ListenCollectionGroupQuery(
+      collectionName,
+      ownerFilter(owner, filterArray),
+      null,
+      dataCallBack,
+      errCallBack
+    );
+  } catch (err) {
+    console.log(`failed:listenQuerySlice setup ${collectionName} err: ${err}`);
+  }
+};
+
+/**
+ * @async
+ * @function typedWrite
+ * @static
+ * optionally batched record update - abstracts batch process from specific types
+ * @param {DocumentObject} data - the data object/record to update.  This will create a new one if it doesn't exist
+ * @param {?string} data.Id
+ * @param {?string} data.refPath
+ * @param {?DocumentObject} parent - parent object (if any) this belongs to
+ * @param {!string} parent.refPath - full path to parent document
+ * @param {!string} type - name of type of object - i.e. the sub-collection name
+ * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
+ * @return {Promise} WriteBatch, Transaction or Void
+ */
+export const typedWrite = (data, parent, type, batch = null) => {
+  return writeRecord(
+    type, //type of sub-collection...
+    data,
+    parent.refPath, //... under tour reference
+    batch
+  );
+};
+
+/**
+ * @async
+ * @function typedWriteByTree
+ * @static
+ * optionally batched record update - abstracts batch process from specific types
+ * @param {object} data - the data object/record to update.  This will create a new one if it doesn't exist
+ * @param {ArtistTree} tree - Object with properties of refPath segments
+ * @param {string} type - name of type of object - i.e. the sub-collection name
+ * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
+ * @return {Promise} WriteBatch, Transaction or Void
+ */
+export const typedWriteByTree = (data, tree, type, batch = null) => {
+  //existing perks will be over-written, new ones created
+  return writeRecord(
+    typedRefPathFromTree(tree, type), //type of sub-collection...
+    data,
+    /*no parent */ null,
+    batch
+  );
+};
+
+/**
+ * @async
+ * @function typedCreate
+ * @static
+ * Creates a new document reference of the indicated type, and writes
+ * it to the backend. Specific intent is when the Id needs to be
+ * pre-specified, or shared outside this function. Normal writing
+ * action will silently create a new document, which has to then be
+ * found by query
+ * @param {object} data - the data object/record to create.  This
+ * will create a new one if it doesn't exist
+ * @param {?DocumentObject} parent - parent object (if any) this
+ * belongs to
+ * @param {string} parent.refPath - full path to parent document
+ * @param {string} type - name of type of object - i.e. the
+ * sub-collection name
+ * @param {?WriteBatch|Transaction} batch - batching object.
+ * Transaction will be added to the batch
+ * @return {Promise} WriteBatch, Transaction or Void
+ *
+ */
+export const typedCreate = (data, parent, type, batch = null) => {
+  //create a new document reference (entirely local) and make a data object
+  let newData = createUniqueReference(data, parent.refPath);
+  //merge the supplied data into the new data object
+  newData = {
+    ...data,
+    ...newData
+  };
+  //parent data already in created reference
+  return typedWrite(newData, null, type, batch);
+};
+
+/**
+ * @typedef {Map} RecordTree
+ */
+
+/**
+ * @sync
+ * @function treeFromChild
+ * @static
+ * Extracts a tree of document ID's from a child document (assumes is a child)
+ * @param {Record} child document (regardless of depth)
+ *  of a tree
+ * @param {!string} child.refPath
+ * @returns {RecordTree}
+ */
+export const treeFromChild = (child) => {
+  let deconstruction = new Map();
+  const refPath = child.refPath.slice();
+  let parts = refPath.split(`/`);
+  while (parts && parts.length) {
+    //parse the parts of the path
+    let type = parts.shift();
+    let Id = parts.shift();
+    deconstruction.set(type, Id);
+  }
+  return deconstruction;
+};
+
+/**
+ * @function typedRefPathFromTree
+ * @static
+ * Builds a refPath *down* to a desired collection/type from an existing
+ * RecordTree Map.
+ * @param {RecordTree} tree
+ * @param {!string} type
+ * @param {?string} branchType a collection name to start branching from.
+ * This is in case tree was built from a sister collection/document
+ * @return {string} constructed refPath (collection)
+ */
+export const typedRefPathFromTree = (tree, type, branchType) => {
+  let pathString = "";
+  for (let [collection, docId] of tree) {
+    pathString = `${pathString}${collection}/`;
+    if (collection === type) {
+      //reached requested depth
+      break;
+    }
+    if (collection === branchType) {
+      //If reached the branch point, append the current Id and desired "type"
+      //and return result
+      pathString = `${pathString}${docId}/${type}`;
+      break;
+    }
+    //add on the current tree level docId for next collection level
+    pathString = `${pathString}${docId}/`;
+  }
+  return pathString;
+};
+
+/**
+ * @function typedIdFromChild
+ * @static
+ * Looks up a "tree" to find the Id of the document at the requested
+ * collection level ("type")
+ * @param {DocumentObject} child document (regardless of depth)
+ *  of a tree
+ * @param {!string} child.refPath
+ * @param {!string} type name of desired type/collection level in tree
+ */
+export const typedIdFromChild = (child, type) => {
+  //previous/tree/levels/then/type/Id/whatever/else
+  //(previous/tree/levels/then/type) (Id/whatever/else)
+  //(Id) (whatever/else)
+  return treeFromChild(child).get(type);
+};
+
+/**
+ * @function typedRefPathFromChild
+ * @static
+ * Builds a refPath *up* to a desired collection/type from an existing
+ * child in a tree
+ * @param {DocumentObject} child document (regardless of depth)
+ *  of a tree
+ * @param {!string} child.refPath
+ * @param {!string} type
+ * @return {string} constructed refPath (collection)
+ */
+export const typedRefPathFromChild = (child, type) => {
+  return typedRefPathFromTree(treeFromChild(child), type);
+};
+
+/**
+ * @async
+ * @function typedFetchFromChild
+ * @static
+ * function to fetch a document from "up" the collection/document tree of a child document
+ * @param {DocumentObject} child - assumed to be an object in a collection/document Tree
+ * @param {!string} refPath
+ * @param {string} type - type/collection to fetch parent document from
+ * @param {?WriteBatch|Transaction} batch - optional batch object to chain
+ */
+export const typedFetchFromChild = async (child, type, batch = null) => {
+  //previous/tree/levels/then/type/Id/whatever/else
+  //(previous/tree/levels/then/type) (Id/whatever/else)
+  //(Id) (whatever/else)
+  //fetch (previous/tree/levels/then/type)/(Id)
+  return fetchRecord(
+    typedRefPathFromChild(child, type), //Full Path to collection
+    typedIdFromChild(child, type), //Id
+    null, //No parent needed
+    batch //optional Batch object
+  );
+};
+
+/**
+ * @async
+ * @function typedFetchFromTree
+ * @static
+ * function to fetch a document from "up" the collection/document tree of a child document
+ * @param {RecordTree} tree - assumed to be an object in a collection/document Tree
+ * @param {!string} refPath
+ * @param {string} type - type/collection to fetch parent document from
+ * @param {?WriteBatch|Transaction} batch - optional batch object to chain
+ */
+export const typedFetchFromTree = async (tree, type, batch = null) => {
+  return fetchRecord(
+    typedRefPathFromTree(tree), //Full Path to collection
+    tree.get(type), //Id
+    null, //No parent needed
+    batch //optional Batch object
+  );
+};
+
+/**
+ * @async
+ * @function typedCollectFromTree
+ * @static
+ * function to collect documents from "up" the collection/document tree of a child document
+ * @param {RecordTree} tree - assumed to be an object in a collection/document Tree
+ * @param {string} type - type/collection to fetch parent document from
+ * @param {?WriteBatch|Transaction} batch - optional batch object to chain
+ */
+export const typedCollectFromTree = async (tree, type, batch = null) => {
+  return collectRecords(typedRefPathFromTree(tree, type), batch);
+};
+
+/**
+ * @function localBatchReturn
+ * @static
+ * Some operations need their internal steps batched.  This routine
+ * is a helper to decide if to close the batch now, or defer to the
+ * our batch
+ * @param {?WriteBatch|Transaction} incomingBatch - a batching object
+ * passed into the subroutine Internal Transaction will be added to
+ * the incoming batch
+ * @param {?WriteBatch|Transaction} internalBatch - a batching object
+ * as built *in* the routine, built on the incomingBatch if it exists
+ * @return {?WriteBatch|Transaction} WriteBatch, Transaction or Void
+ * @example
+ * ```
+ * export const suboperation = (data, batch = null) => {
+ *  let myBatch = batch || openWriteBatch(); //note short circuit
+ *  //stuff that happens in the routine
+ *  writeRecord(table, data, parent, myBatch);
+ *  writeRecord(otherTable, otherData, otherParent, myBatch);
+ *  return localBatchReturn(batch, myBatch);
+ * }
+ * ```
+ */
+export const localBatchReturn = (incomingBatch, internalBatch) => {
+  //if incoming batch, just pass along, else asynchronously commit local batch
+  return incomingBatch ? internalBatch : closeWriteBatch(internalBatch);
+};

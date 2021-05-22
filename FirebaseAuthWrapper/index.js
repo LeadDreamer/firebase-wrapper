@@ -18,6 +18,8 @@
  * import * as firebase from "firebase/app";
  * import "firebase/auth";
  * import FirebaseAuth from "@leaddreamer/firebase-wrapper/FirebaseAuthWrapper";
+ * //the next is optional - if you want the React component
+ * import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
  * import {config} from "wherever-you-put-it";
  *
  * ((myconfig) {
@@ -26,7 +28,7 @@
  * } catch (err) {
  *   firebase.initializeApp(myconfig);
  * }
- * FirebaseAuth(firebase);
+ * FirebaseAuth(firebase, StyledFirebaseAuth);
  * })(config)
  * ```
  */
@@ -39,7 +41,7 @@ export default function FirebaseAuthWrapper(firebase, styled) {
     //firebase.auth.TwitterAuthProvider.PROVIDER_ID
   ];
   FirebaseAuthPersistence = firebase.auth.Auth.Persistence.LOCAL;
-  AuthComponent = styled;
+  StyledFirebaseAuth = styled;
 }
 
 /**
@@ -59,7 +61,7 @@ let FirebaseAuthPersistence;
  */
 export let FirebaseAuthSignInOptions;
 
-let AuthComponent;
+export let StyledFirebaseAuth;
 
 /**
  * ----------------------------------------------------------------------
@@ -173,19 +175,3 @@ export const attachAuthUserListener = (next, fallback) => {
 export const setPersistence = () => {
   FirebaseAuth.setPersistence(FirebaseAuthPersistence);
 };
-
-export function MyStyledFirebaseAuth(props) {
-  let { uiConfig } = props;
-  return (
-    AuthComponent && (
-      <AuthComponent
-        uiCallback={(ui) => {
-          setPersistence();
-          ui.disableAutoSignIn();
-        }}
-        uiConfig={uiConfig}
-        firebaseAuth={FirebaseAuth}
-      />
-    )
-  );
-}
