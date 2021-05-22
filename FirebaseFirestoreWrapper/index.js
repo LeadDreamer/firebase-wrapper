@@ -1910,8 +1910,8 @@ export const typedIdFromChild = (child, type) => {
  * @param {!string} type
  * @return {string} constructed refPath (collection)
  */
-export const typedRefPathFromChild = (child, type) => {
-  return typedRefPathFromTree(treeFromChild(child), type);
+export const typedRefPathFromChild = (child, type, branchType = null) => {
+  return typedRefPathFromTree(treeFromChild(child), type, branchType);
 };
 
 /**
