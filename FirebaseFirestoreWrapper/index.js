@@ -1924,13 +1924,18 @@ export const typedRefPathFromChild = (child, type, branchType = null) => {
  * @param {string} type - type/collection to fetch parent document from
  * @param {?WriteBatch|Transaction} batch - optional batch object to chain
  */
-export const typedFetchFromChild = async (child, type, batch = null) => {
+export const typedFetchFromChild = async (
+  child,
+  type,
+  branchType = null,
+  batch = null
+) => {
   //previous/tree/levels/then/type/Id/whatever/else
   //(previous/tree/levels/then/type) (Id/whatever/else)
   //(Id) (whatever/else)
   //fetch (previous/tree/levels/then/type)/(Id)
   return fetchRecord(
-    typedRefPathFromChild(child, type), //Full Path to collection
+    typedRefPathFromChild(child, type, branchType), //Full Path to collection
     typedIdFromChild(child, type), //Id
     null, //No parent needed
     batch //optional Batch object
@@ -1965,8 +1970,31 @@ export const typedFetchFromTree = async (tree, type, batch = null) => {
  * @param {string} type - type/collection to fetch parent document from
  * @param {?WriteBatch|Transaction} batch - optional batch object to chain
  */
-export const typedCollectFromTree = async (tree, type, batch = null) => {
-  return collectRecords(typedRefPathFromTree(tree, type), batch);
+export const typedCollectFromTree = async (
+  tree,
+  type,
+  branchType = null,
+  batch = null
+) => {
+  return collectRecords(typedRefPathFromTree(tree, type, branchType), batch);
+};
+
+/**
+ * @async
+ * @function typedCollectFromChild
+ * @static
+ * function to collect documents from "up" the collection/document tree of a child document
+ * @param {Record} child - assumed to be an object in a collection/document Tree
+ * @param {string} type - type/collection to fetch parent document from
+ * @param {?WriteBatch|Transaction} batch - optional batch object to chain
+ */
+export const typedCollectFromChild = async (
+  child,
+  type,
+  branchType = null,
+  batch = null
+) => {
+  return collectRecords(typedRefPathFromChild(child, type, branchType), batch);
 };
 
 /**
