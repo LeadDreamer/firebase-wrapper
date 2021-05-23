@@ -166,16 +166,34 @@ export const arrayUnionFieldValue = (elements) => {
  * ----------------------------------------------------------------------
  * @function RecordFromSnapshot
  * @static
- * @description returns an internal record structure from a firestore snapshot
- * @param {Snapshot} Snap
+ * @description returns an internal record structure from a firestore
+ * Document snapshot
+ * @param {DocumentSnapshot} DocumentSnapshot
  * @returns {Record}
  */
-export const RecordFromSnapshot = (Snapshot) => {
+export const RecordFromSnapshot = (DocumentSnapshot) => {
   return {
-    ...Snapshot.data(),
-    Id: Snapshot.id,
-    refPath: Snapshot.ref.path
+    ...DocumentSnapshot.data(),
+    Id: DocumentSnapshot.id,
+    refPath: DocumentSnapshot.ref.path
   };
+};
+
+/**
+ * ----------------------------------------------------------------------
+ * @function RecordsFromSnapshot
+ * @static
+ * @description returns an array of internal record structures from a
+ * firestore Query snapshot
+ * @param {QuerySnapshot} QuerySnapshot
+ * @returns {RecordArray}
+ */
+export const RecordsFromSnapshot = (QuerySnapshot) => {
+  return QuerySnapshot.empty
+    ? null
+    : QuerySnapshot.docs.map((docSnap) => {
+        return RecordFromSnapshot(docSnap);
+      });
 };
 
 /**
@@ -393,11 +411,7 @@ export const collectRecords = (tablePath, refPath = null) => {
     .then((querySnapshot) => {
       // returns a promise
       if (!querySnapshot.empty)
-        return Promise.resolve(
-          querySnapshot.docs.map((doc) => {
-            return RecordFromSnapshot(doc);
-          })
-        );
+        return Promise.resolve(RecordsFromSnapshot(querySnapshot));
       else return Promise.reject("noDocuments:collectRecords:" + tablePath);
     })
     .catch((err) => {
@@ -429,11 +443,7 @@ export const collectRecordsByFilter = (table, filterArray, refPath = null) => {
   return filterQuery(db.collection(table), filterArray)
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
-      return Promise.resolve(
-        querySnapshot.docs.map((doc) => {
-          return RecordFromSnapshot(doc);
-        })
-      );
+      return Promise.resolve(RecordsFromSnapshot(querySnapshot));
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsByFilter");
@@ -462,11 +472,7 @@ export const collectRecordsInGroup = (tableName) => {
     .then((querySnapshot) => {
       // returns a promise
       if (!querySnapshot.empty)
-        return Promise.resolve(
-          querySnapshot.docs.map((doc) => {
-            return RecordFromSnapshot(doc);
-          })
-        );
+        return Promise.resolve(RecordsFromSnapshot(querySnapshot));
       else
         return Promise.reject("noDocuments:collectRecordsInGroup:" + tableName);
     })
@@ -493,12 +499,7 @@ export const collectRecordsInGroupByFilter = (tableName, filterArray) => {
   return filterQuery(db.collectionGroup(tableName), filterArray)
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
-      return querySnapshot.empty
-        ? null
-        : querySnapshot.docs.map((doc) => {
-            return RecordFromSnapshot(doc);
-          });
-      //);
+      return Promise.resolve(RecordsFromSnapshot(querySnapshot));
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsInGroupByFilter");
@@ -942,9 +943,7 @@ const ListenRecordsCommon = (reference, dataCallback, errCallback) => {
     (querySnapshot) => {
       // returns a promise
       if (!querySnapshot.empty) {
-        let dataArray = querySnapshot.docs.map((doc) => {
-          return RecordFromSnapshot(doc);
-        });
+        let dataArray = RecordsFromSnapshot(querySnapshot);
         dataCallback(dataArray);
       } else errCallback("noDocuments:ListenRecordsCommon");
     },
@@ -1119,9 +1118,7 @@ export class PaginateFetch {
           //return Promise.resolve(QuerySnapshot);
           this.snapshot = QuerySnapshot;
         }
-        return this.snapshot.docs.map((doc) => {
-          return RecordFromSnapshot(doc);
-        });
+        return Promise.resolve(RecordsFromSnapshot(this.snapshot));
       });
   }
 
@@ -1149,9 +1146,7 @@ export class PaginateFetch {
           //then update document set, and execute callback
           this.snapshot = QuerySnapshot;
         }
-        return this.snapshot.docs.map((doc) => {
-          return RecordFromSnapshot(doc);
-        });
+        return Promise.resolve(RecordsFromSnapshot(this.snapshot));
       });
   }
 }
@@ -1246,9 +1241,7 @@ export class PaginateGroupFetch {
           //return Promise.resolve(QuerySnapshot);
           this.snapshot = QuerySnapshot;
         }
-        return this.snapshot.docs.map((doc) => {
-          return RecordFromSnapshot(doc);
-        });
+        return Promise.resolve(RecordsFromSnapshot(this.snapshot));
       });
   }
 
@@ -1276,9 +1269,7 @@ export class PaginateGroupFetch {
           //then update document set, and execute callback
           this.snapshot = QuerySnapshot;
         }
-        return this.snapshot.docs.map((doc) => {
-          return RecordFromSnapshot(doc);
-        });
+        return Promise.resolve(RecordsFromSnapshot(this.snapshot));
       });
   }
 }
@@ -1428,11 +1419,7 @@ export class PaginatedListener {
           //then update document set, and execute callback
           this.snapshot = QuerySnapshot;
         }
-        this.dataCallback(
-          this.snapshot.docs.map((doc) => {
-            return RecordFromSnapshot(doc);
-          })
-        );
+        this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
         this.errCallback(err);
@@ -1469,11 +1456,7 @@ export class PaginatedListener {
           //then update document set, and execute callback
           this.snapshot = QuerySnapshot;
         }
-        this.dataCallback(
-          this.snapshot.docs.map((doc) => {
-            return RecordFromSnapshot(doc);
-          })
-        );
+        this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
         this.errCallback(err);
@@ -1507,11 +1490,7 @@ export class PaginatedListener {
           //then update document set, and execute callback
           this.snapshot = QuerySnapshot;
         }
-        this.dataCallback(
-          this.snapshot.docs.map((doc) => {
-            return RecordFromSnapshot(doc);
-          })
-        );
+        this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
         this.errCallback(err);
@@ -1543,13 +1522,7 @@ export class PaginatedListener {
         this.status = PAGINATE_UPDATED;
         //*IF* documents (i.e. haven't gone back ebfore start)
         this.snapshot = QuerySnapshot;
-        this.dataCallback(
-          this.snapshot.empty
-            ? null
-            : this.snapshot.docs.map((doc) => {
-                return RecordFromSnapshot(doc);
-              })
-        );
+        this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
         this.errCallback(err);

@@ -1,5 +1,5 @@
 [![view on npm](http://img.shields.io/npm/v/example.svg)](https://www.npmjs.org/package/example)
-# @leaddreamer/firebase-wrappers
+# @leaddreamer/firebase-wrapper
 
 A set of helper-wrapper functions around firebase firestore, storage and auth. Intent is to treat Firestore as a
 hierarchical record-oriented database; originally conceived to port from one database to another.
@@ -32,7 +32,8 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.incrementFieldValue(n)](#module_FirebaseFirestoreWrapper.incrementFieldValue) ⇒
         * [.arrayRemoveFieldValue(elements)](#module_FirebaseFirestoreWrapper.arrayRemoveFieldValue) ⇒ <code>sentinelValue</code>
         * [.arrayUnionFieldValue(elements)](#module_FirebaseFirestoreWrapper.arrayUnionFieldValue) ⇒
-        * [.RecordFromSnapshot(Snap)](#module_FirebaseFirestoreWrapper.RecordFromSnapshot) ⇒ <code>Record</code>
+        * [.RecordFromSnapshot(DocumentSnapshot)](#module_FirebaseFirestoreWrapper.RecordFromSnapshot) ⇒ <code>Record</code>
+        * [.RecordsFromSnapshot(QuerySnapshot)](#module_FirebaseFirestoreWrapper.RecordsFromSnapshot) ⇒ <code>RecordArray</code>
         * [.DocumentFromRecord(Record)](#module_FirebaseFirestoreWrapper.DocumentFromRecord) ⇒ <code>object</code>
         * [.runTransaction(updateFunction)](#module_FirebaseFirestoreWrapper.runTransaction) ⇒ <code>Promise.&lt;object&gt;</code>
         * [.openWriteBatch()](#module_FirebaseFirestoreWrapper.openWriteBatch) ⇒ <code>WriteBatch</code>
@@ -55,17 +56,35 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.updateRecordFields(recordUpdate)](#module_FirebaseFirestoreWrapper.updateRecordFields) ⇒ <code>Promise.&lt;Record&gt;</code>
         * [.updateRecordByRefPath(docRefPath, data, batch)](#module_FirebaseFirestoreWrapper.updateRecordByRefPath) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
         * [.writeArrayValue(fieldName, fieldValue, docRefPath, batch)](#module_FirebaseFirestoreWrapper.writeArrayValue) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-        * [.ListenRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenRecords) ⇒ <code>callback</code>
         * [.ListenQuery(table, [filterArray], [sortArray], refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenQuery) ⇒ <code>callback</code>
         * [.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenCollectionGroupRecords) ⇒ <code>callback</code>
         * [.ListenCollectionGroupQuery(table, [filterArray], [sortArray], dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenCollectionGroupQuery) ⇒ <code>callback</code>
         * [.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenRecord) ⇒ <code>callback</code>
+        * [.ownerFilter(owner, refPath, queryFilter)](#module_FirebaseFirestoreWrapper.ownerFilter) ⇒ <code>filterObject</code>
+        * [.fetchSlice(owner, collectionName)](#module_FirebaseFirestoreWrapper.fetchSlice) ⇒ <code>QuerySnapshot</code>
+        * [.querySlice(owner, collectionName, queryFilter)](#module_FirebaseFirestoreWrapper.querySlice) ⇒ <code>QuerySnapshot</code>
+        * [.typedWrite(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedWrite) ⇒ <code>Promise</code>
+        * [.typedWriteByTree(data, tree, type, batch)](#module_FirebaseFirestoreWrapper.typedWriteByTree) ⇒ <code>Promise</code>
+        * [.typedCreate(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedCreate) ⇒ <code>Promise</code>
+        * [.treeFromChild(child)](#module_FirebaseFirestoreWrapper.treeFromChild) ⇒ <code>RecordTree</code>
+        * [.typedRefPathFromTree(tree, type, branchType)](#module_FirebaseFirestoreWrapper.typedRefPathFromTree) ⇒ <code>string</code>
+        * [.typedIdFromChild(child, type)](#module_FirebaseFirestoreWrapper.typedIdFromChild)
+        * [.typedRefPathFromChild(child, type)](#module_FirebaseFirestoreWrapper.typedRefPathFromChild) ⇒ <code>string</code>
+        * [.typedFetchFromChild(child, refPath, type, batch)](#module_FirebaseFirestoreWrapper.typedFetchFromChild)
+        * [.typedFetchFromTree(tree, refPath, type, batch)](#module_FirebaseFirestoreWrapper.typedFetchFromTree)
+        * [.typedCollectFromTree(tree, type, batch)](#module_FirebaseFirestoreWrapper.typedCollectFromTree)
+        * [.typedCollectFromChild(child, type, batch)](#module_FirebaseFirestoreWrapper.typedCollectFromChild)
+        * [.localBatchReturn(incomingBatch, internalBatch)](#module_FirebaseFirestoreWrapper.localBatchReturn) ⇒ <code>WriteBatch</code> \| <code>Transaction</code>
         * [.RecordListener](#module_FirebaseFirestoreWrapper.RecordListener) : <code>function</code>
         * [.CollectionListener](#module_FirebaseFirestoreWrapper.CollectionListener) : <code>function</code>
+        * [.errCallback](#module_FirebaseFirestoreWrapper.errCallback) ⇒ <code>callback</code>
         * [.PagingStatus](#module_FirebaseFirestoreWrapper.PagingStatus) : <code>PAGINATE\_INIT</code> \| <code>PAGINATE\_PENDING</code> \| <code>PAGINATE\_UPDATED</code> \| <code>PAGINATE\_DEFAULT</code>
+        * [.errCallback](#module_FirebaseFirestoreWrapper.errCallback) ⇒ <code>callback</code>
+        * [.errCallback](#module_FirebaseFirestoreWrapper.errCallback) ⇒ <code>callback</code>
     * _inner_
         * [~Record](#module_FirebaseFirestoreWrapper..Record) : <code>object</code>
         * [~RecordArray](#module_FirebaseFirestoreWrapper..RecordArray) : <code>Record</code>
+        * [~RecordTree](#module_FirebaseFirestoreWrapper..RecordTree) : <code>Map</code>
 
 <a name="module_FirebaseFirestoreWrapper.PaginateFetch"></a>
 
@@ -259,14 +278,25 @@ return a sentinel to add/join elements to array field
 
 <a name="module_FirebaseFirestoreWrapper.RecordFromSnapshot"></a>
 
-### FirebaseFirestoreWrapper.RecordFromSnapshot(Snap) ⇒ <code>Record</code>
-returns an internal record structure from a firestore snapshot
+### FirebaseFirestoreWrapper.RecordFromSnapshot(DocumentSnapshot) ⇒ <code>Record</code>
+returns an internal record structure from a firestoreDocument snapshot
 
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 
 | Param | Type |
 | --- | --- |
-| Snap | <code>Snapshot</code> | 
+| DocumentSnapshot | <code>DocumentSnapshot</code> | 
+
+<a name="module_FirebaseFirestoreWrapper.RecordsFromSnapshot"></a>
+
+### FirebaseFirestoreWrapper.RecordsFromSnapshot(QuerySnapshot) ⇒ <code>RecordArray</code>
+returns an array of internal record structures from afirestore Query snapshot
+
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+
+| Param | Type |
+| --- | --- |
+| QuerySnapshot | <code>QuerySnapshot</code> | 
 
 <a name="module_FirebaseFirestoreWrapper.DocumentFromRecord"></a>
 
@@ -548,22 +578,6 @@ adds a new value to a firestore record array entry
 | docRefPath | <code>string</code> | the reference path for the document to be updated |
 | batch | <code>WriteBatch</code> \| <code>Transaction</code> | optional - used to chain transactions |
 
-<a name="module_FirebaseFirestoreWrapper.ListenRecords"></a>
-
-### FirebaseFirestoreWrapper.ListenRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>callback</code>
-sets up a listener for changes to a single record
-
-**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
-**Returns**: <code>callback</code> - function to be called to release subscription  
-**Sync**:   
-
-| Param | Type | Description |
-| --- | --- | --- |
-| tablePath | <code>string</code> | string describing relative path to document |
-| refPath | <code>string</code> | string describing path to parent document |
-| dataCallback | <code>QuerySnapshot</code> | function to be called with changes to record |
-| errCallback | <code>callback</code> | function to be called when an error occurs in listener |
-
 <a name="module_FirebaseFirestoreWrapper.ListenQuery"></a>
 
 ### FirebaseFirestoreWrapper.ListenQuery(table, [filterArray], [sortArray], refPath, dataCallback, errCallback) ⇒ <code>callback</code>
@@ -632,6 +646,190 @@ Listen to changes to a single record
 | dataCallback | <code>RecordListener</code> | callback to handle changes to requested document |
 | errCallback | <code>callback</code> | callback to handle error reporting and operations |
 
+<a name="module_FirebaseFirestoreWrapper.ownerFilter"></a>
+
+### FirebaseFirestoreWrapper.ownerFilter(owner, refPath, queryFilter) ⇒ <code>filterObject</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| owner | <code>Record</code> |  |
+| refPath | <code>string</code> | string representing the full path to the Firestore document. |
+| queryFilter | <code>filterObject</code> | additional filter parameters |
+
+<a name="module_FirebaseFirestoreWrapper.fetchSlice"></a>
+
+### FirebaseFirestoreWrapper.fetchSlice(owner, collectionName) ⇒ <code>QuerySnapshot</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>QuerySnapshot</code> - response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| owner | <code>Record</code> |  |
+| owner.refPath | <code>string</code> | string representing the full path to the Firestore document. |
+| collectionName | <code>string</code> | name of the desired collectionGroup |
+
+<a name="module_FirebaseFirestoreWrapper.querySlice"></a>
+
+### FirebaseFirestoreWrapper.querySlice(owner, collectionName, queryFilter) ⇒ <code>QuerySnapshot</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>QuerySnapshot</code> - response  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| owner | <code>Record</code> |  |
+| owner.refPath | <code>string</code> | string representing the full path to the Firestore document. |
+| collectionName | <code>string</code> | name of the desired collectionGroup |
+| queryFilter | <code>filterObject</code> | filter parameters |
+
+<a name="module_FirebaseFirestoreWrapper.typedWrite"></a>
+
+### FirebaseFirestoreWrapper.typedWrite(data, parent, type, batch) ⇒ <code>Promise</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>DocumentObject</code> | the data object/record to update.  This will create a new one if it doesn't exist |
+| data.Id | <code>string</code> |  |
+| data.refPath | <code>string</code> |  |
+| parent | <code>DocumentObject</code> | parent object (if any) this belongs to |
+| parent.refPath | <code>string</code> | full path to parent document |
+| type | <code>string</code> | name of type of object - i.e. the sub-collection name |
+| batch | <code>WriteBatch</code> \| <code>Transaction</code> | batching object.  Transaction will be added to the batch |
+
+<a name="module_FirebaseFirestoreWrapper.typedWriteByTree"></a>
+
+### FirebaseFirestoreWrapper.typedWriteByTree(data, tree, type, batch) ⇒ <code>Promise</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>object</code> | the data object/record to update.  This will create a new one if it doesn't exist |
+| tree | <code>ArtistTree</code> | Object with properties of refPath segments |
+| type | <code>string</code> | name of type of object - i.e. the sub-collection name |
+| batch | <code>WriteBatch</code> \| <code>Transaction</code> | batching object.  Transaction will be added to the batch |
+
+<a name="module_FirebaseFirestoreWrapper.typedCreate"></a>
+
+### FirebaseFirestoreWrapper.typedCreate(data, parent, type, batch) ⇒ <code>Promise</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>object</code> | the data object/record to create.  This will create a new one if it doesn't exist |
+| parent | <code>DocumentObject</code> | parent object (if any) this belongs to |
+| parent.refPath | <code>string</code> | full path to parent document |
+| type | <code>string</code> | name of type of object - i.e. the sub-collection name |
+| batch | <code>WriteBatch</code> \| <code>Transaction</code> | batching object. Transaction will be added to the batch |
+
+<a name="module_FirebaseFirestoreWrapper.treeFromChild"></a>
+
+### FirebaseFirestoreWrapper.treeFromChild(child) ⇒ <code>RecordTree</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Sync**:   
+
+| Param | Type | Description |
+| --- | --- | --- |
+| child | <code>Record</code> | document (regardless of depth)  of a tree |
+| child.refPath | <code>string</code> |  |
+
+<a name="module_FirebaseFirestoreWrapper.typedRefPathFromTree"></a>
+
+### FirebaseFirestoreWrapper.typedRefPathFromTree(tree, type, branchType) ⇒ <code>string</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>string</code> - constructed refPath (collection)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tree | <code>RecordTree</code> |  |
+| type | <code>string</code> |  |
+| branchType | <code>string</code> | a collection name to start branching from. This is in case tree was built from a sister collection/document |
+
+<a name="module_FirebaseFirestoreWrapper.typedIdFromChild"></a>
+
+### FirebaseFirestoreWrapper.typedIdFromChild(child, type)
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| child | <code>DocumentObject</code> | document (regardless of depth)  of a tree |
+| child.refPath | <code>string</code> |  |
+| type | <code>string</code> | name of desired type/collection level in tree |
+
+<a name="module_FirebaseFirestoreWrapper.typedRefPathFromChild"></a>
+
+### FirebaseFirestoreWrapper.typedRefPathFromChild(child, type) ⇒ <code>string</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>string</code> - constructed refPath (collection)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| child | <code>DocumentObject</code> | document (regardless of depth)  of a tree |
+| child.refPath | <code>string</code> |  |
+| type | <code>string</code> |  |
+
+<a name="module_FirebaseFirestoreWrapper.typedFetchFromChild"></a>
+
+### FirebaseFirestoreWrapper.typedFetchFromChild(child, refPath, type, batch)
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| child | <code>DocumentObject</code> | assumed to be an object in a collection/document Tree |
+| refPath | <code>string</code> |  |
+| type | <code>string</code> | type/collection to fetch parent document from |
+| batch | <code>WriteBatch</code> \| <code>Transaction</code> | optional batch object to chain |
+
+<a name="module_FirebaseFirestoreWrapper.typedFetchFromTree"></a>
+
+### FirebaseFirestoreWrapper.typedFetchFromTree(tree, refPath, type, batch)
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tree | <code>RecordTree</code> | assumed to be an object in a collection/document Tree |
+| refPath | <code>string</code> |  |
+| type | <code>string</code> | type/collection to fetch parent document from |
+| batch | <code>WriteBatch</code> \| <code>Transaction</code> | optional batch object to chain |
+
+<a name="module_FirebaseFirestoreWrapper.typedCollectFromTree"></a>
+
+### FirebaseFirestoreWrapper.typedCollectFromTree(tree, type, batch)
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tree | <code>RecordTree</code> | assumed to be an object in a collection/document Tree |
+| type | <code>string</code> | type/collection to fetch parent document from |
+| batch | <code>WriteBatch</code> \| <code>Transaction</code> | optional batch object to chain |
+
+<a name="module_FirebaseFirestoreWrapper.typedCollectFromChild"></a>
+
+### FirebaseFirestoreWrapper.typedCollectFromChild(child, type, batch)
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| child | <code>Record</code> | assumed to be an object in a collection/document Tree |
+| type | <code>string</code> | type/collection to fetch parent document from |
+| batch | <code>WriteBatch</code> \| <code>Transaction</code> | optional batch object to chain |
+
+<a name="module_FirebaseFirestoreWrapper.localBatchReturn"></a>
+
+### FirebaseFirestoreWrapper.localBatchReturn(incomingBatch, internalBatch) ⇒ <code>WriteBatch</code> \| <code>Transaction</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>WriteBatch</code> \| <code>Transaction</code> - WriteBatch, Transaction or Void  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| incomingBatch | <code>WriteBatch</code> \| <code>Transaction</code> | a batching object passed into the subroutine Internal Transaction will be added to the incoming batch |
+| internalBatch | <code>WriteBatch</code> \| <code>Transaction</code> | a batching object as built *in* the routine, built on the incomingBatch if it exists |
+
+**Example**  
+```export const suboperation = (data, batch = null) => { let myBatch = batch || openWriteBatch(); //note short circuit //stuff that happens in the routine writeRecord(table, data, parent, myBatch); writeRecord(otherTable, otherData, otherParent, myBatch); return localBatchReturn(batch, myBatch);}```
 <a name="module_FirebaseFirestoreWrapper.RecordListener"></a>
 
 ### FirebaseFirestoreWrapper.RecordListener : <code>function</code>
@@ -650,10 +848,55 @@ Listen to changes to a single record
 | --- | --- |
 | querySnapshot | <code>QuerySnapshot</code> | 
 
+<a name="module_FirebaseFirestoreWrapper.errCallback"></a>
+
+### FirebaseFirestoreWrapper.errCallback ⇒ <code>callback</code>
+sets up a listener for changes to a single record
+
+**Kind**: static typedef of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>callback</code> - function to be called to release subscription  
+**Sync**:   
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tablePath | <code>string</code> | string describing relative path to document |
+| refPath | <code>string</code> | string describing path to parent document |
+| response | <code>QuerySnapshot</code> |  |
+| response | <code>callback</code> |  |
+
 <a name="module_FirebaseFirestoreWrapper.PagingStatus"></a>
 
 ### FirebaseFirestoreWrapper.PagingStatus : <code>PAGINATE\_INIT</code> \| <code>PAGINATE\_PENDING</code> \| <code>PAGINATE\_UPDATED</code> \| <code>PAGINATE\_DEFAULT</code>
 **Kind**: static typedef of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+<a name="module_FirebaseFirestoreWrapper.errCallback"></a>
+
+### FirebaseFirestoreWrapper.errCallback ⇒ <code>callback</code>
+**Kind**: static typedef of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>callback</code> - function to be called to release subscription  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| owner | <code>Record</code> |  |
+| owner.refPath | <code>string</code> | string representing the full path to the Firestore document. |
+| collectionName | <code>string</code> | name of the desired collectionGroup |
+| response | <code>QuerySnapshot</code> |  |
+| response | <code>string</code> |  |
+
+<a name="module_FirebaseFirestoreWrapper.errCallback"></a>
+
+### FirebaseFirestoreWrapper.errCallback ⇒ <code>callback</code>
+**Kind**: static typedef of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>callback</code> - function to be called to release subscription  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| owner | <code>Record</code> |  |
+| owner.refPath | <code>string</code> | string representing the full path to the Firestore document. |
+| collectionName | <code>string</code> | name of the desired collectionGroup |
+| filterArray | <code>filterObject</code> | filter parameters |
+| response | <code>QuerySnapshot</code> |  |
+| response | <code>string</code> |  |
+
 <a name="module_FirebaseFirestoreWrapper..Record"></a>
 
 ### FirebaseFirestoreWrapper~Record : <code>object</code>
@@ -672,6 +915,10 @@ common properties of our database records
 ### FirebaseFirestoreWrapper~RecordArray : <code>Record</code>
 an array of database records
 
+**Kind**: inner typedef of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+<a name="module_FirebaseFirestoreWrapper..RecordTree"></a>
+
+### FirebaseFirestoreWrapper~RecordTree : <code>Map</code>
 **Kind**: inner typedef of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 
 * * *
