@@ -190,7 +190,7 @@ export const RecordFromSnapshot = (DocumentSnapshot) => {
  */
 export const RecordsFromSnapshot = (QuerySnapshot) => {
   return QuerySnapshot.empty
-    ? null
+    ? []
     : QuerySnapshot.docs.map((docSnap) => {
         return RecordFromSnapshot(docSnap);
       });
