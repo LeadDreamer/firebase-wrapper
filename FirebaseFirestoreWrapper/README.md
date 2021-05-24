@@ -44,7 +44,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.writeRecordByRefPath(data, refPath, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper.writeRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
         * [.writeBack(data, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper.writeBack) ⇒ <code>Promise.&lt;Record&gt;</code>
         * [.collectRecords(tablePath, refPath)](#module_FirebaseFirestoreWrapper.collectRecords) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-        * [.collectRecordsByFilter(table, [filterArray], refPath)](#module_FirebaseFirestoreWrapper.collectRecordsByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+        * [.collectRecordsByFilter(tablePath, [filterArray], refPath)](#module_FirebaseFirestoreWrapper.collectRecordsByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
         * [.collectRecordsInGroup(tableName)](#module_FirebaseFirestoreWrapper.collectRecordsInGroup) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
         * [.collectRecordsInGroupByFilter(tableName, [filterArray])](#module_FirebaseFirestoreWrapper.collectRecordsInGroupByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
         * [.fetchRecord(tablePath, Id, refPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecord) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
@@ -424,7 +424,7 @@ query for a SET of records
 
 <a name="module_FirebaseFirestoreWrapper.collectRecordsByFilter"></a>
 
-### FirebaseFirestoreWrapper.collectRecordsByFilter(table, [filterArray], refPath) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+### FirebaseFirestoreWrapper.collectRecordsByFilter(tablePath, [filterArray], refPath) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
 ----------------------------------------------------------------------
 
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
@@ -432,7 +432,7 @@ query for a SET of records
 
 | Param | Type | Description |
 | --- | --- | --- |
-| table | <code>string</code> | a properly formatted string representing the requested collection - always an ODD number of elements |
+| tablePath | <code>string</code> | a properly formatted string representing the requested collection - always an ODD number of elements |
 | [filterArray] | <code>filterObject</code> | an array of filterObjects The array is assumed to be sorted in the correct order - i.e. filterArray[0] is added first; filterArray[length-1] last returns data as an array of objects (not dissimilar to Redux State objects) with both the documentID and documentReference added as fields. |
 | refPath | <code>string</code> | (optional) allows "table" parameter to reference a sub-collection of an existing document reference (I use a LOT of structured collections) |
 

@@ -189,11 +189,9 @@ export const RecordFromSnapshot = (DocumentSnapshot) => {
  * @returns {RecordArray}
  */
 export const RecordsFromSnapshot = (QuerySnapshot) => {
-  return QuerySnapshot.empty
-    ? []
-    : QuerySnapshot.docs.map((docSnap) => {
-        return RecordFromSnapshot(docSnap);
-      });
+  return QuerySnapshot.docs.map((docSnap) => {
+    return RecordFromSnapshot(docSnap);
+  });
 };
 
 /**
@@ -410,9 +408,9 @@ export const collectRecords = (tablePath, refPath = null) => {
     .get()
     .then((querySnapshot) => {
       // returns a promise
-      if (!querySnapshot.empty)
-        return Promise.resolve(RecordsFromSnapshot(querySnapshot));
-      else return Promise.reject("noDocuments:collectRecords:" + tablePath);
+      return !querySnapshot.empty
+        ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
+        : Promise.reject("noDocuments:collectRecords:" + tablePath);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecords:" + tablePath);
@@ -425,7 +423,7 @@ export const collectRecords = (tablePath, refPath = null) => {
  * @function collectRecordsByFilter
  * @static
  * @descriptions returns an array of documents from Firestore
- * @param {!string} table a properly formatted string representing the requested collection
+ * @param {!string} tablePath a properly formatted string representing the requested collection
  * - always an ODD number of elements
  * @param {filterObject} [filterArray] an array of filterObjects
  * The array is assumed to be sorted in the correct order -
@@ -436,14 +434,21 @@ export const collectRecords = (tablePath, refPath = null) => {
  * of an existing document reference (I use a LOT of structured collections)
  * @returns {Promise<Array<Record>>}
  */
-export const collectRecordsByFilter = (table, filterArray, refPath = null) => {
+export const collectRecordsByFilter = (
+  tablePath,
+  filterArray,
+  refPath = null
+) => {
   const db = dbReference(refPath);
 
   //assumes filterArray is in processing order
-  return filterQuery(db.collection(table), filterArray)
+  return filterQuery(db.collection(tablePath), filterArray)
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
-      return Promise.resolve(RecordsFromSnapshot(querySnapshot));
+      // returns a promise
+      return !querySnapshot.empty
+        ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
+        : Promise.reject("noDocuments:collectRecords:" + tablePath);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsByFilter");
@@ -499,7 +504,10 @@ export const collectRecordsInGroupByFilter = (tableName, filterArray) => {
   return filterQuery(db.collectionGroup(tableName), filterArray)
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
-      return Promise.resolve(RecordsFromSnapshot(querySnapshot));
+      // returns a promise
+      return !querySnapshot.empty
+        ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
+        : Promise.reject("noDocuments:collectRecords:" + tableName);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsInGroupByFilter");

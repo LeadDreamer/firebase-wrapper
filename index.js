@@ -20,6 +20,10 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper";
  * Intent is to treat Firestore as a hierarchical
  * record-oriented database; originally conceived to port from one
  * database to another.
+ * NOTE:
+ * Most helpers return PROMISE.REJECT if no documents are returned.
+ * it is assumed projects using this library *might* want to have an
+ * explicitly error trap for such events.
  */
 
 /**
