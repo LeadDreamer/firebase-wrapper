@@ -53,7 +53,11 @@ functions, with a consistent interface.  There is a parallel set for
 ADMIN-SIDE functions as well.
 Intent is to treat Firestore as a hierarchical
 record-oriented database; originally conceived to port from one
-database to another.</p>
+database to another.
+NOTE:
+Most helpers return PROMISE.REJECT if no documents are returned.
+it is assumed projects using this library <em>might</em> want to have an
+explicitly error trap for such events.</p>
 </dd>
 </dl>
 
@@ -1295,7 +1299,7 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 <a name="module_FirebaseWrapper"></a>
 
 ## FirebaseWrapper
-A set of helper-wrapper functions around firebase firestore, storageand auth.all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.
+A set of helper-wrapper functions around firebase firestore, storageand auth.all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.NOTE:Most helpers return PROMISE.REJECT if no documents are returned.it is assumed projects using this library *might* want to have anexplicitly error trap for such events.
 
 
 * [FirebaseWrapper](#module_FirebaseWrapper)
