@@ -1746,7 +1746,7 @@ export const typedWrite = (data, parent, type, batch = null) => {
   return writeRecord(
     type, //type of sub-collection...
     data,
-    parent.refPath, //... under tour reference
+    parent?.refPath, //... under tour reference
     batch
   );
 };
