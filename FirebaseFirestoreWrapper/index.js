@@ -316,7 +316,7 @@ export const writeRecord = (
   try {
     let docRef = data.Id
       ? // if existing document, re-create reference
-        db.collection(tablePath).doc("/" + data.Id)
+        db.collection(tablePath).doc(data.Id)
       : // if new, create a new reference
         db.collection(tablePath).doc();
     //all a transaction/WriteBatch can return is a chained transaction/WriteBatch
