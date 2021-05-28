@@ -16,8 +16,13 @@
  */
 
 function last(array) {
-  var length = array == null ? 0 : array.length;
+  let length = array == null ? 0 : array.length;
   return length ? array[length - 1] : undefined;
+}
+
+function penultimate(array) {
+  let length = array == null ? 0 : array.length;
+  return length ? array[length - 1 - 1] : undefined;
 }
 
 /**
@@ -1726,6 +1731,14 @@ export const listenQuerySlice = (
   } catch (err) {
     console.log(`failed:listenQuerySlice setup ${collectionName} err: ${err}`);
   }
+};
+
+export const ownerType = (record) => {
+  return record?.refPath.split(`/`)[0];
+};
+
+export const recordType = (record) => {
+  return record?.refPath ? penultimate(record.refPath.split(`/'`)) : undefined;
 };
 
 /**
