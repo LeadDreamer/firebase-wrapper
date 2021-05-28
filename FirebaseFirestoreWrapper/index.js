@@ -1733,10 +1733,24 @@ export const listenQuerySlice = (
   }
 };
 
+/**
+ * @function ownerType
+ * @static
+ * Returns the "type" (collection name) of the top-most parent of a
+ * record, derived from the refPath
+ * @returns {string} the collection name
+ */
 export const ownerType = (record) => {
   return record?.refPath.split(`/`)[0];
 };
 
+/**
+ * @function recordType
+ * @staticReturns the "type" (collection name) the passed record is
+ * stored in, derived from the refPath
+ * @returns {string} the collection name
+ *
+ */
 export const recordType = (record) => {
   return record?.refPath ? penultimate(record.refPath.split(`/'`)) : undefined;
 };
