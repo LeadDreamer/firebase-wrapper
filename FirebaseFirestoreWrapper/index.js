@@ -1746,13 +1746,36 @@ export const ownerType = (record) => {
 
 /**
  * @function recordType
- * @staticReturns the "type" (collection name) the passed record is
+ * @static
+ * Returns the "type" (collection name) the passed record is
  * stored in, derived from the refPath
  * @returns {string} the collection name
  *
  */
 export const recordType = (record) => {
-  return record?.refPath ? penultimate(record.refPath.split(`/'`)) : undefined;
+  return record?.refPath ? penultimate(record.refPath.split(`/`)) : undefined;
+};
+
+/**
+ * @function ownerId
+ * @static
+ * Returns the Id (documentId) of the top-most parent of a
+ * record, derived from the refPath
+ * @returns {string} the Id
+ */
+export const ownerId = (record) => {
+  return record?.refPath ? record?.refPath.split(`/`)[1] : undefined;
+};
+
+/**
+ * @function recordId
+ * @static
+ * Returns the Id (documentId) of the passed record derived from the refPath
+ * @returns {string} the Id
+ *
+ */
+export const recordId = (record) => {
+  return record?.refPath ? last(record.refPath.split(`/`)) : undefined;
 };
 
 /**

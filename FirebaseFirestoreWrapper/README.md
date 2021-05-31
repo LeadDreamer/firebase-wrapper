@@ -64,6 +64,9 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.fetchSlice(owner, collectionName)](#module_FirebaseFirestoreWrapper.fetchSlice) ⇒ <code>QuerySnapshot</code>
         * [.querySlice(owner, collectionName, queryFilter)](#module_FirebaseFirestoreWrapper.querySlice) ⇒ <code>QuerySnapshot</code>
         * [.ownerType()](#module_FirebaseFirestoreWrapper.ownerType) ⇒ <code>string</code>
+        * [.recordType()](#module_FirebaseFirestoreWrapper.recordType) ⇒ <code>string</code>
+        * [.ownerId()](#module_FirebaseFirestoreWrapper.ownerId) ⇒ <code>string</code>
+        * [.recordId()](#module_FirebaseFirestoreWrapper.recordId) ⇒ <code>string</code>
         * [.typedWrite(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedWrite) ⇒ <code>Promise</code>
         * [.typedWriteByTree(data, tree, type, batch)](#module_FirebaseFirestoreWrapper.typedWriteByTree) ⇒ <code>Promise</code>
         * [.typedCreate(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedCreate) ⇒ <code>Promise</code>
@@ -83,7 +86,6 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.errCallback](#module_FirebaseFirestoreWrapper.errCallback) ⇒ <code>callback</code>
         * [.errCallback](#module_FirebaseFirestoreWrapper.errCallback) ⇒ <code>callback</code>
     * _inner_
-        * [~recordType()](#module_FirebaseFirestoreWrapper..recordType) ⇒ <code>string</code>
         * [~Record](#module_FirebaseFirestoreWrapper..Record) : <code>object</code>
         * [~RecordArray](#module_FirebaseFirestoreWrapper..RecordArray) : <code>Record</code>
         * [~RecordTree](#module_FirebaseFirestoreWrapper..RecordTree) : <code>Map</code>
@@ -689,6 +691,21 @@ Listen to changes to a single record
 ### FirebaseFirestoreWrapper.ownerType() ⇒ <code>string</code>
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 **Returns**: <code>string</code> - the collection name  
+<a name="module_FirebaseFirestoreWrapper.recordType"></a>
+
+### FirebaseFirestoreWrapper.recordType() ⇒ <code>string</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>string</code> - the collection name  
+<a name="module_FirebaseFirestoreWrapper.ownerId"></a>
+
+### FirebaseFirestoreWrapper.ownerId() ⇒ <code>string</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>string</code> - the Id  
+<a name="module_FirebaseFirestoreWrapper.recordId"></a>
+
+### FirebaseFirestoreWrapper.recordId() ⇒ <code>string</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>string</code> - the Id  
 <a name="module_FirebaseFirestoreWrapper.typedWrite"></a>
 
 ### FirebaseFirestoreWrapper.typedWrite(data, parent, type, batch) ⇒ <code>Promise</code>
@@ -904,12 +921,6 @@ sets up a listener for changes to a single record
 | response | <code>QuerySnapshot</code> |  |
 | response | <code>string</code> |  |
 
-<a name="module_FirebaseFirestoreWrapper..recordType"></a>
-
-### FirebaseFirestoreWrapper~recordType() ⇒ <code>string</code>
-**Kind**: inner method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
-**Returns**: <code>string</code> - the collection name  
-**Staticreturns**: the "type" (collection name) the passed record isstored in, derived from the refPath  
 <a name="module_FirebaseFirestoreWrapper..Record"></a>
 
 ### FirebaseFirestoreWrapper~Record : <code>object</code>
