@@ -66,6 +66,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.ownerType()](#module_FirebaseFirestoreWrapper.ownerType) ⇒ <code>string</code>
         * [.ownerId()](#module_FirebaseFirestoreWrapper.ownerId) ⇒ <code>string</code>
         * [.ownerRefPath()](#module_FirebaseFirestoreWrapper.ownerRefPath) ⇒ <code>string</code>
+        * [.fetchOwner()](#module_FirebaseFirestoreWrapper.fetchOwner) ⇒ <code>Document</code>
         * [.recordType()](#module_FirebaseFirestoreWrapper.recordType) ⇒ <code>string</code>
         * [.recordId()](#module_FirebaseFirestoreWrapper.recordId) ⇒ <code>string</code>
         * [.typedWrite(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedWrite) ⇒ <code>Promise</code>
@@ -702,6 +703,10 @@ Listen to changes to a single record
 ### FirebaseFirestoreWrapper.ownerRefPath() ⇒ <code>string</code>
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 **Returns**: <code>string</code> - the Id  
+<a name="module_FirebaseFirestoreWrapper.fetchOwner"></a>
+
+### FirebaseFirestoreWrapper.fetchOwner() ⇒ <code>Document</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 <a name="module_FirebaseFirestoreWrapper.recordType"></a>
 
 ### FirebaseFirestoreWrapper.recordType() ⇒ <code>string</code>
