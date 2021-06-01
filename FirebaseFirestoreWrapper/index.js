@@ -1769,6 +1769,23 @@ export const ownerRefPath = (record) => {
 };
 
 /**
+ * @async
+ * @function fetchOwner
+ * @static
+ * returns the record for the top-most parent of a record,
+ * derived from the refPath
+ * @returns {Document}
+ */
+export const fetchOwner = (record) => {
+  return fetchRecord(
+    ownerType(record), //type/collection
+    ownerId(record), //Id of record desired
+    null, //no refPath (top-level)
+    null //no batch
+  );
+};
+
+/**
  * @function recordType
  * @static
  * Returns the "type" (collection name) the passed record is
