@@ -1745,6 +1745,30 @@ export const ownerType = (record) => {
 };
 
 /**
+ * @function ownerId
+ * @static
+ * Returns the Id (documentId) of the top-most parent of a
+ * record, derived from the refPath
+ * @returns {string} the Id
+ */
+export const ownerId = (record) => {
+  return record?.refPath.split(`/`)[1];
+};
+
+/**
+ * @function ownerRefPath
+ * @static
+ * Returns the Id (documentId) of the top-most parent of a
+ * record, derived from the refPath
+ * @returns {string} the Id
+ */
+export const ownerRefPath = (record) => {
+  return record?.refPath
+    ? `${ownerType(record)}/${ownerId(record)}`
+    : undefined;
+};
+
+/**
  * @function recordType
  * @static
  * Returns the "type" (collection name) the passed record is
@@ -1754,17 +1778,6 @@ export const ownerType = (record) => {
  */
 export const recordType = (record) => {
   return record?.refPath ? penultimate(record.refPath.split(`/`)) : undefined;
-};
-
-/**
- * @function ownerId
- * @static
- * Returns the Id (documentId) of the top-most parent of a
- * record, derived from the refPath
- * @returns {string} the Id
- */
-export const ownerId = (record) => {
-  return record?.refPath ? record?.refPath.split(`/`)[1] : undefined;
 };
 
 /**

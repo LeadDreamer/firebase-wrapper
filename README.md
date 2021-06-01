@@ -359,8 +359,9 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.fetchSlice(owner, collectionName)](#module_FirebaseFirestoreWrapper.fetchSlice) ⇒ <code>QuerySnapshot</code>
         * [.querySlice(owner, collectionName, queryFilter)](#module_FirebaseFirestoreWrapper.querySlice) ⇒ <code>QuerySnapshot</code>
         * [.ownerType()](#module_FirebaseFirestoreWrapper.ownerType) ⇒ <code>string</code>
-        * [.recordType()](#module_FirebaseFirestoreWrapper.recordType) ⇒ <code>string</code>
         * [.ownerId()](#module_FirebaseFirestoreWrapper.ownerId) ⇒ <code>string</code>
+        * [.ownerRefPath()](#module_FirebaseFirestoreWrapper.ownerRefPath) ⇒ <code>string</code>
+        * [.recordType()](#module_FirebaseFirestoreWrapper.recordType) ⇒ <code>string</code>
         * [.recordId()](#module_FirebaseFirestoreWrapper.recordId) ⇒ <code>string</code>
         * [.typedWrite(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedWrite) ⇒ <code>Promise</code>
         * [.typedWriteByTree(data, tree, type, batch)](#module_FirebaseFirestoreWrapper.typedWriteByTree) ⇒ <code>Promise</code>
@@ -986,16 +987,21 @@ Listen to changes to a single record
 ### FirebaseFirestoreWrapper.ownerType() ⇒ <code>string</code>
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 **Returns**: <code>string</code> - the collection name  
-<a name="module_FirebaseFirestoreWrapper.recordType"></a>
-
-### FirebaseFirestoreWrapper.recordType() ⇒ <code>string</code>
-**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
-**Returns**: <code>string</code> - the collection name  
 <a name="module_FirebaseFirestoreWrapper.ownerId"></a>
 
 ### FirebaseFirestoreWrapper.ownerId() ⇒ <code>string</code>
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 **Returns**: <code>string</code> - the Id  
+<a name="module_FirebaseFirestoreWrapper.ownerRefPath"></a>
+
+### FirebaseFirestoreWrapper.ownerRefPath() ⇒ <code>string</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>string</code> - the Id  
+<a name="module_FirebaseFirestoreWrapper.recordType"></a>
+
+### FirebaseFirestoreWrapper.recordType() ⇒ <code>string</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>string</code> - the collection name  
 <a name="module_FirebaseFirestoreWrapper.recordId"></a>
 
 ### FirebaseFirestoreWrapper.recordId() ⇒ <code>string</code>
