@@ -275,7 +275,7 @@ export const closeWriteBatch = (batch = null) => {
 export const createUniqueReference = (tablePath, refPath = null) => {
   const db = dbReference(refPath);
   const docRef = db.collection(tablePath).doc(); // just
-  return { Id: docRef.Id, refPath: docRef.path };
+  return { Id: docRef.id, refPath: docRef.path };
 };
 
 /**
