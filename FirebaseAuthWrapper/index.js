@@ -1,3 +1,5 @@
+import "@firebase/app";
+import "@firebase/auth";
 /**
  * @module FirebaseAuthWrapper
  * @description A set of helper-wrapper functions around firebase firestore, storage
@@ -32,18 +34,6 @@
  * })(config)
  * ```
  */
-export default function FirebaseAuthWrapper(firebase, styled) {
-  FirebaseAuth = firebase.auth();
-  FirebaseAuthSignInOptions = [
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-    //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-    firebase.auth.EmailAuthProvider.PROVIDER_ID
-    //firebase.auth.TwitterAuthProvider.PROVIDER_ID
-  ];
-  FirebaseAuthPersistence = firebase.auth.Auth.Persistence.LOCAL;
-  StyledFirebaseAuth = styled;
-}
-
 /**
  * @var {object} FirebaseAuth
  * @static
@@ -62,6 +52,18 @@ let FirebaseAuthPersistence;
 export let FirebaseAuthSignInOptions;
 
 export let StyledFirebaseAuth;
+
+export default function FirebaseAuthWrapper(firebase, styled) {
+  FirebaseAuth = firebase.auth();
+  FirebaseAuthSignInOptions = [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    firebase.auth.EmailAuthProvider.PROVIDER_ID
+    //firebase.auth.TwitterAuthProvider.PROVIDER_ID
+  ];
+  FirebaseAuthPersistence = firebase.auth.Auth.Persistence.LOCAL;
+  StyledFirebaseAuth = styled;
+}
 
 /**
  * ----------------------------------------------------------------------
