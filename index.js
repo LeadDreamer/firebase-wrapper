@@ -68,7 +68,7 @@ const FirebaseWrapper = async (config) => {
   try {
     firebase.app();
   } catch (err) {
-    await firebase.initializeApp(config);
+    firebase.initializeApp(config);
   }
   FirebaseFirestore(firebase);
   FirebaseStorage(firebase);

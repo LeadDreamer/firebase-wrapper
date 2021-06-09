@@ -279,6 +279,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 * [FirebaseCloudFunctionsWrapper](#module_FirebaseCloudFunctionsWrapper)
     * [.FirebaseCloudFunctions(firebase)](#module_FirebaseCloudFunctionsWrapper.FirebaseCloudFunctions)
     * [.CloudFunctions()](#module_FirebaseCloudFunctionsWrapper.CloudFunctions) ⇒ <code>external:promise</code>
+    * [.treeFromParams(Params)](#module_FirebaseCloudFunctionsWrapper.treeFromParams) ⇒ <code>RecordTree</code>
 
 <a name="module_FirebaseCloudFunctionsWrapper.FirebaseCloudFunctions"></a>
 
@@ -299,6 +300,16 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 **Reject**: err as returned from call  
 **Example**  
 ```result = await CloudFunctions("MyGloriousFunction")(argumentToFunction);```
+<a name="module_FirebaseCloudFunctionsWrapper.treeFromParams"></a>
+
+### FirebaseCloudFunctionsWrapper.treeFromParams(Params) ⇒ <code>RecordTree</code>
+**Kind**: static method of [<code>FirebaseCloudFunctionsWrapper</code>](#module_FirebaseCloudFunctionsWrapper)  
+**Sync**:   
+
+| Param | Type |
+| --- | --- |
+| Params | <code>object</code> | 
+
 <a name="module_FirebaseFirestoreWrapper"></a>
 
 ## FirebaseFirestoreWrapper
@@ -382,7 +393,9 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.PagingStatus](#module_FirebaseFirestoreWrapper.PagingStatus) : <code>PAGINATE\_INIT</code> \| <code>PAGINATE\_PENDING</code> \| <code>PAGINATE\_UPDATED</code> \| <code>PAGINATE\_DEFAULT</code>
         * [.errCallback](#module_FirebaseFirestoreWrapper.errCallback) ⇒ <code>callback</code>
         * [.errCallback](#module_FirebaseFirestoreWrapper.errCallback) ⇒ <code>callback</code>
+        * [.errCallback](#module_FirebaseFirestoreWrapper.errCallback) ⇒ <code>Promise</code> \| <code>callback</code>
     * _inner_
+        * [~typedPaginatedListener(type, parent, dataCallback, errCallback, pageSize)](#module_FirebaseFirestoreWrapper..typedPaginatedListener) ⇒ <code>PaginatedListener</code>
         * [~Record](#module_FirebaseFirestoreWrapper..Record) : <code>object</code>
         * [~RecordArray](#module_FirebaseFirestoreWrapper..RecordArray) : <code>Record</code>
         * [~RecordTree](#module_FirebaseFirestoreWrapper..RecordTree) : <code>Map</code>
@@ -1226,6 +1239,37 @@ sets up a listener for changes to a single record
 | filterArray | <code>filterObject</code> | filter parameters |
 | response | <code>QuerySnapshot</code> |  |
 | response | <code>string</code> |  |
+
+<a name="module_FirebaseFirestoreWrapper.errCallback"></a>
+
+### FirebaseFirestoreWrapper.errCallback ⇒ <code>Promise</code> \| <code>callback</code>
+**Kind**: static typedef of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void<code>callback</code> - function to be called to release subscription  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| type | <code>string</code> | name of type of object - i.e. the sub-collection name |
+| parent | <code>DocumentObject</code> | parent object (if any) this belongs to |
+| parent.refPath | <code>string</code> | full path to parent document |
+| batch | <code>WriteBatch</code> \| <code>Transaction</code> | batching object.  Transaction will be added to the batch |
+| type | <code>string</code> | name of the desired collectionGroup |
+| response | <code>QuerySnapshot</code> |  |
+| response | <code>string</code> |  |
+
+<a name="module_FirebaseFirestoreWrapper..typedPaginatedListener"></a>
+
+### FirebaseFirestoreWrapper~typedPaginatedListener(type, parent, dataCallback, errCallback, pageSize) ⇒ <code>PaginatedListener</code>
+**Kind**: inner method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>PaginatedListener</code> - object with unsubscribe and pagination methods  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| type | <code>string</code> | name of type of object - i.e. the sub-collection name |
+| parent | <code>DocumentObject</code> | parent object (if any) this belongs to |
+| parent.refPath | <code>string</code> | full path to parent document |
+| dataCallback | <code>function</code> | callback |
+| errCallback | <code>function</code> | callback |
+| pageSize | <code>number</code> |  |
 
 <a name="module_FirebaseFirestoreWrapper..Record"></a>
 

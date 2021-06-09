@@ -2059,6 +2059,62 @@ export const typedCollectFromChild = async (
 };
 
 /**
+ * @function typedListener
+ * @static
+ * Uses the ownerFilter (above) to establish a listener to "just" the
+ * parts of a collectionGroup that are descendants of the passed "owner"
+ * record.
+ * @param {!string} type - name of type of object - i.e. the sub-collection name
+ * @param {?DocumentObject} parent - parent object (if any) this belongs to
+ * @param {!string} parent.refPath - full path to parent document
+ * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
+ * @return {Promise} WriteBatch, Transaction or Void
+ * @param {!string} type name of the desired collectionGroup
+ * @callback  dataCallback function to be called with changes to record
+ * @param {QuerySnapshot} response
+ * @callback errCallback function to be called when an error
+ * occurs in listener
+ * @param {string}  response
+ * @returns {callback} function to be called to release subscription
+ *
+ */
+export const typedListener = (type, parent, dataCallBack, errCallBack) => {
+  try {
+    return ListenRecords(type, parent?.refPath, dataCallBack, errCallBack);
+  } catch (err) {
+    console.log(`failed:typedListener setup ${type} err: ${err}`);
+  }
+};
+
+/**
+ * @function typedPaginatedListener
+ * @param {!string} type - name of type of object - i.e. the sub-collection name
+ * @param {?DocumentObject} parent - parent object (if any) this belongs to
+ * @param {!string} parent.refPath - full path to parent document
+ * @param {function} dataCallback callback
+ * @param {function} errCallback callback
+ * @param {number} pageSize
+ * @returns {PaginatedListener} object with unsubscribe and pagination methods
+ */
+export const typedPaginatedListener = (
+  type,
+  parent,
+  dataCallback,
+  errCallback,
+  pageSize = PAGINATE_DEFAULT
+) => {
+  return new PaginatedListener(
+    type,
+    null, //filter
+    [{ fieldRef: "name", dirStr: "asc" }], //sort, required
+    parent?.refPath, //refPath
+    pageSize,
+    dataCallback,
+    errCallback
+  );
+};
+
+/**
  * @function localBatchReturn
  * @static
  * Some operations need their internal steps batched.  This routine

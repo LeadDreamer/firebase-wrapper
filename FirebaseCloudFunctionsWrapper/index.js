@@ -57,3 +57,21 @@ export default function FirebaseCloudFunctions(firebase) {
 export const CloudFunctions = (name) => {
   return functions && functions.httpsCallable(name);
 };
+
+/**
+ * @sync
+ * @function treeFromParams
+ * @static
+ * Cloud Function specific - processes a Params list from
+ * a firestore function to create a reference/Id "tree"
+ * @param {object} Params
+ * @returns {RecordTree}
+ */
+export const treeFromParams = (Params) => {
+  let tree = new Map();
+  Object.keys(Params).forEach(paramName => {
+    tree.set(paramName, Params[paramName]);
+  })
+  return tree;
+};
+
