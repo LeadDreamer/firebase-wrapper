@@ -298,14 +298,14 @@ export const dbReference = (refPath) => {
  * @static
  * @description writes a Firestore record to collection
  * indicated by tablePath relative to option DocumentReference refPath
- * @param {!string} tablePath string representing a valid path to a collection to
+ * @param {!string} tablePath - string representing a valid path to a collection to
  * create or update the document in, relative to a document reference
  * passed in
- * @param {!Record} data Data/Record object to write to database
- * @param {?string} refPath an optional valid document reference to start the table path
- * @param {?WriteBatch|Transaction} batch optional chain token to include this
+ * @param {!Record} data - Data/Record object to write to database
+ * @param {?string} refPath - an optional valid document reference to start the table path
+ * @param {?WriteBatch|Transaction} batch - optional chain token to include this
  * operation as part of an Atomic Transaction
- * @param {?boolean} mergeOption - whether to merge into existin data; default TRUE
+ * @param {?boolean} mergeOption - whether to merge into existing data; default TRUE
  * @returns {Promise<Record>}
  */
 export const writeRecord = (
@@ -1875,7 +1875,7 @@ export const typedWriteByTree = (data, tree, type, batch = null) => {
  */
 export const typedCreate = (data, parent, type, batch = null) => {
   //create a new document reference (entirely local) and make a data object
-  let newData = createUniqueReference(data, parent.refPath);
+  let newData = createUniqueReference(type, parent.refPath);
   //merge the supplied data into the new data object
   newData = {
     ...data,
