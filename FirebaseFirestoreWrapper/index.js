@@ -1856,6 +1856,36 @@ export const typedWriteByTree = (data, tree, type, batch = null) => {
 
 /**
  * @async
+ * @function typedWriteByChild
+ * @static
+ * optionally batched record update - abstracts batch process from specific types
+ * @param {object} data - the data object/record to update.  This will create a new one if it doesn't exist
+ * @param {ArtistTree} tree - Object with properties of refPath segments
+ * @param {string} type - name of type of object - i.e. the sub-collection name
+ * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
+ * @return {Promise} WriteBatch, Transaction or Void
+ */
+export const typedWriteByChild = (
+  data,
+  child,
+  type,
+  batch = null,
+  mergeOption = null
+) => {
+  //existing perks will be over-written, new ones created
+  return writeBack(
+    {
+      ...data, //base data
+      Id: typedIdFromChild(child, type), //Id from child path
+      refPath: typedRefPathFromChild(child, type) //refPath from child Path
+    },
+    batch,
+    mergeOption
+  );
+};
+
+/**
+ * @async
  * @function typedCreate
  * @static
  * Creates a new document reference of the indicated type, and writes
