@@ -453,7 +453,7 @@ export const collectRecordsByFilter = (
       // returns a promise
       return !querySnapshot.empty
         ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
-        : Promise.reject("noDocuments:collectRecords:" + tablePath);
+        : Promise.reject("noDocuments:collectRecordsByFilter:" + tablePath);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsByFilter");
@@ -512,7 +512,9 @@ export const collectRecordsInGroupByFilter = (tableName, filterArray) => {
       // returns a promise
       return !querySnapshot.empty
         ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
-        : Promise.reject("noDocuments:collectRecords:" + tableName);
+        : Promise.reject(
+            "noDocuments:collectRecordsInGroupByFilter:" + tableName
+          );
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsInGroupByFilter");
@@ -1845,7 +1847,7 @@ export const typedWrite = (data, parent, type, batch = null) => {
 export const typedWriteByTree = (data, tree, type, batch = null) => {
   //existing perks will be over-written, new ones created
   return writeRecord(
-    typedRefPathFromTree(tree, type), //type of sub-collection...
+    typedTablePathFromTree(tree, type), //type of sub-collection...
     data,
     /*no parent */ null,
     batch
@@ -1913,7 +1915,7 @@ export const treeFromChild = (child) => {
 };
 
 /**
- * @function typedRefPathFromTree
+ * @function typedTablePathFromTree
  * @static
  * Builds a refPath *down* to a desired collection/type from an existing
  * RecordTree Map.
@@ -1921,9 +1923,9 @@ export const treeFromChild = (child) => {
  * @param {!string} type
  * @param {?string} branchType a collection name to start branching from.
  * This is in case tree was built from a sister collection/document
- * @return {string} constructed refPath (collection)
+ * @return {string} constructed TablePath (collection)
  */
-export const typedRefPathFromTree = (tree, type, branchType) => {
+export const typedTablePathFromTree = (tree, type, branchType) => {
   let pathString = "";
   for (let [collection, docId] of tree) {
     pathString = `${pathString}${collection}/`;
@@ -1932,13 +1934,34 @@ export const typedRefPathFromTree = (tree, type, branchType) => {
       break;
     }
     if (collection === branchType) {
-      //If reached the branch point, append the current Id and desired "type"
-      //and return result
-      pathString = `${pathString}${docId}/${type}`;
+      pathString = `${pathString}/${docId}/${type}`;
       break;
     }
     //add on the current tree level docId for next collection level
-    pathString = `${pathString}${docId}/`;
+    pathString = `${pathString}/${docId}/`;
+  }
+  return pathString;
+};
+
+/**
+ * @function typedRefPathFromTree
+ * @static
+ * Builds a refPath *down* to a desired collection/type from an existing
+ * RecordTree Map.
+ * @param {RecordTree} tree
+ * @param {!string} type
+ * @return {string} constructed refPath (document)
+ */
+export const typedRefPathFromTree = (tree, type) => {
+  let pathString = "";
+  for (let [collection, docId] of tree) {
+    pathString = `${pathString}${collection}/${docId}`;
+    if (collection === type) {
+      //reached requested depth
+      break;
+    }
+    //add on the current tree level docId for next collection level
+    pathString = `${pathString}/`;
   }
   return pathString;
 };
@@ -1961,7 +1984,7 @@ export const typedIdFromChild = (child, type) => {
 };
 
 /**
- * @function typedRefPathFromChild
+ * @function typedTablePathFromChild
  * @static
  * Builds a refPath *up* to a desired collection/type from an existing
  * child in a tree
@@ -1971,8 +1994,23 @@ export const typedIdFromChild = (child, type) => {
  * @param {!string} type
  * @return {string} constructed refPath (collection)
  */
-export const typedRefPathFromChild = (child, type, branchType = null) => {
-  return typedRefPathFromTree(treeFromChild(child), type, branchType);
+export const typedTablePathFromChild = (child, type, branchType = null) => {
+  return typedTablePathFromTree(treeFromChild(child), type, branchType);
+};
+
+/**
+ * @function typedRefPathFromChild
+ * @static
+ * Builds a refPath *up* to a desired collection/type from an existing
+ * child in a tree
+ * @param {DocumentObject} child document (regardless of depth)
+ *  of a tree
+ * @param {!string} child.refPath
+ * @param {!string} type
+ * @return {string} constructed refPath (document)
+ */
+export const typedRefPathFromChild = (child, type) => {
+  return typedRefPathFromTree(treeFromChild(child), type);
 };
 
 /**
@@ -1991,12 +2029,8 @@ export const typedFetchFromChild = async (
   branchType = null,
   batch = null
 ) => {
-  //previous/tree/levels/then/type/Id/whatever/else
-  //(previous/tree/levels/then/type) (Id/whatever/else)
-  //(Id) (whatever/else)
-  //fetch (previous/tree/levels/then/type)/(Id)
   return fetchRecord(
-    typedRefPathFromChild(child, type, branchType), //Full Path to collection
+    typedTablePathFromChild(child, type, branchType), //Full Path to collection
     typedIdFromChild(child, type), //Id
     null, //No parent needed
     batch //optional Batch object
@@ -2015,8 +2049,8 @@ export const typedFetchFromChild = async (
  */
 export const typedFetchFromTree = async (tree, type, batch = null) => {
   return fetchRecord(
-    typedRefPathFromTree(tree), //Full Path to collection
-    tree.get(type), //Id
+    typedTablePathFromTree(tree, type), //Full Path to collection
+    tree.get(type), //Id of specific document
     null, //No parent needed
     batch //optional Batch object
   );
@@ -2037,7 +2071,7 @@ export const typedCollectFromTree = async (
   branchType = null,
   batch = null
 ) => {
-  return collectRecords(typedRefPathFromTree(tree, type, branchType), batch);
+  return collectRecords(typedTablePathFromTree(tree, type, branchType));
 };
 
 /**
@@ -2049,13 +2083,8 @@ export const typedCollectFromTree = async (
  * @param {string} type - type/collection to fetch parent document from
  * @param {?WriteBatch|Transaction} batch - optional batch object to chain
  */
-export const typedCollectFromChild = async (
-  child,
-  type,
-  branchType = null,
-  batch = null
-) => {
-  return collectRecords(typedRefPathFromChild(child, type, branchType), batch);
+export const typedCollectFromChild = async (child, type, branchType = null) => {
+  return collectRecords(typedTablePathFromChild(child, type, branchType));
 };
 
 /**

@@ -73,8 +73,10 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.typedWriteByTree(data, tree, type, batch)](#module_FirebaseFirestoreWrapper.typedWriteByTree) ⇒ <code>Promise</code>
         * [.typedCreate(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedCreate) ⇒ <code>Promise</code>
         * [.treeFromChild(child)](#module_FirebaseFirestoreWrapper.treeFromChild) ⇒ <code>RecordTree</code>
-        * [.typedRefPathFromTree(tree, type, branchType)](#module_FirebaseFirestoreWrapper.typedRefPathFromTree) ⇒ <code>string</code>
+        * [.typedTablePathFromTree(tree, type, branchType)](#module_FirebaseFirestoreWrapper.typedTablePathFromTree) ⇒ <code>string</code>
+        * [.typedRefPathFromTree(tree, type)](#module_FirebaseFirestoreWrapper.typedRefPathFromTree) ⇒ <code>string</code>
         * [.typedIdFromChild(child, type)](#module_FirebaseFirestoreWrapper.typedIdFromChild)
+        * [.typedTablePathFromChild(child, type)](#module_FirebaseFirestoreWrapper.typedTablePathFromChild) ⇒ <code>string</code>
         * [.typedRefPathFromChild(child, type)](#module_FirebaseFirestoreWrapper.typedRefPathFromChild) ⇒ <code>string</code>
         * [.typedFetchFromChild(child, refPath, type, batch)](#module_FirebaseFirestoreWrapper.typedFetchFromChild)
         * [.typedFetchFromTree(tree, refPath, type, batch)](#module_FirebaseFirestoreWrapper.typedFetchFromTree)
@@ -387,7 +389,7 @@ writes a Firestore record to collectionindicated by tablePath relative to optio
 | data | <code>Record</code> | Data/Record object to write to database |
 | refPath | <code>string</code> | an optional valid document reference to start the table path |
 | batch | <code>WriteBatch</code> \| <code>Transaction</code> | optional chain token to include this operation as part of an Atomic Transaction |
-| mergeOption | <code>boolean</code> | whether to merge into existin data; default TRUE |
+| mergeOption | <code>boolean</code> | whether to merge into existing data; default TRUE |
 
 <a name="module_FirebaseFirestoreWrapper.writeRecordByRefPath"></a>
 
@@ -773,17 +775,28 @@ Listen to changes to a single record
 | child | <code>Record</code> | document (regardless of depth)  of a tree |
 | child.refPath | <code>string</code> |  |
 
-<a name="module_FirebaseFirestoreWrapper.typedRefPathFromTree"></a>
+<a name="module_FirebaseFirestoreWrapper.typedTablePathFromTree"></a>
 
-### FirebaseFirestoreWrapper.typedRefPathFromTree(tree, type, branchType) ⇒ <code>string</code>
+### FirebaseFirestoreWrapper.typedTablePathFromTree(tree, type, branchType) ⇒ <code>string</code>
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
-**Returns**: <code>string</code> - constructed refPath (collection)  
+**Returns**: <code>string</code> - constructed TablePath (collection)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | tree | <code>RecordTree</code> |  |
 | type | <code>string</code> |  |
 | branchType | <code>string</code> | a collection name to start branching from. This is in case tree was built from a sister collection/document |
+
+<a name="module_FirebaseFirestoreWrapper.typedRefPathFromTree"></a>
+
+### FirebaseFirestoreWrapper.typedRefPathFromTree(tree, type) ⇒ <code>string</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>string</code> - constructed refPath (document)  
+
+| Param | Type |
+| --- | --- |
+| tree | <code>RecordTree</code> | 
+| type | <code>string</code> | 
 
 <a name="module_FirebaseFirestoreWrapper.typedIdFromChild"></a>
 
@@ -796,11 +809,23 @@ Listen to changes to a single record
 | child.refPath | <code>string</code> |  |
 | type | <code>string</code> | name of desired type/collection level in tree |
 
+<a name="module_FirebaseFirestoreWrapper.typedTablePathFromChild"></a>
+
+### FirebaseFirestoreWrapper.typedTablePathFromChild(child, type) ⇒ <code>string</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>string</code> - constructed refPath (collection)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| child | <code>DocumentObject</code> | document (regardless of depth)  of a tree |
+| child.refPath | <code>string</code> |  |
+| type | <code>string</code> |  |
+
 <a name="module_FirebaseFirestoreWrapper.typedRefPathFromChild"></a>
 
 ### FirebaseFirestoreWrapper.typedRefPathFromChild(child, type) ⇒ <code>string</code>
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
-**Returns**: <code>string</code> - constructed refPath (collection)  
+**Returns**: <code>string</code> - constructed refPath (document)  
 
 | Param | Type | Description |
 | --- | --- | --- |
