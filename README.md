@@ -377,6 +377,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.recordId()](#module_FirebaseFirestoreWrapper.recordId) ⇒ <code>string</code>
         * [.typedWrite(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedWrite) ⇒ <code>Promise</code>
         * [.typedWriteByTree(data, tree, type, batch)](#module_FirebaseFirestoreWrapper.typedWriteByTree) ⇒ <code>Promise</code>
+        * [.typedWriteByChild(data, tree, type, batch)](#module_FirebaseFirestoreWrapper.typedWriteByChild) ⇒ <code>Promise</code>
         * [.typedCreate(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedCreate) ⇒ <code>Promise</code>
         * [.treeFromChild(child)](#module_FirebaseFirestoreWrapper.treeFromChild) ⇒ <code>RecordTree</code>
         * [.typedTablePathFromTree(tree, type, branchType)](#module_FirebaseFirestoreWrapper.typedTablePathFromTree) ⇒ <code>string</code>
@@ -1046,6 +1047,19 @@ Listen to changes to a single record
 <a name="module_FirebaseFirestoreWrapper.typedWriteByTree"></a>
 
 ### FirebaseFirestoreWrapper.typedWriteByTree(data, tree, type, batch) ⇒ <code>Promise</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| data | <code>object</code> | the data object/record to update.  This will create a new one if it doesn't exist |
+| tree | <code>ArtistTree</code> | Object with properties of refPath segments |
+| type | <code>string</code> | name of type of object - i.e. the sub-collection name |
+| batch | <code>WriteBatch</code> \| <code>Transaction</code> | batching object.  Transaction will be added to the batch |
+
+<a name="module_FirebaseFirestoreWrapper.typedWriteByChild"></a>
+
+### FirebaseFirestoreWrapper.typedWriteByChild(data, tree, type, batch) ⇒ <code>Promise</code>
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 **Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
 

@@ -1957,18 +1957,20 @@ export const treeFromChild = (child) => {
  */
 export const typedTablePathFromTree = (tree, type, branchType) => {
   let pathString = "";
+  let lastId = "";
   for (let [collection, docId] of tree) {
-    pathString = `${pathString}${collection}/`;
+    pathString = `${pathString}${lastId}${collection}/`;
     if (collection === type) {
       //reached requested depth
       break;
     }
     if (collection === branchType) {
-      pathString = `${pathString}/${docId}/${type}`;
+      pathString = `${pathString}${docId}/${type}/`;
+      // reached branch point
       break;
     }
     //add on the current tree level docId for next collection level
-    pathString = `${pathString}/${docId}/`;
+    lastId = `${docId}/`;
   }
   return pathString;
 };
