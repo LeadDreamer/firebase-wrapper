@@ -9,6 +9,25 @@ import "@firebase/auth";
  */
 
 /**
+ * @var {object} FirebaseAuth
+ * @static
+ * FirebaseAuth instance for various Login/Logout calls
+ */
+export let FirebaseAuth;
+
+/** @private */
+let FirebaseAuthPersistence;
+
+/**
+ * @var {string} [FirebaseAuthSignInOptions]
+ * @static
+ * ID codes for 3rd party Auth providers
+ */
+export let FirebaseAuthSignInOptions;
+
+export let StyledFirebaseAuth;
+
+/**
  * @function FirebaseAuthWrapper
  * @static
  * @description Initializes the Auth service of the provided
@@ -34,25 +53,6 @@ import "@firebase/auth";
  * })(config)
  * ```
  */
-/**
- * @var {object} FirebaseAuth
- * @static
- * FirebaseAuth instance for various Login/Logout calls
- */
-export let FirebaseAuth;
-
-/** @private */
-let FirebaseAuthPersistence;
-
-/**
- * @var {string} [FirebaseAuthSignInOptions]
- * @static
- * ID codes for 3rd party Auth providers
- */
-export let FirebaseAuthSignInOptions;
-
-export let StyledFirebaseAuth;
-
 export default function FirebaseAuthWrapper(firebase, styled) {
   FirebaseAuth = firebase.auth();
   FirebaseAuthSignInOptions = [
@@ -100,34 +100,93 @@ export const refreshAuthUser = async () => {
 // *** native UI Auth support ***
 
 /**
- * ----------------------------------------------------------------------
- **********************************************************************/
+ * @typedef {object} AdditionalUserInfo
+ * @property {!boolean} isNewUser
+ * @property {?object} profile
+ * @property {!string} providerId
+ * @property {?string} username
+ */
+
+/**
+ * @typedef {object} AuthCredential
+ * @property {string} providerId
+ * @property {string} signInMethod
+ * @method toJSON
+ * @method fromJSON
+ */
+
+/**
+ * @typedef {object} User
+ * See https://firebase.google.com/docs/reference/js/firebase.User
+ */
+
+/**
+ * @typedef {object} UserCredential
+ * @property {?AdditionalUserInfo} additionalUserInfo
+ * @property {AuthCredential} credential
+ * @property {?"signin"|"link"|"reauthenticate"} operationType
+ * @property {?"User"} user
+ */
+
+/**
+ * @async
+ * @function doCreateUserWithEmailAndPassword
+ * @static
+ * Creates AND SIGNS IN an authenticated user with the provided email and password
+ * Creates a new user account associated with the specified email
+ * address and password.
+ * On successful creation of the user account, this user will also be
+ * signed in to your application.
+ * User account creation can fail if the account already exists or the
+ * password is invalid.
+ * Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
+ * @param {string} email
+ * @param {string} password
+ * @returns {Promise<UserCredential>}
+ */
 export const doCreateUserWithEmailAndPassword = (email, password) =>
   FirebaseAuth.createUserWithEmailAndPassword(email, password);
 
 /**
- * ----------------------------------------------------------------------
- **********************************************************************/
+ * @async
+ * @function doSignInWithEmailAndPassword
+ * @static
+ * SIGNS IN an existing authenticated user with the provided email and password
+ * Creates a new user account associated with the specified email
+ * address and password.
+ * On successful creation of the user account, this user will also be
+ * signed in to your application.
+ * User account creation can fail if the account already exists or the
+ * password is invalid.
+ * Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
+ * @param {string} email
+ * @param {string} password
+ * @returns {Promise<UserCredential>}
+ */
 export const doSignInWithEmailAndPassword = (email, password) =>
   FirebaseAuth.signInWithEmailAndPassword(email, password);
 
 /**
- * ----------------------------------------------------------------------
- **********************************************************************/
-export const doSignInWithGoogle = () =>
-  FirebaseAuth.signInWithPopup(this.googleProvider);
+ *
+ */
 
 /**
  * ----------------------------------------------------------------------
  **********************************************************************/
-export const doSignInWithFacebook = () =>
-  FirebaseAuth.signInWithPopup(this.facebookProvider);
+export const doSignInWithGoogle = (googleProvider) =>
+  FirebaseAuth.signInWithPopup(googleProvider);
 
 /**
  * ----------------------------------------------------------------------
  **********************************************************************/
-export const doSignInWithTwitter = () =>
-  FirebaseAuth.signInWithPopup(this.twitterProvider);
+export const doSignInWithFacebook = (facebookProvider) =>
+  FirebaseAuth.signInWithPopup(facebookProvider);
+
+/**
+ * ----------------------------------------------------------------------
+ **********************************************************************/
+export const doSignInWithTwitter = (twitterProvider) =>
+  FirebaseAuth.signInWithPopup(twitterProvider);
 
 /**
  * ----------------------------------------------------------------------
@@ -165,10 +224,19 @@ export const createAnonymousUser = () => {
 };
 
 /**
- * ----------------------------------------------------------------------
+ * @callback AuthChangeProcess
+ * @param {User} user
+ */
+
+/**
+ * @function attachAuthUserListener
+ * @static
+ * @property {AuthChangeProcess} next
+ * @return {callback} unsubscribe function
+ *
  **********************************************************************/
-export const attachAuthUserListener = (next, fallback) => {
-  return FirebaseAuth.onIdTokenChanged(next, fallback);
+export const attachAuthUserListener = (next) => {
+  return FirebaseAuth.onIdTokenChanged(next);
 };
 
 /**

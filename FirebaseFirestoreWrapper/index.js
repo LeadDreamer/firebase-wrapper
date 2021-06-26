@@ -20,6 +20,14 @@ function last(array) {
   return length ? array[length - 1] : undefined;
 }
 
+/**
+ * @private
+ * @function penultimate
+ * @param {object} [array]
+ * @returns {object}
+ * @description second-to-last entry in the array
+ */
+
 function penultimate(array) {
   let length = array == null ? 0 : array.length;
   return length ? array[length - 1 - 1] : undefined;
@@ -67,51 +75,56 @@ export default function FirebaseFirestore(firebase) {
 let fdb, aFieldValue, aFieldPath;
 
 /**
- * @function timestamp
- * @static
- * @description - Firestore timestamp processor
+ * class for a Firestore timestamp processor
+ * @class
  */
-export var timestamp;
+export let timestamp;
 
 /**
- * @constant
- * @static
- * @description - a fieldPath value to represent the document Id - WARNING
+ * a fieldPath value to represent the document Id - WARNING
  * Google Firestore has a bug, and this actually represents the FULL PATH
  * to the document
+ * @constant
+ * @type {Object}
+ * @static
+ * @category FieldPath
  */
 export var documentId;
 
 /**
- * @constant
- * @static
- * @description  a sentinel value used to delete a field during an
- * update operation
- */
-export var deleteFieldValue;
-
-/**
- * @constant
- * @static
- * @description a sentinel value to set a field to a
- * server-generated timestamp during set(0 or update())
- */
-export var serverTimestampFieldValue;
-
-/**
- * @static
+ * maximum concurrent writes
  * @constant {number} MAX_CONCURRENCY
- * @description maximum concurrent writes
+ * @static
  */
 export const MAX_CONCURRENCY = 5;
 
 //convenient fieldValue constants
 /**
- * ----------------------------------------------------------------------
- * @function incrementFieldValue
+ * a sentinel value used to delete a field during an
+ * update operation
+ * @constant
  * @static
- * return a sentinel to incrment/decrement
- *    a field
+ * @type {Object}
+ * @category FieldValue
+ */
+export var deleteFieldValue;
+
+/**
+ * a sentinel value to set a field to a
+ * server-generated timestamp during set(0 or update())
+ * @constant
+ * @static
+ * @type {Object}
+ * @category FieldValue
+ */
+export var serverTimestampFieldValue;
+
+/**
+ * ----------------------------------------------------------------------
+ * return a sentinel to incrment/decrement a field
+ * @function
+ * @static
+ * @category FieldValue
  * @param n If either the operand or the current field value uses
  *    floating point precision, all arithmetic follows IEEE 754
  *    semantics. If both values are integers, values outside of
@@ -129,9 +142,10 @@ export const incrementFieldValue = (n) => {
 
 /**
  * ----------------------------------------------------------------------
- * @function arrayRemoveFieldValue
+ * returns a sentinel to remove elements from array field
+ * @function
  * @static
- * @description returns a sentinel to remove elements from array field
+ * @category FieldValue
  * @param elements REST expanded list of elements to remove
  * @returns {sentinelValue} a sentinel value
  **********************************************************************/
@@ -141,9 +155,10 @@ export const arrayRemoveFieldValue = (elements) => {
 
 /**
  * ----------------------------------------------------------------------
+ * return a sentinel to add/join elements to array field
  * @function arrayUnionFieldValue
- * @description return a sentinel to add/join elements to array field
  * @static
+ * @category FieldValue
  * @param elements REST expanded list of elements to add
  * @returns a sentinel value
  **********************************************************************/
@@ -154,6 +169,7 @@ export const arrayUnionFieldValue = (elements) => {
 /* Firebase APIs */
 
 /**
+ * @private
  * @typedef {object} Record
  * common properties of our database records
  * @property {?string} Id - Id of the document as stored in Firestore May
@@ -163,20 +179,22 @@ export const arrayUnionFieldValue = (elements) => {
  */
 
 /**
+ * @private
  * @typedef {Record} [RecordArray]
  * an array of database records
  */
 
 /**
  * ----------------------------------------------------------------------
- * @function RecordFromSnapshot
- * @static
- * @description returns an internal record structure from a firestore
+ * returns an internal record structure from a firestore
  * Document snapshot
+ * @private
+ * @function
+ * @static
  * @param {DocumentSnapshot} DocumentSnapshot
  * @returns {Record}
  */
-export const RecordFromSnapshot = (DocumentSnapshot) => {
+const RecordFromSnapshot = (DocumentSnapshot) => {
   return {
     ...DocumentSnapshot.data(),
     Id: DocumentSnapshot.id,
@@ -186,14 +204,15 @@ export const RecordFromSnapshot = (DocumentSnapshot) => {
 
 /**
  * ----------------------------------------------------------------------
- * @function RecordsFromSnapshot
- * @static
- * @description returns an array of internal record structures from a
+ * returns an array of internal record structures from a
  * firestore Query snapshot
+ * @private
+ * @function
+ * @static
  * @param {QuerySnapshot} QuerySnapshot
  * @returns {RecordArray}
  */
-export const RecordsFromSnapshot = (QuerySnapshot) => {
+const RecordsFromSnapshot = (QuerySnapshot) => {
   return QuerySnapshot.docs.map((docSnap) => {
     return RecordFromSnapshot(docSnap);
   });
@@ -201,13 +220,14 @@ export const RecordsFromSnapshot = (QuerySnapshot) => {
 
 /**
  * ----------------------------------------------------------------------
- * @function DocumentFromRecord
+ * returns a Firestore document structure from an internal Record
+ * @private
+ * @function
  * @static
- * @description returns a Firestore document structure from an internal Record
  * @param {object} Record - cleans up internal document representation
  * @returns {object}
  */
-export const DocumentFromRecord = (Record) => {
+const DocumentFromRecord = (Record) => {
   const cleanData = { ...Record };
   delete cleanData.refPath; //we leave the redundant Id for query optimization
   return cleanData;
@@ -215,12 +235,13 @@ export const DocumentFromRecord = (Record) => {
 
 /**
  * ----------------------------------------------------------------------
- * @async
- * @function runTransaction
- * @static
- * @description creates and runs a series of record operations
+ * creates and runs a series of record operations
  * (executed in the param function) as an atomic operation.
  * A transation object is passed to the callback parameter
+ * @async
+ * @function
+ * @static
+ * @category Batch
  * @param {callback} updateFunction callback function that expects a Transaction
  * token as it's sole argument.  either all the included/chained
  * record operations will succeed, or none
@@ -232,9 +253,10 @@ export const runTransaction = (updateFunction) => {
 
 /**
  * ----------------------------------------------------------------------
- * @sync
- * @function openWriteBatch
+ * Creates a WriteBatch object tocollect actions for Batch writing to backend
+ * @function
  * @static
+ * @category Batch
  * @returns {WriteBatch} object that operations are added to for a bulk
  * operation
  */
@@ -244,14 +266,19 @@ export const openWriteBatch = () => {
 
 /**
  * ----------------------------------------------------------------------
+ * Dispatches an asynchronous Closure to submit Batch
  * @async
- * @function closeWriteBatch
+ * @function
  * @static
- * @description dispatches an asynchronous Closure to submit Batch
+ * @category Batch
  * @param {WriteBatch} batch - WriteBatch to close
  * @returns {Promise<void>}
  */
-export const closeWriteBatch = (batch = null) => {
+export const closeWriteBatch = (
+  /**
+   */
+  batch = null
+) => {
   return (async (innerBatch) => {
     return innerBatch.commit();
   })(batch);
@@ -259,13 +286,12 @@ export const closeWriteBatch = (batch = null) => {
 
 /**
  * ----------------------------------------------------------------------
- * @sync
- * @function createUniqueReference
- * @static
- * @description adds a blank document to the collection
- * referenced in parameter tablePath (relative to optional refPath) and
- * returns it's reference.  This is useful for Transactions and Batches, which
+ * Creates a DocumentReference document to the collection
+ * referenced in parameter tablePath (relative to optional refPath).
+ * This is can be useful for Transactions and Batches, which
  * can only get(), set() or update() existing documents. Tricksie!
+ * @function
+ * @static
  * @param tablePath string representing a valid path to a collection to
  * create the new document in, relative to a document reference
  * passed in
@@ -280,24 +306,24 @@ export const createUniqueReference = (tablePath, refPath = null) => {
 
 /**
  * ----------------------------------------------------------------------
- * @sync
- * @function dbReference
- * @static
- * @description generates a document reference from a path
+ * generates a document reference from a path
  * if passed; else returns the db base reference
+ * @private
+ * @function
+ * @static
  * @param {string} refPath Path to base actions from. May be null
  */
-export const dbReference = (refPath) => {
+const dbReference = (refPath) => {
   return refPath ? fdb.doc(refPath) : fdb;
 };
 
 /**
  * ----------------------------------------------------------------------
+ * Writes a Firestore record to collection indicated by tablePath
+ * relative to option DocumentReference refPath
  * @async
- * @function writeRecord
+ * @function
  * @static
- * @description writes a Firestore record to collection
- * indicated by tablePath relative to option DocumentReference refPath
  * @param {!string} tablePath - string representing a valid path to a collection to
  * create or update the document in, relative to a document reference
  * passed in
@@ -345,10 +371,10 @@ export const writeRecord = (
 
 /**
  * ----------------------------------------------------------------------
- * @async
- * @function writeRecordByRefPath
- * @static
  * @description Writes given data object (or map) to the given documentReference
+ * @async
+ * @function
+ * @static
  * @param {!Record} data Object/Map to be written back to the Firestore
  * @param {!string} refPath DocumentReference to write document to
  * @param {?WriteBatch|Transaction} Transaction Optional Transaction to enclose this action in
@@ -366,11 +392,11 @@ export const writeRecordByRefPath = (
 
 /**
  * ----------------------------------------------------------------------
- * @async
- * @function writeBack
- * @static
- * @description Writes a local-schema document back to the Firestore.  Assume
+ * Writes a local-schema document back to the Firestore.  Assume
  * object/map came from the firestore
+ * @async
+ * @function
+ * @static
  * @param {!Record} data Object/Map to be written back to the Firestore
  * @param {?WriteBatch|Transaction} Transaction Optional Transaction to enclose this action in
  * @param {?boolean} mergeOption - whether to merge into existin data; default TRUE
@@ -767,7 +793,6 @@ const createRefFromPath = (docPath, refPath = null) => {
  * @property {!String} fieldRef
  * @property {!String} opStr
  * @property {any} value
- *
  */
 
 /**
@@ -816,12 +841,14 @@ const sortQuery = (query, sortArray = null) => {
 
 //Listener Support
 /**
+ * @private
  * @callback RecordListener
  * @static
  * @param {DocumentSnapshot} documentSnapshot
  */
 
 /**
+ * @private
  * @callback CollectionListener
  * @static
  * @param {QuerySnapshot} querySnapshot
@@ -829,18 +856,16 @@ const sortQuery = (query, sortArray = null) => {
 
 /**
  * ----------------------------------------------------------------------
- * @sync
- * @function ListenRecords
+ * sets up a listener for changes to a single record
+ * @function
  * @static
- * @description sets up a listener for changes to a single record
+ * @category Listeners
  * @param {!string} tablePath string describing relative path to document
  * @param {?string} refPath string describing path to parent document
- * @callback  dataCallback function to be called with changes to record
- * @param {QuerySnapshot} response
- * @callback errCallback function to be called when an error
+ * @param {CollectionListener}  dataCallback function to be called with changes to record
+ * @param {callback} errCallback function to be called when an error
  * occurs in listener
- * @param {callback}  response
- * @returns {callback} function to be called to release subscription
+ * @returns {unsubscribe} function to be called to release subscription
  */
 export const ListenRecords = (
   tablePath,
@@ -858,19 +883,19 @@ export const ListenRecords = (
 
 /**
  * ----------------------------------------------------------------------
- * @sync
- * @function ListenQuery
+ * Sets up a listener to a query
+ * @function
  * @static
- * @description Sets up a listener to a query
+ * @category Listeners
  * @param {!string} table Name of table to query too - may be sub-collection of
  * optional reference
  * @param {?filterObject} [filterArray] a 3xn array of filter(i.e. "where") conditions
  * @param {?sortObject} [sortArray] an (optional) 2xn array of sort (i.e. "orderBy") conditions
  * @param {?string} refPath An optional Firestore DocumentReference. If present, the
  * "table" parameter above is relative to this reference
- * @param {QuerySnapshot} dataCallback callback function with query results
+ * @param {CollectionListener} dataCallback callback function with query results
  * @param {callback} errCallback callback function with error results
- * @returns {callback} function to be called to release subscription
+ * @returns {unsubscribe} function to be called to release subscription
  */
 export const ListenQuery = (
   table,
@@ -891,13 +916,13 @@ export const ListenQuery = (
 
 /**
  * ----------------------------------------------------------------------
- * @sync
- * @function ListenCollectionGroupRecords
+ * sets up a listener for changes to a collectionGroup
+ * @function
  * @static
- * @description sets up a listener for changes to a collectionGroup
+ * @category Listeners
  * @param {!string} tablePath string describing relative path to document
  * @param {?string} refPath string describing path to parent document
- * @param {QuerySnapshot} dataCallback function to be called with changes to record
+ * @param {CollectionListener} dataCallback function to be called with changes to record
  * @param {callback} errCallback function to be called when an error
  * occurs in listener
  * @returns {callback} function to be called to release subscription
@@ -919,17 +944,17 @@ export const ListenCollectionGroupRecords = (
 
 /**
  * ----------------------------------------------------------------------
- * @sync
- * @function ListenCollectionGroupQuery
+ * sets up a listener for changes to a collectionGroup by query
+ * @function
  * @static
- * @description sets up a listener for changes to a collectionGroup by query
+ * @category Listeners
  * @param {!string} table string describing the name of a collectionGroup
  * @param {?filterObject} [filterArray] a 3xn array of filter(i.e. "where") conditions
  * @param {?sortObject} [sortArray] an (optional) 2xn array of sort (i.e. "orderBy") conditions
- * @param {QuerySnapshot} dataCallback function to be called with changes to record
+ * @param {CollectionListener} dataCallback function to be called with changes to record
  * @param {callback} errCallback function to be called when an error
  * occurs in listener
- * @returns {callback} function to be called to release subscription
+ * @returns {unsubscribe} function to be called to release subscription
  */
 export const ListenCollectionGroupQuery = (
   table,
@@ -969,10 +994,10 @@ const ListenRecordsCommon = (reference, dataCallback, errCallback) => {
 };
 
 /**
- * @sync
- * @function ListenRecord
+ * Listen to changes to a single record
+ * @function
  * @static
- * @description Listen to changes to a single record
+ * @category Listeners
  * @param {!string} tablePath string describing relative path to requested
  * record
  * @param {!string} Id string of Id of requested document
@@ -981,7 +1006,7 @@ const ListenRecordsCommon = (reference, dataCallback, errCallback) => {
  * requested document
  * @param {callback} errCallback callback to handle error reporting and
  * operations
- * @returns {callback} function to be called to release subscription
+ * @returns {unsubscribe} function to be called to release subscription
  */
 export const ListenRecord = (
   tablePath,
@@ -1008,76 +1033,48 @@ export const ListenRecord = (
 
 //  Paginate API
 /**
- * @constant {number} PAGINATE_INIT
+ * @constant {number}
  * @static
+ * @category Paginate Constants
  */
 export const PAGINATE_INIT = 0;
 /**
- * @constant {number} PAGINATE_PENDING
+ * @constant {number}
  * @static
+ * @category Paginate Constants
  */
 export const PAGINATE_PENDING = -1;
 /**
- * @constant {number} PAGINATE_UPDATED
+ * @constant {number}
  * @static
+ * @category Paginate Constants
  */
 export const PAGINATE_UPDATED = 1;
 /**
- * @constant {number} PAGINATE_DEFAULT
+ * @constant {number}
  * @static
+ * @category Paginate Constants
  */
 export const PAGINATE_DEFAULT = 10;
 /**
+ * @private
  * @typedef {
  * PAGINATE_INIT
  * |PAGINATE_PENDING
  * |PAGINATE_UPDATED
  * |PAGINATE_DEFAULT} PagingStatus
- * @static
+ * @category Paginate Constants
  */
 /**
- * @enum {number} [PAGINATE_CHOICES]
+ * @type {number} [PAGINATE_CHOICES]
  * @static
+ * @category Paginate Constants
  */
 export const PAGINATE_CHOICES = [10, 25, 50, 100, 250, 500];
 
-/**
- * @class
- * @static
- * @classdesc An object to allow for paginating a table read from Firestore. REQUIRES a sorting choice
- * @property {Query} Query that forms basis for the table read
- * @property {number} limit page size
- * @property {QuerySnapshot} snapshot last successful snapshot/page fetched
- * @property {PagingStatus} status status of pagination object
- *
- * @property {function} PageForward pages the fetch forward
- * @property {function} PageBack pages the fetch backward
- *
- */
 export class PaginateFetch {
   /**
-   * @member {Query} Query
-   * @memberof PaginateFetch
-   */
-  //Query = null;
-  /**
-   * @member {number} limit
-   * @memberof PaginateFetch
-   */
-  //limit = PAGINATE_DEFAULT;
-  /**
-   * @member {QuerySnapshot} snapshot
-   * @memberof PaginateFetch
-   */
-  //snapshot = null;
-  /**
-   * @member {number} status
-   * @memberof PaginateFetch
-   */
-  //status = null; // -1 pending; 0 uninitialized; 1 updated;
-  /**
-   * @constructs PaginateFetch constructs an object to paginate through large
-   * Firestore Tables
+   * constructs an object to paginate through large Firestore Tables
    * @param {string} table a properly formatted string representing the requested collection
    * - always an ODD number of elements
    * @param {array} filterArray an (optional) 3xn array of filter(i.e. "where") conditions
@@ -1089,7 +1086,7 @@ export class PaginateFetch {
    * @param {?string} refPath (optional) allows "table" parameter to reference a sub-collection
    * of an existing document reference (I use a LOT of structured collections)
    * @param {number} limit page size
-   * @returns {PaginateFetchObject}
+   * @category Paginator
    */
   constructor(
     table,
@@ -1100,19 +1097,32 @@ export class PaginateFetch {
   ) {
     const db = dbReference(refPath);
 
+    /**
+     * current limit of query results
+     * @type {number}
+     */
     this.limit = limit;
+    /**
+     * underlying query for fetch
+     * @private
+     * @type {Query}
+     */
     this.Query = sortQuery(
       filterQuery(db.collection(table), filterArray),
       sortArray
     );
+    /**
+     * current status of pagination
+     * @type {PagingStatus}
+     * -1 pending; 0 uninitialized; 1 updated;
+     */
     this.status = PAGINATE_INIT;
   }
 
   /**
+   * executes the query again to fetch the next set of records
    * @async
-   * @method PageForward
-   * @memberof PaginateFetch
-   * @description executes the query again to fetch the next set of records
+   * @method
    * @returns {Promise<RecordArray>} returns an array of record - the next page
    */
   PageForward() {
@@ -1138,10 +1148,9 @@ export class PaginateFetch {
   }
 
   /**
+   * executes the query again to fetch the previous set of records
    * @async
-   * @method PageBack
-   * @memberof PaginateFetch
-   * @description executes the query again to fetch the previous set of records
+   * @method
    * @returns {Promise<RecordArray>} returns an array of record - the next page
    */
   PageBack() {
@@ -1166,54 +1175,21 @@ export class PaginateFetch {
   }
 }
 
-/**
- * @class
- * @static
- * @classdesc An object to allow for paginating a query for table read from Firestore.
- * @property {Query} Query that forms basis for the table read
- * @property {number} limit page size
- * @property {QuerySnapshot} snapshot last successful snapshot/page fetched
- * @property {PagingStatus} status status of pagination object
- *
- * @property {function} PageForward Changes the listener to the next page forward
- * @property {function} PageBack Changes the listener to the next page backward
- * @property {function} Unsubscribe returns the unsubscribe function
- */
 export class PaginateGroupFetch {
   /**
-   * @member {Query} Query
-   * @memberof PaginateGroupFetch
-   */
-  //Query = null;
-  /**
-   * @member {number} limit
-   * @memberof PaginateGroupFetch
-   */
-  //limit = PAGINATE_DEFAULT;
-  /**
-   * @member {QuerySnapshot} snapshot
-   * @memberof PaginateGroupFetch
-   */
-  //snapshot = null;
-  /**
-   * @member {number} status
-   * @memberof PaginateGroupFetch
-   */
-  //status = null; // -1 pending; 0 uninitialized; 1 updated;
-  /**
-   * @constructs PaginateGroupFetch constructs an object to paginate through large
+   * constructs an object to paginate through large
    * Firestore Tables
-   * @param {string} group a properly formatted string representing the requested collection
+   * @param {!string} group a properly formatted string representing the requested collection
    * - always an ODD number of elements
-   * @param {filterObject} [filterArray] an (optional) 3xn array of filter(i.e. "where") conditions
-   * @param {sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
+   * @param {?filterObject} [filterArray] an (optional) 3xn array of filter(i.e. "where") conditions
+   * @param {!sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
    *
    * The array(s) are assumed to be sorted in the correct order -
    * i.e. filterArray[0] is added first; filterArray[length-1] last
    * returns data as an array of objects (not dissimilar to Redux State objects)
    * with both the documentID and documentReference added as fields.
-   * @param {number} limit (optional)
-   * @returns {PaginateFetchObject}
+   * @param {?number} limit (optional)
+   * @category Paginator
    */
   constructor(
     group,
@@ -1223,19 +1199,32 @@ export class PaginateGroupFetch {
   ) {
     const db = fdb;
 
+    /**
+     * current limit basis for listener query
+     * @type {number}
+     */
     this.limit = limit;
+    /**
+     * Query that forms basis for listener query
+     * @private
+     * @type {Query}
+     */
     this.Query = sortQuery(
       filterQuery(db.collectionGroup(group), filterArray),
       sortArray
     );
+    /**
+     * current status of listener
+     *  -1 pending; 0 uninitialized; 1 updated;
+     * @type {PagingStatus}
+     */
     this.status = PAGINATE_INIT;
   }
 
   /**
+   * executes the query again to fetch the next set of records
    * @async
-   * @method PageForward
-   * @memberof PaginateGroupFetch
-   * @description executes the query again to fetch the next set of records
+   * @method
    * @returns {Promise<RecordArray>} returns an array of record - the next page
    */
   PageForward() {
@@ -1261,10 +1250,9 @@ export class PaginateGroupFetch {
   }
 
   /**
+   * executes the query again to fetch the previous set of records
    * @async
-   * @method PageBack
-   * @memberof PaginateGroupFetch
-   * @description executes the query again to fetch the previous set of records
+   * @method
    * @returns {Promise<RecordArray>} returns an array of record - the next page
    */
   PageBack() {
@@ -1289,73 +1277,11 @@ export class PaginateGroupFetch {
   }
 }
 
-/**
- * @class
- * @static
- * @classdesc An object to allow for paginating a listener for table read from Firestore.
- * REQUIRES a sorting choice
- * masks some subscribe/unsubscribe action for paging forward/backward
- * @property {Query} Query that forms basis for the table read
- * @property {number} limit page size
- * @property {QuerySnapshot} snapshot last successful snapshot/page fetched
- * @property {PagingStatus} status status of pagination object
- *
- * @property {function} PageForward Changes the listener to the next page forward
- * @property {function} PageBack Changes the listener to the next page backward
- */
 export class PaginatedListener {
   /**
-   * @member {string} table
-   * @memberof PaginatedListener
-   */
-  //table = null;
-  /**
-   * @member {filterObject} [filterArray]
-   * @memberof PaginatedListener
-   */
-  //filterArray = null;
-  /**
-   * @member {sortObject} [sortArray]
-   * @memberof PaginatedListener
-   */
-  //sortArray = null;
-  /**
-   * @member {string} refPath
-   * @memberof PaginatedListener
-   */
-  //refPath = null;
-  /**
-   * @member {Query} Query
-   * @memberof PaginatedListener
-   */
-  //Query = null;
-  /**
-   * @member {number} limit
-   * @memberof PaginatedListener
-   */
-  //limit = PAGINATE_DEFAULT;
-  /**
-   * @member {QuerySnapshot} snapshot
-   * @memberof PaginatedListener
-   */
-  //snapshot = null;
-  /**
-   * @member {RecordListener} dataCallback
-   * @memberof PaginatedListener
-   */
-  //dataCallback = null;
-  /**
-   * @member {callback} errCallback
-   * @memberof PaginatedListener
-   */
-  /**
-   * @member {number} status
-   * @memberof PaginatedListener
-   */
-  //status = null; // -1 pending; 0 uninitialized; 1 updated;
-  /**
-   * @constructs PaginatedListener constructs an object to paginate through large
-   * Firestore Tables
+   * Creates an object to allow for paginating a listener for table
+   * read from Firestore. REQUIRES a sorting choice; masks some
+   * subscribe/unsubscribe action for paging forward/backward
    * @param {!string} table a properly formatted string representing the requested collection
    * - always an ODD number of elements
    * @param {filterObject} [filterArray] an (optional) 3xn array of filter(i.e. "where") conditions
@@ -1370,6 +1296,7 @@ export class PaginatedListener {
    * @param {?number} limit (optional)
    * @param {!callback} dataCallback
    * @param {!callback} errCallback
+   * @category Paginator
    */
   constructor(
     table,
@@ -1380,40 +1307,88 @@ export class PaginatedListener {
     dataCallback = null,
     errCallback = null
   ) {
+    /**
+     * table path at base of listener query, relative to original refPath
+     * @private
+     * @type {string}
+     */
     this.table = table;
+    /**
+     * array of filter objects for listener query
+     * @private
+     * @type {filterObject}
+     */
     this.filterArray = filterArray;
+    /**
+     * array of sort objects for listener query
+     * @private
+     * @type {sortObject}
+     */
     this.sortArray = sortArray;
+    /**
+     * refPath as basis for listener query
+     * @private
+     * @type {string}
+     */
     this.refPath = refPath;
+    /**
+     * current limit basis for listener query
+     * @type {number}
+     */
     this.limit = limit;
     this._setQuery();
+    /**
+     * current dataCallback of listener query
+     * @private
+     * @type {RecordListener}
+     */
     this.dataCallback = dataCallback;
+    /**
+     * current errCallback of listener query
+     * @private
+     * @type {callback}
+     */
     this.errCallback = errCallback;
+    /**
+     * current status of listener
+     * @type {number}
+     */
     this.status = PAGINATE_INIT;
   }
 
   /**
+   * reconstructs the basis query
    * @private
    * @method _setQuery
-   * @methodof PaginatedListener
-   * @description reconstructs the underlying query
    * @returns {Query}
    */
   _setQuery() {
     const db = this.refPath ? this.refPath : fdb;
+    /**
+     * Query that forms basis for listener query
+     * @private
+     * @type {Query}
+     */
     this.Query = sortQuery(
       filterQuery(db.collection(this.table), this.filterArray),
       this.sortArray
     );
+    /**
+     * last QuerySnapshot returned for listener query
+     * @private
+     * @type {QuerySnapshot}
+     */
+    this.Snapshot = null;
     return this.Query;
   }
 
   /**
-   * @method PageBack
-   * @memberof PaginatedListener
-   * @description resets the listener query to the previous page of results.
+   * resets the listener query to the next page of results.
    * Unsubscribes from the current listener, constructs a new query, and sets it\
    * as the new listener
-   * @returns {function} returns the unsubscriber function (for lifecycle events)
+   * @async
+   * @method
+   * @returns {unsubscribe} returns the unsubscriber function (for lifecycle events)
    */
   PageForward() {
     const runQuery =
@@ -1444,12 +1419,12 @@ export class PaginatedListener {
   }
 
   /**
-   * @method PageBack
-   * @memberof PaginatedListener
-   * @description resets the listener query to the next page of results.
+   * resets the listener query to the next page of results.
    * Unsubscribes from the current listener, constructs a new query, and sets it\
    * as the new listener
-   * @returns {function} returns the unsubscriber function (for lifecycle events)
+   * @async
+   * @method
+   * @returns {unsubscribe} returns the unsubscriber function (for lifecycle events)
    */
   PageBack() {
     const runQuery =
@@ -1481,11 +1456,11 @@ export class PaginatedListener {
   }
 
   /**
-   * @method ChangeLimit
-   * @memberof PaginatedListener
-   * @description sets page size limit to new value, and restarts the paged listener
+   * sets page size limit to new value, and restarts the paged listener
+   * @async
+   * @method
    * @param {number} newLimit
-   * @returns {function} returns the unsubscriber function (for lifecycle events)
+   * @returns {unsubscribe} returns the unsubscriber function (for lifecycle events)
    */
   ChangeLimit(newLimit) {
     const runQuery = this.Query;
@@ -1515,13 +1490,13 @@ export class PaginatedListener {
   }
 
   /**
-   * @method ChangeFilter
-   * @memberof PaginatedListener
-   * @description changes the filter on the subscription
+   * changes the filter on the subscription
    * This has to unsubscribe the current listener,
    * create a new query, then apply it as the listener
+   * @async
+   * @method
    * @param {filterObject} [filterArray] an array of filter descriptors
-   * @returns {function} returns the unsubscriber function (for lifecycle events)
+   * @returns {unsubscribe} returns the unsubscriber function (for lifecycle events)
    */
   ChangeFilter(filterArray) {
     //IF unsubscribe function is set, run it (and clear it)
@@ -1547,9 +1522,9 @@ export class PaginatedListener {
   }
 
   /**
-   * @method unsubscribe
-   * @memberof PaginatedListener
-   * @description IF unsubscribe function is set, run it.
+   * IF unsubscribe function is set, run it.
+   * @async
+   * @method
    */
   unsubscribe() {
     //IF unsubscribe function is set, run it.
@@ -1561,8 +1536,6 @@ export class PaginatedListener {
 //////////////////////////////////////////////////////////////////////
 // convenience functions
 /**
- * @function ownerFilter
- * @static
  * Contructs a filter that selects only the "owner" section of a
  * collectionGroup query - in other words, descendents of a particular
  * top=level document.  This takes advantage of Firestore's indexing,
@@ -1582,6 +1555,9 @@ export class PaginatedListener {
  * IMPORTANT NOTE:
  * Because this filter uses an INEQUALITY, .sortBy() and .limit() conditions
  * are not supported
+ * @function
+ * @static
+ * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} refPath - string representing the full path to the
  * Firestore document.
@@ -1614,18 +1590,19 @@ export const ownerFilter = (owner, queryFilter = null) => {
 };
 
 /**
- * @function listenSlice
- * @static
  * Uses the ownerFilter (above) to establish a listener to "just" the
  * parts of a collectionGroup that are descendants of the passed "owner"
  * record.
+ * @function
+ * @static
+ * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} owner.refPath - string representing the full path to the
  * Firestore document.
  * @param {!string} collectionName name of the desired collectionGroup
- * @callback  dataCallback function to be called with changes to record
+ * @param {callback}  dataCallback function to be called with changes to record
  * @param {QuerySnapshot} response
- * @callback errCallback function to be called when an error
+ * @param {callback} errCallback function to be called when an error
  * occurs in listener
  * @param {string}  response
  * @returns {callback} function to be called to release subscription
@@ -1651,12 +1628,13 @@ export const listenSlice = (
 };
 
 /**
- * @async
- * @function fetchSlice
- * @static
  * Wrapper around database fetch, using ownerFilter above to
  * select/fetch just an "owner" parent document's descendants from a
  * collectionGroup
+ * @async
+ * @function
+ * @static
+ * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} owner.refPath - string representing the full path to the
  * Firestore document.
@@ -1672,12 +1650,13 @@ export const fetchSlice = (owner, collectionName) => {
 };
 
 /**
- * @async
- * @function querySlice
- * @static
  * Wrapper around database fetch, using ownerFilter above to
  * select/fetch just an "owner" parent document's descendants from a
  * collectionGroup
+ * @async
+ * @function
+ * @static
+ * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} owner.refPath - string representing the full path to the
  * Firestore document.
@@ -1697,19 +1676,20 @@ export const querySlice = (owner, collectionName, filterArray) => {
 };
 
 /**
- * @function listenQuerySlice
- * @static
  * Uses the ownerFilter (above) to establish a listener to "just" the
  * parts of a collectionGroup that are descendants of the passed "owner"
  * record.
+ * @function
+ * @static
+ * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} owner.refPath - string representing the full path to the
  * Firestore document.
  * @param {!string} collectionName name of the desired collectionGroup
  * @param {?filterObject} filterArray filter parameters
- * @callback  dataCallback function to be called with changes to record
+ * @param {!callback}  dataCallback function to be called with changes to record
  * @param {QuerySnapshot} response
- * @callback errCallback function to be called when an error
+ * @param {!callback} errCallback function to be called when an error
  * occurs in listener
  * @param {string}  response
  * @returns {callback} function to be called to release subscription
@@ -1736,10 +1716,12 @@ export const listenQuerySlice = (
 };
 
 /**
- * @function ownerType
- * @static
  * Returns the "type" (collection name) of the top-most parent of a
  * record, derived from the refPath
+ * @function
+ * @static
+ * @category Tree Slice
+ * @param {Record} record
  * @returns {string} the collection name
  */
 export const ownerType = (record) => {
@@ -1747,10 +1729,12 @@ export const ownerType = (record) => {
 };
 
 /**
- * @function ownerId
- * @static
  * Returns the Id (documentId) of the top-most parent of a
  * record, derived from the refPath
+ * @function
+ * @static
+ * @category Tree Slice
+ * @param {Record} record
  * @returns {string} the Id
  */
 export const ownerId = (record) => {
@@ -1758,10 +1742,12 @@ export const ownerId = (record) => {
 };
 
 /**
- * @function ownerRefPath
- * @static
  * Returns the Id (documentId) of the top-most parent of a
  * record, derived from the refPath
+ * @function
+ * @static
+ * @category Tree Slice
+ * @param {Record} record
  * @returns {string} the Id
  */
 export const ownerRefPath = (record) => {
@@ -1771,11 +1757,13 @@ export const ownerRefPath = (record) => {
 };
 
 /**
- * @async
- * @function fetchOwner
- * @static
  * returns the record for the top-most parent of a record,
  * derived from the refPath
+ * @async
+ * @function
+ * @static
+ * @category Tree Slice
+ * @param {Record} record
  * @returns {Document}
  */
 export const fetchOwner = (record) => {
@@ -1788,37 +1776,39 @@ export const fetchOwner = (record) => {
 };
 
 /**
- * @function recordType
- * @static
  * Returns the "type" (collection name) the passed record is
  * stored in, derived from the refPath
+ * @function recordType
+ * @static
+ * @category Typed
+ * @param {Record} record
  * @returns {string} the collection name
- *
  */
 export const recordType = (record) => {
   return record?.refPath ? penultimate(record.refPath.split(`/`)) : undefined;
 };
 
 /**
- * @function recordId
- * @static
  * Returns the Id (documentId) of the passed record derived from the refPath
+ * @function
+ * @static
+ * @category Typed
  * @returns {string} the Id
- *
  */
 export const recordId = (record) => {
   return record?.refPath ? last(record.refPath.split(`/`)) : undefined;
 };
 
 /**
+ * optionally batched record update - abstracts batch process from specific types
  * @async
  * @function typedWrite
  * @static
- * optionally batched record update - abstracts batch process from specific types
- * @param {DocumentObject} data - the data object/record to update.  This will create a new one if it doesn't exist
+ * @category Typed
+ * @param {Record} data - the data object/record to update.  This will create a new one if it doesn't exist
  * @param {?string} data.Id
  * @param {?string} data.refPath
- * @param {?DocumentObject} parent - parent object (if any) this belongs to
+ * @param {?Record} parent - parent object (if any) this belongs to
  * @param {!string} parent.refPath - full path to parent document
  * @param {!string} type - name of type of object - i.e. the sub-collection name
  * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
@@ -1834,11 +1824,12 @@ export const typedWrite = (data, parent, type, batch = null) => {
 };
 
 /**
- * @async
- * @function typedWriteByTree
- * @static
  * optionally batched record update - abstracts batch process from specific types
- * @param {object} data - the data object/record to update.  This will create a new one if it doesn't exist
+ * @async
+ * @function
+ * @static
+ * @category Typed
+ * @param {Record} data - the data object/record to update.  This will create a new one if it doesn't exist
  * @param {ArtistTree} tree - Object with properties of refPath segments
  * @param {string} type - name of type of object - i.e. the sub-collection name
  * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
@@ -1855,11 +1846,12 @@ export const typedWriteByTree = (data, tree, type, batch = null) => {
 };
 
 /**
- * @async
- * @function typedWriteByChild
- * @static
  * optionally batched record update - abstracts batch process from specific types
- * @param {object} data - the data object/record to update.  This will create a new one if it doesn't exist
+ * @async
+ * @function
+ * @static
+ * @category Typed
+ * @param {Record} data - the data object/record to update.  This will create a new one if it doesn't exist
  * @param {ArtistTree} tree - Object with properties of refPath segments
  * @param {string} type - name of type of object - i.e. the sub-collection name
  * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
@@ -1885,17 +1877,18 @@ export const typedWriteByChild = (
 };
 
 /**
- * @async
- * @function typedCreate
- * @static
  * Creates a new document reference of the indicated type, and writes
  * it to the backend. Specific intent is when the Id needs to be
  * pre-specified, or shared outside this function. Normal writing
  * action will silently create a new document, which has to then be
  * found by query
- * @param {object} data - the data object/record to create.  This
+ * @async
+ * @function
+ * @static
+ * @category Typed
+ * @param {Record} data - the data object/record to create.  This
  * will create a new one if it doesn't exist
- * @param {?DocumentObject} parent - parent object (if any) this
+ * @param {?Record} parent - parent object (if any) this
  * belongs to
  * @param {string} parent.refPath - full path to parent document
  * @param {string} type - name of type of object - i.e. the
@@ -1906,26 +1899,26 @@ export const typedWriteByChild = (
  *
  */
 export const typedCreate = (data, parent, type, batch = null) => {
-  //create a new document reference (entirely local) and make a data object
-  let newData = createUniqueReference(type, parent.refPath);
   //merge the supplied data into the new data object
-  newData = {
+  let newData = {
     ...data,
-    ...newData
+    ...(data.Id ? data : createUniqueReference(type, parent.refPath))
   };
   //parent data already in created reference
-  return typedWrite(newData, null, type, batch);
+  return typedWrite(newData, parent, type, batch);
 };
 
 /**
+ * @private
  * @typedef {Map} RecordTree
+ * @category Typed
  */
 
 /**
- * @sync
- * @function treeFromChild
- * @static
  * Extracts a tree of document ID's from a child document (assumes is a child)
+ * @function
+ * @static
+ * @category Typed
  * @param {Record} child document (regardless of depth)
  *  of a tree
  * @param {!string} child.refPath
@@ -1945,10 +1938,11 @@ export const treeFromChild = (child) => {
 };
 
 /**
- * @function typedTablePathFromTree
- * @static
  * Builds a refPath *down* to a desired collection/type from an existing
  * RecordTree Map.
+ * @function
+ * @static
+ * @category Typed
  * @param {RecordTree} tree
  * @param {!string} type
  * @param {?string} branchType a collection name to start branching from.
@@ -1976,10 +1970,11 @@ export const typedTablePathFromTree = (tree, type, branchType) => {
 };
 
 /**
- * @function typedRefPathFromTree
- * @static
  * Builds a refPath *down* to a desired collection/type from an existing
  * RecordTree Map.
+ * @function
+ * @static
+ * @category Typed
  * @param {RecordTree} tree
  * @param {!string} type
  * @return {string} constructed refPath (document)
@@ -1999,11 +1994,12 @@ export const typedRefPathFromTree = (tree, type) => {
 };
 
 /**
- * @function typedIdFromChild
- * @static
  * Looks up a "tree" to find the Id of the document at the requested
  * collection level ("type")
- * @param {DocumentObject} child document (regardless of depth)
+ * @function
+ * @static
+ * @category Typed
+ * @param {Record} child document (regardless of depth)
  *  of a tree
  * @param {!string} child.refPath
  * @param {!string} type name of desired type/collection level in tree
@@ -2016,11 +2012,12 @@ export const typedIdFromChild = (child, type) => {
 };
 
 /**
- * @function typedTablePathFromChild
- * @static
  * Builds a refPath *up* to a desired collection/type from an existing
  * child in a tree
- * @param {DocumentObject} child document (regardless of depth)
+ * @function
+ * @static
+ * @category Typed
+ * @param {Record} child document (regardless of depth)
  *  of a tree
  * @param {!string} child.refPath
  * @param {!string} type
@@ -2031,11 +2028,12 @@ export const typedTablePathFromChild = (child, type, branchType = null) => {
 };
 
 /**
- * @function typedRefPathFromChild
- * @static
  * Builds a refPath *up* to a desired collection/type from an existing
  * child in a tree
- * @param {DocumentObject} child document (regardless of depth)
+ * @function
+ * @static
+ * @category Typed
+ * @param {Record} child document (regardless of depth)
  *  of a tree
  * @param {!string} child.refPath
  * @param {!string} type
@@ -2046,14 +2044,16 @@ export const typedRefPathFromChild = (child, type) => {
 };
 
 /**
- * @async
- * @function typedFetchFromChild
- * @static
  * function to fetch a document from "up" the collection/document tree of a child document
- * @param {DocumentObject} child - assumed to be an object in a collection/document Tree
+ * @async
+ * @function
+ * @static
+ * @category Typed
+ * @param {Record} child - assumed to be an object in a collection/document Tree
  * @param {!string} refPath
  * @param {string} type - type/collection to fetch parent document from
  * @param {?WriteBatch|Transaction} batch - optional batch object to chain
+ * @returns {Promise<RecordObject>}
  */
 export const typedFetchFromChild = async (
   child,
@@ -2070,14 +2070,16 @@ export const typedFetchFromChild = async (
 };
 
 /**
- * @async
- * @function typedFetchFromTree
- * @static
  * function to fetch a document from "up" the collection/document tree of a child document
+ * @async
+ * @function
+ * @static
+ * @category Typed
  * @param {RecordTree} tree - assumed to be an object in a collection/document Tree
  * @param {!string} refPath
  * @param {string} type - type/collection to fetch parent document from
  * @param {?WriteBatch|Transaction} batch - optional batch object to chain
+ * @returns {Promise<RecordObject>}
  */
 export const typedFetchFromTree = async (tree, type, batch = null) => {
   return fetchRecord(
@@ -2089,13 +2091,15 @@ export const typedFetchFromTree = async (tree, type, batch = null) => {
 };
 
 /**
- * @async
- * @function typedCollectFromTree
- * @static
  * function to collect documents from "up" the collection/document tree of a child document
+ * @async
+ * @function
+ * @static
+ * @category Typed
  * @param {RecordTree} tree - assumed to be an object in a collection/document Tree
  * @param {string} type - type/collection to fetch parent document from
  * @param {?WriteBatch|Transaction} batch - optional batch object to chain
+ * @returns {Promise<RecordArray>}
  */
 export const typedCollectFromTree = async (
   tree,
@@ -2107,10 +2111,11 @@ export const typedCollectFromTree = async (
 };
 
 /**
- * @async
- * @function typedCollectFromChild
- * @static
  * function to collect documents from "up" the collection/document tree of a child document
+ * @async
+ * @function
+ * @static
+ * @category Typed
  * @param {Record} child - assumed to be an object in a collection/document Tree
  * @param {string} type - type/collection to fetch parent document from
  * @param {?WriteBatch|Transaction} batch - optional batch object to chain
@@ -2120,22 +2125,20 @@ export const typedCollectFromChild = async (child, type, branchType = null) => {
 };
 
 /**
- * @function typedListener
- * @static
  * Uses the ownerFilter (above) to establish a listener to "just" the
  * parts of a collectionGroup that are descendants of the passed "owner"
  * record.
+ * @function
+ * @static
+ * @category Typed
  * @param {!string} type - name of type of object - i.e. the sub-collection name
- * @param {?DocumentObject} parent - parent object (if any) this belongs to
+ * @param {?Record} parent - parent object (if any) this belongs to
  * @param {!string} parent.refPath - full path to parent document
  * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
- * @return {Promise} WriteBatch, Transaction or Void
  * @param {!string} type name of the desired collectionGroup
- * @callback  dataCallback function to be called with changes to record
- * @param {QuerySnapshot} response
- * @callback errCallback function to be called when an error
+ * @param {CollectionListener} dataCallback function to be called with changes to record
+ * @param {callback} errCallback function to be called when an error
  * occurs in listener
- * @param {string}  response
  * @returns {callback} function to be called to release subscription
  *
  */
@@ -2148,32 +2151,40 @@ export const typedListener = (type, parent, dataCallBack, errCallBack) => {
 };
 
 /**
- * @function typedPaginatedListener
- * @param {!string} type - name of type of object - i.e. the sub-collection name
- * @param {?DocumentObject} parent - parent object (if any) this belongs to
- * @param {!string} parent.refPath - full path to parent document
- * @param {function} dataCallback callback
- * @param {function} errCallback callback
- * @param {number} pageSize
- * @returns {PaginatedListener} object with unsubscribe and pagination methods
+ * @class
+ * @extends PaginatedListener
  */
-export const typedPaginatedListener = (
-  type,
-  parent,
-  dataCallback,
-  errCallback,
-  pageSize = PAGINATE_DEFAULT
-) => {
-  return new PaginatedListener(
+export class typedPaginatedListener extends PaginatedListener {
+  /**
+   * Implements a PaginatedListener using type syntax
+   * @category Typed
+   * @param {!string} type - the "type" (CollectionName) for this record
+   * @param {?RecordObject} parent - the (optional) parent for this
+   * record (i.e. a sub-type)
+   * @param {!string} parent.refPath - the only required part of a
+   * parent record
+   * @param {number} pageSize - the page size requested
+   * @param {CollectionListener} dataCallback - the callback where data is returned
+   * @param {callback} errCallback - callback for errors
+   */
+  constructor(
     type,
-    null, //filter
-    [{ fieldRef: "name", dirStr: "asc" }], //sort, required
-    parent?.refPath, //refPath
-    pageSize,
+    parent,
     dataCallback,
-    errCallback
-  );
-};
+    errCallback,
+    pageSize = PAGINATE_DEFAULT
+  ) {
+    super(
+      type,
+      null, //filter
+      [{ fieldRef: "name", dirStr: "asc" }], //sort, required
+      parent?.refPath, //refPath
+      pageSize,
+      dataCallback,
+      errCallback
+    );
+  }
+}
 
 /**
  * @function localBatchReturn

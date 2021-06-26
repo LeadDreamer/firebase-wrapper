@@ -1,4 +1,5 @@
-[![view on npm](http://img.shields.io/npm/v/example.svg)](https://www.npmjs.org/package/example)
+[![view on
+npm](http://img.shields.io/npm/v/@leaddreamer/firebase-wrapper.svg)](https://www.npmjs.org/package/@leaddreamer/firebase-wrapper)
 # @leaddreamer/firebase-wrapper
 
 A set of helper-wrapper functions around firebase firestore, storage and auth. Intent is to treat Firestore as a

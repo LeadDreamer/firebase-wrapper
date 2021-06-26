@@ -5,6 +5,7 @@
  * record-oriented database; originally conceived to port from one
  * database to another.
  */
+import { FirebaseStorageAdminEmulator } from "./bucket";
 
 /**
  * @function FirebaseStorageWrapper
@@ -32,10 +33,21 @@
  */
 export default function FirebaseStorageWrapper(firebase) {
   FirebaseStorage = firebase.storage();
+  FirebaseStorage =
+    typeof firebase.storage().bucket === "function"
+      ? FirebaseStorageAdminEmulator(firebase)
+      : FirebaseStorage;
 }
 
-/** @private */
 let FirebaseStorage;
+
+//////////////////////////////////////////////////////////////////////
+// *** Storage API ***
+/**
+ *These functions are part of a storage scheme that uses parallel structures
+ * between Firestore collection/documents and Storage paths.  The concept
+ * here is all Storage items are part of/belong to Firestore documents.
+ */
 
 /**
  * ----------------------------------------------------------------------

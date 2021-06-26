@@ -1,8 +1,41 @@
 [![view on npm](http://img.shields.io/npm/v/example.svg)](https://www.npmjs.org/package/example)
-# @leaddreamer/firebase-wrappers
+# @leaddreamer/firebase-wrapper
 
 A set of helper-wrapper functions around firebase firestore, storage and auth. Intent is to treat Firestore as a
 hierarchical record-oriented database; originally conceived to port from one database to another.
+
+## Modules
+
+<dl>
+<dt><a href="#module_FirebaseStorageAdminEmulator">FirebaseStorageAdminEmulator</a></dt>
+<dd><p>A set of helper-wrapper functions around firebase firestore, storage
+and auth. Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.</p>
+</dd>
+<dt><a href="#module_FirebaseStorageWrapper">FirebaseStorageWrapper</a></dt>
+<dd><p>A set of helper-wrapper functions around firebase firestore, storage
+and auth. Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.</p>
+</dd>
+</dl>
+
+<a name="module_FirebaseStorageAdminEmulator"></a>
+
+## FirebaseStorageAdminEmulator
+A set of helper-wrapper functions around firebase firestore, storageand auth. Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.
+
+<a name="module_FirebaseStorageAdminEmulator.FirebaseStorageAdminEmulator"></a>
+
+### FirebaseStorageAdminEmulator.FirebaseStorageAdminEmulator(firebase)
+Initializes the Auth service of the provided firebase app.  Alsoinstantiates various constants and helper functions
+
+**Kind**: static method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
+
+| Param | Type |
+| --- | --- |
+| firebase | <code>firebase</code> | 
 
 <a name="module_FirebaseStorageWrapper"></a>
 
@@ -16,7 +49,6 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
     * [.makeFileURLFromRecord(record, key, filename)](#module_FirebaseStorageWrapper.makeFileURLFromRecord) ⇒ <code>external:promise</code>
     * [.startBlobInRecord(blob, record, key, filename)](#module_FirebaseStorageWrapper.startBlobInRecord) ⇒ <code>UploadTask</code>
     * [.getDefaultImageURL(key)](#module_FirebaseStorageWrapper.getDefaultImageURL)
-    * [.initialize_functions(firebase)](#module_FirebaseStorageWrapper.initialize_functions)
 
 <a name="module_FirebaseStorageWrapper.FirebaseStorageWrapper"></a>
 
@@ -85,17 +117,6 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | Param | Type | Description |
 | --- | --- | --- |
 | key | <code>string</code> | name/key of default image file |
-
-<a name="module_FirebaseStorageWrapper.initialize_functions"></a>
-
-### FirebaseStorageWrapper.initialize\_functions(firebase)
-Initializes the Cloud Function interfaces service of the providedfirebase app.  Also instantiates various constants andhelper functions
-
-**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
-
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
 
 
 * * *
