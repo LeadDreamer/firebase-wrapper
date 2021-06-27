@@ -1546,8 +1546,11 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
     * [.FirebaseStorageWrapper(firebase)](#module_FirebaseStorageWrapper.FirebaseStorageWrapper)
     * [.makeStorageRefFromRecord(record, key, filename)](#module_FirebaseStorageWrapper.makeStorageRefFromRecord) ⇒ <code>StorageReference</code>
     * [.makeFileURLFromRecord(record, key, filename)](#module_FirebaseStorageWrapper.makeFileURLFromRecord) ⇒ <code>external:promise</code>
-    * [.startBlobInRecord(blob, record, key, filename)](#module_FirebaseStorageWrapper.startBlobInRecord) ⇒ <code>UploadTask</code>
-    * [.getDefaultImageURL(key)](#module_FirebaseStorageWrapper.getDefaultImageURL)
+    * [.storeBlobByRecord(blob, record, key, filename)](#module_FirebaseStorageWrapper.storeBlobByRecord) ⇒ <code>UploadTask</code>
+    * [.storeDataURLByRecord(dataURL, record, key, filename)](#module_FirebaseStorageWrapper.storeDataURLByRecord) ⇒
+    * [.getDefaultImageURL(key)](#module_FirebaseStorageWrapper.getDefaultImageURL) ⇒ <code>string</code>
+    * [.getURLFromFilePath(filePath)](#module_FirebaseStorageWrapper.getURLFromFilePath) ⇒ <code>string</code>
+    * [.dataURLToBlob(dataURL)](#module_FirebaseStorageWrapper.dataURLToBlob) ⇒ <code>Object</code>
 
 <a name="module_FirebaseStorageWrapper.FirebaseStorageWrapper"></a>
 
@@ -1587,14 +1590,14 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 
 | Param | Type | Description |
 | --- | --- | --- |
-| record | <code>object</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
+| record | <code>RecordObject</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
 | key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
 | filename | <code>string</code> | an optional name to be associated with the stored item. |
 
-<a name="module_FirebaseStorageWrapper.startBlobInRecord"></a>
+<a name="module_FirebaseStorageWrapper.storeBlobByRecord"></a>
 
-### FirebaseStorageWrapper.startBlobInRecord(blob, record, key, filename) ⇒ <code>UploadTask</code>
-----------------------------------------------------------------------
+### FirebaseStorageWrapper.storeBlobByRecord(blob, record, key, filename) ⇒ <code>UploadTask</code>
+----------------------------------------------------------------------Firestore's document sizes can be limited - 1MB - so our system storeslarger digital "blobs" in a parallel Firestore Storage.
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 **Returns**: <code>UploadTask</code> - Firestore Storage UploadTask Object  
@@ -1602,13 +1605,28 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | Param | Type | Description |
 | --- | --- | --- |
 | blob | <code>blob</code> | A data blob in DataURI format to store in Storage |
-| record | <code>Object</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
+| record | <code>RecordObject</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
+| key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
+| filename | <code>string</code> | an optional name to be associated with the stored item. |
+
+<a name="module_FirebaseStorageWrapper.storeDataURLByRecord"></a>
+
+### FirebaseStorageWrapper.storeDataURLByRecord(dataURL, record, key, filename) ⇒
+----------------------------------------------------------------------Firestore's document sizes can be limited - 1MB - so our system storeslarger digital "blobs" in a parallel Firestore Storage.
+
+**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Returns**: Firestore Storage UploadTask Object----------------------------------------------------------------------  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dataURL | <code>dataURL</code> | A data blob in DataURI format to store in Storage |
+| record | <code>RecordObject</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
 | key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
 | filename | <code>string</code> | an optional name to be associated with the stored item. |
 
 <a name="module_FirebaseStorageWrapper.getDefaultImageURL"></a>
 
-### FirebaseStorageWrapper.getDefaultImageURL(key)
+### FirebaseStorageWrapper.getDefaultImageURL(key) ⇒ <code>string</code>
 ----------------------------------------------------------------------
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
@@ -1616,6 +1634,29 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | Param | Type | Description |
 | --- | --- | --- |
 | key | <code>string</code> | name/key of default image file |
+
+<a name="module_FirebaseStorageWrapper.getURLFromFilePath"></a>
+
+### FirebaseStorageWrapper.getURLFromFilePath(filePath) ⇒ <code>string</code>
+----------------------------------------------------------------------
+
+**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+
+| Param | Type |
+| --- | --- |
+| filePath | <code>string</code> | 
+
+<a name="module_FirebaseStorageWrapper.dataURLToBlob"></a>
+
+### FirebaseStorageWrapper.dataURLToBlob(dataURL) ⇒ <code>Object</code>
+----------------------------------------------------------------------
+
+**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Returns**: <code>Object</code> - {ext: extension, base64: data}  
+
+| Param | Type |
+| --- | --- |
+| dataURL | <code>object</code> | 
 
 
 * * *
