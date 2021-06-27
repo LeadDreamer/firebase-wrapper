@@ -61,15 +61,9 @@ class adminRef {
     await this.fileRef.save(buf, { resumable: false });
     const response = await this.fileRef.getMetadata();
     const localmetadata = response[0];
-    const URL =
-      "https://storage.cloud.google.com/" +
-      localmetadata.bucket +
-      "/" +
-      metadata.name;
     //the response below emulates Firestore Storage UploadTaskSnapshot
     return Promise.resolve({
       ref: this.fileRef,
-      downloadURL: URL,
       metadata: localmetadata
     });
   };

@@ -5,7 +5,7 @@
  * record-oriented database; originally conceived to port from one
  * database to another.
  */
-import { FirebaseStorageAdminEmulator } from "./bucket";
+import FirebaseStorageAdminEmulator from "./bucket";
 
 /**
  * @function FirebaseStorageWrapper
@@ -51,7 +51,7 @@ let FirebaseStorage;
 
 /**
  * ----------------------------------------------------------------------
- * @function makeStorageRefFromRecord
+ * @function
  * @static
  * THis function is part of a storage scheme that uses parallel structures
  * between Firestore collection/documents and Storage paths.  The concept
@@ -83,7 +83,7 @@ export const makeStorageRefFromRecord = (
 
 /**
  * ----------------------------------------------------------------------
- * @function makeFileURLFromRecord
+ * @function
  * @static
  * This function is part of a storage scheme that uses parallel structures
  * between Firestore collection/documents and Storage paths.  The concept
@@ -92,7 +92,7 @@ export const makeStorageRefFromRecord = (
  * filename to construct a '/' separated path to a stored item, , and returns a
  * URL that can be used to access that item.
  * Note this simply makes the URL - it does not carry out *any* operations
- * @param {object} record A firestore document Record - the '/' separated collection/
+ * @param {RecordObject} record A firestore document Record - the '/' separated collection/
  * document path is used as the path to the stored item.
  * @param {string} key An optional string identifying the specific field an stored
  * item is associated with
@@ -107,32 +107,97 @@ export const makeFileURLFromRecord = (record, key = null, filename = null) => {
 
 /**
  * ----------------------------------------------------------------------
- * @function startBlobInRecord
- * @static
  * Firestore's document sizes can be limited - 1MB - so our system stores
  * larger digital "blobs" in a parallel Firestore Storage.
+ * @function
+ * @static
  * @param {blob} blob A data blob in DataURI format to store in Storage
- * @param {Object} record A firestore document Record - the '/' separated collection/
+ * @param {RecordObject} record A firestore document Record - the '/' separated collection/
  * document path is used as the path to the stored item.
  * @param {?string} key An optional string identifying the specific field an stored
  * item is associated with
  * @param {?string} filename an optional name to be associated with the stored item.
  * @returns {UploadTask} Firestore Storage UploadTask Object
  */
-export const startBlobInRecord = (blob, record, key, filename) => {
+export const storeBlobByRecord = (blob, record, key, filename) => {
   const localStorageRef = makeStorageRefFromRecord(record, key, filename);
   return localStorageRef.put(blob);
 };
 
 /**
  * ----------------------------------------------------------------------
- * @function getDefaultImageURL
+ * Firestore's document sizes can be limited - 1MB - so our system stores
+ * larger digital "blobs" in a parallel Firestore Storage.
+ * @async
+ * @function
+ * @static
+ * @param {dataURL} dataURL A data blob in DataURI format to store in Storage
+ * @param {RecordObject} record A firestore document Record - the '/' separated collection/
+ * document path is used as the path to the stored item.
+ * @param {?string} key An optional string identifying the specific field an stored
+ * item is associated with
+ * @param {!string} filename an optional name to be associated with the stored item.
+ * @returns Firestore Storage UploadTask Object
+ * ----------------------------------------------------------------------
+ */
+export const storeDataURLByRecord = (dataURL, record, key, filename) => {
+  return storeBlobByRecord(
+    dataURLToBlob(dataURL).base64,
+    record,
+    key,
+    filename
+  );
+};
+
+/**
+ * ----------------------------------------------------------------------
+ * @function
  * @static
  * @param {!string} key name/key of default image file
+ * @returns {string}
  */
 export const getDefaultImageURL = (key) => {
   let filename = key + ".jpg";
   return Promise.resolve(
     FirebaseStorage.ref("/defaultImages").child(filename).getDownloadURL()
   );
+};
+
+/**
+ * ----------------------------------------------------------------------
+ * @function
+ * @static
+ * @param {!string} filePath
+ * @returns {string}
+ */
+export const getURLFromFilePath = (filePath) => {
+  return FirebaseStorage.ref(filePath).getDownloadURL();
+};
+
+/**
+ * ----------------------------------------------------------------------
+ * @async
+ * @function
+ * @param {object} dataURL
+ * @returns {Object} {ext: extension, base64: data}
+ */
+export const dataURLToBlob = (dataURL) => {
+  var reg = /^data:image\/([\w+]+);base64,([\s\S]+)/;
+  var match = dataURL.match(reg);
+  var baseType = {
+    jpeg: "jpg"
+  };
+
+  baseType["svg+xml"] = "svg";
+
+  if (!match) {
+    throw new Error("image base64 data error");
+  }
+
+  var extname = baseType[match[1]] ? baseType[match[1]] : match[1];
+
+  return {
+    extname: "." + extname,
+    base64: match[2]
+  };
 };
