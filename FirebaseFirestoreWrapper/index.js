@@ -469,14 +469,15 @@ export const collectRecordsByFilter = (
   tablePath,
   refPath = null,
   filterArray = null,
-  sortArray = null
+  sortArray = null,
+  limit = null
 ) => {
   const db = dbReference(refPath);
 
   //assumes filterArray is in processing order
-  return sortQuery(
-    filterQuery(db.collection(tablePath), filterArray),
-    sortArray
+  return limitQuery(
+    sortQuery(filterQuery(db.collection(tablePath), filterArray), sortArray),
+    limit
   )
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
@@ -536,13 +537,17 @@ export const collectRecordsInGroup = (tableName) => {
 export const collectRecordsInGroupByFilter = (
   tableName,
   filterArray = null,
-  sortArray = null
+  sortArray = null,
+  limit = null
 ) => {
   const db = fdb;
 
-  return sortQuery(
-    filterQuery(db.collectionGroup(tableName), filterArray),
-    sortArray
+  return limitQuery(
+    sortQuery(
+      filterQuery(db.collectionGroup(tableName), filterArray),
+      sortArray
+    ),
+    limit
   )
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
@@ -809,7 +814,7 @@ const createRefFromPath = (docPath, refPath = null) => {
 /**
  * ----------------------------------------------------------------------
  * @private
- * @function filterQuery
+ * @function
  * builds and returns a query built from an array of filter (i.e. "where")
  * conditions
  * @param {Query} query collectionReference or Query to build filter upong
@@ -834,7 +839,7 @@ const filterQuery = (query, filterArray = null) => {
 /**
  * ----------------------------------------------------------------------
  * @private
- * @function sortQuery
+ * @function
  * builds and returns a query built from an array of filter (i.e. "where")
  * conditions
  * @param {Query} query collectionReference or Query to build filter upong
@@ -848,6 +853,20 @@ const sortQuery = (query, sortArray = null) => {
         //note "||" - if dirStr is not present(i.e. falsy) default to "asc"
       }, query)
     : query;
+};
+
+/**
+ * ----------------------------------------------------------------------
+ * @private
+ * @function
+ * builds and returns a query built from an array of filter (i.e. "where")
+ * conditions
+ * @param {Query} query - collectionReference or Query to build filter upong
+ * @param {?number} limit - an (optional) 2xn array of sort (i.e. "orderBy") conditions
+ * @returns Firestore Query object
+ */
+const limitQuery = (query, limit = null) => {
+  return limitQuery ? query.limit(limit) : query;
 };
 
 //Listener Support
