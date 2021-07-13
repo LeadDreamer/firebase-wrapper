@@ -422,7 +422,7 @@ export const writeBack = (data, batch = null, mergeOption = true) => {
 /**
  * ----------------------------------------------------------------------
  * @async
- * @function collectRecords
+ * @function
  * @static
  * @description query for a SET of records
  * @param {!string} tablePath string representing path ro requested
@@ -467,13 +467,17 @@ export const collectRecords = (tablePath, refPath = null) => {
  */
 export const collectRecordsByFilter = (
   tablePath,
-  filterArray,
-  refPath = null
+  refPath = null,
+  filterArray = null,
+  sortArray = null
 ) => {
   const db = dbReference(refPath);
 
   //assumes filterArray is in processing order
-  return filterQuery(db.collection(tablePath), filterArray)
+  return sortQuery(
+    filterQuery(db.collection(tablePath), filterArray),
+    sortArray
+  )
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
       // returns a promise
@@ -529,10 +533,17 @@ export const collectRecordsInGroup = (tableName) => {
  * operations
  * @returns {Promise<Array<Record>>}
  **/
-export const collectRecordsInGroupByFilter = (tableName, filterArray) => {
+export const collectRecordsInGroupByFilter = (
+  tableName,
+  filterArray = null,
+  sortArray = null
+) => {
   const db = fdb;
 
-  return filterQuery(db.collectionGroup(tableName), filterArray)
+  return sortQuery(
+    filterQuery(db.collectionGroup(tableName), filterArray),
+    sortArray
+  )
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
       // returns a promise
@@ -1802,7 +1813,7 @@ export const recordId = (record) => {
 /**
  * optionally batched record update - abstracts batch process from specific types
  * @async
- * @function typedWrite
+ * @function
  * @static
  * @category Typed
  * @param {Record} data - the data object/record to update.  This will create a new one if it doesn't exist

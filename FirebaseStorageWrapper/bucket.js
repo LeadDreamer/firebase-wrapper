@@ -39,22 +39,21 @@ class adminRef {
     this.storage = null;
   }
 
-  child(path) {
+  child = (path) => {
     return new adminRef(this.fullPath + "/" + path);
-  }
+  };
 
-  delete() {
+  delete = () => {
     return this.fileRef.delete();
-  }
-  getDownloadURL;
+  };
 
-  getDownloadURL() {
-    return this.fileRef.publicURL();
-  }
+  getDownloadURL = () => {
+    return this.fileRef.publicUrl();
+  };
 
-  getMetadata() {
+  getMetadata = () => {
     return this.fileRef.getMetadata();
-  }
+  };
 
   put = async (data, metadata = null) => {
     var buf = new Buffer(data, "base64");
@@ -64,7 +63,7 @@ class adminRef {
     const localmetadata = response[0];
     //the response below emulates Firestore Storage UploadTaskSnapshot
     return Promise.resolve({
-      ref: this.fileRef,
+      ref: this,
       metadata: localmetadata
     });
   };
@@ -88,11 +87,11 @@ class adminRef {
     });
   };
 
-  toString() {
+  toString = () => {
     return null;
-  }
+  };
 
-  updateMetadata(metadata = null) {
+  updateMetadata = (metadata = null) => {
     return metadata && this.fileRef.setMetadata(metadata);
-  }
+  };
 }
