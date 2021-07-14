@@ -866,7 +866,7 @@ const sortQuery = (query, sortArray = null) => {
  * @returns Firestore Query object
  */
 const limitQuery = (query, limit = null) => {
-  return limitQuery ? query.limit(limit) : query;
+  return limit ? query.limit(limit) : query;
 };
 
 //Listener Support
