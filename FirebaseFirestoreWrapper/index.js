@@ -1583,14 +1583,12 @@ export class PaginatedListener {
  * /TOP_COLLECTION/abcdefh > __name__ > //TOP_COLLECTION/abcdefg
  * (assuming LEXICAL SORT)
  * IMPORTANT NOTE:
- * Because this filter uses an INEQUALITY, .sortBy() and .limit() conditions
+ * Because this filter uses an INEQUALITY, .sortBy() conditions
  * are not supported
  * @function
  * @static
  * @category Tree Slice
  * @param {!Record} owner
- * @param {!string} refPath - string representing the full path to the
- * Firestore document.
  * @param {?filterObject} queryFilter additional filter parameters
  *
  * @returns {filterObject}
