@@ -102,7 +102,7 @@ export const makeStorageRefFromRecord = (
  * @reject {string}
  */
 export const makeFileURLFromRecord = (record, key = null, filename = null) => {
-  return makeStorageRefFromRecord(record).getDownloadURL();
+  return makeStorageRefFromRecord(record, key, filename).getDownloadURL();
 };
 
 /**

@@ -14,17 +14,14 @@
     "email": "tracy@dreamsandlogic.com",
     "url": "http://dreamsandlogic.com"
   },
-  "files": [
-    "*.js",
-    "dist/*.js",
-    "*.md"
-  ],
+  "files": ["*.js", "dist/*.js", "*.md"],
   "main": "dist/index.js",
   "scripts": {
     "transpile": "babel --root-mode upward * --out-dir dist",
     "build": "yarn rimraf dist && npm run transpile",
     "prepublishOnly": "yarn rimraf dist && yarn run transpile",
-    "docs": "./node_modules/.bin/jsdoc2md --template ../README.hbs --files *.js > README.md"
+    "docs": "./node_modules/.bin/jsdoc2md --template ../README.hbs --files *.js > README.md",
+    "rebuild": "npm version patch && npm run docs && npm run build"
   },
   "peerDependencies": {
     "firebase-admin": "^9.4.1",
