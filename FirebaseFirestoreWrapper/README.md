@@ -81,7 +81,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper.PaginatedListener+ChangeFilter) ⇒ <code>unsubscribe</code>
             * [.unsubscribe()](#module_FirebaseFirestoreWrapper.PaginatedListener+unsubscribe)
     * _Tree Slice_
-        * [.ownerFilter(owner, refPath, queryFilter)](#module_FirebaseFirestoreWrapper.ownerFilter) ⇒ <code>filterObject</code>
+        * [.ownerFilter(owner, queryFilter)](#module_FirebaseFirestoreWrapper.ownerFilter) ⇒ <code>filterObject</code>
         * [.listenSlice(owner, collectionName, dataCallback, response, errCallback, response)](#module_FirebaseFirestoreWrapper.listenSlice) ⇒ <code>callback</code>
         * [.fetchSlice(owner, collectionName)](#module_FirebaseFirestoreWrapper.fetchSlice) ⇒ <code>QuerySnapshot</code>
         * [.querySlice(owner, collectionName, queryFilter)](#module_FirebaseFirestoreWrapper.querySlice) ⇒ <code>QuerySnapshot</code>
@@ -776,8 +776,8 @@ IF unsubscribe function is set, run it.
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper.PaginatedListener)  
 <a name="module_FirebaseFirestoreWrapper.ownerFilter"></a>
 
-### FirebaseFirestoreWrapper.ownerFilter(owner, refPath, queryFilter) ⇒ <code>filterObject</code>
-Contructs a filter that selects only the "owner" section of acollectionGroup query - in other words, descendents of a particulartop=level document.  This takes advantage of Firestore's indexing,which "names"/indexes all documents using the FULL PATH to thedocument, starting from the top-most, i.e.:TOP_COLLECTION/{dociId}/NEXT_COLLECTION/{docId}/NEXT_NEXT_COLLECTION/{etc}This functions knowns NOTHING about the actual schema; it simply usesthe path of the indicated "owner" as starting portion of ALL the"child" documents of the owner. It also takes advantage of thestrictly alpha-numeric nature of the path string.As such, ALL children paths strings MUST be "greater than" the ownerbare path, and MUST be LESS THAN the alpha-numerically "next" value:e.g. if the "owner" path is TOP_COLLECTION/abcdefg, then/TOP_COLLECTION/abcdefh > __name__ > //TOP_COLLECTION/abcdefg(assuming LEXICAL SORT)IMPORTANT NOTE:Because this filter uses an INEQUALITY, .sortBy() and .limit() conditionsare not supported
+### FirebaseFirestoreWrapper.ownerFilter(owner, queryFilter) ⇒ <code>filterObject</code>
+Contructs a filter that selects only the "owner" section of acollectionGroup query - in other words, descendents of a particulartop=level document.  This takes advantage of Firestore's indexing,which "names"/indexes all documents using the FULL PATH to thedocument, starting from the top-most, i.e.:TOP_COLLECTION/{dociId}/NEXT_COLLECTION/{docId}/NEXT_NEXT_COLLECTION/{etc}This functions knowns NOTHING about the actual schema; it simply usesthe path of the indicated "owner" as starting portion of ALL the"child" documents of the owner. It also takes advantage of thestrictly alpha-numeric nature of the path string.As such, ALL children paths strings MUST be "greater than" the ownerbare path, and MUST be LESS THAN the alpha-numerically "next" value:e.g. if the "owner" path is TOP_COLLECTION/abcdefg, then/TOP_COLLECTION/abcdefh > __name__ > //TOP_COLLECTION/abcdefg(assuming LEXICAL SORT)IMPORTANT NOTE:Because this filter uses an INEQUALITY, .sortBy() conditionsare not supported
 
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 **Category**: Tree Slice  
@@ -785,7 +785,6 @@ Contructs a filter that selects only the "owner" section of acollectionGroup qu
 | Param | Type | Description |
 | --- | --- | --- |
 | owner | <code>Record</code> |  |
-| refPath | <code>string</code> | string representing the full path to the Firestore document. |
 | queryFilter | <code>filterObject</code> | additional filter parameters |
 
 <a name="module_FirebaseFirestoreWrapper.listenSlice"></a>
