@@ -59,7 +59,7 @@ function penultimate(array) {
  */
 export default function FirebaseFirestore(firebase) {
   //doesnt run firestore persistence in Admin/Node environment
-  process.env.PATH ||
+  process.env.FIREBASE_CONFIG ||
     firebase.firestore().enablePersistence({ synchorizeTabs: true });
   fdb = firebase.firestore();
   aFieldValue = firebase.firestore.FieldValue;
@@ -194,7 +194,7 @@ export const arrayUnionFieldValue = (elements) => {
  * @param {DocumentSnapshot} DocumentSnapshot
  * @returns {Record}
  */
-const RecordFromSnapshot = (DocumentSnapshot) => {
+export const RecordFromSnapshot = (DocumentSnapshot) => {
   return {
     ...DocumentSnapshot.data(),
     Id: DocumentSnapshot.id,
@@ -212,7 +212,7 @@ const RecordFromSnapshot = (DocumentSnapshot) => {
  * @param {QuerySnapshot} QuerySnapshot
  * @returns {RecordArray}
  */
-const RecordsFromSnapshot = (QuerySnapshot) => {
+export const RecordsFromSnapshot = (QuerySnapshot) => {
   return QuerySnapshot.docs.map((docSnap) => {
     return RecordFromSnapshot(docSnap);
   });

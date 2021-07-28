@@ -68,7 +68,7 @@ export default function FirebaseAuthWrapper(firebase, styled) {
 /**
  * ----------------------------------------------------------------------
  * @async
- * @function fetchClaims
+ * @function fetchToken
  * @static
  * fetches our specific custom claim values from firebase auth
  * @param {FirebaseAuthUser} user
