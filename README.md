@@ -40,18 +40,27 @@ and auth. Intent is to treat Firestore as a hierarchical
 record-oriented database; originally conceived to port from one
 database to another.</p>
 </dd>
-<dt><a href="#module_FirebaseStorageAdminEmulator">FirebaseStorageAdminEmulator</a></dt>
-<dd><p>A set of helper-wrapper functions around firebase firestore, storage
-and auth. Intent is to treat Firestore as a hierarchical
-record-oriented database; originally conceived to port from one
-database to another.</p>
-</dd>
 <dt><a href="#module_FirebaseStorageWrapper">FirebaseStorageWrapper</a></dt>
 <dd><p>A set of helper-wrapper functions around firebase firestore, storage
 and auth. Intent is to treat Firestore as a hierarchical
 record-oriented database; originally conceived to port from one
 database to another.</p>
 </dd>
+</dl>
+
+## Functions
+
+<dl>
+<dt><a href="#asynchronously fetches user data from Firestore Authentication">asynchronously fetches user data from Firestore Authentication(userID)</a> ⇒ <code>Promise.&lt;userData&gt;</code></dt>
+<dd></dd>
+<dt><a href="#deletes a single user from the authentication system, identified by user ID"> identified by user ID(userID)</a> ⇒ <code>Promise</code></dt>
+<dd></dd>
+<dt><a href="#sets custom claims on user objectBAD IDEA DONT USEoverwrites other needed settings">sets custom claims on user objectBAD IDEA DONT USEoverwrites other needed settings(uid, customClaim)</a></dt>
+<dd></dd>
+<dt><a href="#adds/merges to new claims to user customClaims">adds/merges to new claims to user customClaims(uid, customClaim)</a></dt>
+<dd></dd>
+<dt><a href="#BAD IDEA DONT USE - its here for completeness, but there are other settingsin the claims we do NOT want to deleteremoves all current customClaims on user (sets to null)">BAD IDEA DONT USE - its here for completeness, but there are other settingsin the claims we do NOT want to deleteremoves all current customClaims on user (sets to null)(uid)</a></dt>
+<dd></dd>
 </dl>
 
 <a name="module_FirebaseWrapper"></a>
@@ -116,7 +125,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.createAnonymousUser](#module_FirebaseAuthWrapper.createAnonymousUser)
         * [.setPersistence](#module_FirebaseAuthWrapper.setPersistence)
         * [.FirebaseAuthWrapper(firebase)](#module_FirebaseAuthWrapper.FirebaseAuthWrapper)
-        * [.fetchClaims(user)](#module_FirebaseAuthWrapper.fetchClaims) ⇒ <code>external:promise</code>
+        * [.fetchToken(user)](#module_FirebaseAuthWrapper.fetchToken) ⇒ <code>external:promise</code>
         * [.refreshAuthUser()](#module_FirebaseAuthWrapper.refreshAuthUser) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.doCreateUserWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper.doCreateUserWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
         * [.doSignInWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper.doSignInWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
@@ -203,9 +212,9 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 
 **Example**  
 ```import * as firebase from "firebase/app";import "firebase/auth";import FirebaseAuth from "@leaddreamer/firebase-wrapper/FirebaseAuthWrapper";//the next is optional - if you want the React componentimport StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";import {config} from "wherever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseAuth(firebase, StyledFirebaseAuth);})(config)```
-<a name="module_FirebaseAuthWrapper.fetchClaims"></a>
+<a name="module_FirebaseAuthWrapper.fetchToken"></a>
 
-### FirebaseAuthWrapper.fetchClaims(user) ⇒ <code>external:promise</code>
+### FirebaseAuthWrapper.fetchToken(user) ⇒ <code>external:promise</code>
 ----------------------------------------------------------------------
 
 **Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
@@ -1519,22 +1528,6 @@ Uses the ownerFilter (above) to establish a listener to "just" theparts of a co
 | dataCallback | <code>CollectionListener</code> | function to be called with changes to record |
 | errCallback | <code>callback</code> | function to be called when an error occurs in listener |
 
-<a name="module_FirebaseStorageAdminEmulator"></a>
-
-## FirebaseStorageAdminEmulator
-A set of helper-wrapper functions around firebase firestore, storageand auth. Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.
-
-<a name="module_FirebaseStorageAdminEmulator.FirebaseStorageAdminEmulator"></a>
-
-### FirebaseStorageAdminEmulator.FirebaseStorageAdminEmulator(firebase)
-Initializes the Auth service of the provided firebase app.  Alsoinstantiates various constants and helper functions
-
-**Kind**: static method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
-
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
-
 <a name="module_FirebaseStorageWrapper"></a>
 
 ## FirebaseStorageWrapper
@@ -1656,6 +1649,55 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | Param | Type |
 | --- | --- |
 | dataURL | <code>object</code> | 
+
+<a name="asynchronously fetches user data from Firestore Authentication"></a>
+
+## asynchronously fetches user data from Firestore Authentication(userID) ⇒ <code>Promise.&lt;userData&gt;</code>
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| userID | <code>string</code> | 
+
+<a name="sets custom claims on user objectBAD IDEA DONT USEoverwrites other needed settings"></a>
+
+## sets custom claims on user objectBAD IDEA DONT USEoverwrites other needed settings(uid, customClaim)
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| uid | <code>string</code> | user ID |
+| customClaim | <code>Object</code> | claims object, less than 1000 Bytes. null clears |
+
+<a name="adds/merges to new claims to user customClaims"></a>
+
+## adds/merges to new claims to user customClaims(uid, customClaim)
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| uid | <code>string</code> | user ID |
+| customClaim | <code>Object</code> | claims object to be merged with existing claims |
+
+<a name="BAD IDEA DONT USE - its here for completeness, but there are other settingsin the claims we do NOT want to deleteremoves all current customClaims on user (sets to null)"></a>
+
+## BAD IDEA DONT USE - its here for completeness, but there are other settingsin the claims we do NOT want to deleteremoves all current customClaims on user (sets to null)(uid)
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| uid | <code>string</code> | user ID |
+
+<a name="FirebaseAuthAdminWrapper"></a>
+
+## .FirebaseAuthAdminWrapper(firebase)
+Initializes the administrative Auth service of the providedfirebase app.  Also instantiates various constants and helper functions
+
+**Kind**: static function  
+
+| Param | Type |
+| --- | --- |
+| firebase | <code>firebase</code> | 
 
 
 * * *

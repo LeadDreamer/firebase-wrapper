@@ -5,39 +5,6 @@ npm](http://img.shields.io/npm/v/@leaddreamer/firebase-wrapper.svg)](https://www
 A set of helper-wrapper functions around firebase firestore, storage and auth. Intent is to treat Firestore as a
 hierarchical record-oriented database; originally conceived to port from one database to another.
 
-## Modules
-
-<dl>
-<dt><a href="#module_FirebaseStorageAdminEmulator">FirebaseStorageAdminEmulator</a></dt>
-<dd><p>A set of helper-wrapper functions around firebase firestore, storage
-and auth. Intent is to treat Firestore as a hierarchical
-record-oriented database; originally conceived to port from one
-database to another.</p>
-</dd>
-<dt><a href="#module_FirebaseStorageWrapper">FirebaseStorageWrapper</a></dt>
-<dd><p>A set of helper-wrapper functions around firebase firestore, storage
-and auth. Intent is to treat Firestore as a hierarchical
-record-oriented database; originally conceived to port from one
-database to another.</p>
-</dd>
-</dl>
-
-<a name="module_FirebaseStorageAdminEmulator"></a>
-
-## FirebaseStorageAdminEmulator
-A set of helper-wrapper functions around firebase firestore, storageand auth. Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.
-
-<a name="module_FirebaseStorageAdminEmulator.FirebaseStorageAdminEmulator"></a>
-
-### FirebaseStorageAdminEmulator.FirebaseStorageAdminEmulator(firebase)
-Initializes the Auth service of the provided firebase app.  Alsoinstantiates various constants and helper functions
-
-**Kind**: static method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
-
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
-
 <a name="module_FirebaseStorageWrapper"></a>
 
 ## FirebaseStorageWrapper

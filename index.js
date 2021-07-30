@@ -1,15 +1,101 @@
-import firebase from "@firebase/app";
-import "@firebase/firestore";
-import "@firebase/storage";
-import "@firebase/auth";
-import "@firebase/functions";
-import "firebaseui";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+"use strict";
 
-import FirebaseFirestore from "./FirebaseFirestoreWrapper";
-import FirebaseStorage from "./FirebaseStorageWrapper";
-import FirebaseAuthWrapper from "./FirebaseAuthWrapper";
-import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper";
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var _exportNames = {};
+exports["default"] = void 0;
+
+var _regenerator = _interopRequireDefault(
+  require("@babel/runtime/regenerator")
+);
+
+var _asyncToGenerator2 = _interopRequireDefault(
+  require("@babel/runtime/helpers/asyncToGenerator")
+);
+
+var _app = _interopRequireDefault(require("@firebase/app"));
+
+require("@firebase/firestore");
+
+require("@firebase/storage");
+
+require("@firebase/auth");
+
+require("@firebase/functions");
+
+require("firebaseui");
+
+var _StyledFirebaseAuth = _interopRequireDefault(
+  require("react-firebaseui/StyledFirebaseAuth")
+);
+
+var _FirebaseFirestoreWrapper = _interopRequireDefault(
+  require("./FirebaseFirestoreWrapper")
+);
+
+Object.keys(_FirebaseFirestoreWrapper).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _FirebaseFirestoreWrapper[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _FirebaseFirestoreWrapper[key];
+    }
+  });
+});
+
+var _FirebaseStorageWrapper = _interopRequireDefault(
+  require("./FirebaseStorageWrapper")
+);
+
+Object.keys(_FirebaseStorageWrapper).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _FirebaseStorageWrapper[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _FirebaseStorageWrapper[key];
+    }
+  });
+});
+
+var _FirebaseAuthWrapper = _interopRequireDefault(
+  require("./FirebaseAuthWrapper")
+);
+
+Object.keys(_FirebaseAuthWrapper).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _FirebaseAuthWrapper[key]) return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _FirebaseAuthWrapper[key];
+    }
+  });
+});
+
+var _FirebaseCloudFunctionsWrapper = _interopRequireDefault(
+  require("./FirebaseCloudFunctionsWrapper")
+);
+
+Object.keys(_FirebaseCloudFunctionsWrapper).forEach(function (key) {
+  if (key === "default" || key === "__esModule") return;
+  if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
+  if (key in exports && exports[key] === _FirebaseCloudFunctionsWrapper[key])
+    return;
+  Object.defineProperty(exports, key, {
+    enumerable: true,
+    get: function get() {
+      return _FirebaseCloudFunctionsWrapper[key];
+    }
+  });
+});
 
 /**
  * @module FirebaseWrapper
@@ -64,20 +150,40 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper";
  * export * from "@leaddreamer/firebase-wrapper";
  * ```
  */
-const FirebaseWrapper = async (config) => {
-  try {
-    firebase.app();
-  } catch (err) {
-    firebase.initializeApp(config);
-  }
-  FirebaseFirestore(firebase);
-  FirebaseStorage(firebase);
-  FirebaseAuthWrapper(firebase, StyledFirebaseAuth);
-  FirebaseCloudFunctions(firebase);
-};
+var FirebaseWrapper = /*#__PURE__*/ (function () {
+  var _ref = (0, _asyncToGenerator2["default"])(
+    /*#__PURE__*/ _regenerator["default"].mark(function _callee(config) {
+      return _regenerator["default"].wrap(function _callee$(_context) {
+        while (1) {
+          switch ((_context.prev = _context.next)) {
+            case 0:
+              try {
+                _app["default"].app();
+              } catch (err) {
+                _app["default"].initializeApp(config);
+              }
 
-export default FirebaseWrapper;
-export * from "./FirebaseFirestoreWrapper";
-export * from "./FirebaseStorageWrapper";
-export * from "./FirebaseAuthWrapper";
-export * from "./FirebaseCloudFunctionsWrapper";
+              (0, _FirebaseFirestoreWrapper["default"])(_app["default"]);
+              (0, _FirebaseStorageWrapper["default"])(_app["default"]);
+              (0, _FirebaseAuthWrapper["default"])(
+                _app["default"],
+                _StyledFirebaseAuth["default"]
+              );
+              (0, _FirebaseCloudFunctionsWrapper["default"])(_app["default"]);
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    })
+  );
+
+  return function FirebaseWrapper(_x) {
+    return _ref.apply(this, arguments);
+  };
+})();
+
+var _default = FirebaseWrapper;
+exports["default"] = _default;

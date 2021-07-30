@@ -1,8 +1,5 @@
-dist/
-dist/**
-dist/**/*
-dist/**/*.*
-./**/dist
+*.js
+./*.js
 node_modules
 ./node_modules
 ./**/node_modules
