@@ -8,9 +8,13 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = FirebaseAuthWrapper;
 exports.setPersistence = exports.attachAuthUserListener = exports.createAnonymousUser = exports.doPasswordUpdate = exports.doSendEmailVerification = exports.doPasswordReset = exports.doSignOut = exports.doSignInWithTwitter = exports.doSignInWithFacebook = exports.doSignInWithGoogle = exports.doSignInWithEmailAndPassword = exports.doCreateUserWithEmailAndPassword = exports.refreshAuthUser = exports.fetchToken = exports.StyledFirebaseAuth = exports.FirebaseAuthSignInOptions = exports.FirebaseAuth = void 0;
 
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+var _regenerator = _interopRequireDefault(
+  require("@babel/runtime/regenerator")
+);
 
-var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+var _asyncToGenerator2 = _interopRequireDefault(
+  require("@babel/runtime/helpers/asyncToGenerator")
+);
 
 require("@firebase/app");
 
@@ -74,8 +78,9 @@ exports.StyledFirebaseAuth = StyledFirebaseAuth;
 
 function FirebaseAuthWrapper(firebase, styled) {
   exports.FirebaseAuth = FirebaseAuth = firebase.auth();
-  exports.FirebaseAuthSignInOptions = FirebaseAuthSignInOptions = [firebase.auth.GoogleAuthProvider.PROVIDER_ID, //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-  firebase.auth.EmailAuthProvider.PROVIDER_ID //firebase.auth.TwitterAuthProvider.PROVIDER_ID
+  exports.FirebaseAuthSignInOptions = FirebaseAuthSignInOptions = [
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID, //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+    firebase.auth.EmailAuthProvider.PROVIDER_ID //firebase.auth.TwitterAuthProvider.PROVIDER_ID
   ];
   FirebaseAuthPersistence = firebase.auth.Auth.Persistence.LOCAL;
   exports.StyledFirebaseAuth = StyledFirebaseAuth = styled;
@@ -92,35 +97,36 @@ function FirebaseAuthWrapper(firebase, styled) {
  * @reject returns err
  */
 
+var fetchToken = /*#__PURE__*/ (function () {
+  var _ref = (0, _asyncToGenerator2["default"])(
+    /*#__PURE__*/ _regenerator["default"].mark(function _callee(user) {
+      var thisUser, token;
+      return _regenerator["default"].wrap(function _callee$(_context) {
+        while (1) {
+          switch ((_context.prev = _context.next)) {
+            case 0:
+              //uses short circuit
+              thisUser = user || FirebaseAuth.currentUser;
+              _context.next = 3;
+              return thisUser.getIdTokenResult(true);
 
-var fetchToken = /*#__PURE__*/function () {
-  var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(user) {
-    var thisUser, token;
-    return _regenerator["default"].wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            //uses short circuit
-            thisUser = user || FirebaseAuth.currentUser;
-            _context.next = 3;
-            return thisUser.getIdTokenResult(true);
+            case 3:
+              token = _context.sent;
+              return _context.abrupt("return", token);
 
-          case 3:
-            token = _context.sent;
-            return _context.abrupt("return", token);
-
-          case 5:
-          case "end":
-            return _context.stop();
+            case 5:
+            case "end":
+              return _context.stop();
+          }
         }
-      }
-    }, _callee);
-  }));
+      }, _callee);
+    })
+  );
 
   return function fetchToken(_x) {
     return _ref.apply(this, arguments);
   };
-}();
+})();
 /**
  * @async
  * @function refreshAuthUser
@@ -130,29 +136,30 @@ var fetchToken = /*#__PURE__*/function () {
  * @returns {Promise<void>}
  */
 
-
 exports.fetchToken = fetchToken;
 
-var refreshAuthUser = /*#__PURE__*/function () {
-  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
-    return _regenerator["default"].wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            FirebaseAuth.updateCurrentUser(FirebaseAuth.currentUser);
+var refreshAuthUser = /*#__PURE__*/ (function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])(
+    /*#__PURE__*/ _regenerator["default"].mark(function _callee2() {
+      return _regenerator["default"].wrap(function _callee2$(_context2) {
+        while (1) {
+          switch ((_context2.prev = _context2.next)) {
+            case 0:
+              FirebaseAuth.updateCurrentUser(FirebaseAuth.currentUser);
 
-          case 1:
-          case "end":
-            return _context2.stop();
+            case 1:
+            case "end":
+              return _context2.stop();
+          }
         }
-      }
-    }, _callee2);
-  }));
+      }, _callee2);
+    })
+  );
 
   return function refreshAuthUser() {
     return _ref2.apply(this, arguments);
   };
-}(); //////////////////////////////////////////////////////////////////////
+})(); //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 // *** native UI Auth support ***
 
@@ -202,10 +209,12 @@ var refreshAuthUser = /*#__PURE__*/function () {
  * @returns {Promise<UserCredential>}
  */
 
-
 exports.refreshAuthUser = refreshAuthUser;
 
-var doCreateUserWithEmailAndPassword = function doCreateUserWithEmailAndPassword(email, password) {
+var doCreateUserWithEmailAndPassword = function doCreateUserWithEmailAndPassword(
+  email,
+  password
+) {
   return FirebaseAuth.createUserWithEmailAndPassword(email, password);
 };
 /**
@@ -225,10 +234,12 @@ var doCreateUserWithEmailAndPassword = function doCreateUserWithEmailAndPassword
  * @returns {Promise<UserCredential>}
  */
 
-
 exports.doCreateUserWithEmailAndPassword = doCreateUserWithEmailAndPassword;
 
-var doSignInWithEmailAndPassword = function doSignInWithEmailAndPassword(email, password) {
+var doSignInWithEmailAndPassword = function doSignInWithEmailAndPassword(
+  email,
+  password
+) {
   return FirebaseAuth.signInWithEmailAndPassword(email, password);
 };
 /**
@@ -239,7 +250,6 @@ var doSignInWithEmailAndPassword = function doSignInWithEmailAndPassword(email, 
  * ----------------------------------------------------------------------
  **********************************************************************/
 
-
 exports.doSignInWithEmailAndPassword = doSignInWithEmailAndPassword;
 
 var doSignInWithGoogle = function doSignInWithGoogle(googleProvider) {
@@ -248,7 +258,6 @@ var doSignInWithGoogle = function doSignInWithGoogle(googleProvider) {
 /**
  * ----------------------------------------------------------------------
  **********************************************************************/
-
 
 exports.doSignInWithGoogle = doSignInWithGoogle;
 
@@ -259,7 +268,6 @@ var doSignInWithFacebook = function doSignInWithFacebook(facebookProvider) {
  * ----------------------------------------------------------------------
  **********************************************************************/
 
-
 exports.doSignInWithFacebook = doSignInWithFacebook;
 
 var doSignInWithTwitter = function doSignInWithTwitter(twitterProvider) {
@@ -268,7 +276,6 @@ var doSignInWithTwitter = function doSignInWithTwitter(twitterProvider) {
 /**
  * ----------------------------------------------------------------------
  **********************************************************************/
-
 
 exports.doSignInWithTwitter = doSignInWithTwitter;
 
@@ -279,7 +286,6 @@ var doSignOut = function doSignOut() {
  * ----------------------------------------------------------------------
  **********************************************************************/
 
-
 exports.doSignOut = doSignOut;
 
 var doPasswordReset = function doPasswordReset(email) {
@@ -288,7 +294,6 @@ var doPasswordReset = function doPasswordReset(email) {
 /**
  * ----------------------------------------------------------------------
  **********************************************************************/
-
 
 exports.doPasswordReset = doPasswordReset;
 
@@ -301,7 +306,6 @@ var doSendEmailVerification = function doSendEmailVerification() {
  * ----------------------------------------------------------------------
  **********************************************************************/
 
-
 exports.doSendEmailVerification = doSendEmailVerification;
 
 var doPasswordUpdate = function doPasswordUpdate(password) {
@@ -311,7 +315,6 @@ var doPasswordUpdate = function doPasswordUpdate(password) {
 /**
  * ----------------------------------------------------------------------
  **********************************************************************/
-
 
 exports.doPasswordUpdate = doPasswordUpdate;
 
@@ -331,7 +334,6 @@ var createAnonymousUser = function createAnonymousUser() {
  *
  **********************************************************************/
 
-
 exports.createAnonymousUser = createAnonymousUser;
 
 var attachAuthUserListener = function attachAuthUserListener(next) {
@@ -341,10 +343,14 @@ var attachAuthUserListener = function attachAuthUserListener(next) {
  * ----------------------------------------------------------------------
  **********************************************************************/
 
-
 exports.attachAuthUserListener = attachAuthUserListener;
 
 var setPersistence = function setPersistence() {
+  FirebaseAuth.setPersistence(FirebaseAuthPersistence);
+};
+
+exports.setPersistence = setPersistence;
+tence = function setPersistence() {
   FirebaseAuth.setPersistence(FirebaseAuthPersistence);
 };
 
