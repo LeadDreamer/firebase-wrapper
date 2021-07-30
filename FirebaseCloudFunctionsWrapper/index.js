@@ -1,3 +1,11 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = FirebaseCloudFunctions;
+exports.treeFromParams = exports.CloudFunctions = void 0;
+
 /**
  * @module FirebaseCloudFunctionsWrapper
  * @description A set of helper-wrapper functions around firebase firestore, storage
@@ -5,13 +13,11 @@
  * record-oriented database; originally conceived to port from one
  * database to another.
  */
-
 //////////////////////////////////////////////////////////////////////
 // Cloud Fetch
-/** @private */
-let functions;
 
-//////////////////////////////////////////////////////////////////////
+/** @private */
+var functions; //////////////////////////////////////////////////////////////////////
 // Cloud Functions
 
 /**
@@ -36,10 +42,10 @@ let functions;
  * })(config)
  * ```
  */
-export default function FirebaseCloudFunctions(firebase) {
+
+function FirebaseCloudFunctions(firebase) {
   functions = firebase.functions();
 }
-
 /**
  * @async
  * @function CloudFunctions
@@ -54,10 +60,11 @@ export default function FirebaseCloudFunctions(firebase) {
  * result = await CloudFunctions("MyGloriousFunction")(argumentToFunction);
  * ```
  */
-export const CloudFunctions = (name) => {
+
+
+var CloudFunctions = function CloudFunctions(name) {
   return functions && functions.httpsCallable(name);
 };
-
 /**
  * @sync
  * @function treeFromParams
@@ -67,11 +74,16 @@ export const CloudFunctions = (name) => {
  * @param {object} Params
  * @returns {RecordTree}
  */
-export const treeFromParams = (Params) => {
-  let tree = new Map();
-  Object.keys(Params).forEach(paramName => {
+
+
+exports.CloudFunctions = CloudFunctions;
+
+var treeFromParams = function treeFromParams(Params) {
+  var tree = new Map();
+  Object.keys(Params).forEach(function (paramName) {
     tree.set(paramName, Params[paramName]);
-  })
+  });
   return tree;
 };
 
+exports.treeFromParams = treeFromParams;

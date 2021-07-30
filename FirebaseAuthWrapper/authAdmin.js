@@ -1,3 +1,61 @@
+"use strict";
+
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = FirebaseAuthAdminWrapper;
+exports.PageUsers = exports.clearCustomClaims = exports.addCustomClaims = exports.setCustomClaims = exports.DeleteUser = exports.getUser = void 0;
+
+var _defineProperty2 = _interopRequireDefault(
+  require("@babel/runtime/helpers/defineProperty")
+);
+
+var _regenerator = _interopRequireDefault(
+  require("@babel/runtime/regenerator")
+);
+
+var _asyncToGenerator2 = _interopRequireDefault(
+  require("@babel/runtime/helpers/asyncToGenerator")
+);
+
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) {
+      symbols = symbols.filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+      });
+    }
+    keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    if (i % 2) {
+      ownKeys(Object(source), true).forEach(function (key) {
+        (0, _defineProperty2["default"])(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(
+          target,
+          key,
+          Object.getOwnPropertyDescriptor(source, key)
+        );
+      });
+    }
+  }
+  return target;
+}
+
 /**
  * @function FirebaseAuthAdminWrapper
  * @static
@@ -5,13 +63,12 @@
  * firebase app.  Also instantiates various constants and helper functions
  * @param {firebase} firebase
  */
-export default function FirebaseAuthAdminWrapper(firebase) {
+function FirebaseAuthAdminWrapper(firebase) {
   FirebaseAuth = firebase.auth();
 }
-
 /** @private */
-let FirebaseAuth;
 
+var FirebaseAuth;
 /**
  * ----------------------------------------------------------------------
  * @async @function getUser
@@ -21,10 +78,9 @@ let FirebaseAuth;
  * ----------------------------------------------------------------------
  */
 
-export const getUser = (userID) => {
+var getUser = function getUser(userID) {
   return FirebaseAuth.getUser(userID);
 };
-
 /**
  * ----------------------------------------------------------------------
  * @async @function DeleteUser
@@ -34,10 +90,11 @@ export const getUser = (userID) => {
  * ----------------------------------------------------------------------
  */
 
-export const DeleteUser = (userID) => {
+exports.getUser = getUser;
+
+var DeleteUser = function DeleteUser(userID) {
   return FirebaseAuth.deleteUser(userID);
 };
-
 /**
  * ----------------------------------------------------------------------
  * @async @function setCustomClaims
@@ -50,11 +107,39 @@ export const DeleteUser = (userID) => {
  * ----------------------------------------------------------------------
  */
 
-export const setCustomClaims = async (uid, customClaim) => {
-  const result = await FirebaseAuth.setCustomUserClaims(uid, customClaim);
-  return result;
-};
+exports.DeleteUser = DeleteUser;
 
+var setCustomClaims = /*#__PURE__*/ (function () {
+  var _ref = (0, _asyncToGenerator2["default"])(
+    /*#__PURE__*/ _regenerator["default"].mark(function _callee(
+      uid,
+      customClaim
+    ) {
+      var result;
+      return _regenerator["default"].wrap(function _callee$(_context) {
+        while (1) {
+          switch ((_context.prev = _context.next)) {
+            case 0:
+              _context.next = 2;
+              return FirebaseAuth.setCustomUserClaims(uid, customClaim);
+
+            case 2:
+              result = _context.sent;
+              return _context.abrupt("return", result);
+
+            case 4:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    })
+  );
+
+  return function setCustomClaims(_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+})();
 /**
  * ----------------------------------------------------------------------
  * @async @function addCustomClaim
@@ -64,17 +149,46 @@ export const setCustomClaims = async (uid, customClaim) => {
  * ----------------------------------------------------------------------
  */
 
-export const addCustomClaims = async (uid, customClaims) => {
-  const ClaimRequest = JSON.parse(JSON.stringify(customClaims));
-  const user = await FirebaseAuth.getUser(uid);
-  const existingClaims = user.customClaims;
-  const finalResult = {
-    ...existingClaims,
-    ...ClaimRequest
-  };
-  await FirebaseAuth.setCustomUserClaims(uid, finalResult);
-};
+exports.setCustomClaims = setCustomClaims;
 
+var addCustomClaims = /*#__PURE__*/ (function () {
+  var _ref2 = (0, _asyncToGenerator2["default"])(
+    /*#__PURE__*/ _regenerator["default"].mark(function _callee2(
+      uid,
+      customClaims
+    ) {
+      var ClaimRequest, user, existingClaims, finalResult;
+      return _regenerator["default"].wrap(function _callee2$(_context2) {
+        while (1) {
+          switch ((_context2.prev = _context2.next)) {
+            case 0:
+              ClaimRequest = JSON.parse(JSON.stringify(customClaims));
+              _context2.next = 3;
+              return FirebaseAuth.getUser(uid);
+
+            case 3:
+              user = _context2.sent;
+              existingClaims = user.customClaims;
+              finalResult = _objectSpread(
+                _objectSpread({}, existingClaims),
+                ClaimRequest
+              );
+              _context2.next = 8;
+              return FirebaseAuth.setCustomUserClaims(uid, finalResult);
+
+            case 8:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    })
+  );
+
+  return function addCustomClaims(_x3, _x4) {
+    return _ref2.apply(this, arguments);
+  };
+})();
 /**
  * ----------------------------------------------------------------------
  * @async @function clearCustomClaims
@@ -85,10 +199,33 @@ export const addCustomClaims = async (uid, customClaims) => {
  * ----------------------------------------------------------------------
  */
 
-export const clearCustomClaims = async (uid) => {
-  return FirebaseAuth.setCustomUserClaims(uid, null);
-};
+exports.addCustomClaims = addCustomClaims;
 
+var clearCustomClaims = /*#__PURE__*/ (function () {
+  var _ref3 = (0, _asyncToGenerator2["default"])(
+    /*#__PURE__*/ _regenerator["default"].mark(function _callee3(uid) {
+      return _regenerator["default"].wrap(function _callee3$(_context3) {
+        while (1) {
+          switch ((_context3.prev = _context3.next)) {
+            case 0:
+              return _context3.abrupt(
+                "return",
+                FirebaseAuth.setCustomUserClaims(uid, null)
+              );
+
+            case 1:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    })
+  );
+
+  return function clearCustomClaims(_x5) {
+    return _ref3.apply(this, arguments);
+  };
+})();
 /**
  * ----------------------------------------------------------------------
  * @async @function PageUsers
@@ -102,6 +239,13 @@ export const clearCustomClaims = async (uid) => {
  * ----------------------------------------------------------------------
  */
 
-export const PageUsers = (pageSize = 1000, pageToken) => {
+exports.clearCustomClaims = clearCustomClaims;
+
+var PageUsers = function PageUsers() {
+  var pageSize =
+    arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
+  var pageToken = arguments.length > 1 ? arguments[1] : undefined;
   return FirebaseAuth.listUsers(pageSize, pageToken);
 };
+
+exports.PageUsers = PageUsers;

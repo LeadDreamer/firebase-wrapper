@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another.",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -14,17 +14,14 @@
     "email": "tracy@dreamsandlogic.com",
     "url": "http://dreamsandlogic.com"
   },
-  "files": [
-    "*.js",
-    "dist/*.js",
-    "*.md"
-  ],
-  "main": "dist/index.js",
+  "files": ["*.mjs", "*.js", "dist/*.js", "*.md"],
+  "main": "index",
   "scripts": {
-    "transpile": "babel --root-mode upward * --out-dir dist",
+    "transpile": "babel --root-mode upward *.mjs --out-dir .",
     "build": "yarn rimraf dist && npm run transpile",
     "prepublishOnly": "yarn rimraf dist && yarn run transpile",
-    "docs": "./node_modules/.bin/jsdoc2md --template ../README.hbs --files *.js > README.md"
+    "docs": "./node_modules/.bin/jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f index.mjs > README.md",
+    "rebuild": "npm version patch && npm run docs && npm run build"
   },
   "peerDependencies": {
     "firebase-admin": "^9.4.1",
