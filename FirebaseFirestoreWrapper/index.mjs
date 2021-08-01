@@ -78,7 +78,9 @@ let fdb, aFieldValue, aFieldPath;
  * class for a Firestore timestamp processor
  * @class
  */
-export let timestamp;
+let timestamp;
+
+export {timestamp};
 
 /**
  * a fieldPath value to represent the document Id - WARNING
@@ -89,14 +91,16 @@ export let timestamp;
  * @static
  * @category FieldPath
  */
-export var documentId;
+let documentId;
+export {documentId};
 
 /**
  * maximum concurrent writes
  * @constant {number} MAX_CONCURRENCY
  * @static
  */
-export const MAX_CONCURRENCY = 5;
+const MAX_CONCURRENCY = 5;
+export {MAX_CONCURRENCY};
 
 //convenient fieldValue constants
 /**
@@ -107,7 +111,8 @@ export const MAX_CONCURRENCY = 5;
  * @type {Object}
  * @category FieldValue
  */
-export var deleteFieldValue;
+let deleteFieldValue;
+export {deleteFieldValue};
 
 /**
  * a sentinel value to set a field to a
@@ -117,7 +122,8 @@ export var deleteFieldValue;
  * @type {Object}
  * @category FieldValue
  */
-export var serverTimestampFieldValue;
+let serverTimestampFieldValue;
+export {serverTimestampFieldValue};
 
 /**
  * ----------------------------------------------------------------------

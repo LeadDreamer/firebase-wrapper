@@ -13,7 +13,7 @@ import "@firebase/auth";
  * @static
  * FirebaseAuth instance for various Login/Logout calls
  */
-export let FirebaseAuth;
+let FirebaseAuth;
 
 /** @private */
 let FirebaseAuthPersistence;
@@ -23,9 +23,9 @@ let FirebaseAuthPersistence;
  * @static
  * ID codes for 3rd party Auth providers
  */
-export let FirebaseAuthSignInOptions;
+let FirebaseAuthSignInOptions;
 
-export let StyledFirebaseAuth;
+let StyledFirebaseAuth;
 
 /**
  * @function FirebaseAuthWrapper
@@ -245,3 +245,5 @@ export const attachAuthUserListener = (next) => {
 export const setPersistence = () => {
   FirebaseAuth.setPersistence(FirebaseAuthPersistence);
 };
+
+export {FirebaseAuth, FirebaseAuthSignInOptions, StyledFirebaseAuth};

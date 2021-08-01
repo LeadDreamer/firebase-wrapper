@@ -76,8 +76,8 @@ const FirebaseWrapper = async (config) => {
   FirebaseCloudFunctions(firebase);
 };
 
-export default FirebaseWrapper;
 export * from "./FirebaseFirestoreWrapper";
 export * from "./FirebaseStorageWrapper";
 export * from "./FirebaseAuthWrapper";
 export * from "./FirebaseCloudFunctionsWrapper";
+export default FirebaseWrapper;

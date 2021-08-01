@@ -1,13 +1,7 @@
 {
   "name": "@leaddreamer/firebase-wrapper",
-  "workspaces": [
-    "FirebaseAuthWrapper",
-    "FirebaseCloudFunctionsWrapper",
-    "FirebaseFirestoreWrapper",
-    "FirebaseStorageWrapper"
-  ],
   "type": "module",
-  "version": "1.0.82",
+  "version": "1.0.99",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another.",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -23,7 +17,7 @@
   },
   "files": [
     "*.*js",
-    "/*/*.*js",
+    "/*.*js",
     "/**/*.*js",
     "*.md",
     "/**/*.md"
@@ -32,26 +26,30 @@
   "browser": "index.mjs",
   "scripts": {
     "transpile": "babel index.mjs --out-dir .",
-    "build": "npm run transpile",
-    "prepublishOnly": "npm run build",
-    "make_docs": "./node_modules/.bin/jsdoc2md -c jsdoc.conf.json --template README.hbs --files *.mjs ./*/*.mjs > README.md",
-    "docs": "npm run make_docs",
-    "rebuild": "npm version patch && npm run docs && npm run build",
-    "rebuild_all": "npm run rebuild -workspaces",
-    "publish_package": "npm publish",
-    "publish_dry": "npm publish --dry-run"
+    "build": "$npm_execpath run transpile",
+    "prepublishOnly": "$npm_execpath run build",
+    "make_docs": "jsdoc2md -c jsdoc.conf.json --template README.hbs --files *.mjs ./*/*.mjs > README.md",
+    "docs": "$npm_execpath run make_docs",
+    "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
+    "FAW": "cd FirebaseAuthWrapper && $npm_execpath run rebuild && cd ..",
+    "FCFW": "cd FirebaseCloudFunctionsWrapper && $npm_execpath run rebuild && cd ..",
+    "FFW": "cd FirebaseFirestoreWrapper && $npm_execpath run rebuild && cd ..",
+    "FSW": "cd FirebaseStorageWrapper && $npm_execpath run rebuild && cd ..",
+    "rebuild_all": "$npm_execpath run FAW && $npm_execpath run FCFW && $npm_execpath run FFW && $npm_execpath run FSW && $npm_execpath run rebuild",
+    "publish_package": "$npm_execpath publish",
+    "publish_dry": "$npm_execpath publish --dry-run"
   },
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@firebase/app": "0.6.24",
-    "@firebase/auth": "0.16.6",
-    "@firebase/firestore": "2.3.4",
-    "@firebase/functions": "0.6.10",
-    "@firebase/storage": "0.5.3",
-    "firebase": "8.6.5",
-    "firebaseui": "4.8.0",
+    "@firebase/app": "0.6.29",
+    "@firebase/auth": "0.16.8",
+    "@firebase/firestore": "2.3.10",
+    "@firebase/functions": "0.6.14",
+    "@firebase/storage": "0.6.1",
+    "firebase": "8.8.1",
+    "firebaseui": "4.8.1",
     "react-firebaseui": "5.0.2"
   },
   "peerDependencies": {
