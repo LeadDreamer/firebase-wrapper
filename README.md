@@ -359,113 +359,106 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 
 * [FirebaseFirestoreWrapper](#module_FirebaseFirestoreWrapper)
-    * [.timestamp](#module_FirebaseFirestoreWrapper.timestamp)
-        * [new exports.timestamp()](#new_module_FirebaseFirestoreWrapper.timestamp_new)
-    * [.MAX_CONCURRENCY](#module_FirebaseFirestoreWrapper.MAX_CONCURRENCY) : <code>number</code>
-    * [.initialize_firestore(firebase)](#module_FirebaseFirestoreWrapper.initialize_firestore)
-    * [.createUniqueReference(tablePath, refPath)](#module_FirebaseFirestoreWrapper.createUniqueReference) ⇒ <code>DocumentReference</code>
-    * [.writeRecord(tablePath, data, refPath, batch, mergeOption)](#module_FirebaseFirestoreWrapper.writeRecord) ⇒ <code>Promise.&lt;Record&gt;</code>
-    * [.writeRecordByRefPath(data, refPath, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper.writeRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
-    * [.writeBack(data, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper.writeBack) ⇒ <code>Promise.&lt;Record&gt;</code>
-    * [.collectRecords(tablePath, refPath)](#module_FirebaseFirestoreWrapper.collectRecords) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-    * [.collectRecordsByFilter(tablePath, [filterArray], refPath)](#module_FirebaseFirestoreWrapper.collectRecordsByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-    * [.collectRecordsInGroup(tableName)](#module_FirebaseFirestoreWrapper.collectRecordsInGroup) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-    * [.collectRecordsInGroupByFilter(tableName, [filterArray])](#module_FirebaseFirestoreWrapper.collectRecordsInGroupByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-    * [.fetchRecord(tablePath, Id, refPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecord) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-    * [.fetchRecordByRefPath(docRefPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
-    * [.fetchRecordByFilter(table, [filterArray], refPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecordByFilter) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-    * [.fetchRecordInGroupByFilter(table, [filterArray], batch)](#module_FirebaseFirestoreWrapper.fetchRecordInGroupByFilter) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-    * [.deleteRecord(table, record, refPath, batch)](#module_FirebaseFirestoreWrapper.deleteRecord) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-    * [.deleteRecordByRefPath(docRefPath, batch)](#module_FirebaseFirestoreWrapper.deleteRecordByRefPath) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-    * [.updateRecordFields(recordUpdate)](#module_FirebaseFirestoreWrapper.updateRecordFields) ⇒ <code>Promise.&lt;Record&gt;</code>
-    * [.updateRecordByRefPath(docRefPath, data, batch)](#module_FirebaseFirestoreWrapper.updateRecordByRefPath) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-    * [.writeArrayValue(fieldName, fieldValue, docRefPath, batch)](#module_FirebaseFirestoreWrapper.writeArrayValue) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-    * [.localBatchReturn(incomingBatch, internalBatch)](#module_FirebaseFirestoreWrapper.localBatchReturn) ⇒ <code>WriteBatch</code> \| <code>Transaction</code>
-    * _Batch_
-        * [.runTransaction(updateFunction)](#module_FirebaseFirestoreWrapper.runTransaction) ⇒ <code>Promise.&lt;object&gt;</code>
-        * [.openWriteBatch()](#module_FirebaseFirestoreWrapper.openWriteBatch) ⇒ <code>WriteBatch</code>
-        * [.closeWriteBatch(batch)](#module_FirebaseFirestoreWrapper.closeWriteBatch) ⇒ <code>Promise.&lt;void&gt;</code>
-    * _FieldPath_
-        * [.documentId](#module_FirebaseFirestoreWrapper.documentId) : <code>Object</code>
-    * _FieldValue_
-        * [.deleteFieldValue](#module_FirebaseFirestoreWrapper.deleteFieldValue) : <code>Object</code>
-        * [.serverTimestampFieldValue](#module_FirebaseFirestoreWrapper.serverTimestampFieldValue) : <code>Object</code>
-        * [.incrementFieldValue(n)](#module_FirebaseFirestoreWrapper.incrementFieldValue) ⇒
-        * [.arrayRemoveFieldValue(elements)](#module_FirebaseFirestoreWrapper.arrayRemoveFieldValue) ⇒ <code>sentinelValue</code>
-        * [.arrayUnionFieldValue(elements)](#module_FirebaseFirestoreWrapper.arrayUnionFieldValue) ⇒
-    * _Listeners_
-        * [.ListenRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenRecords) ⇒ <code>unsubscribe</code>
-        * [.ListenQuery(table, [filterArray], [sortArray], refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenQuery) ⇒ <code>unsubscribe</code>
-        * [.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenCollectionGroupRecords) ⇒ <code>callback</code>
-        * [.ListenCollectionGroupQuery(table, [filterArray], [sortArray], dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenCollectionGroupQuery) ⇒ <code>unsubscribe</code>
-        * [.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenRecord) ⇒ <code>unsubscribe</code>
-    * _Paginate Constants_
-        * [.PAGINATE_INIT](#module_FirebaseFirestoreWrapper.PAGINATE_INIT) : <code>number</code>
-        * [.PAGINATE_PENDING](#module_FirebaseFirestoreWrapper.PAGINATE_PENDING) : <code>number</code>
-        * [.PAGINATE_UPDATED](#module_FirebaseFirestoreWrapper.PAGINATE_UPDATED) : <code>number</code>
-        * [.PAGINATE_DEFAULT](#module_FirebaseFirestoreWrapper.PAGINATE_DEFAULT) : <code>number</code>
-        * [.PAGINATE_CHOICES](#module_FirebaseFirestoreWrapper.PAGINATE_CHOICES) : <code>number</code>
-    * _Paginator_
-        * [.PaginateFetch](#module_FirebaseFirestoreWrapper.PaginateFetch)
-            * [new exports.PaginateFetch(table, filterArray, sortArray, refPath, limit)](#new_module_FirebaseFirestoreWrapper.PaginateFetch_new)
-            * [.limit](#module_FirebaseFirestoreWrapper.PaginateFetch+limit) : <code>number</code>
-            * [.status](#module_FirebaseFirestoreWrapper.PaginateFetch+status) : <code>PagingStatus</code>
-            * [.PageForward()](#module_FirebaseFirestoreWrapper.PaginateFetch+PageForward) ⇒ <code>Promise.&lt;RecordArray&gt;</code>
-            * [.PageBack()](#module_FirebaseFirestoreWrapper.PaginateFetch+PageBack) ⇒ <code>Promise.&lt;RecordArray&gt;</code>
-        * [.PaginateGroupFetch](#module_FirebaseFirestoreWrapper.PaginateGroupFetch)
-            * [new exports.PaginateGroupFetch(group, [filterArray], [sortArray], limit)](#new_module_FirebaseFirestoreWrapper.PaginateGroupFetch_new)
-            * [.limit](#module_FirebaseFirestoreWrapper.PaginateGroupFetch+limit) : <code>number</code>
-            * [.status](#module_FirebaseFirestoreWrapper.PaginateGroupFetch+status) : <code>PagingStatus</code>
-            * [.PageForward()](#module_FirebaseFirestoreWrapper.PaginateGroupFetch+PageForward) ⇒ <code>Promise.&lt;RecordArray&gt;</code>
-            * [.PageBack()](#module_FirebaseFirestoreWrapper.PaginateGroupFetch+PageBack) ⇒ <code>Promise.&lt;RecordArray&gt;</code>
-        * [.PaginatedListener](#module_FirebaseFirestoreWrapper.PaginatedListener)
-            * [new exports.PaginatedListener(table, [filterArray], [sortArray], refPath, limit, dataCallback, errCallback)](#new_module_FirebaseFirestoreWrapper.PaginatedListener_new)
-            * [.limit](#module_FirebaseFirestoreWrapper.PaginatedListener+limit) : <code>number</code>
-            * [.status](#module_FirebaseFirestoreWrapper.PaginatedListener+status) : <code>number</code>
-            * [.PageForward()](#module_FirebaseFirestoreWrapper.PaginatedListener+PageForward) ⇒ <code>unsubscribe</code>
-            * [.PageBack()](#module_FirebaseFirestoreWrapper.PaginatedListener+PageBack) ⇒ <code>unsubscribe</code>
-            * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper.PaginatedListener+ChangeLimit) ⇒ <code>unsubscribe</code>
-            * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper.PaginatedListener+ChangeFilter) ⇒ <code>unsubscribe</code>
-            * [.unsubscribe()](#module_FirebaseFirestoreWrapper.PaginatedListener+unsubscribe)
-    * _Tree Slice_
-        * [.ownerFilter(owner, queryFilter)](#module_FirebaseFirestoreWrapper.ownerFilter) ⇒ <code>filterObject</code>
-        * [.listenSlice(owner, collectionName, dataCallback, response, errCallback, response)](#module_FirebaseFirestoreWrapper.listenSlice) ⇒ <code>callback</code>
-        * [.fetchSlice(owner, collectionName)](#module_FirebaseFirestoreWrapper.fetchSlice) ⇒ <code>QuerySnapshot</code>
-        * [.querySlice(owner, collectionName, queryFilter)](#module_FirebaseFirestoreWrapper.querySlice) ⇒ <code>QuerySnapshot</code>
-        * [.listenQuerySlice(owner, collectionName, filterArray, dataCallback, response, errCallback, response)](#module_FirebaseFirestoreWrapper.listenQuerySlice) ⇒ <code>callback</code>
-        * [.ownerType(record)](#module_FirebaseFirestoreWrapper.ownerType) ⇒ <code>string</code>
-        * [.ownerId(record)](#module_FirebaseFirestoreWrapper.ownerId) ⇒ <code>string</code>
-        * [.ownerRefPath(record)](#module_FirebaseFirestoreWrapper.ownerRefPath) ⇒ <code>string</code>
-        * [.fetchOwner(record)](#module_FirebaseFirestoreWrapper.fetchOwner) ⇒ <code>Document</code>
-    * _Typed_
-        * [.typedPaginatedListener](#module_FirebaseFirestoreWrapper.typedPaginatedListener) ⇐ <code>PaginatedListener</code>
-            * [new exports.typedPaginatedListener(type, parent, pageSize, dataCallback, errCallback)](#new_module_FirebaseFirestoreWrapper.typedPaginatedListener_new)
-        * [.recordType(record)](#module_FirebaseFirestoreWrapper.recordType) ⇒ <code>string</code>
-        * [.recordId()](#module_FirebaseFirestoreWrapper.recordId) ⇒ <code>string</code>
-        * [.typedWrite(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedWrite) ⇒ <code>Promise</code>
-        * [.typedWriteByTree(data, tree, type, batch)](#module_FirebaseFirestoreWrapper.typedWriteByTree) ⇒ <code>Promise</code>
-        * [.typedWriteByChild(data, tree, type, batch)](#module_FirebaseFirestoreWrapper.typedWriteByChild) ⇒ <code>Promise</code>
-        * [.typedCreate(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedCreate) ⇒ <code>Promise</code>
-        * [.treeFromChild(child)](#module_FirebaseFirestoreWrapper.treeFromChild) ⇒ <code>RecordTree</code>
-        * [.typedTablePathFromTree(tree, type, branchType)](#module_FirebaseFirestoreWrapper.typedTablePathFromTree) ⇒ <code>string</code>
-        * [.typedRefPathFromTree(tree, type)](#module_FirebaseFirestoreWrapper.typedRefPathFromTree) ⇒ <code>string</code>
-        * [.typedIdFromChild(child, type)](#module_FirebaseFirestoreWrapper.typedIdFromChild)
-        * [.typedTablePathFromChild(child, type)](#module_FirebaseFirestoreWrapper.typedTablePathFromChild) ⇒ <code>string</code>
-        * [.typedRefPathFromChild(child, type)](#module_FirebaseFirestoreWrapper.typedRefPathFromChild) ⇒ <code>string</code>
-        * [.typedFetchFromChild(child, refPath, type, batch)](#module_FirebaseFirestoreWrapper.typedFetchFromChild) ⇒ <code>Promise.&lt;RecordObject&gt;</code>
-        * [.typedFetchFromTree(tree, refPath, type, batch)](#module_FirebaseFirestoreWrapper.typedFetchFromTree) ⇒ <code>Promise.&lt;RecordObject&gt;</code>
-        * [.typedCollectFromTree(tree, type, batch)](#module_FirebaseFirestoreWrapper.typedCollectFromTree) ⇒ <code>Promise.&lt;RecordArray&gt;</code>
-        * [.typedCollectFromChild(child, type, batch)](#module_FirebaseFirestoreWrapper.typedCollectFromChild)
-        * [.typedListener(type, parent, batch, type, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.typedListener) ⇒ <code>callback</code>
-
-<a name="module_FirebaseFirestoreWrapper.timestamp"></a>
-
-### FirebaseFirestoreWrapper.timestamp
-**Kind**: static class of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
-<a name="new_module_FirebaseFirestoreWrapper.timestamp_new"></a>
-
-#### new exports.timestamp()
-class for a Firestore timestamp processor
+    * _static_
+        * [.MAX_CONCURRENCY](#module_FirebaseFirestoreWrapper.MAX_CONCURRENCY) : <code>number</code>
+        * [.initialize_firestore(firebase)](#module_FirebaseFirestoreWrapper.initialize_firestore)
+        * [.createUniqueReference(tablePath, refPath)](#module_FirebaseFirestoreWrapper.createUniqueReference) ⇒ <code>DocumentReference</code>
+        * [.writeRecord(tablePath, data, refPath, batch, mergeOption)](#module_FirebaseFirestoreWrapper.writeRecord) ⇒ <code>Promise.&lt;Record&gt;</code>
+        * [.writeRecordByRefPath(data, refPath, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper.writeRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
+        * [.writeBack(data, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper.writeBack) ⇒ <code>Promise.&lt;Record&gt;</code>
+        * [.collectRecords(tablePath, refPath)](#module_FirebaseFirestoreWrapper.collectRecords) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+        * [.collectRecordsByFilter(tablePath, [filterArray], refPath)](#module_FirebaseFirestoreWrapper.collectRecordsByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+        * [.collectRecordsInGroup(tableName)](#module_FirebaseFirestoreWrapper.collectRecordsInGroup) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+        * [.collectRecordsInGroupByFilter(tableName, [filterArray])](#module_FirebaseFirestoreWrapper.collectRecordsInGroupByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+        * [.fetchRecord(tablePath, Id, refPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecord) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
+        * [.fetchRecordByRefPath(docRefPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
+        * [.fetchRecordByFilter(table, [filterArray], refPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecordByFilter) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
+        * [.fetchRecordInGroupByFilter(table, [filterArray], batch)](#module_FirebaseFirestoreWrapper.fetchRecordInGroupByFilter) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
+        * [.deleteRecord(table, record, refPath, batch)](#module_FirebaseFirestoreWrapper.deleteRecord) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
+        * [.deleteRecordByRefPath(docRefPath, batch)](#module_FirebaseFirestoreWrapper.deleteRecordByRefPath) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
+        * [.updateRecordFields(recordUpdate)](#module_FirebaseFirestoreWrapper.updateRecordFields) ⇒ <code>Promise.&lt;Record&gt;</code>
+        * [.updateRecordByRefPath(docRefPath, data, batch)](#module_FirebaseFirestoreWrapper.updateRecordByRefPath) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
+        * [.writeArrayValue(fieldName, fieldValue, docRefPath, batch)](#module_FirebaseFirestoreWrapper.writeArrayValue) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
+        * [.localBatchReturn(incomingBatch, internalBatch)](#module_FirebaseFirestoreWrapper.localBatchReturn) ⇒ <code>WriteBatch</code> \| <code>Transaction</code>
+        * _Batch_
+            * [.runTransaction(updateFunction)](#module_FirebaseFirestoreWrapper.runTransaction) ⇒ <code>Promise.&lt;object&gt;</code>
+            * [.openWriteBatch()](#module_FirebaseFirestoreWrapper.openWriteBatch) ⇒ <code>WriteBatch</code>
+            * [.closeWriteBatch(batch)](#module_FirebaseFirestoreWrapper.closeWriteBatch) ⇒ <code>Promise.&lt;void&gt;</code>
+        * _FieldPath_
+            * [.documentId](#module_FirebaseFirestoreWrapper.documentId) : <code>Object</code>
+        * _FieldValue_
+            * [.deleteFieldValue](#module_FirebaseFirestoreWrapper.deleteFieldValue) : <code>Object</code>
+            * [.serverTimestampFieldValue](#module_FirebaseFirestoreWrapper.serverTimestampFieldValue) : <code>Object</code>
+            * [.incrementFieldValue(n)](#module_FirebaseFirestoreWrapper.incrementFieldValue) ⇒
+            * [.arrayRemoveFieldValue(elements)](#module_FirebaseFirestoreWrapper.arrayRemoveFieldValue) ⇒ <code>sentinelValue</code>
+            * [.arrayUnionFieldValue(elements)](#module_FirebaseFirestoreWrapper.arrayUnionFieldValue) ⇒
+        * _Listeners_
+            * [.ListenRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenRecords) ⇒ <code>unsubscribe</code>
+            * [.ListenQuery(table, [filterArray], [sortArray], refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenQuery) ⇒ <code>unsubscribe</code>
+            * [.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenCollectionGroupRecords) ⇒ <code>callback</code>
+            * [.ListenCollectionGroupQuery(table, [filterArray], [sortArray], dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenCollectionGroupQuery) ⇒ <code>unsubscribe</code>
+            * [.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.ListenRecord) ⇒ <code>unsubscribe</code>
+        * _Paginate Constants_
+            * [.PAGINATE_INIT](#module_FirebaseFirestoreWrapper.PAGINATE_INIT) : <code>number</code>
+            * [.PAGINATE_PENDING](#module_FirebaseFirestoreWrapper.PAGINATE_PENDING) : <code>number</code>
+            * [.PAGINATE_UPDATED](#module_FirebaseFirestoreWrapper.PAGINATE_UPDATED) : <code>number</code>
+            * [.PAGINATE_DEFAULT](#module_FirebaseFirestoreWrapper.PAGINATE_DEFAULT) : <code>number</code>
+            * [.PAGINATE_CHOICES](#module_FirebaseFirestoreWrapper.PAGINATE_CHOICES) : <code>number</code>
+        * _Paginator_
+            * [.PaginateFetch](#module_FirebaseFirestoreWrapper.PaginateFetch)
+                * [new exports.PaginateFetch(table, filterArray, sortArray, refPath, limit)](#new_module_FirebaseFirestoreWrapper.PaginateFetch_new)
+                * [.limit](#module_FirebaseFirestoreWrapper.PaginateFetch+limit) : <code>number</code>
+                * [.status](#module_FirebaseFirestoreWrapper.PaginateFetch+status) : <code>PagingStatus</code>
+                * [.PageForward()](#module_FirebaseFirestoreWrapper.PaginateFetch+PageForward) ⇒ <code>Promise.&lt;RecordArray&gt;</code>
+                * [.PageBack()](#module_FirebaseFirestoreWrapper.PaginateFetch+PageBack) ⇒ <code>Promise.&lt;RecordArray&gt;</code>
+            * [.PaginateGroupFetch](#module_FirebaseFirestoreWrapper.PaginateGroupFetch)
+                * [new exports.PaginateGroupFetch(group, [filterArray], [sortArray], limit)](#new_module_FirebaseFirestoreWrapper.PaginateGroupFetch_new)
+                * [.limit](#module_FirebaseFirestoreWrapper.PaginateGroupFetch+limit) : <code>number</code>
+                * [.status](#module_FirebaseFirestoreWrapper.PaginateGroupFetch+status) : <code>PagingStatus</code>
+                * [.PageForward()](#module_FirebaseFirestoreWrapper.PaginateGroupFetch+PageForward) ⇒ <code>Promise.&lt;RecordArray&gt;</code>
+                * [.PageBack()](#module_FirebaseFirestoreWrapper.PaginateGroupFetch+PageBack) ⇒ <code>Promise.&lt;RecordArray&gt;</code>
+            * [.PaginatedListener](#module_FirebaseFirestoreWrapper.PaginatedListener)
+                * [new exports.PaginatedListener(table, [filterArray], [sortArray], refPath, limit, dataCallback, errCallback)](#new_module_FirebaseFirestoreWrapper.PaginatedListener_new)
+                * [.limit](#module_FirebaseFirestoreWrapper.PaginatedListener+limit) : <code>number</code>
+                * [.status](#module_FirebaseFirestoreWrapper.PaginatedListener+status) : <code>number</code>
+                * [.PageForward()](#module_FirebaseFirestoreWrapper.PaginatedListener+PageForward) ⇒ <code>unsubscribe</code>
+                * [.PageBack()](#module_FirebaseFirestoreWrapper.PaginatedListener+PageBack) ⇒ <code>unsubscribe</code>
+                * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper.PaginatedListener+ChangeLimit) ⇒ <code>unsubscribe</code>
+                * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper.PaginatedListener+ChangeFilter) ⇒ <code>unsubscribe</code>
+                * [.unsubscribe()](#module_FirebaseFirestoreWrapper.PaginatedListener+unsubscribe)
+        * _Tree Slice_
+            * [.ownerFilter(owner, queryFilter)](#module_FirebaseFirestoreWrapper.ownerFilter) ⇒ <code>filterObject</code>
+            * [.listenSlice(owner, collectionName, dataCallback, response, errCallback, response)](#module_FirebaseFirestoreWrapper.listenSlice) ⇒ <code>callback</code>
+            * [.fetchSlice(owner, collectionName)](#module_FirebaseFirestoreWrapper.fetchSlice) ⇒ <code>QuerySnapshot</code>
+            * [.querySlice(owner, collectionName, queryFilter)](#module_FirebaseFirestoreWrapper.querySlice) ⇒ <code>QuerySnapshot</code>
+            * [.listenQuerySlice(owner, collectionName, filterArray, dataCallback, response, errCallback, response)](#module_FirebaseFirestoreWrapper.listenQuerySlice) ⇒ <code>callback</code>
+            * [.ownerType(record)](#module_FirebaseFirestoreWrapper.ownerType) ⇒ <code>string</code>
+            * [.ownerId(record)](#module_FirebaseFirestoreWrapper.ownerId) ⇒ <code>string</code>
+            * [.ownerRefPath(record)](#module_FirebaseFirestoreWrapper.ownerRefPath) ⇒ <code>string</code>
+            * [.fetchOwner(record)](#module_FirebaseFirestoreWrapper.fetchOwner) ⇒ <code>Document</code>
+        * _Typed_
+            * [.typedPaginatedListener](#module_FirebaseFirestoreWrapper.typedPaginatedListener) ⇐ <code>PaginatedListener</code>
+                * [new exports.typedPaginatedListener(type, parent, pageSize, dataCallback, errCallback)](#new_module_FirebaseFirestoreWrapper.typedPaginatedListener_new)
+            * [.recordType(record)](#module_FirebaseFirestoreWrapper.recordType) ⇒ <code>string</code>
+            * [.recordId()](#module_FirebaseFirestoreWrapper.recordId) ⇒ <code>string</code>
+            * [.typedWrite(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedWrite) ⇒ <code>Promise</code>
+            * [.typedWriteByTree(data, tree, type, batch)](#module_FirebaseFirestoreWrapper.typedWriteByTree) ⇒ <code>Promise</code>
+            * [.typedWriteByChild(data, tree, type, batch)](#module_FirebaseFirestoreWrapper.typedWriteByChild) ⇒ <code>Promise</code>
+            * [.typedCreate(data, parent, type, batch)](#module_FirebaseFirestoreWrapper.typedCreate) ⇒ <code>Promise</code>
+            * [.treeFromChild(child)](#module_FirebaseFirestoreWrapper.treeFromChild) ⇒ <code>RecordTree</code>
+            * [.typedTablePathFromTree(tree, type, branchType)](#module_FirebaseFirestoreWrapper.typedTablePathFromTree) ⇒ <code>string</code>
+            * [.typedRefPathFromTree(tree, type)](#module_FirebaseFirestoreWrapper.typedRefPathFromTree) ⇒ <code>string</code>
+            * [.typedIdFromChild(child, type)](#module_FirebaseFirestoreWrapper.typedIdFromChild)
+            * [.typedTablePathFromChild(child, type)](#module_FirebaseFirestoreWrapper.typedTablePathFromChild) ⇒ <code>string</code>
+            * [.typedRefPathFromChild(child, type)](#module_FirebaseFirestoreWrapper.typedRefPathFromChild) ⇒ <code>string</code>
+            * [.typedFetchFromChild(child, refPath, type, batch)](#module_FirebaseFirestoreWrapper.typedFetchFromChild) ⇒ <code>Promise.&lt;RecordObject&gt;</code>
+            * [.typedFetchFromTree(tree, refPath, type, batch)](#module_FirebaseFirestoreWrapper.typedFetchFromTree) ⇒ <code>Promise.&lt;RecordObject&gt;</code>
+            * [.typedCollectFromTree(tree, type, batch)](#module_FirebaseFirestoreWrapper.typedCollectFromTree) ⇒ <code>Promise.&lt;RecordArray&gt;</code>
+            * [.typedCollectFromChild(child, type, batch)](#module_FirebaseFirestoreWrapper.typedCollectFromChild)
+            * [.typedListener(type, parent, batch, type, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper.typedListener) ⇒ <code>callback</code>
+    * _inner_
+        * [~timestamp](#module_FirebaseFirestoreWrapper..timestamp)
+            * [new timestamp()](#new_module_FirebaseFirestoreWrapper..timestamp_new)
 
 <a name="module_FirebaseFirestoreWrapper.MAX_CONCURRENCY"></a>
 
@@ -1527,6 +1520,15 @@ Uses the ownerFilter (above) to establish a listener to "just" theparts of a co
 | type | <code>string</code> | name of the desired collectionGroup |
 | dataCallback | <code>CollectionListener</code> | function to be called with changes to record |
 | errCallback | <code>callback</code> | function to be called when an error occurs in listener |
+
+<a name="module_FirebaseFirestoreWrapper..timestamp"></a>
+
+### FirebaseFirestoreWrapper~timestamp
+**Kind**: inner class of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+<a name="new_module_FirebaseFirestoreWrapper..timestamp_new"></a>
+
+#### new timestamp()
+class for a Firestore timestamp processor
 
 <a name="module_FirebaseStorageWrapper"></a>
 
