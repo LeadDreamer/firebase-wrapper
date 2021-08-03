@@ -39,23 +39,23 @@ class adminRef {
     this.storage = null;
   }
 
-  child = (path) => {
+  child(path) {
     return new adminRef(this.fullPath + "/" + path);
   };
 
-  delete = () => {
+  delete() {
     return this.fileRef.delete();
   };
 
-  getDownloadURL = () => {
+  getDownloadURL() {
     return this.fileRef.publicUrl();
   };
 
-  getMetadata = () => {
+  getMetadata() {
     return this.fileRef.getMetadata();
   };
 
-  put = async (data, metadata = null) => {
+  async put(data, metadata = null) {
     var buf = new Buffer(data, "base64");
     metadata && this.fileRef.setMetadata(metadata);
     await this.fileRef.save(buf, { resumable: false });
@@ -68,7 +68,7 @@ class adminRef {
     });
   };
 
-  putString = async (dataString, stringFormat = null, metadata = null) => {
+  async putString(dataString, stringFormat = null, metadata = null) {
     var buf = new Buffer(dataString, stringFormat);
     metadata && this.fileRef.setMetadata(metadata);
     await this.fileRef.save(buf, { resumable: false });
@@ -87,11 +87,11 @@ class adminRef {
     });
   };
 
-  toString = () => {
+  toString() {
     return null;
   };
 
-  updateMetadata = (metadata = null) => {
+  updateMetadata(metadata = null) {
     return metadata && this.fileRef.setMetadata(metadata);
   };
 }
