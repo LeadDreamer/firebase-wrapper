@@ -62,6 +62,7 @@ export default function FirebaseFirestore(firebase) {
   process.env.FIREBASE_CONFIG ||
     firebase.firestore().enablePersistence({ synchorizeTabs: true });
   fdb = firebase.firestore();
+  fdb.settings({ignoreUndefinedProperties: true, merge: true});
   aFieldValue = firebase.firestore.FieldValue;
   aFieldPath = firebase.firestore.FieldPath;
 
