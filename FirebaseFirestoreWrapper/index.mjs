@@ -1,3 +1,6 @@
+import "@firebase/app";
+import "@firebase/firestore";
+
 /**
  * @module FirebaseFirestoreWrapper
  * @description A set of helper-wrapper functions around firebase firestore, storage
@@ -57,12 +60,12 @@ function penultimate(array) {
  * })(config)
  * ```
  */
-export default function FirebaseFirestore(firebase) {
+export default async function FirebaseFirestore(firebase) {
   //doesnt run firestore persistence in Admin/Node environment
-  process.env.FIREBASE_CONFIG ||
-    firebase.firestore().enablePersistence({ synchorizeTabs: true });
   fdb = firebase.firestore();
-  fdb.settings({ignoreUndefinedProperties: true, merge: true});
+  process.env.FIREBASE_CONFIG ||
+    await firebase.firestore().enablePersistence({ synchorizeTabs: true });
+  //fdb.settings({ignoreUndefinedProperties: true, merge: true});
   aFieldValue = firebase.firestore.FieldValue;
   aFieldPath = firebase.firestore.FieldPath;
 
@@ -573,7 +576,7 @@ export const collectRecordsInGroupByFilter = (
 /**
  * ----------------------------------------------------------------------
  * @async
- * @function fetchRecord
+ * @function
  * @static
  * @description retrieve a record from the Firestore.  If a Batch object is passed,
  * returns a chained Btahc object

@@ -1,5 +1,6 @@
 import "@firebase/app";
 import "@firebase/auth";
+import "firebaseui";
 /**
  * @module FirebaseAuthWrapper
  * @description A set of helper-wrapper functions around firebase firestore, storage
@@ -24,8 +25,6 @@ let FirebaseAuthPersistence;
  * ID codes for 3rd party Auth providers
  */
 let FirebaseAuthSignInOptions;
-
-let StyledFirebaseAuth;
 
 /**
  * @function FirebaseAuthWrapper
@@ -53,7 +52,7 @@ let StyledFirebaseAuth;
  * })(config)
  * ```
  */
-export default function FirebaseAuthWrapper(firebase, styled) {
+export default function FirebaseAuthWrapper(firebase) {
   FirebaseAuth = firebase.auth();
   FirebaseAuthSignInOptions = [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
@@ -62,7 +61,6 @@ export default function FirebaseAuthWrapper(firebase, styled) {
     //firebase.auth.TwitterAuthProvider.PROVIDER_ID
   ];
   FirebaseAuthPersistence = firebase.auth.Auth.Persistence.LOCAL;
-  StyledFirebaseAuth = styled;
 }
 
 /**
@@ -217,8 +215,10 @@ export const doPasswordUpdate = (password) =>
 
 // *** Merge Auth and DB User API *** //
 /**
- * ----------------------------------------------------------------------
- **********************************************************************/
+ * @async
+ * @function
+ * @returns {Promise<UserCredential>}
+ **/
 export const createAnonymousUser = () => {
   return FirebaseAuth.signInAnonymously();
 };
@@ -246,4 +246,4 @@ export const setPersistence = () => {
   FirebaseAuth.setPersistence(FirebaseAuthPersistence);
 };
 
-export {FirebaseAuth, FirebaseAuthSignInOptions, StyledFirebaseAuth};
+export {FirebaseAuth, FirebaseAuthSignInOptions};

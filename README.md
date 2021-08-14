@@ -122,13 +122,13 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.doPasswordReset](#module_FirebaseAuthWrapper.doPasswordReset)
         * [.doSendEmailVerification](#module_FirebaseAuthWrapper.doSendEmailVerification)
         * [.doPasswordUpdate](#module_FirebaseAuthWrapper.doPasswordUpdate)
-        * [.createAnonymousUser](#module_FirebaseAuthWrapper.createAnonymousUser)
         * [.setPersistence](#module_FirebaseAuthWrapper.setPersistence)
         * [.FirebaseAuthWrapper(firebase)](#module_FirebaseAuthWrapper.FirebaseAuthWrapper)
         * [.fetchToken(user)](#module_FirebaseAuthWrapper.fetchToken) ⇒ <code>external:promise</code>
         * [.refreshAuthUser()](#module_FirebaseAuthWrapper.refreshAuthUser) ⇒ <code>Promise.&lt;void&gt;</code>
         * [.doCreateUserWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper.doCreateUserWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
         * [.doSignInWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper.doSignInWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
+        * [.createAnonymousUser()](#module_FirebaseAuthWrapper.createAnonymousUser) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
         * [.attachAuthUserListener()](#module_FirebaseAuthWrapper.attachAuthUserListener) ⇒ <code>callback</code>
     * _inner_
         * [~fromJSON()](#module_FirebaseAuthWrapper..fromJSON) : <code>object</code>
@@ -184,12 +184,6 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 <a name="module_FirebaseAuthWrapper.doPasswordUpdate"></a>
 
 ### FirebaseAuthWrapper.doPasswordUpdate
-----------------------------------------------------------------------
-
-**Kind**: static constant of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper.createAnonymousUser"></a>
-
-### FirebaseAuthWrapper.createAnonymousUser
 ----------------------------------------------------------------------
 
 **Kind**: static constant of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
@@ -249,6 +243,10 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | email | <code>string</code> | 
 | password | <code>string</code> | 
 
+<a name="module_FirebaseAuthWrapper.createAnonymousUser"></a>
+
+### FirebaseAuthWrapper.createAnonymousUser() ⇒ <code>Promise.&lt;UserCredential&gt;</code>
+**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
 <a name="module_FirebaseAuthWrapper.attachAuthUserListener"></a>
 
 ### FirebaseAuthWrapper.attachAuthUserListener() ⇒ <code>callback</code>

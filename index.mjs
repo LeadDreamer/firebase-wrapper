@@ -1,10 +1,7 @@
 import firebase from "@firebase/app";
-import "@firebase/firestore";
-import "@firebase/storage";
-import "@firebase/auth";
-import "@firebase/functions";
-import "firebaseui";
-import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import "@firebase/app";
+import { version } from "./package.json";
+
 
 import FirebaseFirestore from "./FirebaseFirestoreWrapper";
 import FirebaseStorage from "./FirebaseStorageWrapper";
@@ -68,12 +65,19 @@ const FirebaseWrapper = async (config) => {
   try {
     firebase.app();
   } catch (err) {
+    try {
     firebase.initializeApp(config);
+    } catch (err) {
+      console.log("firebase initialize failed")
+    }
   }
-  FirebaseFirestore(firebase);
-  FirebaseStorage(firebase);
-  FirebaseAuthWrapper(firebase, StyledFirebaseAuth);
-  FirebaseCloudFunctions(firebase);
+  await Promise.all([
+    FirebaseAuthWrapper(firebase),
+    FirebaseFirestore(firebase),
+    FirebaseStorage(firebase),
+    FirebaseCloudFunctions(firebase)
+  ])
+  return version;
 };
 
 export * from "./FirebaseFirestoreWrapper";

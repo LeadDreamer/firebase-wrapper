@@ -1,3 +1,6 @@
+import "@firebase/app";
+import "@firebase/functions";
+
 /**
  * @module FirebaseCloudFunctionsWrapper
  * @description A set of helper-wrapper functions around firebase firestore, storage
@@ -74,4 +77,3 @@ export const treeFromParams = (Params) => {
   })
   return tree;
 };
-

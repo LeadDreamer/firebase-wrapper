@@ -1,3 +1,5 @@
+import "@firebase/storage";
+
 /**
  * @module FirebaseStorageWrapper
  * @description A set of helper-wrapper functions around firebase firestore, storage
