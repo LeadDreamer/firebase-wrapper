@@ -302,10 +302,10 @@ export const closeWriteBatch = (
  * can only get(), set() or update() existing documents. Tricksie!
  * @function
  * @static
- * @param tablePath string representing a valid path to a collection to
+ * @param {!string} tablePath string representing a valid path to a collection to
  * create the new document in, relative to a document reference
  * passed in
- * @param refPath an optional valid document reference to start the table path
+ * @param {?string} refPath an optional valid document reference to start the table path
  * @returns {DocumentReference} Firestore Document Reference
  */
 export const createUniqueReference = (tablePath, refPath = null) => {

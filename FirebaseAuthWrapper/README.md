@@ -15,6 +15,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
     * _static_
         * [.FirebaseAuth](#module_FirebaseAuthWrapper.FirebaseAuth) : <code>object</code>
         * [.FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper.FirebaseAuthSignInOptions) : <code>string</code>
+        * [.fetchJWT](#module_FirebaseAuthWrapper.fetchJWT) ⇒ <code>Promise.&lt;JWT&gt;</code>
         * [.doSignInWithGoogle](#module_FirebaseAuthWrapper.doSignInWithGoogle)
         * [.doSignInWithFacebook](#module_FirebaseAuthWrapper.doSignInWithFacebook)
         * [.doSignInWithTwitter](#module_FirebaseAuthWrapper.doSignInWithTwitter)
@@ -45,6 +46,17 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 ### FirebaseAuthWrapper.FirebaseAuthSignInOptions : <code>string</code>
 **Kind**: static property of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+<a name="module_FirebaseAuthWrapper.fetchJWT"></a>
+
+### FirebaseAuthWrapper.fetchJWT ⇒ <code>Promise.&lt;JWT&gt;</code>
+**Kind**: static constant of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+**Fulfil**: Returnsa JWT token  
+**Reject**: returns an err  
+
+| Param | Type |
+| --- | --- |
+| user | <code>FirebaseAuthUser</code> | 
+
 <a name="module_FirebaseAuthWrapper.doSignInWithGoogle"></a>
 
 ### FirebaseAuthWrapper.doSignInWithGoogle

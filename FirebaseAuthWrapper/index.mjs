@@ -77,9 +77,28 @@ export default function FirebaseAuthWrapper(firebase) {
 export const fetchToken = async (user) => {
   //uses short circuit
   const thisUser = user || FirebaseAuth.currentUser;
+  //the "true" below forces a reset
   const token = await thisUser.getIdTokenResult(true);
   return token;
 };
+
+/**
+ * @async
+ * @static
+ * Fetch a JWT token for authenticated signed requests
+ * @param {FirebaseAuthUser} user
+ * @returns {Promise<JWT>}
+ * @fulfil Returnsa JWT token
+ * @reject returns an err
+ */
+
+ export const fetchJWT = async (user) => {
+  const thisUser = user || FirebaseAuth.currentUser;
+  //the "true" below forces a reset
+  const JWT = await thisUser.getIdToken(true);
+  return JWT;
+
+ }
 
 /**
  * @async
