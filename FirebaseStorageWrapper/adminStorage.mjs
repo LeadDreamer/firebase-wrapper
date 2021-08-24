@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 /**
  * A set of helper-wrapper functions around firebase firestore, storage
  * and auth. Intent is to treat Firestore as a hierarchical
@@ -43,15 +44,24 @@ class adminRef {
     return new adminRef(this.fullPath + "/" + path);
   };
 
-  delete() {
+  async delete() {
     return this.fileRef.delete();
   };
 
-  getDownloadURL() {
-    return this.fileRef.publicUrl();
+  async getDownloadURL() {
+    const config = {
+      action: "read",
+      expire: new dayjs().add(2, "day"),
+      version: "v4",
+      virtualHostedStyle: true
+    };
+    return this.fileRef.getSignedUrl(config, (err, url) => {
+      if (err) return Promise.reject(null);
+      return url;
+    });
   };
 
-  getMetadata() {
+  async getMetadata() {
     return this.fileRef.getMetadata();
   };
 
@@ -91,7 +101,7 @@ class adminRef {
     return null;
   };
 
-  updateMetadata(metadata = null) {
+  async updateMetadata(metadata = null) {
     return metadata && this.fileRef.setMetadata(metadata);
   };
 }

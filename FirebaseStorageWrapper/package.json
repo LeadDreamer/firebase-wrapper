@@ -14,17 +14,13 @@
     "email": "tracy@dreamsandlogic.com",
     "url": "http://dreamsandlogic.com"
   },
-  "files": [
-    "*.*js",
-    "/*/*.*js",
-    "*.md"
-  ],
+  "files": ["*.*js", "*.md"],
   "main": "index",
   "browser": "index.mjs",
   "scripts": {
-    "transpile": "babel --root-mode upward ./*.mjs ./*/*.mjs --out-dir .",
-    "build": "yarn rimraf dist && npm run transpile",
-    "prepublishOnly": "yarn rimraf dist && yarn run transpile",
+    "transpile": "babel --root-mode upward ./*.mjs --out-dir .",
+    "build": "npm run transpile",
+    "prepublishOnly": "yarn run transpile",
     "docs": "./node_modules/.bin/jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f index.mjs > README.md",
     "rebuild": "npm version patch && npm run docs && npm run build"
   },

@@ -40,6 +40,12 @@ and auth. Intent is to treat Firestore as a hierarchical
 record-oriented database; originally conceived to port from one
 database to another.</p>
 </dd>
+<dt><a href="#module_FirebaseStorageAdminEmulator">FirebaseStorageAdminEmulator</a></dt>
+<dd><p>A set of helper-wrapper functions around firebase firestore, storage
+and auth. Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.</p>
+</dd>
 <dt><a href="#module_FirebaseStorageWrapper">FirebaseStorageWrapper</a></dt>
 <dd><p>A set of helper-wrapper functions around firebase firestore, storage
 and auth. Intent is to treat Firestore as a hierarchical
@@ -115,6 +121,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
     * _static_
         * [.FirebaseAuth](#module_FirebaseAuthWrapper.FirebaseAuth) : <code>object</code>
         * [.FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper.FirebaseAuthSignInOptions) : <code>string</code>
+        * [.fetchJWT](#module_FirebaseAuthWrapper.fetchJWT) ⇒ <code>Promise.&lt;JWT&gt;</code>
         * [.doSignInWithGoogle](#module_FirebaseAuthWrapper.doSignInWithGoogle)
         * [.doSignInWithFacebook](#module_FirebaseAuthWrapper.doSignInWithFacebook)
         * [.doSignInWithTwitter](#module_FirebaseAuthWrapper.doSignInWithTwitter)
@@ -145,6 +152,17 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 ### FirebaseAuthWrapper.FirebaseAuthSignInOptions : <code>string</code>
 **Kind**: static property of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+<a name="module_FirebaseAuthWrapper.fetchJWT"></a>
+
+### FirebaseAuthWrapper.fetchJWT ⇒ <code>Promise.&lt;JWT&gt;</code>
+**Kind**: static constant of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+**Fulfil**: Returnsa JWT token  
+**Reject**: returns an err  
+
+| Param | Type |
+| --- | --- |
+| user | <code>FirebaseAuthUser</code> | 
+
 <a name="module_FirebaseAuthWrapper.doSignInWithGoogle"></a>
 
 ### FirebaseAuthWrapper.doSignInWithGoogle
@@ -485,10 +503,10 @@ Initializes the Firestore service of the providedfirebase app.  Also instantiat
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 **Returns**: <code>DocumentReference</code> - Firestore Document Reference  
 
-| Param | Description |
-| --- | --- |
-| tablePath | string representing a valid path to a collection to create the new document in, relative to a document reference passed in |
-| refPath | an optional valid document reference to start the table path |
+| Param | Type | Description |
+| --- | --- | --- |
+| tablePath | <code>string</code> | string representing a valid path to a collection to create the new document in, relative to a document reference passed in |
+| refPath | <code>string</code> | an optional valid document reference to start the table path |
 
 <a name="module_FirebaseFirestoreWrapper.writeRecord"></a>
 
@@ -1527,6 +1545,22 @@ Uses the ownerFilter (above) to establish a listener to "just" theparts of a co
 
 #### new timestamp()
 class for a Firestore timestamp processor
+
+<a name="module_FirebaseStorageAdminEmulator"></a>
+
+## FirebaseStorageAdminEmulator
+A set of helper-wrapper functions around firebase firestore, storageand auth. Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.
+
+<a name="module_FirebaseStorageAdminEmulator.FirebaseStorageAdminEmulator"></a>
+
+### FirebaseStorageAdminEmulator.FirebaseStorageAdminEmulator(firebase)
+Initializes the Auth service of the provided firebase app.  Alsoinstantiates various constants and helper functions
+
+**Kind**: static method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
+
+| Param | Type |
+| --- | --- |
+| firebase | <code>firebase</code> | 
 
 <a name="module_FirebaseStorageWrapper"></a>
 

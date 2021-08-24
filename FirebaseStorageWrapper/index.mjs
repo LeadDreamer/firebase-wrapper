@@ -7,7 +7,7 @@ import "@firebase/storage";
  * record-oriented database; originally conceived to port from one
  * database to another.
  */
-import FirebaseStorageAdminEmulator from "./bucket";
+import FirebaseStorageAdminEmulator from "./adminStorage";
 
 /**
  * @function FirebaseStorageWrapper
