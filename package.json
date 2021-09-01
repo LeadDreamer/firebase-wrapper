@@ -1,7 +1,7 @@
 {
   "name": "@leaddreamer/firebase-wrapper",
   "type": "module",
-  "version": "1.0.139",
+  "version": "1.0.142",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another.",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -25,12 +25,13 @@
   "main": "index",
   "browser": "index.mjs",
   "scripts": {
-    "transpile": "babel index.mjs --out-dir .",
+    "transpile": "babel *.mjs --out-dir .",
     "build": "$npm_execpath run transpile",
     "prepublishOnly": "$npm_execpath run build",
     "make_docs": "jsdoc2md -c jsdoc.conf.json --template README.hbs --files *.mjs ./*/*.mjs > README.md",
     "docs": "$npm_execpath run make_docs",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
+    "FAE": "cd FirebaseAdminEntry && $npm_execpath run rebuild && cd ..",
     "FAW": "cd FirebaseAuthWrapper && $npm_execpath run rebuild && cd ..",
     "FCFW": "cd FirebaseCloudFunctionsWrapper && $npm_execpath run rebuild && cd ..",
     "FFW": "cd FirebaseFirestoreWrapper && $npm_execpath run rebuild && cd ..",

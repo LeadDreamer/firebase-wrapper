@@ -1,4 +1,4 @@
-import "@firebase/app";
+//import "@firebase/app";
 import "@firebase/auth";
 /**
  * @module FirebaseAuthWrapper
