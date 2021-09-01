@@ -15,6 +15,9 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
     * [.FirebaseStorageWrapper(firebase)](#module_FirebaseStorageWrapper.FirebaseStorageWrapper)
     * [.makeStorageRefFromRecord(record, key, filename)](#module_FirebaseStorageWrapper.makeStorageRefFromRecord) ⇒ <code>StorageReference</code>
     * [.makeFileURLFromRecord(record, key, filename)](#module_FirebaseStorageWrapper.makeFileURLFromRecord) ⇒ <code>external:promise</code>
+    * [.makePrivateURLFromRecord(record, key)](#module_FirebaseStorageWrapper.makePrivateURLFromRecord) ⇒ <code>string</code>
+    * [.makePrivateURLFromReference(reference, key)](#module_FirebaseStorageWrapper.makePrivateURLFromReference) ⇒ <code>string</code>
+    * [.makePrivateURLFromPath(fullPath)](#module_FirebaseStorageWrapper.makePrivateURLFromPath) ⇒ <code>string</code>
     * [.storeBlobByRecord(blob, record, key, filename)](#module_FirebaseStorageWrapper.storeBlobByRecord) ⇒ <code>UploadTask</code>
     * [.storeDataURLByRecord(dataURL, record, key, filename)](#module_FirebaseStorageWrapper.storeDataURLByRecord) ⇒
     * [.getDefaultImageURL(key)](#module_FirebaseStorageWrapper.getDefaultImageURL) ⇒ <code>string</code>
@@ -62,6 +65,44 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | record | <code>RecordObject</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
 | key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
 | filename | <code>string</code> | an optional name to be associated with the stored item. |
+
+<a name="module_FirebaseStorageWrapper.makePrivateURLFromRecord"></a>
+
+### FirebaseStorageWrapper.makePrivateURLFromRecord(record, key) ⇒ <code>string</code>
+----------------------------------------------------------------------
+
+**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Returns**: <code>string</code> - The resulting Security-Rule-compliant URL  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| record | <code>RecordObject</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
+| key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
+
+<a name="module_FirebaseStorageWrapper.makePrivateURLFromReference"></a>
+
+### FirebaseStorageWrapper.makePrivateURLFromReference(reference, key) ⇒ <code>string</code>
+----------------------------------------------------------------------
+
+**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Returns**: <code>string</code> - The resulting Security-Rule-compliant URL  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| reference | <code>StorageReference</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
+| key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
+
+<a name="module_FirebaseStorageWrapper.makePrivateURLFromPath"></a>
+
+### FirebaseStorageWrapper.makePrivateURLFromPath(fullPath) ⇒ <code>string</code>
+----------------------------------------------------------------------
+
+**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Returns**: <code>string</code> - constructed Security-Rule-compliant URL  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fullPath | <code>string</code> | required path to the stored item. |
 
 <a name="module_FirebaseStorageWrapper.storeBlobByRecord"></a>
 

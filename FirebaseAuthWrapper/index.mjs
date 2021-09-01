@@ -1,6 +1,5 @@
 import "@firebase/app";
 import "@firebase/auth";
-import "firebaseui";
 /**
  * @module FirebaseAuthWrapper
  * @description A set of helper-wrapper functions around firebase firestore, storage
@@ -104,7 +103,7 @@ export const fetchToken = async (user) => {
  * @async
  * @function refreshAuthUser
  * @static
- * triggers an update of the Firebase Uth user object.  A listener
+ * triggers an update of the Firebase Auth user object.  A listener
  * can be set to monitor these changes
  * @returns {Promise<void>}
  */

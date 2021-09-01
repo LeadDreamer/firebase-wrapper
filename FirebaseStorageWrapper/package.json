@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "version": "1.0.16",
+  "version": "1.0.33",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database.  Also has AdminSDK wrapper",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -14,7 +14,10 @@
     "email": "tracy@dreamsandlogic.com",
     "url": "http://dreamsandlogic.com"
   },
-  "files": ["*.*js", "*.md"],
+  "files": [
+    "*.*js",
+    "*.md"
+  ],
   "main": "index",
   "browser": "index.mjs",
   "scripts": {

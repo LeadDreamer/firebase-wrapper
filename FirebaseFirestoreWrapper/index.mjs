@@ -1105,7 +1105,7 @@ export const PAGINATE_DEFAULT = 10;
  * @category Paginate Constants
  */
 /**
- * @type {number} [PAGINATE_CHOICES]
+ * @type {number}
  * @static
  * @category Paginate Constants
  */
@@ -1152,8 +1152,8 @@ export class PaginateFetch {
     );
     /**
      * current status of pagination
-     * @type {PagingStatus}
      * -1 pending; 0 uninitialized; 1 updated;
+     * @type {PagingStatus}
      */
     this.status = PAGINATE_INIT;
   }

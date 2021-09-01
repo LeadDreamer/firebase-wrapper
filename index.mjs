@@ -74,7 +74,7 @@ const FirebaseWrapper = async (config) => {
   await Promise.all([
     FirebaseAuthWrapper(firebase),
     FirebaseFirestore(firebase),
-    FirebaseStorage(firebase),
+    FirebaseStorage(firebase, config),
     FirebaseCloudFunctions(firebase)
   ])
   return version;

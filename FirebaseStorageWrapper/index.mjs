@@ -33,15 +33,26 @@ import FirebaseStorageAdminEmulator from "./adminStorage";
  * })(config);
  * ```
  */
-export default function FirebaseStorageWrapper(firebase) {
+export default function FirebaseStorageWrapper(firebase, config) {
   FirebaseStorage = firebase.storage();
   FirebaseStorage =
     typeof firebase.storage().bucket === "function"
       ? FirebaseStorageAdminEmulator(firebase)
       : FirebaseStorage;
+  bucket_name = config.storageBucket;
+  return;
 }
 
 let FirebaseStorage;
+const bucket_domain = "https://firebasestorage.googleapis.com/v0/b/";
+const bucket_head = "/o/";
+let bucket_name;
+
+//URL = `${bucket_domain}${bucket_name}${bucket_head}${fullPath}?alt=${filetype_parameter}`;
+
+export const getPrivateURL = (ref) => {
+  return makePrivateURLFromPath(ref.fullPath)
+}
 
 //////////////////////////////////////////////////////////////////////
 // *** Storage API ***
@@ -75,11 +86,7 @@ export const makeStorageRefFromRecord = (
   filename = null
 ) => {
   return record.refPath
-    ? FirebaseStorage.ref(
-        record.refPath +
-          (key ? "/" + key : "") +
-          (filename ? "/" + filename : "")
-      )
+    ? FirebaseStorage.ref(`${record.refPath}${(key ? "/" + key : "")}${(filename ? "/" + filename : "")}`)
     : null;
 };
 
@@ -105,6 +112,76 @@ export const makeStorageRefFromRecord = (
  */
 export const makeFileURLFromRecord = (record, key = null, filename = null) => {
   return makeStorageRefFromRecord(record, key, filename).getDownloadURL();
+};
+
+/**
+ * ----------------------------------------------------------------------
+ * @function
+ * @static
+ * This function is part of a storage scheme that uses parallel structures
+ * between Firestore collection/documents and Storage paths.  The concept
+ * here is all Storage items are part of/belong to Firestore documents.
+ * This function takes a document record, and combines it with optional key,
+ * to construct a '/' separated path to a stored item, , and returns a
+ * URL that can be used to access that item.
+ * Note this simply makes the URL - it does not carry out *any* operations
+ * @param {RecordObject} record A firestore document Record - the '/' separated collection/
+ * document path is used as the path to the stored item.
+ * @param {?string} key An optional string identifying the specific field an stored
+ * item is associated with
+ * @returns {string} The resulting Security-Rule-compliant URL
+ */
+export const makePrivateURLFromRecord = (record, key = null) => {
+  //build the full path from the record structure, key name and key value
+  let fullPath = `${record.refPath}${(key ? "/" + key : "")}${(record[key] ? "/" + record[key] : "")}`;
+  //turn that path into a privateURL
+  return makePrivateURLFromPath(fullPath);
+};
+
+/**
+ * ----------------------------------------------------------------------
+ * @function
+ * @static
+ * This function is part of a storage scheme that uses parallel structures
+ * between Firestore collection/documents and Storage paths.  The concept
+ * here is all Storage items are part of/belong to Firestore documents.
+ * This function takes a document record, and combines it with optional key,
+ * to construct a '/' separated path to a stored item, , and returns a
+ * URL that can be used to access that item.
+ * Note this simply makes the URL - it does not carry out *any* operations
+ * @param {StorageReference} reference A firestore document Record - the '/' separated collection/
+ * document path is used as the path to the stored item.
+ * @param {?string} key An optional string identifying the specific field an stored
+ * item is associated with
+ * @returns {string} The resulting Security-Rule-compliant URL
+ */
+export const makePrivateURLFromReference = (reference) => {
+  //build the full path from the record structure, key name and key value
+  let fullPath = reference.fullPath;
+  //turn that path into a privateURL
+  return makePrivateURLFromPath(fullPath);
+};
+
+/**
+ * ----------------------------------------------------------------------
+ * @function
+ * @static
+ * This function is part of a storage scheme that uses parallel structures
+ * between Firestore collection/documents and Storage paths.  The concept
+ * here is all Storage items are part of/belong to Firestore documents.
+ * This function takes a full path to a Storage object and turns it into
+ * URL.  If "type"is not included, the URL will return the metadata, not
+ * the contents.
+ * Note this simply makes the URL - it does not carry out *any* operations
+ * @param {!string} fullPath required path to the stored item.
+ * @returns {string} constructed Security-Rule-compliant URL
+ */
+export const makePrivateURLFromPath = (fullPath) => {
+  // note?alt-media paramter is just top return the FILE, no
+  // the meta-data object
+  let newPath = fullPath.replace(/\//g, "%2F");
+  const privateURL = `${bucket_domain}${bucket_name}${bucket_head}${newPath}?alt=media`;
+  return privateURL;
 };
 
 /**
