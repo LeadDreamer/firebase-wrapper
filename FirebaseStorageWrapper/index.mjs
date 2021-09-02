@@ -7,7 +7,7 @@ import "@firebase/storage";
  * record-oriented database; originally conceived to port from one
  * database to another.
  */
-import FirebaseStorageAdminEmulator from "./adminStorage";
+//import FirebaseStorageAdminEmulator from "./adminStorage";
 
 /**
  * @function FirebaseStorageWrapper
@@ -35,15 +35,16 @@ import FirebaseStorageAdminEmulator from "./adminStorage";
  */
 export default function FirebaseStorageWrapper(firebase, config) {
   FirebaseStorage = firebase.storage();
-  FirebaseStorage =
-    typeof firebase.storage().bucket === "function"
-      ? FirebaseStorageAdminEmulator(firebase)
-      : FirebaseStorage;
+  if (typeof firebase.storage().bucket === "function") {
+    FirebaseStorageAdminEmulator = require("./adminStorage");
+    FirebaseStorage = FirebaseStorageAdminEmulator(firebase);
+  };
+
   bucket_name = config.storageBucket;
   return;
 }
 
-let FirebaseStorage;
+let FirebaseStorage, FirebaseStorageAdminEmulator;
 const bucket_domain = "https://firebasestorage.googleapis.com/v0/b/";
 const bucket_head = "/o/";
 let bucket_name;
