@@ -54,6 +54,10 @@ export const getPrivateURL = (ref) => {
   return makePrivateURLFromPath(ref.fullPath)
 }
 
+function getPrivateURLHack(){
+  return makePrivateURLFromPath(this.fullPath)
+}
+
 //////////////////////////////////////////////////////////////////////
 // *** Storage API ***
 /**
@@ -85,9 +89,14 @@ export const makeStorageRefFromRecord = (
   key = null,
   filename = null
 ) => {
-  return record.refPath
+  let ref = record.refPath
     ? FirebaseStorage.ref(`${record.refPath}${(key ? "/" + key : "")}${(filename ? "/" + filename : "")}`)
     : null;
+
+  if (ref) {
+      ref.getPrivateURL = getPrivateURLHack;
+  }
+  return ref;
 };
 
 /**
@@ -200,7 +209,10 @@ export const makePrivateURLFromPath = (fullPath) => {
  */
 export const storeBlobByRecord = (blob, record, key, filename) => {
   const localStorageRef = makeStorageRefFromRecord(record, key, filename);
-  return localStorageRef.put(blob);
+  return localStorageRef.put(blob).then((snapshot) => {
+    snapshot.ref.getPrivateURL = getPrivateURLHack;
+    return snapshot;
+  });
 };
 
 /**

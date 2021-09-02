@@ -1,7 +1,7 @@
 {
   "name": "@leaddreamer/firebase-wrapper",
   "type": "module",
-  "version": "1.0.142",
+  "version": "1.0.148",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another.",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -15,13 +15,7 @@
     "email": "tracy@dreamsandlogic.com",
     "url": "http://dreamsandlogic.com"
   },
-  "files": [
-    "*.*js",
-    "/*.*js",
-    "/**/*.*js",
-    "*.md",
-    "/**/*.md"
-  ],
+  "files": ["*.*js", "/*.*js", "/**/*.*js", "*.md", "/**/*.md"],
   "main": "index",
   "browser": "index.mjs",
   "scripts": {
@@ -36,7 +30,7 @@
     "FCFW": "cd FirebaseCloudFunctionsWrapper && $npm_execpath run rebuild && cd ..",
     "FFW": "cd FirebaseFirestoreWrapper && $npm_execpath run rebuild && cd ..",
     "FSW": "cd FirebaseStorageWrapper && $npm_execpath run rebuild && cd ..",
-    "rebuild_all": "$npm_execpath run FAW && $npm_execpath run FCFW && $npm_execpath run FFW && $npm_execpath run FSW && $npm_execpath run rebuild",
+    "rebuild_all": "$npm_execpath run FAE && $npm_execpath run FAW && $npm_execpath run FCFW && $npm_execpath run FFW && $npm_execpath run FSW && $npm_execpath run rebuild",
     "publish_package": "$npm_execpath publish",
     "publish_dry": "$npm_execpath publish --dry-run"
   },
@@ -49,9 +43,7 @@
     "@firebase/firestore": "2.3.10",
     "@firebase/functions": "0.6.14",
     "@firebase/storage": "0.6.1",
-    "firebase": "8.9.1",
-    "firebaseui": "4.8.1",
-    "react-firebaseui": "5.0.2"
+    "firebase": "8.9.1"
   },
   "peerDependencies": {
     "firebase-admin": "^9.4.1",
