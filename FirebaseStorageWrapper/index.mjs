@@ -33,10 +33,10 @@ import "@firebase/storage";
  * })(config);
  * ```
  */
-export default function FirebaseStorageWrapper(firebase, config) {
+export default async function FirebaseStorageWrapper(firebase, config) {
   FirebaseStorage = firebase.storage();
   if (typeof firebase.storage().bucket === "function") {
-    FirebaseStorageAdminEmulator = require("./adminStorage");
+    FirebaseStorageAdminEmulator = await import("./adminStorage").default;
     FirebaseStorage = FirebaseStorageAdminEmulator(firebase);
   };
 

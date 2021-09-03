@@ -62,14 +62,15 @@ const FirebaseWrapper = async () => {
     firebase.initializeApp();
     } catch (err) {
       console.log("firebase admin initialize failed")
+    } finally {
+      await Promise.all([
+        FirebaseFirestore(firebase),
+        FirebaseStorage(firebase, JSON.parse(process.env.FIREBASE_CONFIG)),
+        FirebaseAuthAdminWrapper(firebase),
+      ])
+
     }
   }
-  await Promise.all([
-    FirebaseFirestore(firebase),
-    FirebaseStorage(firebase, JSON.parse(process.env.FIREBASE_CONFIG)),
-    FirebaseAuthAdminWrapper(firebase),
-  ])
-  return version;
 };
 
 export * from "../FirebaseFirestoreWrapper";

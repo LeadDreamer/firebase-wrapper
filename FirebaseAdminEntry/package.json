@@ -1,4 +1,8 @@
 {
+  "name": "@leaddreamer/firebase-wrapper",
+  "engines": {
+    "node": "12"
+  },
   "type": "module",
   "version": "1.0.3",
   "description": "admin-compatible wrapper for firebase",
@@ -14,10 +18,7 @@
     "email": "tracy@dreamsandlogic.com",
     "url": "http://dreamsandlogic.com"
   },
-  "files": [
-    "*.*js",
-    "*.md"
-  ],
+  "files": ["*.*js", "*.md"],
   "main": "index",
   "browser": "index.mjs",
   "scripts": {
