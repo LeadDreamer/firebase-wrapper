@@ -1,6 +1,5 @@
 import firebase from "@firebase/app";
 import "@firebase/app";
-import { version } from "./package.json";
 
 
 import FirebaseFirestore from "./FirebaseFirestoreWrapper";
@@ -77,7 +76,7 @@ const FirebaseWrapper = async (config) => {
     FirebaseStorage(firebase, config),
     FirebaseCloudFunctions(firebase)
   ])
-  return version;
+  return;
 };
 
 export * from "./FirebaseFirestoreWrapper";
