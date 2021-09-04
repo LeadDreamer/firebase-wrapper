@@ -1,5 +1,4 @@
 import firebase from "firebase-admin";
-import { version } from "./package.json";
 
 import FirebaseFirestore from "../FirebaseFirestoreWrapper";
 import FirebaseStorage from "../FirebaseStorageWrapper";
@@ -62,6 +61,7 @@ const FirebaseWrapper = async () => {
     firebase.initializeApp();
     } catch (err) {
       console.log("firebase admin initialize failed")
+      return null;
     } finally {
       await Promise.all([
         FirebaseFirestore(firebase),
@@ -71,6 +71,7 @@ const FirebaseWrapper = async () => {
 
     }
   }
+  return;
 };
 
 export * from "../FirebaseFirestoreWrapper";

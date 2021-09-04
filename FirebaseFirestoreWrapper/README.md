@@ -140,10 +140,10 @@ Initializes the Firestore service of the providedfirebase app.  Also instantiat
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 **Returns**: <code>DocumentReference</code> - Firestore Document Reference  
 
-| Param | Description |
-| --- | --- |
-| tablePath | string representing a valid path to a collection to create the new document in, relative to a document reference passed in |
-| refPath | an optional valid document reference to start the table path |
+| Param | Type | Description |
+| --- | --- | --- |
+| tablePath | <code>string</code> | string representing a valid path to a collection to create the new document in, relative to a document reference passed in |
+| refPath | <code>string</code> | an optional valid document reference to start the table path |
 
 <a name="module_FirebaseFirestoreWrapper.writeRecord"></a>
 
@@ -570,8 +570,6 @@ Listen to changes to a single record
 <a name="module_FirebaseFirestoreWrapper.PAGINATE_CHOICES"></a>
 
 ### FirebaseFirestoreWrapper.PAGINATE\_CHOICES : <code>number</code>
-[PAGINATE_CHOICES]
-
 **Kind**: static constant of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 **Category**: Paginate Constants  
 <a name="module_FirebaseFirestoreWrapper.PaginateFetch"></a>
@@ -610,7 +608,7 @@ current limit of query results
 <a name="module_FirebaseFirestoreWrapper.PaginateFetch+status"></a>
 
 #### paginateFetch.status : <code>PagingStatus</code>
-current status of pagination
+current status of pagination-1 pending; 0 uninitialized; 1 updated;
 
 **Kind**: instance property of [<code>PaginateFetch</code>](#module_FirebaseFirestoreWrapper.PaginateFetch)  
 <a name="module_FirebaseFirestoreWrapper.PaginateFetch+PageForward"></a>

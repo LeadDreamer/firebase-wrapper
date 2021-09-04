@@ -1,4 +1,5 @@
 import "@firebase/storage";
+import FirebaseStorageAdminEmulator from "./adminStorage.mjs";
 
 /**
  * @module FirebaseStorageWrapper
@@ -36,7 +37,7 @@ import "@firebase/storage";
 export default async function FirebaseStorageWrapper(firebase, config) {
   FirebaseStorage = firebase.storage();
   if (typeof firebase.storage().bucket === "function") {
-    FirebaseStorageAdminEmulator = await import("./adminStorage").default;
+    //FirebaseStorageAdminEmulator = await import("./adminStorage");
     FirebaseStorage = FirebaseStorageAdminEmulator(firebase);
   };
 
@@ -44,7 +45,7 @@ export default async function FirebaseStorageWrapper(firebase, config) {
   return;
 }
 
-let FirebaseStorage, FirebaseStorageAdminEmulator;
+let FirebaseStorage;
 const bucket_domain = "https://firebasestorage.googleapis.com/v0/b/";
 const bucket_head = "/o/";
 let bucket_name;

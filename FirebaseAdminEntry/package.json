@@ -3,8 +3,7 @@
   "engines": {
     "node": "12"
   },
-  "type": "module",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "admin-compatible wrapper for firebase",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -18,8 +17,11 @@
     "email": "tracy@dreamsandlogic.com",
     "url": "http://dreamsandlogic.com"
   },
-  "files": ["*.*js", "*.md"],
-  "main": "index",
+  "files": [
+    "*.*js",
+    "*.md"
+  ],
+  "main": "index.mjs",
   "browser": "index.mjs",
   "scripts": {
     "transpile": "babel --root-mode upward *.mjs --out-dir .",

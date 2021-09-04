@@ -1,6 +1,7 @@
 import {getPrivateURL} from "./index";
+import * as uuid from "uuid/dist/esm-browser/index.js";
 
-const { v4: uuidv4 } = require('uuid');
+const uuidv4 = uuid.v4;
 
 /**
  * @typedef {object} File
