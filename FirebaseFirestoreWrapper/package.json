@@ -1,9 +1,9 @@
 {
   "name": "@leaddreamer/firebase-wrapper",
   "engines": {
-    "node": "12"
+    "node": "14"
   },
-  "version": "1.1.13",
+  "version": "1.1.11",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another.",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -17,11 +17,7 @@
     "email": "tracy@dreamsandlogic.com",
     "url": "http://dreamsandlogic.com"
   },
-  "files": [
-    "*.mjs",
-    "*.js",
-    "*.md"
-  ],
+  "files": ["*.mjs", "*.js", "*.md"],
   "main": "index.mjs",
   "browser": "index.mjs",
   "scripts": {
