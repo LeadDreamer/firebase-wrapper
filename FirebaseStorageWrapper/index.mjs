@@ -175,8 +175,6 @@ export const makePrivateURLFromReference = (reference) => {
 
 /**
  * ----------------------------------------------------------------------
- * @function
- * @static
  * This function is part of a storage scheme that uses parallel structures
  * between Firestore collection/documents and Storage paths.  The concept
  * here is all Storage items are part of/belong to Firestore documents.
@@ -184,6 +182,8 @@ export const makePrivateURLFromReference = (reference) => {
  * URL.  If "type"is not included, the URL will return the metadata, not
  * the contents.
  * Note this simply makes the URL - it does not carry out *any* operations
+ * @static
+ * @function makePrivateURLFromPath
  * @param {!string} fullPath required path to the stored item.
  * @returns {string} constructed Security-Rule-compliant URL
  */
@@ -199,8 +199,8 @@ export const makePrivateURLFromPath = (fullPath) => {
  * ----------------------------------------------------------------------
  * Firestore's document sizes can be limited - 1MB - so our system stores
  * larger digital "blobs" in a parallel Firestore Storage.
- * @function
  * @static
+ * @function storeBlobByRecord
  * @param {blob} blob A data blob in DataURI format to store in Storage
  * @param {RecordObject} record A firestore document Record - the '/' separated collection/
  * document path is used as the path to the stored item.
@@ -221,9 +221,9 @@ export const storeBlobByRecord = (blob, record, key, filename) => {
  * ----------------------------------------------------------------------
  * Firestore's document sizes can be limited - 1MB - so our system stores
  * larger digital "blobs" in a parallel Firestore Storage.
- * @async
- * @function
  * @static
+ * @async
+ * @function storeDataURLByRecord
  * @param {dataURL} dataURL A data blob in DataURI format to store in Storage
  * @param {RecordObject} record A firestore document Record - the '/' separated collection/
  * document path is used as the path to the stored item.
