@@ -158,7 +158,7 @@ class adminRef {
   };
 
   /**
-   * @method
+   * @method child
    * creates and returns a new adminRef object from existin path
    * @param {string} path
    * a relative path *from* the existing storageRef to create child
@@ -170,7 +170,7 @@ class adminRef {
 
   /**
    * @async
-   * @method
+   * @method delete
    * Deletes the referenced storage item
    * @returns {Promise}
    */
@@ -181,7 +181,7 @@ class adminRef {
 
   /**
    * @async
-   * @method
+   * @method getDownloadURL
    * Generates a long-lived (essentially permanent until revoked)
    * Public-Access URL for a storage item in FIREBASE (not Cloud Storage)
    * format
@@ -197,7 +197,7 @@ class adminRef {
 
   /**
    * @async
-   * @method
+   * @method getToken
    * Fetches (or creates as needed) a unique token for a storage object
    * @returns {Promise<string>}
    */
@@ -228,7 +228,7 @@ class adminRef {
 
   /**
    * @async
-   * @method
+   * @method put
    * puts a block of data (and optional metadata) into storage at
    * location specified by adminRef
    * @param {blob} data
@@ -250,7 +250,7 @@ class adminRef {
 
   /**
    * @async
-   * @method
+   * @method putString
    * puts a string (possibly encoded data) into a storage file
    * described by the provided reference.
    * @param {string} dataString
