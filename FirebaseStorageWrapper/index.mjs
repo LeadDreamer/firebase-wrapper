@@ -196,7 +196,6 @@ export const makePrivateURLFromPath = (fullPath) => {
 };
 
 /**
- * ----------------------------------------------------------------------
  * Firestore's document sizes can be limited - 1MB - so our system stores
  * larger digital "blobs" in a parallel Firestore Storage.
  * @static
@@ -218,7 +217,6 @@ export const storeBlobByRecord = (blob, record, key, filename) => {
 };
 
 /**
- * ----------------------------------------------------------------------
  * Firestore's document sizes can be limited - 1MB - so our system stores
  * larger digital "blobs" in a parallel Firestore Storage.
  * @static
@@ -243,7 +241,6 @@ export const storeDataURLByRecord = (dataURL, record, key, filename) => {
 };
 
 /**
- * ----------------------------------------------------------------------
  * @function
  * @static
  * @param {!string} key name/key of default image file

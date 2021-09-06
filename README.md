@@ -2207,7 +2207,6 @@ Note this simply makes the URL - it does not carry out *any* operations
 <a name="module_FirebaseStorageWrapper.storeBlobByRecord"></a>
 
 ### FirebaseStorageWrapper.storeBlobByRecord(blob, record, key, filename) ⇒ <code>UploadTask</code>
-----------------------------------------------------------------------
 Firestore's document sizes can be limited - 1MB - so our system stores
 larger digital "blobs" in a parallel Firestore Storage.
 
@@ -2224,7 +2223,6 @@ larger digital "blobs" in a parallel Firestore Storage.
 <a name="module_FirebaseStorageWrapper.storeDataURLByRecord"></a>
 
 ### FirebaseStorageWrapper.storeDataURLByRecord(dataURL, record, key, filename) ⇒
-----------------------------------------------------------------------
 Firestore's document sizes can be limited - 1MB - so our system stores
 larger digital "blobs" in a parallel Firestore Storage.
 
@@ -2242,8 +2240,6 @@ larger digital "blobs" in a parallel Firestore Storage.
 <a name="module_FirebaseStorageWrapper.getDefaultImageURL"></a>
 
 ### FirebaseStorageWrapper.getDefaultImageURL(key) ⇒ <code>string</code>
-----------------------------------------------------------------------
-
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 
 | Param | Type | Description |
