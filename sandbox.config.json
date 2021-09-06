@@ -4,5 +4,6 @@
   "view": "browser",
   "container": {
     "node": "12"
-  }
+  },
+  "template": "node"
 }
