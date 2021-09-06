@@ -217,7 +217,7 @@ class adminRef {
 
   /**
    * @async
-   * @method
+   * @method getMetadata
    * Fetches the FileMetadata for the storage object. Custom/Client metadata
    * is located in FileMetadata.metadata
    * @returns {FileMetadata}
@@ -227,10 +227,10 @@ class adminRef {
   };
 
   /**
-   * @async
-   * @method put
    * puts a block of data (and optional metadata) into storage at
    * location specified by adminRef
+   * @async
+   * @method put
    * @param {blob} data
    * @param {?object} metadata
    * @returns {Promise<object>}
@@ -249,10 +249,10 @@ class adminRef {
   };
 
   /**
-   * @async
-   * @method putString
    * puts a string (possibly encoded data) into a storage file
    * described by the provided reference.
+   * @async
+   * @method putString
    * @param {string} dataString
    * @param {string} stringFormat
    * @param {FileMetadata} metadata
