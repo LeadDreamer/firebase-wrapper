@@ -24,7 +24,7 @@
     "transpile": "babel --root-mode upward *.mjs --out-dir .",
     "build": "$npm_execpath run transpile",
     "prepublishOnly": "$npm_execpath run transpile",
-    "docs": "./node_modules/.bin/jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f index.mjs > README.md",
+    "docs": "./node_modules/.bin/jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f *.mjs > README.md",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build"
   },
   "peerDependencies": {

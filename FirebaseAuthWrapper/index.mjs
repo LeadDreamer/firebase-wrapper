@@ -1,4 +1,3 @@
-//import "@firebase/app";
 import "@firebase/auth";
 /**
  * @module FirebaseAuthWrapper
@@ -26,11 +25,11 @@ let FirebaseAuthPersistence;
 let FirebaseAuthSignInOptions;
 
 /**
- * @function FirebaseAuthWrapper
- * @static
- * @description Initializes the Auth service of the provided
+ * Initializes the Auth service of the provided
  * firebase app.  Also instantiates various constants and
  * helper functions
+ * @static
+ * @function FirebaseAuthWrapper
  * @param {firebase} firebase
  * @example
  * ```
@@ -63,11 +62,10 @@ export default function FirebaseAuthWrapper(firebase) {
 }
 
 /**
- * ----------------------------------------------------------------------
+ * fetches our specific custom claim values from firebase auth
+ * @static
  * @async
  * @function fetchToken
- * @static
- * fetches our specific custom claim values from firebase auth
  * @param {FirebaseAuthUser} user
  * @return {external:promise}
  * @fulfil Returns a user token object
@@ -82,9 +80,10 @@ export const fetchToken = async (user) => {
 };
 
 /**
- * @async
- * @static
  * Fetch a JWT token for authenticated signed requests
+ * @static
+ * @async
+ * @function fetchJWT
  * @param {FirebaseAuthUser} user
  * @returns {Promise<JWT>}
  * @fulfil Returnsa JWT token
@@ -100,11 +99,11 @@ export const fetchToken = async (user) => {
  }
 
 /**
- * @async
- * @function refreshAuthUser
- * @static
  * triggers an update of the Firebase Auth user object.  A listener
  * can be set to monitor these changes
+ * @static
+ * @async
+ * @function refreshAuthUser
  * @returns {Promise<void>}
  */
 export const refreshAuthUser = async () => {
@@ -145,9 +144,6 @@ export const refreshAuthUser = async () => {
  */
 
 /**
- * @async
- * @function doCreateUserWithEmailAndPassword
- * @static
  * Creates AND SIGNS IN an authenticated user with the provided email and password
  * Creates a new user account associated with the specified email
  * address and password.
@@ -156,6 +152,9 @@ export const refreshAuthUser = async () => {
  * User account creation can fail if the account already exists or the
  * password is invalid.
  * Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
+ * @static
+ * @async
+ * @function doCreateUserWithEmailAndPassword
  * @param {string} email
  * @param {string} password
  * @returns {Promise<UserCredential>}
@@ -164,9 +163,6 @@ export const doCreateUserWithEmailAndPassword = (email, password) =>
   FirebaseAuth.createUserWithEmailAndPassword(email, password);
 
 /**
- * @async
- * @function doSignInWithEmailAndPassword
- * @static
  * SIGNS IN an existing authenticated user with the provided email and password
  * Creates a new user account associated with the specified email
  * address and password.
@@ -175,6 +171,9 @@ export const doCreateUserWithEmailAndPassword = (email, password) =>
  * User account creation can fail if the account already exists or the
  * password is invalid.
  * Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
+ * @static
+ * @async
+ * @function doSignInWithEmailAndPassword
  * @param {string} email
  * @param {string} password
  * @returns {Promise<UserCredential>}
@@ -187,52 +186,55 @@ export const doSignInWithEmailAndPassword = (email, password) =>
  */
 
 /**
- * ----------------------------------------------------------------------
- **********************************************************************/
+ * @function
+*/
 export const doSignInWithGoogle = (googleProvider) =>
   FirebaseAuth.signInWithPopup(googleProvider);
 
 /**
- * ----------------------------------------------------------------------
- **********************************************************************/
+ * @function
+*/
 export const doSignInWithFacebook = (facebookProvider) =>
   FirebaseAuth.signInWithPopup(facebookProvider);
 
 /**
- * ----------------------------------------------------------------------
- **********************************************************************/
+ * @function
+*/
 export const doSignInWithTwitter = (twitterProvider) =>
   FirebaseAuth.signInWithPopup(twitterProvider);
 
 /**
- * ----------------------------------------------------------------------
- **********************************************************************/
+ * @function
+*/
 export const doSignOut = () => {
   return FirebaseAuth.signOut();
 };
 
 /**
- * ----------------------------------------------------------------------
- **********************************************************************/
+ * @function
+*/
 export const doPasswordReset = (email) =>
   FirebaseAuth.sendPasswordResetEmail(email);
 
 /**
- * ----------------------------------------------------------------------
- **********************************************************************/
+ * @static
+ * @function doSendEmailVerification
+*/
 export const doSendEmailVerification = () =>
   FirebaseAuth.currentUser.sendEmailVerification({
     url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT
   });
 
 /**
- * ----------------------------------------------------------------------
- **********************************************************************/
+ * @static
+ * @function doPasswordUpdate
+*/
 export const doPasswordUpdate = (password) =>
   FirebaseAuth.currentUser.updatePassword(password);
 
 // *** Merge Auth and DB User API *** //
 /**
+ * @static
  * @async
  * @function
  * @returns {Promise<UserCredential>}
@@ -247,19 +249,20 @@ export const createAnonymousUser = () => {
  */
 
 /**
- * @function attachAuthUserListener
  * @static
+ * @function attachAuthUserListener
  * @property {AuthChangeProcess} next
  * @return {callback} unsubscribe function
  *
- **********************************************************************/
+*/
 export const attachAuthUserListener = (next) => {
   return FirebaseAuth.onIdTokenChanged(next);
 };
 
 /**
- * ----------------------------------------------------------------------
- **********************************************************************/
+ * @static
+ * @function setPersistence
+*/
 export const setPersistence = () => {
   FirebaseAuth.setPersistence(FirebaseAuthPersistence);
 };
