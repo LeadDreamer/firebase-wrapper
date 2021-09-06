@@ -3,7 +3,7 @@
   "engines": {
     "node": "12"
   },
-  "version": "1.0.7",
+  "version": "1.0.9",
   "description": "admin-compatible wrapper for firebase",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
