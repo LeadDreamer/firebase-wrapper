@@ -2133,8 +2133,6 @@ FirebaseStorage(firebase);
 <a name="module_FirebaseStorageWrapper.makeStorageRefFromRecord"></a>
 
 ### FirebaseStorageWrapper.makeStorageRefFromRecord(record, key, filename) ⇒ <code>StorageReference</code>
-----------------------------------------------------------------------
-
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Returns**: <code>StorageReference</code> - a Firestore Storage Reference
 
@@ -2147,8 +2145,6 @@ FirebaseStorage(firebase);
 <a name="module_FirebaseStorageWrapper.makeFileURLFromRecord"></a>
 
 ### FirebaseStorageWrapper.makeFileURLFromRecord(record, key, filename) ⇒ <code>external:promise</code>
-----------------------------------------------------------------------
-
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Fulfil**: <code>string</code>  a "long-lived" URL to access the file.
 **Reject**: <code>string</code>
@@ -2162,8 +2158,6 @@ FirebaseStorage(firebase);
 <a name="module_FirebaseStorageWrapper.makePrivateURLFromRecord"></a>
 
 ### FirebaseStorageWrapper.makePrivateURLFromRecord(record, key) ⇒ <code>string</code>
-----------------------------------------------------------------------
-
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Returns**: <code>string</code> - The resulting Security-Rule-compliant URL
 
@@ -2175,8 +2169,6 @@ FirebaseStorage(firebase);
 <a name="module_FirebaseStorageWrapper.makePrivateURLFromReference"></a>
 
 ### FirebaseStorageWrapper.makePrivateURLFromReference(reference, key) ⇒ <code>string</code>
-----------------------------------------------------------------------
-
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Returns**: <code>string</code> - The resulting Security-Rule-compliant URL
 
@@ -2188,7 +2180,6 @@ FirebaseStorage(firebase);
 <a name="module_FirebaseStorageWrapper.makePrivateURLFromPath"></a>
 
 ### FirebaseStorageWrapper.makePrivateURLFromPath(fullPath) ⇒ <code>string</code>
-----------------------------------------------------------------------
 This function is part of a storage scheme that uses parallel structures
 between Firestore collection/documents and Storage paths.  The concept
 here is all Storage items are part of/belong to Firestore documents.
@@ -2228,7 +2219,6 @@ larger digital "blobs" in a parallel Firestore Storage.
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Returns**: Firestore Storage UploadTask Object
-----------------------------------------------------------------------
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -2249,8 +2239,6 @@ larger digital "blobs" in a parallel Firestore Storage.
 <a name="module_FirebaseStorageWrapper.getURLFromFilePath"></a>
 
 ### FirebaseStorageWrapper.getURLFromFilePath(filePath) ⇒ <code>string</code>
-----------------------------------------------------------------------
-
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 
 | Param | Type |
@@ -2260,8 +2248,6 @@ larger digital "blobs" in a parallel Firestore Storage.
 <a name="module_FirebaseStorageWrapper.dataURLToBlob"></a>
 
 ### FirebaseStorageWrapper.dataURLToBlob(dataURL) ⇒ <code>Object</code>
-----------------------------------------------------------------------
-
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Returns**: <code>Object</code> - {ext: extension, base64: data}
 

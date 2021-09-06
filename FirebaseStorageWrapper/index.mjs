@@ -69,7 +69,6 @@ function getPrivateURLHack(){
  */
 
 /**
- * ----------------------------------------------------------------------
  * @function
  * @static
  * THis function is part of a storage scheme that uses parallel structures
@@ -102,7 +101,6 @@ export const makeStorageRefFromRecord = (
 };
 
 /**
- * ----------------------------------------------------------------------
  * @function
  * @static
  * This function is part of a storage scheme that uses parallel structures
@@ -126,7 +124,6 @@ export const makeFileURLFromRecord = (record, key = null, filename = null) => {
 };
 
 /**
- * ----------------------------------------------------------------------
  * @function
  * @static
  * This function is part of a storage scheme that uses parallel structures
@@ -150,7 +147,6 @@ export const makePrivateURLFromRecord = (record, key = null) => {
 };
 
 /**
- * ----------------------------------------------------------------------
  * @function
  * @static
  * This function is part of a storage scheme that uses parallel structures
@@ -174,7 +170,6 @@ export const makePrivateURLFromReference = (reference) => {
 };
 
 /**
- * ----------------------------------------------------------------------
  * This function is part of a storage scheme that uses parallel structures
  * between Firestore collection/documents and Storage paths.  The concept
  * here is all Storage items are part of/belong to Firestore documents.
@@ -229,7 +224,6 @@ export const storeBlobByRecord = (blob, record, key, filename) => {
  * item is associated with
  * @param {!string} filename an optional name to be associated with the stored item.
  * @returns Firestore Storage UploadTask Object
- * ----------------------------------------------------------------------
  */
 export const storeDataURLByRecord = (dataURL, record, key, filename) => {
   return storeBlobByRecord(
@@ -254,7 +248,6 @@ export const getDefaultImageURL = (key) => {
 };
 
 /**
- * ----------------------------------------------------------------------
  * @function
  * @static
  * @param {!string} filePath
@@ -265,7 +258,6 @@ export const getURLFromFilePath = (filePath) => {
 };
 
 /**
- * ----------------------------------------------------------------------
  * @async
  * @function
  * @param {object} dataURL
