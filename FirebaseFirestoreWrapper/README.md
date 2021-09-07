@@ -10,7 +10,7 @@ hierarchical record-oriented database; originally conceived to port from one dat
 
 ## FirebaseFirestoreWrapper
 
-A set of helper-wrapper functions around firebase firestore, storage
+A set of helper-BACKER functions around firebase firestore, storage
 and auth. Intent is to treat Firestore as a hierarchical
 record-oriented database; originally conceived to port from one
 database to another.
