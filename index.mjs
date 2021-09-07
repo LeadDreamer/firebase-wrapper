@@ -65,16 +65,16 @@ const FirebaseWrapper = async (config) => {
     firebase.app();
   } catch (err) {
     try {
-    firebase.initializeApp(config);
+    firebase.initializeApp(config?.appId ? config : null);
     } catch (err) {
       console.log("firebase initialize failed")
     }
   }
   await Promise.all([
-    FirebaseAuthWrapper(firebase),
-    FirebaseFirestore(firebase),
+    FirebaseAuthWrapper(firebase, config),
+    FirebaseFirestore(firebase, config),
     FirebaseStorage(firebase, config),
-    FirebaseCloudFunctions(firebase)
+    FirebaseCloudFunctions(firebase, config)
   ])
   return;
 };
