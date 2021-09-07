@@ -3,7 +3,7 @@
   "engines": {
     "node": "14"
   },
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "admin-compatible wrapper for firebase",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -21,7 +21,7 @@
     "*.*js",
     "*.md"
   ],
-  "main": "index.mjs",
+  "main": "index",
   "browser": "index.mjs",
   "scripts": {
     "transpile": "babel --root-mode upward *.mjs --out-dir .",

@@ -3,7 +3,7 @@
   "engines": {
     "node": "14"
   },
-  "version": "1.0.29",
+  "version": "1.0.30",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another.",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -21,7 +21,7 @@
     "*.*js",
     "*.md"
   ],
-  "main": "index.mjs",
+  "main": "index",
   "browser": "index.mjs",
   "scripts": {
     "transpile": "babel --root-mode upward *.mjs --out-dir .",
