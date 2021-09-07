@@ -1,6 +1,6 @@
 import "@firebase/auth";
 /**
- * @module FirebaseAuthWrapper
+ * @module FirebaseAuthWrapper/authClient
  * @description A set of helper-wrapper functions around firebase firestore, storage
  * and auth. Intent is to treat Firestore as a hierarchical
  * record-oriented database; originally conceived to port from one

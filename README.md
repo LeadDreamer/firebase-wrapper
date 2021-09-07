@@ -40,7 +40,7 @@ explicitly error trap for such events.</p>
 <dd><p>A set of helpers around Firebase admin SDK auth.
 Specific to use in Cloud Functions</p>
 </dd>
-<dt><a href="#module_FirebaseAuthWrapper">FirebaseAuthWrapper</a></dt>
+<dt><a href="#module_FirebaseAuthWrapper/authClient">FirebaseAuthWrapper/authClient</a></dt>
 <dd><p>A set of helper-wrapper functions around firebase firestore, storage
 and auth. Intent is to treat Firestore as a hierarchical
 record-oriented database; originally conceived to port from one
@@ -310,66 +310,66 @@ pages through the full list of users. Woefully inefficient.
 | pageSize | <code>number</code> | default 1000 |
 | pageToken | <code>object</code> | default null |
 
-<a name="module_FirebaseAuthWrapper"></a>
+<a name="module_FirebaseAuthWrapper/authClient"></a>
 
-## FirebaseAuthWrapper
+## FirebaseAuthWrapper/authClient
 A set of helper-wrapper functions around firebase firestore, storageand auth. Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.
 
 **Example**  
 ```import * as firebase from "firebase/app";import "firebase/auth";import FirebaseAuth from "@leaddreamer/firebase-wrapper/FirebaseAuthWrapper";//the next is optional - if you want the React componentimport StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";import {config} from "wherever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseAuth(firebase, StyledFirebaseAuth);})(config)```
 
-* [FirebaseAuthWrapper](#module_FirebaseAuthWrapper)
+* [FirebaseAuthWrapper/authClient](#module_FirebaseAuthWrapper/authClient)
     * _static_
-        * [.FirebaseAuth](#module_FirebaseAuthWrapper.FirebaseAuth) : <code>object</code>
-        * [.FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper.FirebaseAuthSignInOptions) : <code>string</code>
-        * [.FirebaseAuthWrapper(firebase)](#module_FirebaseAuthWrapper.FirebaseAuthWrapper)
-        * [.fetchToken(user)](#module_FirebaseAuthWrapper.fetchToken) ⇒ <code>external:promise</code>
-        * [.fetchJWT(user)](#module_FirebaseAuthWrapper.fetchJWT) ⇒ <code>Promise.&lt;JWT&gt;</code>
-        * [.refreshAuthUser()](#module_FirebaseAuthWrapper.refreshAuthUser) ⇒ <code>Promise.&lt;void&gt;</code>
-        * [.doCreateUserWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper.doCreateUserWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-        * [.doSignInWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper.doSignInWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-        * [.doSignInWithGoogle()](#module_FirebaseAuthWrapper.doSignInWithGoogle)
-        * [.doSignInWithFacebook()](#module_FirebaseAuthWrapper.doSignInWithFacebook)
-        * [.doSignInWithTwitter()](#module_FirebaseAuthWrapper.doSignInWithTwitter)
-        * [.doSignOut()](#module_FirebaseAuthWrapper.doSignOut)
-        * [.doPasswordReset()](#module_FirebaseAuthWrapper.doPasswordReset)
-        * [.doSendEmailVerification()](#module_FirebaseAuthWrapper.doSendEmailVerification)
-        * [.doPasswordUpdate()](#module_FirebaseAuthWrapper.doPasswordUpdate)
-        * [.createAnonymousUser()](#module_FirebaseAuthWrapper.createAnonymousUser) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-        * [.attachAuthUserListener()](#module_FirebaseAuthWrapper.attachAuthUserListener) ⇒ <code>callback</code>
-        * [.setPersistence()](#module_FirebaseAuthWrapper.setPersistence)
+        * [.FirebaseAuth](#module_FirebaseAuthWrapper/authClient.FirebaseAuth) : <code>object</code>
+        * [.FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper/authClient.FirebaseAuthSignInOptions) : <code>string</code>
+        * [.FirebaseAuthWrapper(firebase)](#module_FirebaseAuthWrapper/authClient.FirebaseAuthWrapper)
+        * [.fetchToken(user)](#module_FirebaseAuthWrapper/authClient.fetchToken) ⇒ <code>external:promise</code>
+        * [.fetchJWT(user)](#module_FirebaseAuthWrapper/authClient.fetchJWT) ⇒ <code>Promise.&lt;JWT&gt;</code>
+        * [.refreshAuthUser()](#module_FirebaseAuthWrapper/authClient.refreshAuthUser) ⇒ <code>Promise.&lt;void&gt;</code>
+        * [.doCreateUserWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient.doCreateUserWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
+        * [.doSignInWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient.doSignInWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
+        * [.doSignInWithGoogle()](#module_FirebaseAuthWrapper/authClient.doSignInWithGoogle)
+        * [.doSignInWithFacebook()](#module_FirebaseAuthWrapper/authClient.doSignInWithFacebook)
+        * [.doSignInWithTwitter()](#module_FirebaseAuthWrapper/authClient.doSignInWithTwitter)
+        * [.doSignOut()](#module_FirebaseAuthWrapper/authClient.doSignOut)
+        * [.doPasswordReset()](#module_FirebaseAuthWrapper/authClient.doPasswordReset)
+        * [.doSendEmailVerification()](#module_FirebaseAuthWrapper/authClient.doSendEmailVerification)
+        * [.doPasswordUpdate()](#module_FirebaseAuthWrapper/authClient.doPasswordUpdate)
+        * [.createAnonymousUser()](#module_FirebaseAuthWrapper/authClient.createAnonymousUser) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
+        * [.attachAuthUserListener()](#module_FirebaseAuthWrapper/authClient.attachAuthUserListener) ⇒ <code>callback</code>
+        * [.setPersistence()](#module_FirebaseAuthWrapper/authClient.setPersistence)
     * _inner_
-        * [~fromJSON()](#module_FirebaseAuthWrapper..fromJSON) : <code>object</code>
-        * [~AdditionalUserInfo](#module_FirebaseAuthWrapper..AdditionalUserInfo) : <code>object</code>
-        * [~User](#module_FirebaseAuthWrapper..User) : <code>object</code>
-        * [~UserCredential](#module_FirebaseAuthWrapper..UserCredential) : <code>object</code>
-        * [~AuthChangeProcess](#module_FirebaseAuthWrapper..AuthChangeProcess) : <code>function</code>
+        * [~fromJSON()](#module_FirebaseAuthWrapper/authClient..fromJSON) : <code>object</code>
+        * [~AdditionalUserInfo](#module_FirebaseAuthWrapper/authClient..AdditionalUserInfo) : <code>object</code>
+        * [~User](#module_FirebaseAuthWrapper/authClient..User) : <code>object</code>
+        * [~UserCredential](#module_FirebaseAuthWrapper/authClient..UserCredential) : <code>object</code>
+        * [~AuthChangeProcess](#module_FirebaseAuthWrapper/authClient..AuthChangeProcess) : <code>function</code>
 
-<a name="module_FirebaseAuthWrapper.FirebaseAuth"></a>
+<a name="module_FirebaseAuthWrapper/authClient.FirebaseAuth"></a>
 
-### FirebaseAuthWrapper.FirebaseAuth : <code>object</code>
-**Kind**: static property of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper.FirebaseAuthSignInOptions"></a>
+### FirebaseAuthWrapper/authClient.FirebaseAuth : <code>object</code>
+**Kind**: static property of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient.FirebaseAuthSignInOptions"></a>
 
-### FirebaseAuthWrapper.FirebaseAuthSignInOptions : <code>string</code>
-**Kind**: static property of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper.FirebaseAuthWrapper"></a>
+### FirebaseAuthWrapper/authClient.FirebaseAuthSignInOptions : <code>string</code>
+**Kind**: static property of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient.FirebaseAuthWrapper"></a>
 
-### FirebaseAuthWrapper.FirebaseAuthWrapper(firebase)
+### FirebaseAuthWrapper/authClient.FirebaseAuthWrapper(firebase)
 Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
 
 | Param | Type |
 | --- | --- |
 | firebase | <code>firebase</code> | 
 
-<a name="module_FirebaseAuthWrapper.fetchToken"></a>
+<a name="module_FirebaseAuthWrapper/authClient.fetchToken"></a>
 
-### FirebaseAuthWrapper.fetchToken(user) ⇒ <code>external:promise</code>
+### FirebaseAuthWrapper/authClient.fetchToken(user) ⇒ <code>external:promise</code>
 fetches our specific custom claim values from firebase auth
 
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
 **Fulfil**: Returns a user token object  
 **Reject**: returns err  
 
@@ -377,12 +377,12 @@ fetches our specific custom claim values from firebase auth
 | --- | --- |
 | user | <code>FirebaseAuthUser</code> | 
 
-<a name="module_FirebaseAuthWrapper.fetchJWT"></a>
+<a name="module_FirebaseAuthWrapper/authClient.fetchJWT"></a>
 
-### FirebaseAuthWrapper.fetchJWT(user) ⇒ <code>Promise.&lt;JWT&gt;</code>
+### FirebaseAuthWrapper/authClient.fetchJWT(user) ⇒ <code>Promise.&lt;JWT&gt;</code>
 Fetch a JWT token for authenticated signed requests
 
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
 **Fulfil**: Returnsa JWT token  
 **Reject**: returns an err  
 
@@ -390,72 +390,72 @@ Fetch a JWT token for authenticated signed requests
 | --- | --- |
 | user | <code>FirebaseAuthUser</code> | 
 
-<a name="module_FirebaseAuthWrapper.refreshAuthUser"></a>
+<a name="module_FirebaseAuthWrapper/authClient.refreshAuthUser"></a>
 
-### FirebaseAuthWrapper.refreshAuthUser() ⇒ <code>Promise.&lt;void&gt;</code>
+### FirebaseAuthWrapper/authClient.refreshAuthUser() ⇒ <code>Promise.&lt;void&gt;</code>
 triggers an update of the Firebase Auth user object.  A listenercan be set to monitor these changes
 
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper.doCreateUserWithEmailAndPassword"></a>
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient.doCreateUserWithEmailAndPassword"></a>
 
-### FirebaseAuthWrapper.doCreateUserWithEmailAndPassword(email, password) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
+### FirebaseAuthWrapper/authClient.doCreateUserWithEmailAndPassword(email, password) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
 Creates AND SIGNS IN an authenticated user with the provided email and passwordCreates a new user account associated with the specified emailaddress and password.On successful creation of the user account, this user will also besigned in to your application.User account creation can fail if the account already exists or thepassword is invalid.Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
 
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
 
 | Param | Type |
 | --- | --- |
 | email | <code>string</code> | 
 | password | <code>string</code> | 
 
-<a name="module_FirebaseAuthWrapper.doSignInWithEmailAndPassword"></a>
+<a name="module_FirebaseAuthWrapper/authClient.doSignInWithEmailAndPassword"></a>
 
-### FirebaseAuthWrapper.doSignInWithEmailAndPassword(email, password) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
+### FirebaseAuthWrapper/authClient.doSignInWithEmailAndPassword(email, password) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
 SIGNS IN an existing authenticated user with the provided email and passwordCreates a new user account associated with the specified emailaddress and password.On successful creation of the user account, this user will also besigned in to your application.User account creation can fail if the account already exists or thepassword is invalid.Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
 
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
 
 | Param | Type |
 | --- | --- |
 | email | <code>string</code> | 
 | password | <code>string</code> | 
 
-<a name="module_FirebaseAuthWrapper.doSignInWithGoogle"></a>
+<a name="module_FirebaseAuthWrapper/authClient.doSignInWithGoogle"></a>
 
-### FirebaseAuthWrapper.doSignInWithGoogle()
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper.doSignInWithFacebook"></a>
+### FirebaseAuthWrapper/authClient.doSignInWithGoogle()
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient.doSignInWithFacebook"></a>
 
-### FirebaseAuthWrapper.doSignInWithFacebook()
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper.doSignInWithTwitter"></a>
+### FirebaseAuthWrapper/authClient.doSignInWithFacebook()
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient.doSignInWithTwitter"></a>
 
-### FirebaseAuthWrapper.doSignInWithTwitter()
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper.doSignOut"></a>
+### FirebaseAuthWrapper/authClient.doSignInWithTwitter()
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient.doSignOut"></a>
 
-### FirebaseAuthWrapper.doSignOut()
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper.doPasswordReset"></a>
+### FirebaseAuthWrapper/authClient.doSignOut()
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient.doPasswordReset"></a>
 
-### FirebaseAuthWrapper.doPasswordReset()
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper.doSendEmailVerification"></a>
+### FirebaseAuthWrapper/authClient.doPasswordReset()
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient.doSendEmailVerification"></a>
 
-### FirebaseAuthWrapper.doSendEmailVerification()
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper.doPasswordUpdate"></a>
+### FirebaseAuthWrapper/authClient.doSendEmailVerification()
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient.doPasswordUpdate"></a>
 
-### FirebaseAuthWrapper.doPasswordUpdate()
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper.createAnonymousUser"></a>
+### FirebaseAuthWrapper/authClient.doPasswordUpdate()
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient.createAnonymousUser"></a>
 
-### FirebaseAuthWrapper.createAnonymousUser() ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper.attachAuthUserListener"></a>
+### FirebaseAuthWrapper/authClient.createAnonymousUser() ⇒ <code>Promise.&lt;UserCredential&gt;</code>
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient.attachAuthUserListener"></a>
 
-### FirebaseAuthWrapper.attachAuthUserListener() ⇒ <code>callback</code>
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+### FirebaseAuthWrapper/authClient.attachAuthUserListener() ⇒ <code>callback</code>
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
 **Returns**: <code>callback</code> - unsubscribe function  
 **Properties**
 
@@ -463,14 +463,14 @@ SIGNS IN an existing authenticated user with the provided email and passwordCre
 | --- | --- |
 | next | <code>AuthChangeProcess</code> | 
 
-<a name="module_FirebaseAuthWrapper.setPersistence"></a>
+<a name="module_FirebaseAuthWrapper/authClient.setPersistence"></a>
 
-### FirebaseAuthWrapper.setPersistence()
-**Kind**: static method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper..fromJSON"></a>
+### FirebaseAuthWrapper/authClient.setPersistence()
+**Kind**: static method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient..fromJSON"></a>
 
-### FirebaseAuthWrapper~fromJSON() : <code>object</code>
-**Kind**: inner method of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+### FirebaseAuthWrapper/authClient~fromJSON() : <code>object</code>
+**Kind**: inner method of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
 **Properties**
 
 | Name | Type |
@@ -478,10 +478,10 @@ SIGNS IN an existing authenticated user with the provided email and passwordCre
 | providerId | <code>string</code> | 
 | signInMethod | <code>string</code> | 
 
-<a name="module_FirebaseAuthWrapper..AdditionalUserInfo"></a>
+<a name="module_FirebaseAuthWrapper/authClient..AdditionalUserInfo"></a>
 
-### FirebaseAuthWrapper~AdditionalUserInfo : <code>object</code>
-**Kind**: inner typedef of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+### FirebaseAuthWrapper/authClient~AdditionalUserInfo : <code>object</code>
+**Kind**: inner typedef of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
 **Properties**
 
 | Name | Type |
@@ -491,16 +491,16 @@ SIGNS IN an existing authenticated user with the provided email and passwordCre
 | providerId | <code>string</code> | 
 | username | <code>string</code> | 
 
-<a name="module_FirebaseAuthWrapper..User"></a>
+<a name="module_FirebaseAuthWrapper/authClient..User"></a>
 
-### FirebaseAuthWrapper~User : <code>object</code>
+### FirebaseAuthWrapper/authClient~User : <code>object</code>
 See https://firebase.google.com/docs/reference/js/firebase.User
 
-**Kind**: inner typedef of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
-<a name="module_FirebaseAuthWrapper..UserCredential"></a>
+**Kind**: inner typedef of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
+<a name="module_FirebaseAuthWrapper/authClient..UserCredential"></a>
 
-### FirebaseAuthWrapper~UserCredential : <code>object</code>
-**Kind**: inner typedef of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+### FirebaseAuthWrapper/authClient~UserCredential : <code>object</code>
+**Kind**: inner typedef of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
 **Properties**
 
 | Name | Type |
@@ -510,10 +510,10 @@ See https://firebase.google.com/docs/reference/js/firebase.User
 | operationType | <code>&quot;signin&quot;</code> \| <code>&quot;link&quot;</code> \| <code>&quot;reauthenticate&quot;</code> | 
 | user | <code>&quot;User&quot;</code> | 
 
-<a name="module_FirebaseAuthWrapper..AuthChangeProcess"></a>
+<a name="module_FirebaseAuthWrapper/authClient..AuthChangeProcess"></a>
 
-### FirebaseAuthWrapper~AuthChangeProcess : <code>function</code>
-**Kind**: inner typedef of [<code>FirebaseAuthWrapper</code>](#module_FirebaseAuthWrapper)  
+### FirebaseAuthWrapper/authClient~AuthChangeProcess : <code>function</code>
+**Kind**: inner typedef of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)  
 
 | Param | Type |
 | --- | --- |

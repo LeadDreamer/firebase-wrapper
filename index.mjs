@@ -62,20 +62,21 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper";
  */
 const FirebaseWrapper = async (config) => {
   try {
-    firebase.app();
+    await firebase.app();
   } catch (err) {
     try {
-    firebase.initializeApp(config?.appId ? config : null);
+    await firebase.initializeApp(config?.appId ? config : null);
     } catch (err) {
       console.log("firebase initialize failed")
     }
+  } finally {
+    await Promise.all([
+      FirebaseAuthWrapper(firebase, config),
+      FirebaseFirestore(firebase, config),
+      FirebaseStorage(firebase, config),
+      FirebaseCloudFunctions(firebase, config)
+    ])
   }
-  await Promise.all([
-    FirebaseAuthWrapper(firebase, config),
-    FirebaseFirestore(firebase, config),
-    FirebaseStorage(firebase, config),
-    FirebaseCloudFunctions(firebase, config)
-  ])
   return;
 };
 
