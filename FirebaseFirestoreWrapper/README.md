@@ -3,7 +3,7 @@ npm](http://img.shields.io/npm/v/@leaddreamer/firebase-wrapper.svg)](https://www
 
 # @leaddreamer/firebase-wrapper
 
-A set of helper-WRAPPER functions around firebase firestore, storage and auth. Intent is to treat Firestore as a
+A set of helper-BACKER functions around firebase firestore, storage and auth. Intent is to treat Firestore as a
 hierarchical record-oriented database; originally conceived to port from one database to another.
 
 <a name="module_FirebaseFirestoreWrapper"></a>
