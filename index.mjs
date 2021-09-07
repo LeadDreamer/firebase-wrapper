@@ -1,4 +1,4 @@
-import firebase from "@firebase/app";
+//import firebase from "@firebase/app";
 import "@firebase/app";
 
 
@@ -60,7 +60,7 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper";
  * export * from "@leaddreamer/firebase-wrapper";
  * ```
  */
-const FirebaseWrapper = async (config) => {
+const FirebaseWrapper = async (firebase, config) => {
   try {
     await firebase.app();
   } catch (err) {
