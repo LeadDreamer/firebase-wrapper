@@ -1,11 +1,9 @@
 [![view on
-
 npm](http://img.shields.io/npm/v/@leaddreamer/firebase-wrapper.svg)](https://www.npmjs.org/package/@leaddreamer/firebase-wrapper)
 
 # @leaddreamer/firebase-wrapper
 
 A set of helper-wrapper functions around firebase firestore, storage and auth. Intent is to treat Firestore as a
-
 hierarchical record-oriented database; originally conceived to port from one database to another.
 
 <a name="module_FirebaseStorageWrapper"></a>
@@ -66,8 +64,6 @@ FirebaseStorage(firebase);
 
 ### FirebaseStorageWrapper.makeStorageRefFromRecord(record, key, filename) ⇒ <code>StorageReference</code>
 
----
-
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Returns**: <code>StorageReference</code> - a Firestore Storage Reference
 
@@ -80,8 +76,6 @@ FirebaseStorage(firebase);
 <a name="module_FirebaseStorageWrapper.makeFileURLFromRecord"></a>
 
 ### FirebaseStorageWrapper.makeFileURLFromRecord(record, key, filename) ⇒ <code>external:promise</code>
-
----
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Fulfil**: <code>string</code> a "long-lived" URL to access the file.
@@ -97,8 +91,6 @@ FirebaseStorage(firebase);
 
 ### FirebaseStorageWrapper.makePrivateURLFromRecord(record, key) ⇒ <code>string</code>
 
----
-
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Returns**: <code>string</code> - The resulting Security-Rule-compliant URL
 
@@ -110,8 +102,6 @@ FirebaseStorage(firebase);
 <a name="module_FirebaseStorageWrapper.makePrivateURLFromReference"></a>
 
 ### FirebaseStorageWrapper.makePrivateURLFromReference(reference, key) ⇒ <code>string</code>
-
----
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Returns**: <code>string</code> - The resulting Security-Rule-compliant URL
@@ -125,7 +115,13 @@ FirebaseStorage(firebase);
 
 ### FirebaseStorageWrapper.makePrivateURLFromPath(fullPath) ⇒ <code>string</code>
 
----
+This function is part of a storage scheme that uses parallel structures
+between Firestore collection/documents and Storage paths. The concept
+here is all Storage items are part of/belong to Firestore documents.
+This function takes a full path to a Storage object and turns it into
+URL. If "type"is not included, the URL will return the metadata, not
+the contents.
+Note this simply makes the URL - it does not carry out _any_ operations
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Returns**: <code>string</code> - constructed Security-Rule-compliant URL
@@ -137,8 +133,6 @@ FirebaseStorage(firebase);
 <a name="module_FirebaseStorageWrapper.storeBlobByRecord"></a>
 
 ### FirebaseStorageWrapper.storeBlobByRecord(blob, record, key, filename) ⇒ <code>UploadTask</code>
-
----
 
 Firestore's document sizes can be limited - 1MB - so our system stores
 larger digital "blobs" in a parallel Firestore Storage.
@@ -157,15 +151,11 @@ larger digital "blobs" in a parallel Firestore Storage.
 
 ### FirebaseStorageWrapper.storeDataURLByRecord(dataURL, record, key, filename) ⇒
 
----
-
 Firestore's document sizes can be limited - 1MB - so our system stores
 larger digital "blobs" in a parallel Firestore Storage.
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Returns**: Firestore Storage UploadTask Object
-
----
 
 | Param    | Type                      | Description                                                                                                       |
 | -------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------- |
@@ -178,8 +168,6 @@ larger digital "blobs" in a parallel Firestore Storage.
 
 ### FirebaseStorageWrapper.getDefaultImageURL(key) ⇒ <code>string</code>
 
----
-
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 
 | Param | Type                | Description                    |
@@ -190,8 +178,6 @@ larger digital "blobs" in a parallel Firestore Storage.
 
 ### FirebaseStorageWrapper.getURLFromFilePath(filePath) ⇒ <code>string</code>
 
----
-
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 
 | Param    | Type                |
@@ -201,8 +187,6 @@ larger digital "blobs" in a parallel Firestore Storage.
 <a name="module_FirebaseStorageWrapper.dataURLToBlob"></a>
 
 ### FirebaseStorageWrapper.dataURLToBlob(dataURL) ⇒ <code>Object</code>
-
----
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
 **Returns**: <code>Object</code> - {ext: extension, base64: data}
