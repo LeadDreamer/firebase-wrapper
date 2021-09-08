@@ -1,5 +1,5 @@
 import "@firebase/storage";
-import FirebaseStorageAdminEmulator from "./adminStorage.mjs";
+import FirebaseStorageAdminEmulator from "./adminStorage";
 
 /**
  * @module FirebaseStorageWrapper
