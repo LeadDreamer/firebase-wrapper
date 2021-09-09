@@ -161,7 +161,7 @@ FirebaseAuth(firebase, StyledFirebaseAuth);
   - _static_
     - [.FirebaseAuth](#module_FirebaseAuthWrapper/authClient.FirebaseAuth) : <code>object</code>
     - [.FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper/authClient.FirebaseAuthSignInOptions) : <code>string</code>
-    - [.FirebaseAuthWrapper(firebase)](#module_FirebaseAuthWrapper/authClient.FirebaseAuthWrapper)
+    - [.FirebaseAuthClient(firebase)](#module_FirebaseAuthWrapper/authClient.FirebaseAuthClient)
     - [.fetchToken(user)](#module_FirebaseAuthWrapper/authClient.fetchToken) ⇒ <code>external:promise</code>
     - [.fetchJWT(user)](#module_FirebaseAuthWrapper/authClient.fetchJWT) ⇒ <code>Promise.&lt;JWT&gt;</code>
     - [.refreshAuthUser()](#module_FirebaseAuthWrapper/authClient.refreshAuthUser) ⇒ <code>Promise.&lt;void&gt;</code>
@@ -194,9 +194,9 @@ FirebaseAuth(firebase, StyledFirebaseAuth);
 ### FirebaseAuthWrapper/authClient.FirebaseAuthSignInOptions : <code>string</code>
 
 **Kind**: static property of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)
-<a name="module_FirebaseAuthWrapper/authClient.FirebaseAuthWrapper"></a>
+<a name="module_FirebaseAuthWrapper/authClient.FirebaseAuthClient"></a>
 
-### FirebaseAuthWrapper/authClient.FirebaseAuthWrapper(firebase)
+### FirebaseAuthWrapper/authClient.FirebaseAuthClient(firebase)
 
 Initializes the Auth service of the provided
 firebase app. Also instantiates various constants and

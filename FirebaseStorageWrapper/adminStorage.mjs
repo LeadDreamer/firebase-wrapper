@@ -1,5 +1,5 @@
 import {getPrivateURL} from "./index";
-import * as uuid from "uuid/dist/esm-browser/index.js";
+import * as uuid from "uuid";
 
 const uuidv4 = uuid.v4;
 

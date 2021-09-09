@@ -36,7 +36,7 @@ import FirebaseStorageAdminEmulator from "./adminStorage";
  */
 export default async function FirebaseStorageWrapper(firebase, config) {
   FirebaseStorage = firebase.storage();
-  if (typeof firebase.storage().bucket === "function") {
+  if (!config?.appId) {
     //FirebaseStorageAdminEmulator = await import("./adminStorage");
     FirebaseStorage = FirebaseStorageAdminEmulator(firebase);
   };

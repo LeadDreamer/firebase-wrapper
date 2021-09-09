@@ -18,9 +18,9 @@ let functions;
 // Cloud Functions
 
 /**
- * @function FirebaseCloudFunctions
- * @static
  * Initializes the FirebaseCLoud function support
+ * @static
+ * @function FirebaseCloudFunctions
  * @param {firebase} firebase
  * @example
  * ```
@@ -39,8 +39,8 @@ let functions;
  * })(config)
  * ```
  */
-export default function FirebaseCloudFunctions(firebase) {
-  functions = firebase.functions();
+export default function FirebaseCloudFunctions(firebase, config) {
+  if (config?.appId) functions = firebase.functions();
 }
 
 /**

@@ -24,6 +24,8 @@ database to another.
 
 ### FirebaseCloudFunctionsWrapper.FirebaseCloudFunctions(firebase)
 
+Initializes the FirebaseCLoud function support
+
 **Kind**: static method of [<code>FirebaseCloudFunctionsWrapper</code>](#module_FirebaseCloudFunctionsWrapper)
 
 | Param    | Type                  |

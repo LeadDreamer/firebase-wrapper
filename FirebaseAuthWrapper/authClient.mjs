@@ -48,10 +48,10 @@ let FirebaseAuthSignInOptions;
  * firebase app.  Also instantiates various constants and
  * helper functions
  * @static
- * @function FirebaseAuthWrapper
+ * @function FirebaseAuthClient
  * @param {firebase} firebase
  */
-export default function FirebaseAuthWrapper(firebase) {
+export default function FirebaseAuthClient(firebase) {
   FirebaseAuth = firebase.auth();
   FirebaseAuthSignInOptions = [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,

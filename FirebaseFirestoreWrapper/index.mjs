@@ -37,11 +37,11 @@ function penultimate(array) {
 }
 
 /**
- * @function initialize_firestore
- * @static
- * @description Initializes the Firestore service of the provided
+ * Initializes the Firestore service of the provided
  * firebase app.  Also instantiates various constants and
  * helper functions
+ * @static
+ * @function FirebaseFirestore
  * @param {firebase} firebase
  * @example
  * ```
@@ -60,10 +60,10 @@ function penultimate(array) {
  * })(config)
  * ```
  */
-export default async function FirebaseFirestore(firebase) {
-  //doesnt run firestore persistence in Admin/Node environment
+export default async function FirebaseFirestore(firebase, config) {
   fdb = firebase.firestore();
-  process.env.FIREBASE_CONFIG ||
+  //doesnt run firestore persistence in Admin/Node environment
+  !config?.appId ||
     await firebase.firestore().enablePersistence({ synchorizeTabs: true });
   //fdb.settings({ignoreUndefinedProperties: true, merge: true});
   aFieldValue = firebase.firestore.FieldValue;
