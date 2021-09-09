@@ -142,6 +142,9 @@ export * from "@leaddreamer/firebase-wrapper";
 <a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
 
 ### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
+only authDomain, databaseURL and storageBucket are present when
+called from a cloud environment
+
 **Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)
 **Properties**
 
@@ -233,6 +236,9 @@ export * from "@leaddreamer/firebase-wrapper";
 <a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
 
 ### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
+only authDomain, databaseURL and storageBucket are present when
+called from a cloud environment
+
 **Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)
 **Properties**
 
@@ -394,7 +400,7 @@ FirebaseAuth(firebase, StyledFirebaseAuth);
     * _static_
         * [.FirebaseAuth](#module_FirebaseAuthWrapper/authClient.FirebaseAuth) : <code>object</code>
         * [.FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper/authClient.FirebaseAuthSignInOptions) : <code>string</code>
-        * [.FirebaseAuthWrapper(firebase)](#module_FirebaseAuthWrapper/authClient.FirebaseAuthWrapper)
+        * [.FirebaseAuthClient(firebase)](#module_FirebaseAuthWrapper/authClient.FirebaseAuthClient)
         * [.fetchToken(user)](#module_FirebaseAuthWrapper/authClient.fetchToken) ⇒ <code>external:promise</code>
         * [.fetchJWT(user)](#module_FirebaseAuthWrapper/authClient.fetchJWT) ⇒ <code>Promise.&lt;JWT&gt;</code>
         * [.refreshAuthUser()](#module_FirebaseAuthWrapper/authClient.refreshAuthUser) ⇒ <code>Promise.&lt;void&gt;</code>
@@ -425,9 +431,9 @@ FirebaseAuth(firebase, StyledFirebaseAuth);
 
 ### FirebaseAuthWrapper/authClient.FirebaseAuthSignInOptions : <code>string</code>
 **Kind**: static property of [<code>FirebaseAuthWrapper/authClient</code>](#module_FirebaseAuthWrapper/authClient)
-<a name="module_FirebaseAuthWrapper/authClient.FirebaseAuthWrapper"></a>
+<a name="module_FirebaseAuthWrapper/authClient.FirebaseAuthClient"></a>
 
-### FirebaseAuthWrapper/authClient.FirebaseAuthWrapper(firebase)
+### FirebaseAuthWrapper/authClient.FirebaseAuthClient(firebase)
 Initializes the Auth service of the provided
 firebase app.  Also instantiates various constants and
 helper functions
@@ -625,6 +631,8 @@ database to another.
 <a name="module_FirebaseCloudFunctionsWrapper.FirebaseCloudFunctions"></a>
 
 ### FirebaseCloudFunctionsWrapper.FirebaseCloudFunctions(firebase)
+Initializes the FirebaseCLoud function support
+
 **Kind**: static method of [<code>FirebaseCloudFunctionsWrapper</code>](#module_FirebaseCloudFunctionsWrapper)
 
 | Param | Type |
@@ -679,7 +687,7 @@ database to another.
 * [FirebaseFirestoreWrapper](#module_FirebaseFirestoreWrapper)
     * _static_
         * [.MAX_CONCURRENCY](#module_FirebaseFirestoreWrapper.MAX_CONCURRENCY) : <code>number</code>
-        * [.initialize_firestore(firebase)](#module_FirebaseFirestoreWrapper.initialize_firestore)
+        * [.FirebaseFirestore(firebase)](#module_FirebaseFirestoreWrapper.FirebaseFirestore)
         * [.createUniqueReference(tablePath, refPath)](#module_FirebaseFirestoreWrapper.createUniqueReference) ⇒ <code>DocumentReference</code>
         * [.writeRecord(tablePath, data, refPath, batch, mergeOption)](#module_FirebaseFirestoreWrapper.writeRecord) ⇒ <code>Promise.&lt;Record&gt;</code>
         * [.writeRecordByRefPath(data, refPath, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper.writeRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
@@ -784,9 +792,9 @@ database to another.
 maximum concurrent writes
 
 **Kind**: static constant of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)
-<a name="module_FirebaseFirestoreWrapper.initialize_firestore"></a>
+<a name="module_FirebaseFirestoreWrapper.FirebaseFirestore"></a>
 
-### FirebaseFirestoreWrapper.initialize\_firestore(firebase)
+### FirebaseFirestoreWrapper.FirebaseFirestore(firebase)
 Initializes the Firestore service of the provided
 firebase app.  Also instantiates various constants and
 helper functions

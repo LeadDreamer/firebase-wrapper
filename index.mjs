@@ -24,6 +24,8 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper";
  */
 
 /**
+ * only authDomain, databaseURL and storageBucket are present when
+ * called from a cloud environment
  * @typedef {Object} FirebaseConfigObject
  * @property {!string} apiKey required api Key from Firebase Console,
  * @property {!string} appId required app ID from Firebase Console
@@ -65,18 +67,15 @@ const FirebaseWrapper = async (firebase, config) => {
     await firebase.app();
   } catch (err) {
     try {
-    await firebase.initializeApp(config?.appId ? config : null);
-    } catch (err) {
+        config?.appId ? await firebase.initializeApp(config) : await firebase.initializeApp();
+        await FirebaseAuthWrapper(firebase, config);
+        await FirebaseFirestore(firebase, config);
+        await FirebaseStorage(firebase, config);
+        await FirebaseCloudFunctions(firebase, config);
+      } catch (err) {
       console.log("firebase initialize failed")
     }
-  } finally {
-    await Promise.all([
-      FirebaseAuthWrapper(firebase, config),
-      FirebaseFirestore(firebase, config),
-      FirebaseStorage(firebase, config),
-      FirebaseCloudFunctions(firebase, config)
-    ])
-  }
+  };
   return;
 };
 
