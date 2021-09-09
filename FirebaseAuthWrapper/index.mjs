@@ -1,11 +1,11 @@
 import FirebaseAuthAdminWrapper from "./authAdmin";
-import FirebaseAuthWrapperClient from "./authClient";
+import FirebaseAuthClientWrapper from "./authClient";
 
 export default function FirebaseAuthWrapper(firebase, config){
   if (!config?.appId) {
-     FirebaseAuthAdminWrapper(firebase);
+     return FirebaseAuthAdminWrapper(firebase);
   } else {
-    FirebaseAuthWrapperClient(firebase);
+    return FirebaseAuthClientWrapper(firebase);
   }
 }
 
