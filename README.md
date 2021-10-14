@@ -1714,8 +1714,7 @@ optionally batched record update - abstracts batch process from specific types
 | Param | Type | Description |
 | --- | --- | --- |
 | data | <code>Record</code> | the data object/record to update.  This will create a new one if it doesn't exist |
-| data.Id | <code>string</code> |  |
-| data.refPath | <code>string</code> |  |
+| data.refPath | <code>string</code> | only part used |
 | parent | <code>Record</code> | parent object (if any) this belongs to |
 | parent.refPath | <code>string</code> | full path to parent document |
 | type | <code>string</code> | name of type of object - i.e. the sub-collection name |
@@ -1965,6 +1964,7 @@ database to another.
 * [FirebaseStorageWrapper](#module_FirebaseStorageWrapper)
     * [.FirebaseStorageWrapper(firebase)](#module_FirebaseStorageWrapper.FirebaseStorageWrapper)
     * [.makeStorageRefFromRecord(record, key, filename)](#module_FirebaseStorageWrapper.makeStorageRefFromRecord) ⇒ <code>StorageReference</code>
+    * [.listReference(storageReference, optionsObject)](#module_FirebaseStorageWrapper.listReference) ⇒ <code>ListResult</code>
     * [.makeFileURLFromRecord(record, key, filename)](#module_FirebaseStorageWrapper.makeFileURLFromRecord) ⇒ <code>external:promise</code>
     * [.makePrivateURLFromRecord(record, key)](#module_FirebaseStorageWrapper.makePrivateURLFromRecord) ⇒ <code>string</code>
     * [.makePrivateURLFromReference(reference, key)](#module_FirebaseStorageWrapper.makePrivateURLFromReference) ⇒ <code>string</code>
@@ -2015,6 +2015,16 @@ FirebaseStorage(firebase);
 | record | <code>string</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
 | key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
 | filename | <code>string</code> | an optional name to be associated with the stored item. |
+
+<a name="module_FirebaseStorageWrapper.listReference"></a>
+
+### FirebaseStorageWrapper.listReference(storageReference, optionsObject) ⇒ <code>ListResult</code>
+**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)
+
+| Param | Type | Description |
+| --- | --- | --- |
+| storageReference | <code>StorageReference</code> | a storage reference to a "directory", not a file. More accurate to state that it is *treated* as a directory, since such niceties are a Firestore convention, not a physical reality |
+| optionsObject | <code>ListOptions</code> |  |
 
 <a name="module_FirebaseStorageWrapper.makeFileURLFromRecord"></a>
 

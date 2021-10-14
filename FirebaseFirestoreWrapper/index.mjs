@@ -1843,8 +1843,7 @@ export const recordId = (record) => {
  * @static
  * @category Typed
  * @param {Record} data - the data object/record to update.  This will create a new one if it doesn't exist
- * @param {?string} data.Id
- * @param {?string} data.refPath
+ * @param {!string} data.refPath - only part used
  * @param {?Record} parent - parent object (if any) this belongs to
  * @param {!string} parent.refPath - full path to parent document
  * @param {!string} type - name of type of object - i.e. the sub-collection name

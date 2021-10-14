@@ -101,6 +101,23 @@ export const makeStorageRefFromRecord = (
 };
 
 /**
+ * @async
+ * @function
+ * @param {StorageReference} storageReference a storage reference to a
+ * "directory", not a file. More accurate to state that it is *treated*
+ * as a directory, since such niceties are a Firestore convention, not
+ * a physical reality
+ * @param {ListOptions} optionsObject
+ * @returns {ListResult}
+ */
+export const listReference = async (
+  storageReference,
+  optionsObject
+) => {
+  return storageReference.list(optionsObject)
+}
+
+/**
  * @function
  * @static
  * This function is part of a storage scheme that uses parallel structures
