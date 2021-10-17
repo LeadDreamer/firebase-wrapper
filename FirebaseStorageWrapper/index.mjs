@@ -1,5 +1,6 @@
 import "@firebase/storage";
 import FirebaseStorageAdminEmulator from "./adminStorage";
+import { PAGINATE_DEFAULT, PAGINATE_END, PAGINATE_INIT, PAGINATE_PENDING, PAGINATE_UPDATED } from "../Common";
 
 /**
  * @module FirebaseStorageWrapper
@@ -115,6 +116,45 @@ export const listReference = async (
   optionsObject
 ) => {
   return storageReference.list(optionsObject)
+}
+
+
+export class paginateListing {
+  constructor (
+    storageReference,
+    limit = PAGINATE_DEFAULT
+  ) {
+    this.storageReference = storageReference;
+    this.status = PAGINATE_INIT;
+    this.limit = limit;
+    this.listOptions = {
+      maxResults: limit,
+      pageToken: null
+    };
+  };
+
+  /**
+   * executes the query again to fetch the next set of records
+   * @async
+   * @method
+   * @returns {Promise<StorageReference>} returns an array of record - the next page
+   */
+  async PageForward() {
+    if (this.status === PAGINATE_END) return [];
+    this.status = PAGINATE_PENDING;
+    const result = await listReference(this.storageReference, this.listOptions);
+    this.status = PAGINATE_UPDATED;
+    if (!result.newPageToken) { // if no more results
+      this.status=PAGINATE_END;
+    };
+
+    this.listOptions = {
+      ...this.listOptions,
+      pageToken: result.newPageToken
+    };
+    return result.items;
+  };
+
 }
 
 /**
