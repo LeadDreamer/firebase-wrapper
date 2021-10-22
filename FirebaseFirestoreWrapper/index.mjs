@@ -1,6 +1,6 @@
 import "@firebase/app";
 import "@firebase/firestore";
-import { PAGINATE_DEFAULT, PAGINATE_INIT, PAGINATE_PENDING, PAGINATE_UPDATED } from "../Common";
+import { PAGINATE_DEFAULT, PAGINATE_INIT, PAGINATE_PENDING, PAGINATE_UPDATED } from "./Common";
 
 /**
  * @module FirebaseFirestoreWrapper
@@ -293,6 +293,46 @@ export const closeWriteBatch = (
   return (async (innerBatch) => {
     return innerBatch.commit();
   })(batch);
+};
+
+/**
+ * ----------------------------------------------------------------------
+ * Creates a bulkWriter object to collect actions for Bulk writing to backend
+ * offers parallel operations, writes only, does NOT check for contentions,
+ * admin/Node-side only.
+ * @function
+ * @static
+ * @category Batch
+ * @returns {BulkWriter} object that operations are added to for a bulk
+ * operation
+ */
+export const openBulkWriter = () => {
+  if (typeof fdb.bulkWriter !== "function") {
+    return null;
+  }
+  return fdb.bulkWriter();
+};
+
+/**
+ * ----------------------------------------------------------------------
+ * Dispatches an asynchronous Closure to complete BulkWriter
+ * @async
+ * @function
+ * @static
+ * @category Batch
+ * @param {BulkWriter} bulkWriter - bulkWriter to close
+ * @returns {Promise<void>}
+ */
+export const closeBulkWriter = (
+  /**
+   */
+  bulkWriter = null
+) => {
+  if (typeof fdb.bulkWriter !== "function" || !bulkWriter) return null;
+
+  return (async (innerBulkWriter) => {
+    return innerBulkWriter.close();
+  })(bulkWriter);
 };
 
 /**
@@ -2209,3 +2249,5 @@ export const localBatchReturn = (incomingBatch, internalBatch) => {
   //if incoming batch, just pass along, else asynchronously commit local batch
   return incomingBatch ? internalBatch : closeWriteBatch(internalBatch);
 };
+
+export * from "./Common";

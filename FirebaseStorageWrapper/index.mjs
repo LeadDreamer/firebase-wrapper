@@ -1,6 +1,6 @@
 import "@firebase/storage";
 import FirebaseStorageAdminEmulator from "./adminStorage";
-import { PAGINATE_DEFAULT, PAGINATE_END, PAGINATE_INIT, PAGINATE_PENDING, PAGINATE_UPDATED } from "../Common";
+import { PAGINATE_DEFAULT, PAGINATE_END, PAGINATE_INIT, PAGINATE_PENDING, PAGINATE_UPDATED } from "../FirebaseFirestoreWrapper/Common";
 
 /**
  * @module FirebaseStorageWrapper

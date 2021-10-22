@@ -81,6 +81,18 @@ database to another.</p>
 <dd></dd>
 <dt><a href="#PAGINATE_CHOICES">PAGINATE_CHOICES</a> : <code>number</code></dt>
 <dd></dd>
+<dt><a href="#PAGINATE_INIT">PAGINATE_INIT</a> : <code>number</code></dt>
+<dd></dd>
+<dt><a href="#PAGINATE_PENDING">PAGINATE_PENDING</a> : <code>number</code></dt>
+<dd></dd>
+<dt><a href="#PAGINATE_UPDATED">PAGINATE_UPDATED</a> : <code>number</code></dt>
+<dd></dd>
+<dt><a href="#PAGINATE_END">PAGINATE_END</a> : <code>number</code></dt>
+<dd></dd>
+<dt><a href="#PAGINATE_DEFAULT">PAGINATE_DEFAULT</a> : <code>number</code></dt>
+<dd></dd>
+<dt><a href="#PAGINATE_CHOICES">PAGINATE_CHOICES</a> : <code>number</code></dt>
+<dd></dd>
 </dl>
 
 <a name="module_FirebaseWrapper"></a>
@@ -712,6 +724,8 @@ database to another.
             * [.runTransaction(updateFunction)](#module_FirebaseFirestoreWrapper.runTransaction) ⇒ <code>Promise.&lt;object&gt;</code>
             * [.openWriteBatch()](#module_FirebaseFirestoreWrapper.openWriteBatch) ⇒ <code>WriteBatch</code>
             * [.closeWriteBatch(batch)](#module_FirebaseFirestoreWrapper.closeWriteBatch) ⇒ <code>Promise.&lt;void&gt;</code>
+            * [.openBulkWriter()](#module_FirebaseFirestoreWrapper.openBulkWriter) ⇒ <code>BulkWriter</code>
+            * [.closeBulkWriter(bulkWriter)](#module_FirebaseFirestoreWrapper.closeBulkWriter) ⇒ <code>Promise.&lt;void&gt;</code>
         * _FieldPath_
             * [.documentId](#module_FirebaseFirestoreWrapper.documentId) : <code>Object</code>
         * _FieldValue_
@@ -1121,6 +1135,31 @@ Dispatches an asynchronous Closure to submit Batch
 | Param | Type | Description |
 | --- | --- | --- |
 | batch | <code>WriteBatch</code> | WriteBatch to close |
+
+<a name="module_FirebaseFirestoreWrapper.openBulkWriter"></a>
+
+### FirebaseFirestoreWrapper.openBulkWriter() ⇒ <code>BulkWriter</code>
+----------------------------------------------------------------------
+Creates a bulkWriter object to collect actions for Bulk writing to backend
+offers parallel operations, writes only, does NOT check for contentions,
+admin/Node-side only.
+
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)
+**Returns**: <code>BulkWriter</code> - object that operations are added to for a bulk
+operation
+**Category**: Batch
+<a name="module_FirebaseFirestoreWrapper.closeBulkWriter"></a>
+
+### FirebaseFirestoreWrapper.closeBulkWriter(bulkWriter) ⇒ <code>Promise.&lt;void&gt;</code>
+----------------------------------------------------------------------
+Dispatches an asynchronous Closure to complete BulkWriter
+
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)
+**Category**: Batch
+
+| Param | Type | Description |
+| --- | --- | --- |
+| bulkWriter | <code>BulkWriter</code> | bulkWriter to close |
 
 <a name="module_FirebaseFirestoreWrapper.documentId"></a>
 
@@ -2125,6 +2164,36 @@ larger digital "blobs" in a parallel Firestore Storage.
 | --- | --- |
 | dataURL | <code>object</code> |
 
+<a name="PAGINATE_INIT"></a>
+
+## PAGINATE\_INIT : <code>number</code>
+**Kind**: global constant
+**Category**: Paginate Constants
+<a name="PAGINATE_PENDING"></a>
+
+## PAGINATE\_PENDING : <code>number</code>
+**Kind**: global constant
+**Category**: Paginate Constants
+<a name="PAGINATE_UPDATED"></a>
+
+## PAGINATE\_UPDATED : <code>number</code>
+**Kind**: global constant
+**Category**: Paginate Constants
+<a name="PAGINATE_END"></a>
+
+## PAGINATE\_END : <code>number</code>
+**Kind**: global constant
+**Category**: Paginate Constants
+<a name="PAGINATE_DEFAULT"></a>
+
+## PAGINATE\_DEFAULT : <code>number</code>
+**Kind**: global constant
+**Category**: Paginate Constants
+<a name="PAGINATE_CHOICES"></a>
+
+## PAGINATE\_CHOICES : <code>number</code>
+**Kind**: global constant
+**Category**: Paginate Constants
 <a name="PAGINATE_INIT"></a>
 
 ## PAGINATE\_INIT : <code>number</code>

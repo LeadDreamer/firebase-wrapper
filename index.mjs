@@ -79,7 +79,6 @@ const FirebaseWrapper = async (firebase, config) => {
   return;
 };
 
-export * from "./Common";
 export * from "./FirebaseFirestoreWrapper";
 export * from "./FirebaseStorageWrapper";
 export * from "./FirebaseAuthWrapper";
