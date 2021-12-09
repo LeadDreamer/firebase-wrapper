@@ -323,16 +323,14 @@ export const openBulkWriter = () => {
  * @param {BulkWriter} bulkWriter - bulkWriter to close
  * @returns {Promise<void>}
  */
-export const closeBulkWriter = (
+export const closeBulkWriter = async (
   /**
    */
   bulkWriter = null
 ) => {
   if (typeof fdb.bulkWriter !== "function" || !bulkWriter) return null;
 
-  return (async (innerBulkWriter) => {
-    return innerBulkWriter.close();
-  })(bulkWriter);
+  return bulkWriter.close();
 };
 
 /**
@@ -449,6 +447,7 @@ export const writeRecordByRefPath = (
  * @function
  * @static
  * @param {!Record} data Object/Map to be written back to the Firestore
+ * @param {!string} data.refPath required to be present
  * @param {?WriteBatch|Transaction} Transaction Optional Transaction to enclose this action in
  * @param {?boolean} mergeOption - whether to merge into existin data; default TRUE
  * @returns {Promise<Record>} record as written.
@@ -507,13 +506,14 @@ export const collectRecords = (tablePath, refPath = null) => {
  * @descriptions returns an array of documents from Firestore
  * @param {!string} tablePath a properly formatted string representing the requested collection
  * - always an ODD number of elements
- * @param {filterObject} [filterArray] an array of filterObjects
+ * @param {?string} refPath (optional) allows "table" parameter to reference a sub-collection
+ * of an existing document reference (I use a LOT of structured collections)
+ * @param {?filterObject} [filterArray] an array of filterObjects
  * The array is assumed to be sorted in the correct order -
  * i.e. filterArray[0] is added first; filterArray[length-1] last
  * returns data as an array of objects (not dissimilar to Redux State objects)
  * with both the documentID and documentReference added as fields.
- * @param {?string} refPath (optional) allows "table" parameter to reference a sub-collection
- * of an existing document reference (I use a LOT of structured collections)
+ * @param {?sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
  * @returns {Promise<Array<Record>>}
  */
 export const collectRecordsByFilter = (
@@ -1182,7 +1182,9 @@ export class PaginateFetch {
           //return Promise.resolve(QuerySnapshot);
           this.snapshot = QuerySnapshot;
         }
-        return Promise.resolve(RecordsFromSnapshot(this.snapshot));
+        return this.snapshot
+        ? Promise.resolve(RecordsFromSnapshot(this.snapshot))
+        : Promise.resolve(null);
       });
   }
 
