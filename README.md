@@ -22,20 +22,6 @@ Most helpers return PROMISE.REJECT if no documents are returned.
 it is assumed projects using this library <em>might</em> want to have an
 explicitly error trap for such events.</p>
 </dd>
-<dt><a href="#module_FirebaseWrapper">FirebaseWrapper</a></dt>
-<dd><p>A set of helper-wrapper functions around firebase firestore, storage
-and auth.
-all-in-one wrapper for a solid subset of CLIENT-SIDE Firebase
-functions, with a consistent interface.  There is a parallel set for
-ADMIN-SIDE functions as well.
-Intent is to treat Firestore as a hierarchical
-record-oriented database; originally conceived to port from one
-database to another.
-NOTE:
-Most helpers return PROMISE.REJECT if no documents are returned.
-it is assumed projects using this library <em>might</em> want to have an
-explicitly error trap for such events.</p>
-</dd>
 <dt><a href="#module_FirebaseAuthWrapper/authAdmin">FirebaseAuthWrapper/authAdmin</a></dt>
 <dd><p>A set of helpers around Firebase admin SDK auth.
 Specific to use in Cloud Functions</p>
@@ -81,18 +67,6 @@ database to another.</p>
 <dd></dd>
 <dt><a href="#PAGINATE_CHOICES">PAGINATE_CHOICES</a> : <code>number</code></dt>
 <dd></dd>
-<dt><a href="#PAGINATE_INIT">PAGINATE_INIT</a> : <code>number</code></dt>
-<dd></dd>
-<dt><a href="#PAGINATE_PENDING">PAGINATE_PENDING</a> : <code>number</code></dt>
-<dd></dd>
-<dt><a href="#PAGINATE_UPDATED">PAGINATE_UPDATED</a> : <code>number</code></dt>
-<dd></dd>
-<dt><a href="#PAGINATE_END">PAGINATE_END</a> : <code>number</code></dt>
-<dd></dd>
-<dt><a href="#PAGINATE_DEFAULT">PAGINATE_DEFAULT</a> : <code>number</code></dt>
-<dd></dd>
-<dt><a href="#PAGINATE_CHOICES">PAGINATE_CHOICES</a> : <code>number</code></dt>
-<dd></dd>
 </dl>
 
 <a name="module_FirebaseWrapper"></a>
@@ -115,9 +89,7 @@ explicitly error trap for such events.
 * [FirebaseWrapper](#module_FirebaseWrapper)
     * _static_
         * [.FirebaseWrapper(config)](#module_FirebaseWrapper.FirebaseWrapper) ⇒
-        * [.FirebaseWrapper()](#module_FirebaseWrapper.FirebaseWrapper) ⇒
     * _inner_
-        * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
         * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
 
 <a name="module_FirebaseWrapper.FirebaseWrapper"></a>
@@ -130,20 +102,6 @@ explicitly error trap for such events.
 | --- | --- | --- |
 | config | <code>FirebaseConfigObject</code> | Firebase Admin object |
 
-**Example**
-```
-//this specifically loads ALL the subsections, specifically for
-//the Browser.  See later (tbd) notes for NodeJS
-
-import FirebaseWrapper from "@leaddreamer/firebase-wrapper";
-FirebaseWrapper(config); //see below
-export * from "@leaddreamer/firebase-wrapper";
-```
-<a name="module_FirebaseWrapper.FirebaseWrapper"></a>
-
-### FirebaseWrapper.FirebaseWrapper() ⇒
-**Kind**: static method of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)
-**Returns**: none
 **Example**
 ```
 //this specifically loads ALL the subsections, specifically for
@@ -173,115 +131,6 @@ called from a cloud environment
 | messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
 | measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
 | mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
-
-<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
-
-### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
-**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| projectId | <code>string</code> | required Firebase projectID from Firebase console |
-| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
-| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
-| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
-| messagingSenderId: | <code>string</code> | (optional) ID for Messaging service from Firebase Console |
-| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
-
-<a name="module_FirebaseWrapper"></a>
-
-## FirebaseWrapper
-A set of helper-wrapper functions around firebase firestore, storage
-and auth.
-all-in-one wrapper for a solid subset of CLIENT-SIDE Firebase
-functions, with a consistent interface.  There is a parallel set for
-ADMIN-SIDE functions as well.
-Intent is to treat Firestore as a hierarchical
-record-oriented database; originally conceived to port from one
-database to another.
-NOTE:
-Most helpers return PROMISE.REJECT if no documents are returned.
-it is assumed projects using this library *might* want to have an
-explicitly error trap for such events.
-
-
-* [FirebaseWrapper](#module_FirebaseWrapper)
-    * _static_
-        * [.FirebaseWrapper(config)](#module_FirebaseWrapper.FirebaseWrapper) ⇒
-        * [.FirebaseWrapper()](#module_FirebaseWrapper.FirebaseWrapper) ⇒
-    * _inner_
-        * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
-        * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
-
-<a name="module_FirebaseWrapper.FirebaseWrapper"></a>
-
-### FirebaseWrapper.FirebaseWrapper(config) ⇒
-**Kind**: static method of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)
-**Returns**: none
-
-| Param | Type | Description |
-| --- | --- | --- |
-| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
-
-**Example**
-```
-//this specifically loads ALL the subsections, specifically for
-//the Browser.  See later (tbd) notes for NodeJS
-
-import FirebaseWrapper from "@leaddreamer/firebase-wrapper";
-FirebaseWrapper(config); //see below
-export * from "@leaddreamer/firebase-wrapper";
-```
-<a name="module_FirebaseWrapper.FirebaseWrapper"></a>
-
-### FirebaseWrapper.FirebaseWrapper() ⇒
-**Kind**: static method of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)
-**Returns**: none
-**Example**
-```
-//this specifically loads ALL the subsections, specifically for
-//the Browser.  See later (tbd) notes for NodeJS
-
-import FirebaseWrapper from "@leaddreamer/firebase-wrapper";
-FirebaseWrapper(config); //see below
-export * from "@leaddreamer/firebase-wrapper";
-```
-<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
-
-### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
-only authDomain, databaseURL and storageBucket are present when
-called from a cloud environment
-
-**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| apiKey | <code>string</code> | required api Key from Firebase Console, |
-| appId | <code>string</code> | required app ID from Firebase Console |
-| projectId | <code>string</code> | required Firebase projectID from Firebase console |
-| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
-| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
-| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
-| messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
-| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
-| mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
-
-<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
-
-### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
-**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| projectId | <code>string</code> | required Firebase projectID from Firebase console |
-| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
-| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
-| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
-| messagingSenderId: | <code>string</code> | (optional) ID for Messaging service from Firebase Console |
-| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
 
 <a name="module_FirebaseAuthWrapper/authAdmin"></a>
 
@@ -707,7 +556,7 @@ database to another.
         * [.writeRecordByRefPath(data, refPath, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper.writeRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
         * [.writeBack(data, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper.writeBack) ⇒ <code>Promise.&lt;Record&gt;</code>
         * [.collectRecords(tablePath, refPath)](#module_FirebaseFirestoreWrapper.collectRecords) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-        * [.collectRecordsByFilter(tablePath, [filterArray], refPath)](#module_FirebaseFirestoreWrapper.collectRecordsByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+        * [.collectRecordsByFilter(tablePath, refPath, [filterArray], [sortArray])](#module_FirebaseFirestoreWrapper.collectRecordsByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
         * [.collectRecordsInGroup(tableName)](#module_FirebaseFirestoreWrapper.collectRecordsInGroup) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
         * [.collectRecordsInGroupByFilter(tableName, [filterArray])](#module_FirebaseFirestoreWrapper.collectRecordsInGroupByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
         * [.fetchRecord(tablePath, Id, refPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecord) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
@@ -893,6 +742,7 @@ object/map came from the firestore
 | Param | Type | Description |
 | --- | --- | --- |
 | data | <code>Record</code> | Object/Map to be written back to the Firestore |
+| data.refPath | <code>string</code> | required to be present |
 | Transaction | <code>WriteBatch</code> \| <code>Transaction</code> | Optional Transaction to enclose this action in |
 | mergeOption | <code>boolean</code> | whether to merge into existin data; default TRUE |
 
@@ -910,7 +760,7 @@ query for a SET of records
 
 <a name="module_FirebaseFirestoreWrapper.collectRecordsByFilter"></a>
 
-### FirebaseFirestoreWrapper.collectRecordsByFilter(tablePath, [filterArray], refPath) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+### FirebaseFirestoreWrapper.collectRecordsByFilter(tablePath, refPath, [filterArray], [sortArray]) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
 ----------------------------------------------------------------------
 
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)
@@ -919,8 +769,9 @@ query for a SET of records
 | Param | Type | Description |
 | --- | --- | --- |
 | tablePath | <code>string</code> | a properly formatted string representing the requested collection - always an ODD number of elements |
-| [filterArray] | <code>filterObject</code> | an array of filterObjects The array is assumed to be sorted in the correct order - i.e. filterArray[0] is added first; filterArray[length-1] last returns data as an array of objects (not dissimilar to Redux State objects) with both the documentID and documentReference added as fields. |
 | refPath | <code>string</code> | (optional) allows "table" parameter to reference a sub-collection of an existing document reference (I use a LOT of structured collections) |
+| [filterArray] | <code>filterObject</code> | an array of filterObjects The array is assumed to be sorted in the correct order - i.e. filterArray[0] is added first; filterArray[length-1] last returns data as an array of objects (not dissimilar to Redux State objects) with both the documentID and documentReference added as fields. |
+| [sortArray] | <code>sortObject</code> | a 2xn array of sort (i.e. "orderBy") conditions |
 
 <a name="module_FirebaseFirestoreWrapper.collectRecordsInGroup"></a>
 
@@ -2164,36 +2015,6 @@ larger digital "blobs" in a parallel Firestore Storage.
 | --- | --- |
 | dataURL | <code>object</code> |
 
-<a name="PAGINATE_INIT"></a>
-
-## PAGINATE\_INIT : <code>number</code>
-**Kind**: global constant
-**Category**: Paginate Constants
-<a name="PAGINATE_PENDING"></a>
-
-## PAGINATE\_PENDING : <code>number</code>
-**Kind**: global constant
-**Category**: Paginate Constants
-<a name="PAGINATE_UPDATED"></a>
-
-## PAGINATE\_UPDATED : <code>number</code>
-**Kind**: global constant
-**Category**: Paginate Constants
-<a name="PAGINATE_END"></a>
-
-## PAGINATE\_END : <code>number</code>
-**Kind**: global constant
-**Category**: Paginate Constants
-<a name="PAGINATE_DEFAULT"></a>
-
-## PAGINATE\_DEFAULT : <code>number</code>
-**Kind**: global constant
-**Category**: Paginate Constants
-<a name="PAGINATE_CHOICES"></a>
-
-## PAGINATE\_CHOICES : <code>number</code>
-**Kind**: global constant
-**Category**: Paginate Constants
 <a name="PAGINATE_INIT"></a>
 
 ## PAGINATE\_INIT : <code>number</code>
