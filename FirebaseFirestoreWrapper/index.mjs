@@ -66,7 +66,7 @@ export default async function FirebaseFirestore(firebase, config) {
   //doesnt run firestore persistence in Admin/Node environment
   !config?.appId ||
     await firebase.firestore().enablePersistence({ synchorizeTabs: true });
-  //fdb.settings({ignoreUndefinedProperties: true, merge: true});
+  fdb.settings({ignoreUndefinedProperties: true, merge: true});
   aFieldValue = firebase.firestore.FieldValue;
   aFieldPath = firebase.firestore.FieldPath;
 
