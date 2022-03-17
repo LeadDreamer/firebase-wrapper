@@ -1,7 +1,3 @@
-//import firebase from "@firebase/app";
-import "@firebase/app";
-
-
 import FirebaseFirestore from "./FirebaseFirestoreWrapper";
 import FirebaseStorage from "./FirebaseStorageWrapper";
 import FirebaseAuthWrapper from "./FirebaseAuthWrapper";

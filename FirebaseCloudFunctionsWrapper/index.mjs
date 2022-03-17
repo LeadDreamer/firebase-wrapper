@@ -1,5 +1,4 @@
-import "@firebase/app";
-import "@firebase/functions";
+import "firebase/functions";
 
 /**
  * @module FirebaseCloudFunctionsWrapper

@@ -1,5 +1,4 @@
-import "@firebase/app";
-import "@firebase/firestore";
+import "firebase/firestore";
 import { PAGINATE_DEFAULT, PAGINATE_INIT, PAGINATE_PENDING, PAGINATE_UPDATED } from "./Common";
 
 /**
@@ -63,10 +62,10 @@ function penultimate(array) {
  */
 export default async function FirebaseFirestore(firebase, config) {
   fdb = firebase.firestore();
+  fdb.settings({ignoreUndefinedProperties: true, merge: true});
   //doesnt run firestore persistence in Admin/Node environment
   !config?.appId ||
     await firebase.firestore().enablePersistence({ synchorizeTabs: true });
-  fdb.settings({ignoreUndefinedProperties: true, merge: true});
   aFieldValue = firebase.firestore.FieldValue;
   aFieldPath = firebase.firestore.FieldPath;
 
@@ -514,6 +513,7 @@ export const collectRecords = (tablePath, refPath = null) => {
  * returns data as an array of objects (not dissimilar to Redux State objects)
  * with both the documentID and documentReference added as fields.
  * @param {?sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
+ * @param {?number} limit limit result to this number (if at all)
  * @returns {Promise<Array<Record>>}
  */
 export const collectRecordsByFilter = (
@@ -633,9 +633,11 @@ export const fetchRecord = (tablePath, Id, refPath = null, batch = null) => {
 
   const docRef = db.collection(tablePath).doc(Id);
 
-  return batch
-    ? batch.get(docRef) // returned chained Batch object
-    : docRef.get().then((docSnapshot) => {
+  const thePromise = batch
+  ? batch.get(docRef) // returned chained Batch object
+  : docRef.get();
+
+  return thePromise.then((docSnapshot) => {
         if (docSnapshot.exists) {
           return RecordFromSnapshot(docSnapshot);
         } else {
@@ -659,17 +661,20 @@ export const fetchRecord = (tablePath, Id, refPath = null, batch = null) => {
  */
 export const fetchRecordByRefPath = (docRefPath, batch = null) => {
   //Dangerously assumes refPath  exists
-  if (batch) return batch.get(createRefFromPath(docRefPath));
-  else
-    return createRefFromPath(docRefPath)
-      .get()
-      .then((docSnapshot) => {
-        if (docSnapshot.exists) {
-          return RecordFromSnapshot(docSnapshot);
-        } else {
-          return Promise.reject(null);
-        }
-      });
+
+  const thisRef = createRefFromPath(docRefPath);
+
+  const thePromise = batch
+  ? batch.get(thisRef)
+  : thisRef.get();
+
+  return thePromise.then((docSnapshot) => {
+    if (docSnapshot.exists) {
+      return RecordFromSnapshot(docSnapshot);
+    } else {
+      return Promise.reject("no document");
+    }
+  });
 };
 
 /**
@@ -761,9 +766,11 @@ export const deleteRecord = (table, record, refPath = null, batch = null) => {
  * @returns {Promise<Record|WriteBatch|Transaction>}
  **********************************************************************/
 export const deleteRecordByRefPath = (docRefPath, batch = null) => {
+  const thisRef = createRefFromPath(docRefPath);
+
   return batch
-    ? batch.delete(createRefFromPath(docRefPath))
-    : createRefFromPath(docRefPath).delete();
+    ? batch.delete(thisRef)
+    : thisRef.delete();
 };
 
 /**
@@ -802,11 +809,13 @@ export const updateRecordFields = async (recordUpdate) => {
 export const updateRecordByRefPath = (docRefPath, data, batch = null) => {
   const cleanData = DocumentFromRecord(data);
   //  delete cleanData.Id;
+  const thisRef = createRefFromPath(docRefPath);
+
   return batch
-    ? batch.set(createRefFromPath(docRefPath), cleanData, {
+    ? batch.set(thisRef, cleanData, {
         merge: true
       })
-    : createRefFromPath(docRefPath)
+    : thisRef
         .set(cleanData, { merge: true }) //update merges record
         .then(() => {
           return data;
@@ -831,22 +840,25 @@ export const writeArrayValue = (
   docRefPath,
   batch = null
 ) => {
+  const thisRef = createRefFromPath(docRefPath);
+
   if (batch)
     return batch.set(
-      createRefFromPath(docRefPath),
+      thisRef,
       {
         [fieldName]: aFieldValue.arrayUnion(fieldValue)
       },
       { merge: true }
     );
   else
-    return createRefFromPath(docRefPath).set(
+    return thisRef.set(
       {
         [fieldName]: aFieldValue.arrayUnion(fieldValue)
       },
       { merge: true }
     );
 };
+
 /** @private */
 const createRefFromPath = (docPath, refPath = null) => {
   const db = dbReference(refPath);
@@ -1328,7 +1340,7 @@ export class PaginatedListener {
    * @param {filterObject} [filterArray] an (optional) 3xn array of filter(i.e. "where") conditions
    * @param {!sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
    * @param {?refPath} refPath (optional) allows "table" parameter to reference a sub-collection
-   * of an existing document reference (I use a LOT of structered collections)
+   * of an existing document reference (I use a LOT of structured collections)
    *
    * The array is assumed to be sorted in the correct order -
    * i.e. filterArray[0] is added first; filterArray[length-1] last
@@ -1425,7 +1437,7 @@ export class PaginatedListener {
 
   /**
    * resets the listener query to the next page of results.
-   * Unsubscribes from the current listener, constructs a new query, and sets it\
+   * Unsubscribes from the current listener, constructs a new query, and sets it
    * as the new listener
    * @async
    * @method
@@ -1793,6 +1805,31 @@ export const ownerRefPath = (record) => {
   return record?.refPath
     ? `${ownerType(record)}/${ownerId(record)}`
     : undefined;
+};
+
+/**
+ * Returns the bare owner record reference to the parent (root) of a
+ * provided child
+ * @function
+ * @static
+ * @category Tree Slice
+ * @param {Record} record child record
+ * @returns {Record} reference to the parent (root) record
+ */
+export const ownerByChild = (record) => {
+  return record?.refPath
+    ? {
+      Id: `${ownerId(record)}`,
+      refPath: `${ownerType(record)}/${ownerId(record)}`
+    }
+    : undefined;
+};
+
+export const ownerByOwnerType = (ownerId, ownerType) => {
+  return {
+    Id: ownerId,
+    refPath: `${ownerType}/${ownerId}`
+  };
 };
 
 /**
@@ -2249,7 +2286,7 @@ export class typedPaginatedListener extends PaginatedListener {
  */
 export const localBatchReturn = (incomingBatch, internalBatch) => {
   //if incoming batch, just pass along, else asynchronously commit local batch
-  return incomingBatch ? internalBatch : closeWriteBatch(internalBatch);
+  return incomingBatch ? Promise.resolve(null) : closeWriteBatch(internalBatch);
 };
 
 export * from "./Common";

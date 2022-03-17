@@ -1,4 +1,4 @@
-import "@firebase/auth";
+import "firebase/auth";
 /**
  * @module FirebaseAuthWrapper/authClient
  * @description A set of helper-wrapper functions around firebase firestore, storage
