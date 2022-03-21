@@ -1,7 +1,13 @@
 import "firebase/storage";
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
-import { PAGINATE_DEFAULT, PAGINATE_END, PAGINATE_INIT, PAGINATE_PENDING, PAGINATE_UPDATED } from "../FirebaseFirestoreWrapper/Common";
+import {
+  PAGINATE_DEFAULT,
+  PAGINATE_END,
+  PAGINATE_INIT,
+  PAGINATE_PENDING,
+  PAGINATE_UPDATED
+} from "../FirebaseFirestoreWrapper/Common.js";
 
 //const uuidv4 = v4;
 
@@ -43,7 +49,7 @@ export default async function FirebaseStorageWrapper(firebase, config) {
   if (!config?.appId) {
     //FirebaseStorageAdminEmulator = await import("./adminStorage");
     FirebaseStorage = FirebaseStorageAdminEmulator(firebase);
-  };
+  }
 
   bucket_name = config.storageBucket;
   return;
@@ -57,11 +63,11 @@ let bucket_name;
 //URL = `${bucket_domain}${bucket_name}${bucket_head}${fullPath}?alt=${filetype_parameter}`;
 
 export const getPrivateURL = (ref) => {
-  return makePrivateURLFromPath(ref.fullPath)
-}
+  return makePrivateURLFromPath(ref.fullPath);
+};
 
-function getPrivateURLHack(){
-  return makePrivateURLFromPath(this.fullPath)
+function getPrivateURLHack() {
+  return makePrivateURLFromPath(this.fullPath);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -95,11 +101,15 @@ export const makeStorageRefFromRecord = (
   filename = null
 ) => {
   let ref = record.refPath
-    ? FirebaseStorage.ref(`${record.refPath}${(key ? "/" + key : "")}${(filename ? "/" + filename : "")}`)
+    ? FirebaseStorage.ref(
+        `${record.refPath}${key ? "/" + key : ""}${
+          filename ? "/" + filename : ""
+        }`
+      )
     : null;
 
   if (ref) {
-      ref.getPrivateURL = getPrivateURLHack;
+    ref.getPrivateURL = getPrivateURLHack;
   }
   return ref;
 };
@@ -114,19 +124,12 @@ export const makeStorageRefFromRecord = (
  * @param {ListOptions} optionsObject
  * @returns {ListResult}
  */
-export const listReference = async (
-  storageReference,
-  optionsObject
-) => {
-  return storageReference.list(optionsObject)
-}
-
+export const listReference = async (storageReference, optionsObject) => {
+  return storageReference.list(optionsObject);
+};
 
 export class paginateListing {
-  constructor (
-    storageReference,
-    limit = PAGINATE_DEFAULT
-  ) {
+  constructor(storageReference, limit = PAGINATE_DEFAULT) {
     this.storageReference = storageReference;
     this.status = PAGINATE_INIT;
     this.limit = limit;
@@ -134,7 +137,7 @@ export class paginateListing {
       maxResults: limit,
       pageToken: null
     };
-  };
+  }
 
   /**
    * executes the query again to fetch the next set of records
@@ -147,17 +150,17 @@ export class paginateListing {
     this.status = PAGINATE_PENDING;
     const result = await listReference(this.storageReference, this.listOptions);
     this.status = PAGINATE_UPDATED;
-    if (!result.newPageToken) { // if no more results
-      this.status=PAGINATE_END;
-    };
+    if (!result.newPageToken) {
+      // if no more results
+      this.status = PAGINATE_END;
+    }
 
     this.listOptions = {
       ...this.listOptions,
       pageToken: result.newPageToken
     };
     return result.items;
-  };
-
+  }
 }
 
 /**
@@ -201,7 +204,9 @@ export const makeFileURLFromRecord = (record, key = null, filename = null) => {
  */
 export const makePrivateURLFromRecord = (record, key = null) => {
   //build the full path from the record structure, key name and key value
-  let fullPath = `${record.refPath}${(key ? "/" + key : "")}${(record[key] ? "/" + record[key] : "")}`;
+  let fullPath = `${record.refPath}${key ? "/" + key : ""}${
+    record[key] ? "/" + record[key] : ""
+  }`;
   //turn that path into a privateURL
   return makePrivateURLFromPath(fullPath);
 };
@@ -421,7 +426,7 @@ export const dataURLToBlob = (dataURL) => {
  * @static
  * @param {firebase} firebase
  */
- const FirebaseStorageAdminEmulator = (firebase) => {
+const FirebaseStorageAdminEmulator = (firebase) => {
   FirebaseBucket = firebase.storage().bucket();
 
   let firebaseStorage = {};
@@ -431,7 +436,7 @@ export const dataURLToBlob = (dataURL) => {
   };
 
   return firebaseStorage;
-}
+};
 
 let FirebaseBucket;
 
@@ -463,13 +468,13 @@ class adminRef {
      * @type {string}
      */
     this.fullPath = this.fileRef.name;
-    let split= this.fileRef.name.split("/");
+    let split = this.fileRef.name.split("/");
     /**
      * filename portion only
      * @static
      * @type {string}
      */
-    this.name = split[split.length-1];
+    this.name = split[split.length - 1];
     /**
      * name of containing bucket
      * @static
@@ -499,10 +504,10 @@ class adminRef {
       ...this.fileRef?.metadata,
       metadata: {
         ...this.fileRef?.metadata?.metadata,
-      firebaseStorageDownloadTokens: token
+        firebaseStorageDownloadTokens: token
       }
     };
-  };
+  }
 
   /**
    * @method child
@@ -513,7 +518,7 @@ class adminRef {
    */
   child(path) {
     return new adminRef(this.fullPath + "/" + path);
-  };
+  }
 
   /**
    * @async
@@ -524,7 +529,7 @@ class adminRef {
 
   async delete() {
     return this.fileRef.delete();
-  };
+  }
 
   /**
    * @async
@@ -540,7 +545,7 @@ class adminRef {
 
     url = url + `&token=${token}`;
     return url;
-  };
+  }
 
   /**
    * @async
@@ -549,7 +554,8 @@ class adminRef {
    * @returns {Promise<string>}
    */
   async getToken() {
-    let token = await this.fileRef.getMetadata().metadata?.firebaseStorageDownloadTokens;
+    let token = await this.fileRef.getMetadata().metadata
+      ?.firebaseStorageDownloadTokens;
     if (!token) {
       //if there isn't a token yet, set one
       token = uuidv4();
@@ -557,8 +563,8 @@ class adminRef {
         metadata: {
           firebaseStorageDownloadTokens: token
         }
-      })
-    };
+      });
+    }
     return token;
   }
 
@@ -571,7 +577,7 @@ class adminRef {
    */
   async getMetadata() {
     return this.fileRef.getMetadata();
-  };
+  }
 
   /**
    * puts a block of data (and optional metadata) into storage at
@@ -593,7 +599,7 @@ class adminRef {
       ref: this,
       metadata: localmetadata
     });
-  };
+  }
 
   /**
    * puts a string (possibly encoded data) into a storage file
@@ -618,13 +624,13 @@ class adminRef {
       downloadURL: url,
       metadata: localmetadata
     });
-  };
+  }
 
   toString() {
     return null;
-  };
+  }
 
   async updateMetadata(metadata = null) {
     return metadata && this.fileRef.setMetadata(metadata);
-  };
+  }
 }
