@@ -1,5 +1,10 @@
 import "firebase/firestore";
-import { PAGINATE_DEFAULT, PAGINATE_INIT, PAGINATE_PENDING, PAGINATE_UPDATED } from "./Common";
+import {
+  PAGINATE_DEFAULT,
+  PAGINATE_INIT,
+  PAGINATE_PENDING,
+  PAGINATE_UPDATED
+} from "./Common.js";
 
 /**
  * @module FirebaseFirestoreWrapper
@@ -62,10 +67,10 @@ function penultimate(array) {
  */
 export default async function FirebaseFirestore(firebase, config) {
   fdb = firebase.firestore();
-  fdb.settings({ignoreUndefinedProperties: true, merge: true});
+  fdb.settings({ ignoreUndefinedProperties: true, merge: true });
   //doesnt run firestore persistence in Admin/Node environment
   !config?.appId ||
-    await firebase.firestore().enablePersistence({ synchorizeTabs: true });
+    (await firebase.firestore().enablePersistence({ synchorizeTabs: true }));
   aFieldValue = firebase.firestore.FieldValue;
   aFieldPath = firebase.firestore.FieldPath;
 
@@ -84,7 +89,7 @@ let fdb, aFieldValue, aFieldPath;
  */
 let timestamp;
 
-export {timestamp};
+export { timestamp };
 
 /**
  * a fieldPath value to represent the document Id - WARNING
@@ -96,7 +101,7 @@ export {timestamp};
  * @category FieldPath
  */
 let documentId;
-export {documentId};
+export { documentId };
 
 /**
  * maximum concurrent writes
@@ -104,7 +109,7 @@ export {documentId};
  * @static
  */
 const MAX_CONCURRENCY = 5;
-export {MAX_CONCURRENCY};
+export { MAX_CONCURRENCY };
 
 //convenient fieldValue constants
 /**
@@ -116,7 +121,7 @@ export {MAX_CONCURRENCY};
  * @category FieldValue
  */
 let deleteFieldValue;
-export {deleteFieldValue};
+export { deleteFieldValue };
 
 /**
  * a sentinel value to set a field to a
@@ -127,7 +132,7 @@ export {deleteFieldValue};
  * @category FieldValue
  */
 let serverTimestampFieldValue;
-export {serverTimestampFieldValue};
+export { serverTimestampFieldValue };
 
 /**
  * ----------------------------------------------------------------------
@@ -634,16 +639,16 @@ export const fetchRecord = (tablePath, Id, refPath = null, batch = null) => {
   const docRef = db.collection(tablePath).doc(Id);
 
   const thePromise = batch
-  ? batch.get(docRef) // returned chained Batch object
-  : docRef.get();
+    ? batch.get(docRef) // returned chained Batch object
+    : docRef.get();
 
   return thePromise.then((docSnapshot) => {
-        if (docSnapshot.exists) {
-          return RecordFromSnapshot(docSnapshot);
-        } else {
-          return Promise.reject("no document");
-        }
-      });
+    if (docSnapshot.exists) {
+      return RecordFromSnapshot(docSnapshot);
+    } else {
+      return Promise.reject("no document");
+    }
+  });
 };
 
 /**
@@ -664,9 +669,7 @@ export const fetchRecordByRefPath = (docRefPath, batch = null) => {
 
   const thisRef = createRefFromPath(docRefPath);
 
-  const thePromise = batch
-  ? batch.get(thisRef)
-  : thisRef.get();
+  const thePromise = batch ? batch.get(thisRef) : thisRef.get();
 
   return thePromise.then((docSnapshot) => {
     if (docSnapshot.exists) {
@@ -768,9 +771,7 @@ export const deleteRecord = (table, record, refPath = null, batch = null) => {
 export const deleteRecordByRefPath = (docRefPath, batch = null) => {
   const thisRef = createRefFromPath(docRefPath);
 
-  return batch
-    ? batch.delete(thisRef)
-    : thisRef.delete();
+  return batch ? batch.delete(thisRef) : thisRef.delete();
 };
 
 /**
@@ -1195,8 +1196,8 @@ export class PaginateFetch {
           this.snapshot = QuerySnapshot;
         }
         return this.snapshot
-        ? Promise.resolve(RecordsFromSnapshot(this.snapshot))
-        : Promise.resolve(null);
+          ? Promise.resolve(RecordsFromSnapshot(this.snapshot))
+          : Promise.resolve(null);
       });
   }
 
@@ -1819,9 +1820,9 @@ export const ownerRefPath = (record) => {
 export const ownerByChild = (record) => {
   return record?.refPath
     ? {
-      Id: `${ownerId(record)}`,
-      refPath: `${ownerType(record)}/${ownerId(record)}`
-    }
+        Id: `${ownerId(record)}`,
+        refPath: `${ownerType(record)}/${ownerId(record)}`
+      }
     : undefined;
 };
 
@@ -2289,4 +2290,4 @@ export const localBatchReturn = (incomingBatch, internalBatch) => {
   return incomingBatch ? Promise.resolve(null) : closeWriteBatch(internalBatch);
 };
 
-export * from "./Common";
+export * from "./Common.js";
