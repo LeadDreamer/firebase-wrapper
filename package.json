@@ -1,10 +1,10 @@
 {
-  "name": "@leaddreamer/firebase-wrapper",
+  "name": "firebase-wrapper-beta",
   "engines": {
     "node": "14"
   },
-  "version": "1.1.0",
-  "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another.",
+  "version": "1.1.1",
+  "description": "",
   "repository": "LeadDreamer/firebase-wrapper",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
   "bugs": {
@@ -18,7 +18,13 @@
     "url": "http://dreamsandlogic.com"
   },
   "type": "module",
-  "files": ["*.js", "**/*.js", "**/dist/*.js", "*.md", "/*/*.md"],
+  "files": [
+    "*.js",
+    "**/*.js",
+    "**/dist/*.js",
+    "*.md",
+    "/*/*.md"
+  ],
   "main": "index.js",
   "exports": {
     "import": {
@@ -50,7 +56,7 @@
   "scripts": {
     "transpile": "babel *.js --out-dir ./dist",
     "build": "$npm_execpath run transpile",
-    "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
+    "rebuild": "$npm_execpath version prerelease --git-tag-version --preid=beta && $npm_execpath run docs && $npm_execpath run build",
     "prepublishOnly": "$npm_execpath run build",
     "make_docs": "jsdoc2md -c jsdoc.conf.json --template README.hbs --files *.js ./*/*.js > README.md",
     "docs": "$npm_execpath run make_docs",
@@ -64,7 +70,7 @@
     "FSW_docs": "cd FirebaseStorageWrapper && $npm_execpath run docs && cd ..",
     "rebuild_all": "$npm_execpath run FAW && $npm_execpath run FCFW && $npm_execpath run FFW && $npm_execpath run FSW && $npm_execpath run rebuild",
     "docs_all": "$npm_execpath run FAW_docs && $npm_execpath run FCFW_docs && $npm_execpath run FFW_docs && $npm_execpath run FSW_docs && $npm_execpath run docs",
-    "publish_package": "$npm_execpath publish",
+    "publish_package": "$npm_execpath publish --tag=beta",
     "publish_dry": "$npm_execpath publish --dry-run"
   },
   "publishConfig": {
@@ -94,23 +100,5 @@
     "jsdoc-to-markdown": "7.0.1",
     "rimraf": "^3.0.2"
   },
-  "keywords": [
-    "firebase",
-    "firestore",
-    "firebase firestore",
-    "auth",
-    "firebase auth",
-    "functions",
-    "firebase functions",
-    "cloud functions",
-    "firebase cloud functions",
-    "Cloud Functions",
-    "Firebase Cloud Functions",
-    "CloudFunctions",
-    "Firebase CloudFunctions",
-    "storage",
-    "firebase storage",
-    "firebase wrapper",
-    "firestore wrapper"
-  ]
+  "keywords": []
 }

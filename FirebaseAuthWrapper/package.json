@@ -34,7 +34,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "transpile": "babel --root-mode upward *.js --out-dir ../dist",
+    "transpile": "babel --root-mode upward *.js --out-dir ./dist",
     "build": "$npm_execpath run transpile",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
     "prepublishOnly": "$npm_execpath run transpile",
