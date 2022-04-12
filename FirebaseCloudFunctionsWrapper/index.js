@@ -39,6 +39,7 @@ let functions;
  * ```
  */
 export default function FirebaseCloudFunctions(firebase, config) {
+  config = config.projectId ? config : JSON.parse(config);
   if (config?.appId) functions = firebase.functions();
 }
 
@@ -71,8 +72,8 @@ export const CloudFunctions = (name) => {
  */
 export const treeFromParams = (Params) => {
   let tree = new Map();
-  Object.keys(Params).forEach(paramName => {
+  Object.keys(Params).forEach((paramName) => {
     tree.set(paramName, Params[paramName]);
-  })
+  });
   return tree;
 };

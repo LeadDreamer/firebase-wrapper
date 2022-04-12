@@ -62,6 +62,7 @@ const FirebaseWrapper = async (firebase, config) => {
   try {
     await firebase.app();
   } catch (err) {
+    config = config.projectId ? config : JSON.parse(config);
     try {
       config?.appId
         ? await firebase.initializeApp(config)

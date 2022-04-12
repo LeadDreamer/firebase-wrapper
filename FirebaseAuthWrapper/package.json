@@ -3,7 +3,7 @@
   "engines": {
     "node": "14"
   },
-  "version": "1.1.0",
+  "version": "1.1.4",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another.",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -18,7 +18,11 @@
     "url": "http://dreamsandlogic.com"
   },
   "type": "module",
-  "files": ["*.js", "**/dist/*.js", "*.md"],
+  "files": [
+    "*.js",
+    "**/dist/*.js",
+    "*.md"
+  ],
   "main": "index.js",
   "exports": {
     "import": {
@@ -27,14 +31,13 @@
       "./FirebaseAuthWrapper/*.js": "./*.js"
     },
     "require": {
-      ".": "./dist/index.js",
-      "./FirebaseAuthWrapper": "./dist/index.js",
-      "./FirebaseAuthWrapper/*.js": "./dist/*.js"
-    },
-    "./package.json": "./package.json"
+      ".": "../dist/FirebaseAuthWrapper/index.js",
+      "./FirebaseAuthWrapper": "../dist/FirebaseAuthWrapper/index.js",
+      "./FirebaseAuthWrapper/*.js": "../dist/FirebaseAuthWrapper/*.js"
+    }
   },
   "scripts": {
-    "transpile": "babel --root-mode upward *.js --out-dir ./dist",
+    "transpile": "babel --root-mode upward *.js --out-dir ../dist/FirebaseAuthWrapper",
     "build": "$npm_execpath run transpile",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
     "prepublishOnly": "$npm_execpath run transpile",

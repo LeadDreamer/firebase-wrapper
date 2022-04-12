@@ -22,7 +22,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.collectRecords(tablePath, refPath)](#module_FirebaseFirestoreWrapper.collectRecords) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
         * [.collectRecordsByFilter(tablePath, refPath, [filterArray], [sortArray], limit)](#module_FirebaseFirestoreWrapper.collectRecordsByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
         * [.collectRecordsInGroup(tableName)](#module_FirebaseFirestoreWrapper.collectRecordsInGroup) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-        * [.collectRecordsInGroupByFilter(tableName, [filterArray])](#module_FirebaseFirestoreWrapper.collectRecordsInGroupByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+        * [.collectRecordsInGroupByFilter(tableName, [filterArray], [sortArray], limit)](#module_FirebaseFirestoreWrapper.collectRecordsInGroupByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
         * [.fetchRecord(tablePath, Id, refPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecord) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
         * [.fetchRecordByRefPath(docRefPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
         * [.fetchRecordByFilter(table, [filterArray], refPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecordByFilter) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
@@ -228,7 +228,7 @@ query for a SET of records from a COLLECTIONGROUP - allcollections of a similar
 
 <a name="module_FirebaseFirestoreWrapper.collectRecordsInGroupByFilter"></a>
 
-### FirebaseFirestoreWrapper.collectRecordsInGroupByFilter(tableName, [filterArray]) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+### FirebaseFirestoreWrapper.collectRecordsInGroupByFilter(tableName, [filterArray], [sortArray], limit) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
 queries for Records from a CollectionGroup, filtered bythe passed array of filterObjects
 
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
@@ -236,7 +236,9 @@ queries for Records from a CollectionGroup, filtered bythe passed array of filt
 | Param | Type | Description |
 | --- | --- | --- |
 | tableName | <code>string</code> | string describing the Name of the collectiongroup |
-| [filterArray] | <code>filterObject</code> | array of objects describing filter operations |
+| [filterArray] | <code>filterObject</code> | an array of filterObjects The array is assumed to be sorted in the correct order - i.e. filterArray[0] is added first; filterArray[length-1] last returns data as an array of objects (not dissimilar to Redux State objects) with both the documentID and documentReference added as fields. |
+| [sortArray] | <code>sortObject</code> | a 2xn array of sort (i.e. "orderBy") conditions |
+| limit | <code>number</code> | limit result to this number (if at all) |
 
 <a name="module_FirebaseFirestoreWrapper.fetchRecord"></a>
 

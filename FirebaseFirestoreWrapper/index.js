@@ -69,6 +69,7 @@ export default async function FirebaseFirestore(firebase, config) {
   fdb = firebase.firestore();
   fdb.settings({ ignoreUndefinedProperties: true, merge: true });
   //doesnt run firestore persistence in Admin/Node environment
+  config = config.projectId ? config : JSON.parse(config);
   !config?.appId ||
     (await firebase.firestore().enablePersistence({ synchorizeTabs: true }));
   aFieldValue = firebase.firestore.FieldValue;
@@ -581,13 +582,18 @@ export const collectRecordsInGroup = (tableName) => {
 /**
  * ----------------------------------------------------------------------
  * @async
- * @function collectRecordsInGroupByFilter
+ * @function
  * @static
  * @description queries for Records from a CollectionGroup, filtered by
  * the passed array of filterObjects
  * @param {!string} tableName string describing the Name of the collectiongroup
- * @param {?filterObject} [filterArray] array of objects describing filter
- * operations
+ * @param {?filterObject} [filterArray] an array of filterObjects
+ * The array is assumed to be sorted in the correct order -
+ * i.e. filterArray[0] is added first; filterArray[length-1] last
+ * returns data as an array of objects (not dissimilar to Redux State objects)
+ * with both the documentID and documentReference added as fields.
+ * @param {?sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
+ * @param {?number} limit limit result to this number (if at all)
  * @returns {Promise<Array<Record>>}
  **/
 export const collectRecordsInGroupByFilter = (
