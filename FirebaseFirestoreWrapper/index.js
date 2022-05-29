@@ -229,9 +229,11 @@ export const RecordFromSnapshot = (DocumentSnapshot) => {
  * @returns {RecordArray}
  */
 export const RecordsFromSnapshot = (QuerySnapshot) => {
-  return QuerySnapshot.docs.map((docSnap) => {
-    return RecordFromSnapshot(docSnap);
-  });
+  return QuerySnapshot.empty
+    ? []
+    : QuerySnapshot.docs.map((docSnap) => {
+        return RecordFromSnapshot(docSnap);
+      });
 };
 
 /**
@@ -494,9 +496,7 @@ export const collectRecords = (tablePath, refPath = null) => {
     .get()
     .then((querySnapshot) => {
       // returns a promise
-      return !querySnapshot.empty
-        ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
-        : Promise.reject("noDocuments:collectRecords:" + tablePath);
+      return RecordsFromSnapshot(querySnapshot);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecords:" + tablePath);
@@ -539,9 +539,7 @@ export const collectRecordsByFilter = (
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
       // returns a promise
-      return !querySnapshot.empty
-        ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
-        : Promise.reject("noDocuments:collectRecordsByFilter:" + tablePath);
+      return RecordsFromSnapshot(querySnapshot);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsByFilter");
@@ -569,10 +567,7 @@ export const collectRecordsInGroup = (tableName) => {
     .get()
     .then((querySnapshot) => {
       // returns a promise
-      if (!querySnapshot.empty)
-        return Promise.resolve(RecordsFromSnapshot(querySnapshot));
-      else
-        return Promise.reject("noDocuments:collectRecordsInGroup:" + tableName);
+      return RecordsFromSnapshot(querySnapshot);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsInGroup:" + tableName);
@@ -614,11 +609,7 @@ export const collectRecordsInGroupByFilter = (
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
       // returns a promise
-      return !querySnapshot.empty
-        ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
-        : Promise.reject(
-            "noDocuments:collectRecordsInGroupByFilter:" + tableName
-          );
+      return RecordsFromSnapshot(querySnapshot);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsInGroupByFilter");
@@ -1081,10 +1072,7 @@ const ListenRecordsCommon = (reference, dataCallback, errCallback) => {
   //returns an unsubscribe function
   return reference.onSnapshot(
     (querySnapshot) => {
-      if (!querySnapshot.empty) {
-        let dataArray = RecordsFromSnapshot(querySnapshot);
-        dataCallback(dataArray);
-      } else errCallback("noDocuments:ListenRecordsCommon");
+      dataCallback(RecordsFromSnapshot(querySnapshot));
     },
     (err) => {
       errCallback(`${err} ${reference.path} setup:ListenRecordsCommon`);
@@ -1175,6 +1163,7 @@ export class PaginateFetch {
      * @type {PagingStatus}
      */
     this.status = PAGINATE_INIT;
+    this.empty = true;
   }
 
   /**
@@ -1195,15 +1184,10 @@ export class PaginateFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone beyond start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          //return Promise.resolve(QuerySnapshot);
-          this.snapshot = QuerySnapshot;
-        }
-        return this.snapshot
-          ? Promise.resolve(RecordsFromSnapshot(this.snapshot))
-          : Promise.resolve(null);
+        //update document set (possibly empty), and execute callback
+        //return Promise.resolve(QuerySnapshot);
+        this.snapshot = QuerySnapshot;
+        return RecordsFromSnapshot(this.snapshot);
       });
   }
 
@@ -1230,7 +1214,7 @@ export class PaginateFetch {
           //then update document set, and execute callback
           this.snapshot = QuerySnapshot;
         }
-        return Promise.resolve(RecordsFromSnapshot(this.snapshot));
+        return RecordsFromSnapshot(this.snapshot);
       });
   }
 }
@@ -1305,7 +1289,7 @@ export class PaginateGroupFetch {
           //return Promise.resolve(QuerySnapshot);
           this.snapshot = QuerySnapshot;
         }
-        return Promise.resolve(RecordsFromSnapshot(this.snapshot));
+        return RecordsFromSnapshot(this.snapshot);
       });
   }
 
@@ -1332,7 +1316,7 @@ export class PaginateGroupFetch {
           //then update document set, and execute callback
           this.snapshot = QuerySnapshot;
         }
-        return Promise.resolve(RecordsFromSnapshot(this.snapshot));
+        return RecordsFromSnapshot(this.snapshot);
       });
   }
 }
@@ -1832,6 +1816,14 @@ export const ownerByChild = (record) => {
     : undefined;
 };
 
+/**
+ * @static
+ * @function
+ * @category Tree Slice
+ * @param {!string} ownerId - Document ID of owner account
+ * @param {!string} ownerType - "type" (top-level collection) of owner account
+ * @returns {Record} reference to the parent (root) record
+ */
 export const ownerByOwnerType = (ownerId, ownerType) => {
   return {
     Id: ownerId,
@@ -1900,7 +1892,7 @@ export const typedWrite = (data, parent, type, batch = null) => {
   return writeRecord(
     type, //type of sub-collection...
     data,
-    parent?.refPath, //... under tour reference
+    parent?.refPath, //... under parent path reference
     batch
   );
 };
