@@ -315,24 +315,24 @@ originally conceived to port from one database to another.
   creates and returns a new adminRef object from existin path(path)](#module_FirebaseStorageAdminEmulator..child
   creates and returns a new adminRef object from existin path) ⇒ <code>StorageRefEmulation</code>
   _ [~delete
-  Deletes the referenced storage item()](#module_FirebaseStorageAdminEmulator..delete
+  Deletes the referenced storage item()](#module\*FirebaseStorageAdminEmulator..delete
   Deletes the referenced storage item) ⇒ <code>Promise</code>
-  _ [~getDownloadURL
-  Generates a long-lived (essentially permanent until revoked)
-  Public-Access URL for a storage item in FIREBASE (not Cloud Storage)
-  format()](#module_FirebaseStorageAdminEmulator..getDownloadURL
-  Generates a long-lived (essentially permanent until revoked)
-  Public-Access URL for a storage item in FIREBASE (not Cloud Storage)
-  format) ⇒ <code>string</code>
-  _ [~getToken
-  Fetches (or creates as needed) a unique token for a storage object()](#module_FirebaseStorageAdminEmulator..getToken
-  Fetches (or creates as needed) a unique token for a storage object) ⇒ <code>Promise.&lt;string&gt;</code>
-  _ [~getMetadata
-  Fetches the FileMetadata for the storage object. Custom/Client metadata
-  is located in FileMetadata.metadata()](#module_FirebaseStorageAdminEmulator..getMetadata
-  Fetches the FileMetadata for the storage object. Custom/Client metadata
-  is located in FileMetadata.metadata) ⇒ <code>FileMetadata</code>
-  _ [~put(data, metadata)](#module_FirebaseStorageAdminEmulator..put) ⇒ <code>Promise.&lt;object&gt;</code> \* [~putString(dataString, stringFormat, metadata)](#module_FirebaseStorageAdminEmulator..putString) ⇒ <code>Promise.&lt;object&gt;</code>
+  - [~getDownloadURL
+    Generates a long-lived (essentially permanent until revoked)
+    Public-Access URL for a storage item in FIREBASE (not Cloud Storage)
+    format()](#module\*FirebaseStorageAdminEmulator..getDownloadURL
+    Generates a long-lived (essentially permanent until revoked)
+    Public-Access URL for a storage item in FIREBASE (not Cloud Storage)
+    format) ⇒ <code>string</code>
+  - [~getToken
+    Fetches (or creates as needed) a unique token for a storage object()](#module\*FirebaseStorageAdminEmulator..getToken
+    Fetches (or creates as needed) a unique token for a storage object) ⇒ <code>Promise.&lt;string&gt;</code>
+  - [~getMetadata
+    Fetches the FileMetadata for the storage object. Custom/Client metadata
+    is located in FileMetadata.metadata()](#module\*FirebaseStorageAdminEmulator..getMetadata
+    Fetches the FileMetadata for the storage object. Custom/Client metadata
+    is located in FileMetadata.metadata) ⇒ <code>FileMetadata</code>
+  - [~put(data, metadata)](#module_FirebaseStorageAdminEmulator..put) ⇒ <code>Promise.&lt;object&gt;</code> \* [~putString(dataString, stringFormat, metadata)](#module_FirebaseStorageAdminEmulator..putString) ⇒ <code>Promise.&lt;object&gt;</code>
 
 <a name="module_FirebaseStorageAdminEmulator.FirebaseStorageAdminEmulator"></a>
 
@@ -510,6 +510,12 @@ described by the provided reference.
 | dataString   | <code>string</code>       |
 | stringFormat | <code>string</code>       |
 | metadata     | <code>FileMetadata</code> |
+
+---
+
+&copy; 2020-2021 Tracy Hall
+string</code> |
+| metadata | <code>FileMetadata</code> |
 
 ---
 

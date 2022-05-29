@@ -1434,3 +1434,19 @@ class for a Firestore timestamp processor
 ---
 
 &copy; 2020-2021 Tracy Hall
+ener |
+
+<a name="module_FirebaseFirestoreWrapper..timestamp"></a>
+
+### FirebaseFirestoreWrapper~timestamp
+
+**Kind**: inner class of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)
+<a name="new_module_FirebaseFirestoreWrapper..timestamp_new"></a>
+
+#### new timestamp()
+
+class for a Firestore timestamp processor
+
+---
+
+&copy; 2020-2021 Tracy Hall

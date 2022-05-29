@@ -401,3 +401,12 @@ See https://firebase.google.com/docs/reference/js/firebase.User
 ---
 
 &copy; 2020-2021 Tracy Hall
+
+| Param | Type              |
+| ----- | ----------------- |
+| user  | <code>User</code> |
+
+---
+
+&copy; 2020-2021 Tracy Hall
+ll

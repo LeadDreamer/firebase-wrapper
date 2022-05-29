@@ -1,9 +1,9 @@
 {
-  "name": "firebase-wrapper-12",
+  "name": "@leaddreamer/firebase-wrapper",
   "engines": {
     "node": "14"
   },
-  "version": "1.2.1-beta.2",
+  "version": "1.2.1-beta.3",
   "description": "",
   "repository": "LeadDreamer/firebase-wrapper",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -17,13 +17,7 @@
     "email": "tracy@dreamsandlogic.com",
     "url": "http://dreamsandlogic.com"
   },
-  "files": [
-    "*.js",
-    "**/*.js",
-    "**/dist/*.js",
-    "*.md",
-    "/*/*.md"
-  ],
+  "files": ["*.js", "**/*.js", "**/dist/*.js", "*.md", "/*/*.md"],
   "main": "./index.js",
   "exports": {
     ".": {
