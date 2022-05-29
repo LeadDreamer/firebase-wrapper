@@ -1184,8 +1184,6 @@ export class PaginateFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //update document set (possibly empty), and execute callback
-        //return Promise.resolve(QuerySnapshot);
         this.snapshot = QuerySnapshot;
         return RecordsFromSnapshot(this.snapshot);
       });
@@ -1209,11 +1207,7 @@ export class PaginateFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          this.snapshot = QuerySnapshot;
-        }
+        this.snapshot = QuerySnapshot;
         return RecordsFromSnapshot(this.snapshot);
       });
   }
@@ -1283,12 +1277,7 @@ export class PaginateGroupFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone beyond start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          //return Promise.resolve(QuerySnapshot);
-          this.snapshot = QuerySnapshot;
-        }
+        this.snapshot = QuerySnapshot;
         return RecordsFromSnapshot(this.snapshot);
       });
   }
@@ -1311,11 +1300,7 @@ export class PaginateGroupFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back before start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          this.snapshot = QuerySnapshot;
-        }
+        this.snapshot = QuerySnapshot;
         return RecordsFromSnapshot(this.snapshot);
       });
   }
@@ -1448,11 +1433,7 @@ export class PaginatedListener {
     this.unsubscriber = runQuery.limit(Number(this.limit)).onSnapshot(
       (QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          this.snapshot = QuerySnapshot;
-        }
+        this.snapshot = QuerySnapshot;
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
@@ -1485,11 +1466,7 @@ export class PaginatedListener {
       (QuerySnapshot) => {
         //acknowledge complete
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          this.snapshot = QuerySnapshot;
-        }
+        this.snapshot = QuerySnapshot;
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
@@ -1519,11 +1496,7 @@ export class PaginatedListener {
     this.unsubscriber = runQuery.limit(Number(this.limit)).onSnapshot(
       (QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          this.snapshot = QuerySnapshot;
-        }
+        this.snapshot = QuerySnapshot;
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
@@ -1554,7 +1527,6 @@ export class PaginatedListener {
     this.unsubscriber = runQuery.limit(Number(this.limit)).onSnapshot(
       (QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
         this.snapshot = QuerySnapshot;
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
