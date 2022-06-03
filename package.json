@@ -3,7 +3,7 @@
   "engines": {
     "node": "14"
   },
-  "version": "1.2.1-beta.3",
+  "version": "1.3.0",
   "description": "",
   "repository": "LeadDreamer/firebase-wrapper",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -95,6 +95,7 @@
     "transpile": "babel *.js --out-dir ./dist",
     "build": "$npm_execpath run transpile",
     "rebuild": "$npm_execpath version prerelease --git-tag-version --preid=beta && $npm_execpath run docs && $npm_execpath run build",
+    "rebuild_release": "$npm_execpath version minor --git-tag-version --preid=beta && $npm_execpath run docs && $npm_execpath run build",
     "prepublishOnly": "$npm_execpath run build",
     "make_docs": "jsdoc2md -c jsdoc.conf.json --template README.hbs --files *.js ./*/*.js > README.md",
     "docs": "$npm_execpath run make_docs",
@@ -108,7 +109,8 @@
     "FSW_docs": "cd FirebaseStorageWrapper && $npm_execpath run docs && cd ..",
     "rebuild_all": "$npm_execpath run FAW && $npm_execpath run FCFW && $npm_execpath run FFW && $npm_execpath run FSW && $npm_execpath run rebuild",
     "docs_all": "$npm_execpath run FAW_docs && $npm_execpath run FCFW_docs && $npm_execpath run FFW_docs && $npm_execpath run FSW_docs && $npm_execpath run docs",
-    "publish_package": "$npm_execpath publish --tag=beta",
+    "publish_beta": "$npm_execpath publish --tag=beta",
+    "publish_package": "$npm_execpath publish",
     "publish_dry": "$npm_execpath publish --dry-run"
   },
   "publishConfig": {

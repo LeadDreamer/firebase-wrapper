@@ -158,6 +158,29 @@ export const incrementFieldValue = (n) => {
 
 /**
  * ----------------------------------------------------------------------
+ * return a sentinel to decrment/decrement a field
+ * NOT REALLY A FIREBASE FUNCTION
+ * Fire base has only increment; we implement this for legibility
+ * @function
+ * @static
+ * @category FieldValue
+ * @param n If either the operand or the current field value uses
+ *    floating point precision, all arithmetic follows IEEE 754
+ *    semantics. If both values are integers, values outside of
+ *    JavaScript's safe number range (Number.MIN_SAFE_INTEGER to
+ *    Number.MAX_SAFE_INTEGER) are also subject to precision loss.
+ *    Furthermore, once processed by the Firestore backend, all integer
+ *    operations are capped between -2^63 and 2^63-1.
+ *     If the current field value is not of type number, or if the field
+ *     does not yet exist, the transformation sets the field to the given value.
+ * @returns a sentinel value
+ **********************************************************************/
+export const decrementFieldValue = (n) => {
+  return aFieldValue.increment(-n);
+};
+
+/**
+ * ----------------------------------------------------------------------
  * returns a sentinel to remove elements from array field
  * @function
  * @static
