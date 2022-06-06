@@ -44,13 +44,14 @@ import {
  * })(config);
  * ```
  */
-export default async function FirebaseStorageWrapper(firebase, config) {
-  FirebaseStorage = firebase.storage();
-  if (!config?.appId) {
-    //FirebaseStorageAdminEmulator = await import("./adminStorage");
-    FirebaseStorage = FirebaseStorageAdminEmulator(firebase);
-  }
+let bucket_name;
 
+export default async function FirebaseStorageWrapper(firebase, config) {
+  FirebaseStorage = config?.appId
+    ? firebase.storage()
+    : FirebaseStorageAdminEmulator(firebase);
+
+  config = config.projectId ? config : JSON.parse(config);
   bucket_name = config.storageBucket;
   return;
 }
@@ -58,7 +59,6 @@ export default async function FirebaseStorageWrapper(firebase, config) {
 let FirebaseStorage;
 const bucket_domain = "https://firebasestorage.googleapis.com/v0/b/";
 const bucket_head = "/o/";
-let bucket_name;
 
 //URL = `${bucket_domain}${bucket_name}${bucket_head}${fullPath}?alt=${filetype_parameter}`;
 
@@ -243,7 +243,7 @@ export const makePrivateURLFromReference = (reference) => {
  * the contents.
  * Note this simply makes the URL - it does not carry out *any* operations
  * @static
- * @function makePrivateURLFromPath
+ * @function
  * @param {!string} fullPath required path to the stored item.
  * @returns {string} constructed Security-Rule-compliant URL
  */

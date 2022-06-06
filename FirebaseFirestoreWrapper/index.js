@@ -69,6 +69,7 @@ export default async function FirebaseFirestore(firebase, config) {
   fdb = firebase.firestore();
   fdb.settings({ ignoreUndefinedProperties: true, merge: true });
   //doesnt run firestore persistence in Admin/Node environment
+  config = config.projectId ? config : JSON.parse(config);
   !config?.appId ||
     (await firebase.firestore().enablePersistence({ synchorizeTabs: true }));
   aFieldValue = firebase.firestore.FieldValue;
@@ -157,6 +158,29 @@ export const incrementFieldValue = (n) => {
 
 /**
  * ----------------------------------------------------------------------
+ * return a sentinel to decrment/decrement a field
+ * NOT REALLY A FIREBASE FUNCTION
+ * Fire base has only increment; we implement this for legibility
+ * @function
+ * @static
+ * @category FieldValue
+ * @param n If either the operand or the current field value uses
+ *    floating point precision, all arithmetic follows IEEE 754
+ *    semantics. If both values are integers, values outside of
+ *    JavaScript's safe number range (Number.MIN_SAFE_INTEGER to
+ *    Number.MAX_SAFE_INTEGER) are also subject to precision loss.
+ *    Furthermore, once processed by the Firestore backend, all integer
+ *    operations are capped between -2^63 and 2^63-1.
+ *     If the current field value is not of type number, or if the field
+ *     does not yet exist, the transformation sets the field to the given value.
+ * @returns a sentinel value
+ **********************************************************************/
+export const decrementFieldValue = (n) => {
+  return aFieldValue.increment(-n);
+};
+
+/**
+ * ----------------------------------------------------------------------
  * returns a sentinel to remove elements from array field
  * @function
  * @static
@@ -228,9 +252,11 @@ export const RecordFromSnapshot = (DocumentSnapshot) => {
  * @returns {RecordArray}
  */
 export const RecordsFromSnapshot = (QuerySnapshot) => {
-  return QuerySnapshot.docs.map((docSnap) => {
-    return RecordFromSnapshot(docSnap);
-  });
+  return QuerySnapshot.empty
+    ? []
+    : QuerySnapshot.docs.map((docSnap) => {
+        return RecordFromSnapshot(docSnap);
+      });
 };
 
 /**
@@ -493,9 +519,7 @@ export const collectRecords = (tablePath, refPath = null) => {
     .get()
     .then((querySnapshot) => {
       // returns a promise
-      return !querySnapshot.empty
-        ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
-        : Promise.reject("noDocuments:collectRecords:" + tablePath);
+      return RecordsFromSnapshot(querySnapshot);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecords:" + tablePath);
@@ -538,9 +562,7 @@ export const collectRecordsByFilter = (
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
       // returns a promise
-      return !querySnapshot.empty
-        ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
-        : Promise.reject("noDocuments:collectRecordsByFilter:" + tablePath);
+      return RecordsFromSnapshot(querySnapshot);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsByFilter");
@@ -568,10 +590,7 @@ export const collectRecordsInGroup = (tableName) => {
     .get()
     .then((querySnapshot) => {
       // returns a promise
-      if (!querySnapshot.empty)
-        return Promise.resolve(RecordsFromSnapshot(querySnapshot));
-      else
-        return Promise.reject("noDocuments:collectRecordsInGroup:" + tableName);
+      return RecordsFromSnapshot(querySnapshot);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsInGroup:" + tableName);
@@ -581,13 +600,18 @@ export const collectRecordsInGroup = (tableName) => {
 /**
  * ----------------------------------------------------------------------
  * @async
- * @function collectRecordsInGroupByFilter
+ * @function
  * @static
  * @description queries for Records from a CollectionGroup, filtered by
  * the passed array of filterObjects
  * @param {!string} tableName string describing the Name of the collectiongroup
- * @param {?filterObject} [filterArray] array of objects describing filter
- * operations
+ * @param {?filterObject} [filterArray] an array of filterObjects
+ * The array is assumed to be sorted in the correct order -
+ * i.e. filterArray[0] is added first; filterArray[length-1] last
+ * returns data as an array of objects (not dissimilar to Redux State objects)
+ * with both the documentID and documentReference added as fields.
+ * @param {?sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
+ * @param {?number} limit limit result to this number (if at all)
  * @returns {Promise<Array<Record>>}
  **/
 export const collectRecordsInGroupByFilter = (
@@ -608,11 +632,7 @@ export const collectRecordsInGroupByFilter = (
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
       // returns a promise
-      return !querySnapshot.empty
-        ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
-        : Promise.reject(
-            "noDocuments:collectRecordsInGroupByFilter:" + tableName
-          );
+      return RecordsFromSnapshot(querySnapshot);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsInGroupByFilter");
@@ -1075,10 +1095,7 @@ const ListenRecordsCommon = (reference, dataCallback, errCallback) => {
   //returns an unsubscribe function
   return reference.onSnapshot(
     (querySnapshot) => {
-      if (!querySnapshot.empty) {
-        let dataArray = RecordsFromSnapshot(querySnapshot);
-        dataCallback(dataArray);
-      } else errCallback("noDocuments:ListenRecordsCommon");
+      dataCallback(RecordsFromSnapshot(querySnapshot));
     },
     (err) => {
       errCallback(`${err} ${reference.path} setup:ListenRecordsCommon`);
@@ -1169,6 +1186,7 @@ export class PaginateFetch {
      * @type {PagingStatus}
      */
     this.status = PAGINATE_INIT;
+    this.empty = true;
   }
 
   /**
@@ -1189,15 +1207,8 @@ export class PaginateFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone beyond start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          //return Promise.resolve(QuerySnapshot);
-          this.snapshot = QuerySnapshot;
-        }
-        return this.snapshot
-          ? Promise.resolve(RecordsFromSnapshot(this.snapshot))
-          : Promise.resolve(null);
+        this.snapshot = QuerySnapshot;
+        return RecordsFromSnapshot(this.snapshot);
       });
   }
 
@@ -1219,12 +1230,8 @@ export class PaginateFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          this.snapshot = QuerySnapshot;
-        }
-        return Promise.resolve(RecordsFromSnapshot(this.snapshot));
+        this.snapshot = QuerySnapshot;
+        return RecordsFromSnapshot(this.snapshot);
       });
   }
 }
@@ -1293,13 +1300,8 @@ export class PaginateGroupFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone beyond start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          //return Promise.resolve(QuerySnapshot);
-          this.snapshot = QuerySnapshot;
-        }
-        return Promise.resolve(RecordsFromSnapshot(this.snapshot));
+        this.snapshot = QuerySnapshot;
+        return RecordsFromSnapshot(this.snapshot);
       });
   }
 
@@ -1321,12 +1323,8 @@ export class PaginateGroupFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back before start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          this.snapshot = QuerySnapshot;
-        }
-        return Promise.resolve(RecordsFromSnapshot(this.snapshot));
+        this.snapshot = QuerySnapshot;
+        return RecordsFromSnapshot(this.snapshot);
       });
   }
 }
@@ -1458,11 +1456,7 @@ export class PaginatedListener {
     this.unsubscriber = runQuery.limit(Number(this.limit)).onSnapshot(
       (QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          this.snapshot = QuerySnapshot;
-        }
+        this.snapshot = QuerySnapshot;
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
@@ -1495,11 +1489,7 @@ export class PaginatedListener {
       (QuerySnapshot) => {
         //acknowledge complete
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          this.snapshot = QuerySnapshot;
-        }
+        this.snapshot = QuerySnapshot;
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
@@ -1529,11 +1519,7 @@ export class PaginatedListener {
     this.unsubscriber = runQuery.limit(Number(this.limit)).onSnapshot(
       (QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          this.snapshot = QuerySnapshot;
-        }
+        this.snapshot = QuerySnapshot;
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
@@ -1564,7 +1550,6 @@ export class PaginatedListener {
     this.unsubscriber = runQuery.limit(Number(this.limit)).onSnapshot(
       (QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
         this.snapshot = QuerySnapshot;
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
@@ -1826,6 +1811,14 @@ export const ownerByChild = (record) => {
     : undefined;
 };
 
+/**
+ * @static
+ * @function
+ * @category Tree Slice
+ * @param {!string} ownerId - Document ID of owner account
+ * @param {!string} ownerType - "type" (top-level collection) of owner account
+ * @returns {Record} reference to the parent (root) record
+ */
 export const ownerByOwnerType = (ownerId, ownerType) => {
   return {
     Id: ownerId,
@@ -1894,7 +1887,7 @@ export const typedWrite = (data, parent, type, batch = null) => {
   return writeRecord(
     type, //type of sub-collection...
     data,
-    parent?.refPath, //... under tour reference
+    parent?.refPath, //... under parent path reference
     batch
   );
 };

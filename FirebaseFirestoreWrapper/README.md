@@ -22,7 +22,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.collectRecords(tablePath, refPath)](#module_FirebaseFirestoreWrapper.collectRecords) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
         * [.collectRecordsByFilter(tablePath, refPath, [filterArray], [sortArray], limit)](#module_FirebaseFirestoreWrapper.collectRecordsByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
         * [.collectRecordsInGroup(tableName)](#module_FirebaseFirestoreWrapper.collectRecordsInGroup) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-        * [.collectRecordsInGroupByFilter(tableName, [filterArray])](#module_FirebaseFirestoreWrapper.collectRecordsInGroupByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+        * [.collectRecordsInGroupByFilter(tableName, [filterArray], [sortArray], limit)](#module_FirebaseFirestoreWrapper.collectRecordsInGroupByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
         * [.fetchRecord(tablePath, Id, refPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecord) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
         * [.fetchRecordByRefPath(docRefPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
         * [.fetchRecordByFilter(table, [filterArray], refPath, batch)](#module_FirebaseFirestoreWrapper.fetchRecordByFilter) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
@@ -45,6 +45,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.deleteFieldValue](#module_FirebaseFirestoreWrapper.deleteFieldValue) : <code>Object</code>
             * [.serverTimestampFieldValue](#module_FirebaseFirestoreWrapper.serverTimestampFieldValue) : <code>Object</code>
             * [.incrementFieldValue(n)](#module_FirebaseFirestoreWrapper.incrementFieldValue) ⇒
+            * [.decrementFieldValue(n)](#module_FirebaseFirestoreWrapper.decrementFieldValue) ⇒
             * [.arrayRemoveFieldValue(elements)](#module_FirebaseFirestoreWrapper.arrayRemoveFieldValue) ⇒ <code>sentinelValue</code>
             * [.arrayUnionFieldValue(elements)](#module_FirebaseFirestoreWrapper.arrayUnionFieldValue) ⇒
         * _Listeners_
@@ -85,6 +86,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.ownerId(record)](#module_FirebaseFirestoreWrapper.ownerId) ⇒ <code>string</code>
             * [.ownerRefPath(record)](#module_FirebaseFirestoreWrapper.ownerRefPath) ⇒ <code>string</code>
             * [.ownerByChild(record)](#module_FirebaseFirestoreWrapper.ownerByChild) ⇒ <code>Record</code>
+            * [.ownerByOwnerType(ownerId, ownerType)](#module_FirebaseFirestoreWrapper.ownerByOwnerType) ⇒ <code>Record</code>
             * [.fetchOwner(record)](#module_FirebaseFirestoreWrapper.fetchOwner) ⇒ <code>Document</code>
         * _Typed_
             * [.typedPaginatedListener](#module_FirebaseFirestoreWrapper.typedPaginatedListener) ⇐ <code>PaginatedListener</code>
@@ -228,7 +230,7 @@ query for a SET of records from a COLLECTIONGROUP - allcollections of a similar
 
 <a name="module_FirebaseFirestoreWrapper.collectRecordsInGroupByFilter"></a>
 
-### FirebaseFirestoreWrapper.collectRecordsInGroupByFilter(tableName, [filterArray]) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+### FirebaseFirestoreWrapper.collectRecordsInGroupByFilter(tableName, [filterArray], [sortArray], limit) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
 queries for Records from a CollectionGroup, filtered bythe passed array of filterObjects
 
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
@@ -236,7 +238,9 @@ queries for Records from a CollectionGroup, filtered bythe passed array of filt
 | Param | Type | Description |
 | --- | --- | --- |
 | tableName | <code>string</code> | string describing the Name of the collectiongroup |
-| [filterArray] | <code>filterObject</code> | array of objects describing filter operations |
+| [filterArray] | <code>filterObject</code> | an array of filterObjects The array is assumed to be sorted in the correct order - i.e. filterArray[0] is added first; filterArray[length-1] last returns data as an array of objects (not dissimilar to Redux State objects) with both the documentID and documentReference added as fields. |
+| [sortArray] | <code>sortObject</code> | a 2xn array of sort (i.e. "orderBy") conditions |
+| limit | <code>number</code> | limit result to this number (if at all) |
 
 <a name="module_FirebaseFirestoreWrapper.fetchRecord"></a>
 
@@ -448,6 +452,19 @@ a sentinel value to set a field to aserver-generated timestamp during set(0 or 
 
 ### FirebaseFirestoreWrapper.incrementFieldValue(n) ⇒
 ----------------------------------------------------------------------return a sentinel to incrment/decrement a field
+
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: a sentinel value  
+**Category**: FieldValue  
+
+| Param | Description |
+| --- | --- |
+| n | If either the operand or the current field value uses    floating point precision, all arithmetic follows IEEE 754    semantics. If both values are integers, values outside of    JavaScript's safe number range (Number.MIN_SAFE_INTEGER to    Number.MAX_SAFE_INTEGER) are also subject to precision loss.    Furthermore, once processed by the Firestore backend, all integer    operations are capped between -2^63 and 2^63-1.     If the current field value is not of type number, or if the field     does not yet exist, the transformation sets the field to the given value. |
+
+<a name="module_FirebaseFirestoreWrapper.decrementFieldValue"></a>
+
+### FirebaseFirestoreWrapper.decrementFieldValue(n) ⇒
+----------------------------------------------------------------------return a sentinel to decrment/decrement a fieldNOT REALLY A FIREBASE FUNCTIONFire base has only increment; we implement this for legibility
 
 **Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
 **Returns**: a sentinel value  
@@ -894,6 +911,18 @@ Returns the bare owner record reference to the parent (root) of aprovided child
 | Param | Type | Description |
 | --- | --- | --- |
 | record | <code>Record</code> | child record |
+
+<a name="module_FirebaseFirestoreWrapper.ownerByOwnerType"></a>
+
+### FirebaseFirestoreWrapper.ownerByOwnerType(ownerId, ownerType) ⇒ <code>Record</code>
+**Kind**: static method of [<code>FirebaseFirestoreWrapper</code>](#module_FirebaseFirestoreWrapper)  
+**Returns**: <code>Record</code> - reference to the parent (root) record  
+**Category**: Tree Slice  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ownerId | <code>string</code> | Document ID of owner account |
+| ownerType | <code>string</code> | "type" (top-level collection) of owner account |
 
 <a name="module_FirebaseFirestoreWrapper.fetchOwner"></a>
 
