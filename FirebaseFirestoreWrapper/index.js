@@ -402,7 +402,6 @@ const dbReference = (refPath) => {
  * relative to option DocumentReference refPath
  * @async
  * @function
- * @static
  * @param {!string} tablePath - string representing a valid path to a collection to
  * create or update the document in, relative to a document reference
  * passed in
@@ -413,7 +412,7 @@ const dbReference = (refPath) => {
  * @param {?boolean} mergeOption - whether to merge into existing data; default TRUE
  * @returns {Promise<Record>}
  */
-export const writeRecord = (
+export const writeRecord = async (
   tablePath,
   data,
   refPath = null,
@@ -433,16 +432,17 @@ export const writeRecord = (
     cleanData.Id = docRef.id; //copy the newly generated ID into the record/document
     if (batch) {
       //if passed a transaction object, use it
-      return batch.set(docRef, cleanData, { merge: mergeOption });
+      await batch.set(docRef, cleanData, { merge: mergeOption });
     } else {
       //not a transaction
-      return docRef.set(cleanData, { merge: mergeOption }).then(() => {
-        return Promise.resolve({
-          ...data,
-          refPath: data.refPath || docRef.path
-        });
-      });
+      await docRef.set(cleanData, { merge: mergeOption });
     }
+
+    return Promise.resolve({
+      ...data,
+      Id: docRef.Id,
+      refPath: data.refPath || docRef.path //short circuit
+    });
   } catch (err) {
     return Promise.reject(err);
   }
@@ -1334,37 +1334,38 @@ export class PaginatedListener {
    * Creates an object to allow for paginating a listener for table
    * read from Firestore. REQUIRES a sorting choice; masks some
    * subscribe/unsubscribe action for paging forward/backward
-   * @param {!string} table a properly formatted string representing the requested collection
+   * @param {!string} tablePath a properly formatted string representing the requested collection
    * - always an ODD number of elements
-   * @param {filterObject} [filterArray] an (optional) 3xn array of filter(i.e. "where") conditions
-   * @param {!sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
    * @param {?refPath} refPath (optional) allows "table" parameter to reference a sub-collection
    * of an existing document reference (I use a LOT of structured collections)
+   * @param {!callback} dataCallback
+   * @param {!callback} errCallback
+   * @param {?number} limit (optional)
+   * @param {filterObject} [filterArray] an (optional) 3xn array of filter(i.e. "where") conditions
+   * @param {!sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
+   * defaults to [{ fieldRef: "name", dirStr: "asc" }] as pagination *requires* a sort
    *
    * The array is assumed to be sorted in the correct order -
    * i.e. filterArray[0] is added first; filterArray[length-1] last
    * returns data as an array of objects (not dissimilar to Redux State objects)
    * with both the documentID and documentReference added as fields.
-   * @param {?number} limit (optional)
-   * @param {!callback} dataCallback
-   * @param {!callback} errCallback
    * @category Paginator
    */
   constructor(
-    table,
-    filterArray = null,
-    sortArray,
+    tablePath,
     refPath = null,
+    dataCallback,
+    errCallback,
     limit = PAGINATE_DEFAULT,
-    dataCallback = null,
-    errCallback = null
+    filterArray = null,
+    sortArray = [{ fieldRef: "name", dirStr: "asc" }]
   ) {
     /**
      * table path at base of listener query, relative to original refPath
      * @private
      * @type {string}
      */
-    this.table = table;
+    this.tablePath = tablePath;
     /**
      * array of filter objects for listener query
      * @private
@@ -1415,14 +1416,15 @@ export class PaginatedListener {
    * @returns {Query}
    */
   _setQuery() {
-    const db = this.refPath ? this.refPath : fdb;
+    const db = this.refPath ? dbReference(this.refPath) : fdb;
     /**
      * Query that forms basis for listener query
      * @private
      * @type {Query}
      */
+
     this.Query = sortQuery(
-      filterQuery(db.collection(this.table), this.filterArray),
+      filterQuery(db.collection(this.tablePath), this.filterArray),
       this.sortArray
     );
     /**
@@ -1456,7 +1458,10 @@ export class PaginatedListener {
     this.unsubscriber = runQuery.limit(Number(this.limit)).onSnapshot(
       (QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        this.snapshot = QuerySnapshot;
+        //only change local snapshot if result is NOT empty
+        if (!QuerySnapshot.empty) {
+          this.snapshot = QuerySnapshot;
+        }
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
@@ -1489,7 +1494,13 @@ export class PaginatedListener {
       (QuerySnapshot) => {
         //acknowledge complete
         this.status = PAGINATE_UPDATED;
-        this.snapshot = QuerySnapshot;
+        //only change local snapshot if result is NOT empty
+        if (!QuerySnapshot.empty) {
+          this.snapshot = QuerySnapshot;
+        }
+        //if it comes back empty, re-issue the queryFilter
+        //the now-empty snapshot will remove the endBefore
+        //if THAT query comes back empty, there are no document
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
@@ -1519,7 +1530,10 @@ export class PaginatedListener {
     this.unsubscriber = runQuery.limit(Number(this.limit)).onSnapshot(
       (QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        this.snapshot = QuerySnapshot;
+        //only change local snapshot if result is NOT empty
+        if (!QuerySnapshot.empty) {
+          this.snapshot = QuerySnapshot;
+        }
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
@@ -1873,7 +1887,6 @@ export const recordId = (record) => {
  * optionally batched record update - abstracts batch process from specific types
  * @async
  * @function
- * @static
  * @category Typed
  * @param {Record} data - the data object/record to update.  This will create a new one if it doesn't exist
  * @param {!string} data.refPath - only part used
@@ -1881,9 +1894,9 @@ export const recordId = (record) => {
  * @param {!string} parent.refPath - full path to parent document
  * @param {!string} type - name of type of object - i.e. the sub-collection name
  * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
- * @return {Promise} WriteBatch, Transaction or Void
+ * @return {Promise<Record>} record, with Id & refpath
  */
-export const typedWrite = (data, parent, type, batch = null) => {
+export const typedWrite = async (data, parent, type, batch = null) => {
   return writeRecord(
     type, //type of sub-collection...
     data,
@@ -1896,15 +1909,14 @@ export const typedWrite = (data, parent, type, batch = null) => {
  * optionally batched record update - abstracts batch process from specific types
  * @async
  * @function
- * @static
  * @category Typed
  * @param {Record} data - the data object/record to update.  This will create a new one if it doesn't exist
  * @param {ArtistTree} tree - Object with properties of refPath segments
  * @param {string} type - name of type of object - i.e. the sub-collection name
  * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
- * @return {Promise} WriteBatch, Transaction or Void
+ * @return {Promise} record, with Id & refpath
  */
-export const typedWriteByTree = (data, tree, type, batch = null) => {
+export const typedWriteByTree = async (data, tree, type, batch = null) => {
   //existing perks will be over-written, new ones created
   return writeRecord(
     typedTablePathFromTree(tree, type), //type of sub-collection...
@@ -2192,68 +2204,6 @@ export const typedCollectFromTree = async (
 export const typedCollectFromChild = async (child, type, branchType = null) => {
   return collectRecords(typedTablePathFromChild(child, type, branchType));
 };
-
-/**
- * Uses the ownerFilter (above) to establish a listener to "just" the
- * parts of a collectionGroup that are descendants of the passed "owner"
- * record.
- * @function
- * @static
- * @category Typed
- * @param {!string} type - name of type of object - i.e. the sub-collection name
- * @param {?Record} parent - parent object (if any) this belongs to
- * @param {!string} parent.refPath - full path to parent document
- * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
- * @param {!string} type name of the desired collectionGroup
- * @param {CollectionListener} dataCallback function to be called with changes to record
- * @param {callback} errCallback function to be called when an error
- * occurs in listener
- * @returns {callback} function to be called to release subscription
- *
- */
-export const typedListener = (type, parent, dataCallBack, errCallBack) => {
-  try {
-    return ListenRecords(type, parent?.refPath, dataCallBack, errCallBack);
-  } catch (err) {
-    console.log(`failed:typedListener setup ${type} err: ${err}`);
-  }
-};
-
-/**
- * @class
- * @extends PaginatedListener
- */
-export class typedPaginatedListener extends PaginatedListener {
-  /**
-   * Implements a PaginatedListener using type syntax
-   * @category Typed
-   * @param {!string} type - the "type" (CollectionName) for this record
-   * @param {?RecordObject} parent - the (optional) parent for this
-   * record (i.e. a sub-type)
-   * @param {!string} parent.refPath - the only required part of a
-   * parent record
-   * @param {number} pageSize - the page size requested
-   * @param {CollectionListener} dataCallback - the callback where data is returned
-   * @param {callback} errCallback - callback for errors
-   */
-  constructor(
-    type,
-    parent,
-    dataCallback,
-    errCallback,
-    pageSize = PAGINATE_DEFAULT
-  ) {
-    super(
-      type,
-      null, //filter
-      [{ fieldRef: "name", dirStr: "asc" }], //sort, required
-      parent?.refPath, //refPath
-      pageSize,
-      dataCallback,
-      errCallback
-    );
-  }
-}
 
 /**
  * @function localBatchReturn
