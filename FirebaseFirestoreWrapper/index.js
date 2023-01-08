@@ -410,7 +410,7 @@ const dbReference = (refPath) => {
  * @param {?WriteBatch|Transaction} batch - optional chain token to include this
  * operation as part of an Atomic Transaction
  * @param {?boolean} mergeOption - whether to merge into existing data; default TRUE
- * @returns {Promise<Record>}
+ * @returns {Promise<Record>} - a copy of the written record
  */
 export const writeRecord = async (
   tablePath,
@@ -1001,28 +1001,28 @@ export const ListenRecords = (
  * @function
  * @static
  * @category Listeners
- * @param {!string} table Name of table to query too - may be sub-collection of
+ * @param {!string} tablePath Name of table to query too - may be sub-collection of
  * optional reference
- * @param {?filterObject} [filterArray] a 3xn array of filter(i.e. "where") conditions
- * @param {?sortObject} [sortArray] an (optional) 2xn array of sort (i.e. "orderBy") conditions
  * @param {?string} refPath An optional Firestore DocumentReference. If present, the
  * "table" parameter above is relative to this reference
  * @param {CollectionListener} dataCallback callback function with query results
  * @param {callback} errCallback callback function with error results
+ * @param {?filterObject} [filterArray] a 3xn array of filter(i.e. "where") conditions
+ * @param {?sortObject} [sortArray] an (optional) 2xn array of sort (i.e. "orderBy") conditions
  * @returns {unsubscribe} function to be called to release subscription
  */
 export const ListenQuery = (
-  table,
-  filterArray,
-  sortArray,
+  tablePath,
   refPath = null,
   dataCallback,
-  errCallback
+  errCallback,
+  filterArray = null,
+  sortArray = null
 ) => {
   const db = dbReference(refPath);
 
   return ListenRecordsCommon(
-    sortQuery(filterQuery(db.collection(table), filterArray), sortArray), //get the resulting filtered query results
+    sortQuery(filterQuery(db.collection(tablePath), filterArray), sortArray), //get the resulting filtered query results
     dataCallback,
     errCallback
   );
