@@ -38,8 +38,11 @@ let functions;
  * })(config)
  * ```
  */
-export default function FirebaseCloudFunctions(firebase, config) {
-  if (config?.appId) functions = firebase.functions();
+export default async function FirebaseCloudFunctions(firebase, config) {
+  if (config?.appId) {
+    functions = await firebase.functions();
+    return functions;
+  }
 }
 
 /**
@@ -56,9 +59,9 @@ export default function FirebaseCloudFunctions(firebase, config) {
  * result = await CloudFunctions("MyGloriousFunction")(argumentToFunction);
  * ```
  */
-export const CloudFunctions = (name) => {
+export async function CloudFunctions(name) {
   return functions && functions.httpsCallable(name);
-};
+}
 
 /**
  * @sync
@@ -69,10 +72,10 @@ export const CloudFunctions = (name) => {
  * @param {object} Params
  * @returns {RecordTree}
  */
-export const treeFromParams = (Params) => {
+export function treeFromParams(Params) {
   let tree = new Map();
-  Object.keys(Params).forEach(paramName => {
+  Object.keys(Params).forEach((paramName) => {
     tree.set(paramName, Params[paramName]);
-  })
+  });
   return tree;
-};
+}

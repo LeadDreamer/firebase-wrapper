@@ -58,27 +58,28 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper/index.js";
  * export * from "@leaddreamer/firebase-wrapper";
  * ```
  */
-const FirebaseWrapper = async (firebase, config) => {
+export default async function FirebaseWrapper(firebase, config) {
   try {
     await firebase.app();
   } catch (err) {
     try {
-      config?.appId
-        ? await firebase.initializeApp(config)
-        : await firebase.initializeApp();
+      await (config?.appId
+        ? firebase.initializeApp(config)
+        : firebase.initializeApp());
+
       await FirebaseAuthWrapper(firebase, config);
       await FirebaseFirestore(firebase, config);
       await FirebaseStorage(firebase, config);
-      await FirebaseCloudFunctions(firebase, config);
+      return FirebaseCloudFunctions(firebase, config);
     } catch (err) {
       console.log("firebase initialize failed");
     }
   }
   return;
-};
+}
 
 export * from "./FirebaseFirestoreWrapper/index.js";
 export * from "./FirebaseStorageWrapper/index.js";
 export * from "./FirebaseAuthWrapper/index.js";
 export * from "./FirebaseCloudFunctionsWrapper/index.js";
-export default FirebaseWrapper;
+//export default FirebaseWrapper;
