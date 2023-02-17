@@ -3,7 +3,7 @@ import {
   PAGINATE_DEFAULT,
   PAGINATE_INIT,
   PAGINATE_PENDING,
-  PAGINATE_UPDATED
+  PAGINATE_UPDATED,
 } from "./Common.js";
 
 /**
@@ -66,12 +66,17 @@ function penultimate(array) {
  * ```
  */
 export default async function FirebaseFirestore(firebase, config, thisLogger) {
+  thisLogger("Starting FirebaseFirestore");
   fdb = firebase.firestore();
+  thisLogger("fdb? ", !!fdb);
   fdb.settings({ ignoreUndefinedProperties: true, merge: true });
   //doesnt run firestore persistence in Admin/Node environment
+  thisLogger("fdb settings");
   config = config.projectId ? config : JSON.parse(config);
-  !config?.appId ||
-    (await firebase.firestore().enablePersistence({ synchorizeTabs: true }));
+  if (!config?.appId) {
+    await firebase.firestore().enablePersistence({ synchorizeTabs: true });
+  }
+  thisLogger("persistence");
   aFieldValue = firebase.firestore.FieldValue;
   aFieldPath = firebase.firestore.FieldPath;
 
@@ -238,7 +243,7 @@ export const RecordFromSnapshot = (DocumentSnapshot) => {
   return {
     ...DocumentSnapshot.data(),
     Id: DocumentSnapshot.id,
-    refPath: DocumentSnapshot.ref.path
+    refPath: DocumentSnapshot.ref.path,
   };
 };
 
@@ -442,7 +447,7 @@ export const writeRecord = async (
     return Promise.resolve({
       ...data,
       Id: docRef.Id,
-      refPath: data.refPath || docRef.path //short circuit
+      refPath: data.refPath || docRef.path, //short circuit
     });
   } catch (err) {
     return Promise.reject(err);
@@ -489,7 +494,7 @@ export const writeBack = (data, batch = null, mergeOption = true) => {
   if (batch) {
     //if passed a transaction object, use it
     return batch.set(createRefFromPath(data.refPath), cleanData, {
-      merge: mergeOption
+      merge: mergeOption,
     });
   } else {
     return createRefFromPath(data.refPath)
@@ -835,7 +840,7 @@ export const updateRecordByRefPath = (docRefPath, data, batch = null) => {
 
   return batch
     ? batch.set(thisRef, cleanData, {
-        merge: true
+        merge: true,
       })
     : thisRef
         .set(cleanData, { merge: true }) //update merges record
@@ -868,14 +873,14 @@ export const writeArrayValue = (
     return batch.set(
       thisRef,
       {
-        [fieldName]: aFieldValue.arrayUnion(fieldValue)
+        [fieldName]: aFieldValue.arrayUnion(fieldValue),
       },
       { merge: true }
     );
   else
     return thisRef.set(
       {
-        [fieldName]: aFieldValue.arrayUnion(fieldValue)
+        [fieldName]: aFieldValue.arrayUnion(fieldValue),
       },
       { merge: true }
     );
@@ -1630,13 +1635,13 @@ export const ownerFilter = (owner, queryFilter = null) => {
     {
       fieldRef: "__name__",
       opStr: ">",
-      value: ownerPath
+      value: ownerPath,
     },
     {
       fieldRef: "__name__",
       opStr: "<",
-      value: nextPath
-    }
+      value: nextPath,
+    },
   ];
   return queryFilter ? ownerParts.concat(queryFilter) : ownerParts;
 };
@@ -1821,7 +1826,7 @@ export const ownerByChild = (record) => {
   return record?.refPath
     ? {
         Id: `${ownerId(record)}`,
-        refPath: `${ownerType(record)}/${ownerId(record)}`
+        refPath: `${ownerType(record)}/${ownerId(record)}`,
       }
     : undefined;
 };
@@ -1837,7 +1842,7 @@ export const ownerByChild = (record) => {
 export const ownerByOwnerType = (ownerId, ownerType) => {
   return {
     Id: ownerId,
-    refPath: `${ownerType}/${ownerId}`
+    refPath: `${ownerType}/${ownerId}`,
   };
 };
 
@@ -1951,7 +1956,7 @@ export const typedWriteByChild = (
     {
       ...data, //base data
       Id: typedIdFromChild(child, type), //Id from child path
-      refPath: typedRefPathFromChild(child, type) //refPath from child Path
+      refPath: typedRefPathFromChild(child, type), //refPath from child Path
     },
     batch,
     mergeOption
@@ -1984,7 +1989,7 @@ export const typedCreate = (data, parent, type, batch = null) => {
   //merge the supplied data into the new data object
   let newData = {
     ...data,
-    ...(data.Id ? data : createUniqueReference(type, parent.refPath))
+    ...(data.Id ? data : createUniqueReference(type, parent.refPath)),
   };
   //parent data already in created reference
   return typedWrite(newData, parent, type, batch);

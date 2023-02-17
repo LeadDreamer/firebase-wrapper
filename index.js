@@ -73,8 +73,11 @@ export default async function FirebaseWrapper(firebase, config, thisLogger) {
       localLogger("after init", !!happ);
 
       await FirebaseAuthWrapper(firebase, config, localLogger);
+      localLogger("After Auth");
       await FirebaseFirestore(firebase, config, localLogger);
+      localLogger("After Firestore");
       await FirebaseStorage(firebase, config, localLogger);
+      localLogger("After Storage");
       return FirebaseCloudFunctions(firebase, config, localLogger);
     } catch (err) {
       console.log("firebase initialize failed");
