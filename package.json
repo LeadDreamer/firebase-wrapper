@@ -99,7 +99,7 @@
   },
   "scripts": {
     "transpile": "babel ./ -d ./dist/",
-    "build": "$npm_execpath run transpile",
+    "build": " rm -rf dist && $npm_execpath run transpile",
     "rebuild": "$npm_execpath version prerelease --git-tag-version --preid=beta && $npm_execpath run docs && $npm_execpath run build",
     "rebuild_release": "$npm_execpath version minor --git-tag-version && $npm_execpath run docs && $npm_execpath run build",
     "prepublishOnly": "$npm_execpath run build",
