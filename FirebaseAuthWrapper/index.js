@@ -8,10 +8,10 @@ export default async function FirebaseAuthWrapper(
 ) {
   if (!config?.appId) {
     thisLogger("Auth Admin");
-    return FirebaseAuthAdminWrapper(firebase);
+    return FirebaseAuthAdminWrapper(firebase, thisLogger);
   } else {
     thisLogger("Auth Client");
-    return FirebaseAuthClientWrapper(firebase);
+    return FirebaseAuthClientWrapper(firebase, thisLogger);
   }
 }
 

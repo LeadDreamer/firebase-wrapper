@@ -65,6 +65,8 @@ export default async function FirebaseAuthClient(firebase, thisLogger) {
     //firebase.auth.TwitterAuthProvider.PROVIDER_ID
   ];
   FirebaseAuthPersistence = firebase.auth.Auth.Persistence.LOCAL;
+  thisLogger("After Persistence");
+  return Promise.resolve();
 }
 
 /**
