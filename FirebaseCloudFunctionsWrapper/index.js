@@ -38,8 +38,13 @@ let functions;
  * })(config)
  * ```
  */
-export default async function FirebaseCloudFunctions(firebase, config) {
+export default async function FirebaseCloudFunctions(
+  firebase,
+  config,
+  thisLogger
+) {
   if (config?.appId) {
+    thisLogger("Cloud CLient");
     functions = await firebase.functions();
     return functions;
   }

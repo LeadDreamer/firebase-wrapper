@@ -65,7 +65,7 @@ function penultimate(array) {
  * })(config)
  * ```
  */
-export default async function FirebaseFirestore(firebase, config) {
+export default async function FirebaseFirestore(firebase, config, thisLogger) {
   fdb = firebase.firestore();
   fdb.settings({ ignoreUndefinedProperties: true, merge: true });
   //doesnt run firestore persistence in Admin/Node environment
@@ -79,6 +79,7 @@ export default async function FirebaseFirestore(firebase, config) {
   documentId = aFieldPath.documentId();
   deleteFieldValue = aFieldValue.delete();
   serverTimestampFieldValue = aFieldValue.serverTimestamp();
+  thisLogger("Firestore");
 }
 
 /** @private */

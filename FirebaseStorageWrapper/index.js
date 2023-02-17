@@ -46,10 +46,14 @@ import {
  */
 let bucket_name;
 
-export default async function FirebaseStorageWrapper(firebase, config) {
-  FirebaseStorage = config?.appId
-    ? firebase.storage()
-    : FirebaseStorageAdminEmulator(firebase);
+export default async function FirebaseStorageWrapper(firebase, config, thisLogger) {
+  if (config?appId) {
+    thisLogger("Storage client");
+    FirebaseStorage = firebase.storage();
+  } else {
+     thisLogger("Storage admin");
+     FirebaseStorage = FirebaseStorageAdminEmulator(firebase);
+  }
 
   config = config.projectId ? config : JSON.parse(config);
   bucket_name = config.storageBucket;
