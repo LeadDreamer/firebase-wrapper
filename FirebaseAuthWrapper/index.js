@@ -10,7 +10,7 @@ export default async function FirebaseAuthWrapper(
     thisLogger("Auth Admin");
     return FirebaseAuthAdminWrapper(firebase);
   } else {
-    thisLogger("Client Admin");
+    thisLogger("Auth Client");
     return FirebaseAuthClientWrapper(firebase);
   }
 }
