@@ -59,7 +59,7 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper/index.js";
  * ```
  */
 export default async function FirebaseWrapper(firebase, config, thisLogger) {
-  localLogger = thisLogger || (() => {});
+  const localLogger = thisLogger || (() => {});
   try {
     await firebase.app();
   } catch (err) {
