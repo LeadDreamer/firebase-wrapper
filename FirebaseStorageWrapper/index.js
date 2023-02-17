@@ -6,7 +6,7 @@ import {
   PAGINATE_END,
   PAGINATE_INIT,
   PAGINATE_PENDING,
-  PAGINATE_UPDATED
+  PAGINATE_UPDATED,
 } from "../FirebaseFirestoreWrapper/Common.js";
 
 //const uuidv4 = v4;
@@ -135,7 +135,7 @@ export class paginateListing {
     this.limit = limit;
     this.listOptions = {
       maxResults: limit,
-      pageToken: null
+      pageToken: null,
     };
   }
 
@@ -157,7 +157,7 @@ export class paginateListing {
 
     this.listOptions = {
       ...this.listOptions,
-      pageToken: result.newPageToken
+      pageToken: result.newPageToken,
     };
     return result.items;
   }
@@ -305,12 +305,12 @@ export const storeDataURLByRecord = (dataURL, record, key, filename) => {
  * @param {!string} key name/key of default image file
  * @returns {string}
  */
-export const getDefaultImageURL = (key) => {
+export async function getDefaultImageURL(key) {
   let filename = key + ".jpg";
   return Promise.resolve(
     FirebaseStorage.ref("/defaultImages").child(filename).getDownloadURL()
   );
-};
+}
 
 /**
  * @function
@@ -332,7 +332,7 @@ export const dataURLToBlob = (dataURL) => {
   var reg = /^data:image\/([\w+]+);base64,([\s\S]+)/;
   var match = dataURL.match(reg);
   var baseType = {
-    jpeg: "jpg"
+    jpeg: "jpg",
   };
 
   baseType["svg+xml"] = "svg";
@@ -345,7 +345,7 @@ export const dataURLToBlob = (dataURL) => {
 
   return {
     extname: "." + extname,
-    base64: match[2]
+    base64: match[2],
   };
 };
 
@@ -504,8 +504,8 @@ class adminRef {
       ...this.fileRef?.metadata,
       metadata: {
         ...this.fileRef?.metadata?.metadata,
-        firebaseStorageDownloadTokens: token
-      }
+        firebaseStorageDownloadTokens: token,
+      },
     };
   }
 
@@ -561,8 +561,8 @@ class adminRef {
       token = uuidv4();
       await this.fileRef.setMetadata({
         metadata: {
-          firebaseStorageDownloadTokens: token
-        }
+          firebaseStorageDownloadTokens: token,
+        },
       });
     }
     return token;
@@ -597,7 +597,7 @@ class adminRef {
     //the response below emulates Firestore Storage UploadTaskSnapshot
     return Promise.resolve({
       ref: this,
-      metadata: localmetadata
+      metadata: localmetadata,
     });
   }
 
@@ -622,7 +622,7 @@ class adminRef {
     return Promise.resolve({
       ref: this,
       downloadURL: url,
-      metadata: localmetadata
+      metadata: localmetadata,
     });
   }
 
