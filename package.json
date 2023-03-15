@@ -118,7 +118,7 @@
   },
   "peerDependencies": {
     "firebase-admin": "^9.4.1",
-    "firebase": "^8.10.0"
+    "firebase": "^8.10.1"
   },
   "peerDependenciesMeta": {
     "firebase-admin": {
