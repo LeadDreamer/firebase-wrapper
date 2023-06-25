@@ -3,7 +3,7 @@ import {
   PAGINATE_DEFAULT,
   PAGINATE_INIT,
   PAGINATE_PENDING,
-  PAGINATE_UPDATED
+  PAGINATE_UPDATED,
 } from "./Common.js";
 
 /**
@@ -17,12 +17,10 @@ import {
 // utilities
 /**
  * @private
- * @function last
- * @param {object} [array]
+ * @param {Array.object}
  * @returns {object}
  * @description last entry in the array
  */
-
 function last(array) {
   let length = array == null ? 0 : array.length;
   return length ? array[length - 1] : undefined;
@@ -30,12 +28,10 @@ function last(array) {
 
 /**
  * @private
- * @function penultimate
- * @param {object} [array]
+ * @param {Array.object}
  * @returns {object}
  * @description second-to-last entry in the array
  */
-
 function penultimate(array) {
   let length = array == null ? 0 : array.length;
   return length ? array[length - 1 - 1] : undefined;
@@ -45,9 +41,8 @@ function penultimate(array) {
  * Initializes the Firestore service of the provided
  * firebase app.  Also instantiates various constants and
  * helper functions
- * @static
- * @function FirebaseFirestore
  * @param {firebase} firebase
+ * @returns {Promise.void}
  * @example
  * ```
  * import * as firebase from "firebase/app";
@@ -85,11 +80,10 @@ let fdb, aFieldValue, aFieldPath;
 
 /**
  * class for a Firestore timestamp processor
- * @class
  */
-let timestamp;
+export let timestamp;
 
-export { timestamp };
+//export { timestamp };
 
 /**
  * a fieldPath value to represent the document Id - WARNING
@@ -97,50 +91,42 @@ export { timestamp };
  * to the document
  * @constant
  * @type {Object}
- * @static
  * @category FieldPath
  */
-let documentId;
-export { documentId };
+export let documentId;
+//export { documentId };
 
 /**
  * maximum concurrent writes
- * @constant {number} MAX_CONCURRENCY
- * @static
  */
-const MAX_CONCURRENCY = 5;
-export { MAX_CONCURRENCY };
+export const MAX_CONCURRENCY = 5;
+//export { MAX_CONCURRENCY };
 
 //convenient fieldValue constants
 /**
  * a sentinel value used to delete a field during an
  * update operation
  * @constant
- * @static
  * @type {Object}
  * @category FieldValue
  */
-let deleteFieldValue;
-export { deleteFieldValue };
+export let deleteFieldValue;
+//export { deleteFieldValue };
 
 /**
  * a sentinel value to set a field to a
  * server-generated timestamp during set(0 or update())
  * @constant
- * @static
  * @type {Object}
  * @category FieldValue
  */
-let serverTimestampFieldValue;
-export { serverTimestampFieldValue };
+export let serverTimestampFieldValue;
+//export { serverTimestampFieldValue };
 
 /**
- * ----------------------------------------------------------------------
  * return a sentinel to incrment/decrement a field
- * @function
- * @static
  * @category FieldValue
- * @param n If either the operand or the current field value uses
+ * @param {number} n If either the operand or the current field value uses
  *    floating point precision, all arithmetic follows IEEE 754
  *    semantics. If both values are integers, values outside of
  *    JavaScript's safe number range (Number.MIN_SAFE_INTEGER to
@@ -149,42 +135,35 @@ export { serverTimestampFieldValue };
  *    operations are capped between -2^63 and 2^63-1.
  *     If the current field value is not of type number, or if the field
  *     does not yet exist, the transformation sets the field to the given value.
- * @returns a sentinel value
- **********************************************************************/
-export const incrementFieldValue = (n) => {
-  return aFieldValue.increment(n);
-};
-
-/**
- * ----------------------------------------------------------------------
- * returns a sentinel to remove elements from array field
- * @function
- * @static
- * @category FieldValue
- * @param elements REST expanded list of elements to remove
  * @returns {sentinelValue} a sentinel value
- **********************************************************************/
-export const arrayRemoveFieldValue = (elements) => {
-  return aFieldValue.arrayRemove(...elements);
-};
+ */
+export function incrementFieldValue(n) {
+  return aFieldValue.increment(n);
+}
 
 /**
- * ----------------------------------------------------------------------
- * return a sentinel to add/join elements to array field
- * @function arrayUnionFieldValue
- * @static
+ * returns a sentinel to remove elements from array field
  * @category FieldValue
- * @param elements REST expanded list of elements to add
- * @returns a sentinel value
- **********************************************************************/
-export const arrayUnionFieldValue = (elements) => {
-  return aFieldValue.arrayUnion(...elements);
-};
+ * @param {any} arrayElements REST expanded list of elements to remove
+ * @returns {sentinelValue} a sentinel value
+ */
+export function arrayRemoveFieldValue(arrayElements) {
+  return aFieldValue.arrayRemove(...arrayElements);
+}
+
+/**
+ * return a sentinel to add/join elements to array field
+ * @category FieldValue
+ * @param {any} arrayElements REST expanded list of elements to add
+ * @returns {sentinelValue} a sentinel value
+ */
+export function arrayUnionFieldValue(arrayElements) {
+  return aFieldValue.arrayUnion(...arrayElements);
+}
 
 /* Firebase APIs */
 
 /**
- * @private
  * @typedef {object} Record
  * common properties of our database records
  * @property {?string} Id - Id of the document as stored in Firestore May
@@ -194,110 +173,82 @@ export const arrayUnionFieldValue = (elements) => {
  */
 
 /**
- * @private
- * @typedef {Record} [RecordArray]
- * an array of database records
- */
-
-/**
- * ----------------------------------------------------------------------
  * returns an internal record structure from a firestore
  * Document snapshot
- * @private
- * @function
- * @static
- * @param {DocumentSnapshot} DocumentSnapshot
+ * @param {DocumentSnapshot} documentSnapshot
  * @returns {Record}
  */
-export const RecordFromSnapshot = (DocumentSnapshot) => {
+export function RecordFromSnapshot(documentSnapshot) {
   return {
-    ...DocumentSnapshot.data(),
-    Id: DocumentSnapshot.id,
-    refPath: DocumentSnapshot.ref.path
+    ...documentSnapshot.data(),
+    Id: documentSnapshot.id,
+    refPath: documentSnapshot.ref.path,
   };
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * returns an array of internal record structures from a
  * firestore Query snapshot
- * @private
- * @function
- * @static
- * @param {QuerySnapshot} QuerySnapshot
- * @returns {RecordArray}
+ * @param {QuerySnapshot} querySnapshot
+ * @returns {Array.Record}
  */
-export const RecordsFromSnapshot = (QuerySnapshot) => {
-  return QuerySnapshot.docs.map((docSnap) => {
+export function RecordsFromSnapshot(querySnapshot) {
+  return querySnapshot.docs.map((docSnap) => {
     return RecordFromSnapshot(docSnap);
   });
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * returns a Firestore document structure from an internal Record
  * @private
- * @function
- * @static
- * @param {object} Record - cleans up internal document representation
- * @returns {object}
+ * @param {Record} record - cleans up internal document representation
+ * @returns {Record}
  */
-const DocumentFromRecord = (Record) => {
-  const cleanData = { ...Record };
+function DocumentFromRecord(record) {
+  const cleanData = { ...record };
   delete cleanData.refPath; //we leave the redundant Id for query optimization
   return cleanData;
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * creates and runs a series of record operations
  * (executed in the param function) as an atomic operation.
  * A transation object is passed to the callback parameter
- * @async
- * @function
- * @static
  * @category Batch
  * @param {callback} updateFunction callback function that expects a Transaction
  * token as it's sole argument.  either all the included/chained
  * record operations will succeed, or none
- * @returns {Promise<object>} a promise with the result of updateFunction
+ * @returns {Promise.object} a promise with the result of updateFunction
  */
-export const runTransaction = (updateFunction) => {
+export async function runTransaction(updateFunction) {
   return fdb.runTransaction(updateFunction);
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * Creates a WriteBatch object tocollect actions for Batch writing to backend
- * @function
- * @static
+ * Creates a WriteBatch object to collect actions for Batch writing to backend
  * @category Batch
- * @returns {WriteBatch} object that operations are added to for a bulk
+ * @returns {Promise<WriteBatch>} object that operations are added to for a bulk
  * operation
  */
-export const openWriteBatch = () => {
+export async function openWriteBatch() {
   return fdb.batch();
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * Dispatches an asynchronous Closure to submit Batch
- * @async
- * @function
- * @static
  * @category Batch
  * @param {WriteBatch} batch - WriteBatch to close
  * @returns {Promise<void>}
  */
-export const closeWriteBatch = (
+export async function closeWriteBatch(
   /**
    */
   batch = null
-) => {
+) {
   return (async (innerBatch) => {
     return innerBatch.commit();
   })(batch);
-};
+}
 
 /**
  * ----------------------------------------------------------------------
@@ -413,7 +364,7 @@ export const writeRecord = (
       return docRef.set(cleanData, { merge: mergeOption }).then(() => {
         return Promise.resolve({
           ...data,
-          refPath: data.refPath || docRef.path
+          refPath: data.refPath || docRef.path,
         });
       });
     }
@@ -462,7 +413,7 @@ export const writeBack = (data, batch = null, mergeOption = true) => {
   if (batch) {
     //if passed a transaction object, use it
     return batch.set(createRefFromPath(data.refPath), cleanData, {
-      merge: mergeOption
+      merge: mergeOption,
     });
   } else {
     return createRefFromPath(data.refPath)
@@ -814,7 +765,7 @@ export const updateRecordByRefPath = (docRefPath, data, batch = null) => {
 
   return batch
     ? batch.set(thisRef, cleanData, {
-        merge: true
+        merge: true,
       })
     : thisRef
         .set(cleanData, { merge: true }) //update merges record
@@ -847,14 +798,14 @@ export const writeArrayValue = (
     return batch.set(
       thisRef,
       {
-        [fieldName]: aFieldValue.arrayUnion(fieldValue)
+        [fieldName]: aFieldValue.arrayUnion(fieldValue),
       },
       { merge: true }
     );
   else
     return thisRef.set(
       {
-        [fieldName]: aFieldValue.arrayUnion(fieldValue)
+        [fieldName]: aFieldValue.arrayUnion(fieldValue),
       },
       { merge: true }
     );
@@ -1175,7 +1126,7 @@ export class PaginateFetch {
    * executes the query again to fetch the next set of records
    * @async
    * @method
-   * @returns {Promise<RecordArray>} returns an array of record - the next page
+   * @returns {Promise<Array.Record>} returns an array of record - the next page
    */
   PageForward() {
     const runQuery = this.snapshot
@@ -1205,7 +1156,7 @@ export class PaginateFetch {
    * executes the query again to fetch the previous set of records
    * @async
    * @method
-   * @returns {Promise<RecordArray>} returns an array of record - the next page
+   * @returns {Promise<Array.Record>} returns an array of record - the next page
    */
   PageBack() {
     const runQuery = this.snapshot
@@ -1279,7 +1230,7 @@ export class PaginateGroupFetch {
    * executes the query again to fetch the next set of records
    * @async
    * @method
-   * @returns {Promise<RecordArray>} returns an array of record - the next page
+   * @returns {Promise<Array.Record>} returns an array of record - the next page
    */
   PageForward() {
     const runQuery = this.snapshot
@@ -1307,7 +1258,7 @@ export class PaginateGroupFetch {
    * executes the query again to fetch the previous set of records
    * @async
    * @method
-   * @returns {Promise<RecordArray>} returns an array of record - the next page
+   * @returns {Promise<Array.Record>} returns an array of record - the next page
    */
   PageBack() {
     const runQuery = this.snapshot
@@ -1630,13 +1581,13 @@ export const ownerFilter = (owner, queryFilter = null) => {
     {
       fieldRef: "__name__",
       opStr: ">",
-      value: ownerPath
+      value: ownerPath,
     },
     {
       fieldRef: "__name__",
       opStr: "<",
-      value: nextPath
-    }
+      value: nextPath,
+    },
   ];
   return queryFilter ? ownerParts.concat(queryFilter) : ownerParts;
 };
@@ -1821,7 +1772,7 @@ export const ownerByChild = (record) => {
   return record?.refPath
     ? {
         Id: `${ownerId(record)}`,
-        refPath: `${ownerType(record)}/${ownerId(record)}`
+        refPath: `${ownerType(record)}/${ownerId(record)}`,
       }
     : undefined;
 };
@@ -1829,7 +1780,7 @@ export const ownerByChild = (record) => {
 export const ownerByOwnerType = (ownerId, ownerType) => {
   return {
     Id: ownerId,
-    refPath: `${ownerType}/${ownerId}`
+    refPath: `${ownerType}/${ownerId}`,
   };
 };
 
@@ -1945,7 +1896,7 @@ export const typedWriteByChild = (
     {
       ...data, //base data
       Id: typedIdFromChild(child, type), //Id from child path
-      refPath: typedRefPathFromChild(child, type) //refPath from child Path
+      refPath: typedRefPathFromChild(child, type), //refPath from child Path
     },
     batch,
     mergeOption
@@ -1978,7 +1929,7 @@ export const typedCreate = (data, parent, type, batch = null) => {
   //merge the supplied data into the new data object
   let newData = {
     ...data,
-    ...(data.Id ? data : createUniqueReference(type, parent.refPath))
+    ...(data.Id ? data : createUniqueReference(type, parent.refPath)),
   };
   //parent data already in created reference
   return typedWrite(newData, parent, type, batch);
@@ -2175,7 +2126,7 @@ export const typedFetchFromTree = async (tree, type, batch = null) => {
  * @param {RecordTree} tree - assumed to be an object in a collection/document Tree
  * @param {string} type - type/collection to fetch parent document from
  * @param {?WriteBatch|Transaction} batch - optional batch object to chain
- * @returns {Promise<RecordArray>}
+ * @returns {Promise<Array.Record>}
  */
 export const typedCollectFromTree = async (
   tree,
