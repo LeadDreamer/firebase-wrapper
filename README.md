@@ -492,16 +492,16 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 
 * [FirebaseCloudFunctionsWrapper](#module_FirebaseCloudFunctionsWrapper)
-    * [.FirebaseCloudFunctions(firebase)](#module_FirebaseCloudFunctionsWrapper.FirebaseCloudFunctions)
-    * [.CloudFunctions()](#module_FirebaseCloudFunctionsWrapper.CloudFunctions) ⇒ <code>external:promise</code>
-    * [.treeFromParams(Params)](#module_FirebaseCloudFunctionsWrapper.treeFromParams) ⇒ <code>RecordTree</code>
+    * [module.exports(firebase)](#exp_module_FirebaseCloudFunctionsWrapper--module.exports) ⏏
+        * [.CloudFunctions()](#module_FirebaseCloudFunctionsWrapper--module.exports.CloudFunctions) ⇒ <code>Promise</code>
+        * [.treeFromParams(Params)](#module_FirebaseCloudFunctionsWrapper--module.exports.treeFromParams) ⇒ <code>Map</code>
 
-<a name="module_FirebaseCloudFunctionsWrapper.FirebaseCloudFunctions"></a>
+<a name="exp_module_FirebaseCloudFunctionsWrapper--module.exports"></a>
 
-### FirebaseCloudFunctionsWrapper.FirebaseCloudFunctions(firebase)
-Initializes the FirebaseCLoud function support
+### module.exports(firebase) ⏏
+Initializes the FirebaseCloud function support
 
-**Kind**: static method of [<code>FirebaseCloudFunctionsWrapper</code>](#module_FirebaseCloudFunctionsWrapper)  
+**Kind**: Exported function  
 
 | Param | Type |
 | --- | --- |
@@ -509,19 +509,22 @@ Initializes the FirebaseCLoud function support
 
 **Example**  
 ```import * as firebase from "firebase/app";import "firebase/functions";import FirebaseFunctions from "@leaddreamer/firebase-wrapper/FirebaseCloudFunctionsWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFunctions(firebase);})(config)```
-<a name="module_FirebaseCloudFunctionsWrapper.CloudFunctions"></a>
+<a name="module_FirebaseCloudFunctionsWrapper--module.exports.CloudFunctions"></a>
 
-### FirebaseCloudFunctionsWrapper.CloudFunctions() ⇒ <code>external:promise</code>
-**Kind**: static method of [<code>FirebaseCloudFunctionsWrapper</code>](#module_FirebaseCloudFunctionsWrapper)  
+#### module.exports.CloudFunctions() ⇒ <code>Promise</code>
+Calls the cloud function named in the passed argument, andasynchronously returns the result
+
+**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseCloudFunctionsWrapper--module.exports)  
 **Fulfil**: result as returns from call  
 **Reject**: err as returned from call  
 **Example**  
 ```result = await CloudFunctions("MyGloriousFunction")(argumentToFunction);```
-<a name="module_FirebaseCloudFunctionsWrapper.treeFromParams"></a>
+<a name="module_FirebaseCloudFunctionsWrapper--module.exports.treeFromParams"></a>
 
-### FirebaseCloudFunctionsWrapper.treeFromParams(Params) ⇒ <code>RecordTree</code>
-**Kind**: static method of [<code>FirebaseCloudFunctionsWrapper</code>](#module_FirebaseCloudFunctionsWrapper)  
-**Sync**:   
+#### module.exports.treeFromParams(Params) ⇒ <code>Map</code>
+Cloud Function specific - processes a Params list froma firestore function to create a reference/Id "tree"
+
+**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseCloudFunctionsWrapper--module.exports)  
 
 | Param | Type |
 | --- | --- |

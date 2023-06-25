@@ -17,9 +17,7 @@ let functions;
 // Cloud Functions
 
 /**
- * Initializes the FirebaseCLoud function support
- * @static
- * @function FirebaseCloudFunctions
+ * Initializes the FirebaseCloud function support
  * @param {firebase} firebase
  * @example
  * ```
@@ -38,17 +36,15 @@ let functions;
  * })(config)
  * ```
  */
-export default function FirebaseCloudFunctions(firebase, config) {
+export default async function FirebaseCloudFunctions(firebase, config) {
   if (config?.appId) functions = firebase.functions();
+  return Promise.resolve(null);
 }
 
 /**
- * @async
- * @function CloudFunctions
- * @static
  * Calls the cloud function named in the passed argument, and
  * asynchronously returns the result
- * @returns {external:promise}
+ * @returns {Promise}
  * @fulfil result as returns from call
  * @reject err as returned from call
  * @example
@@ -56,23 +52,20 @@ export default function FirebaseCloudFunctions(firebase, config) {
  * result = await CloudFunctions("MyGloriousFunction")(argumentToFunction);
  * ```
  */
-export const CloudFunctions = (name) => {
+export async function CloudFunctions(name) {
   return functions && functions.httpsCallable(name);
-};
+}
 
 /**
- * @sync
- * @function treeFromParams
- * @static
  * Cloud Function specific - processes a Params list from
  * a firestore function to create a reference/Id "tree"
  * @param {object} Params
- * @returns {RecordTree}
+ * @returns {Map}
  */
-export const treeFromParams = (Params) => {
+export function treeFromParams(Params) {
   let tree = new Map();
-  Object.keys(Params).forEach(paramName => {
+  Object.keys(Params).forEach((paramName) => {
     tree.set(paramName, Params[paramName]);
-  })
+  });
   return tree;
-};
+}
