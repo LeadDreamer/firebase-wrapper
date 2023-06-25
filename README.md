@@ -551,9 +551,9 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.RecordFromSnapshot(documentSnapshot)](#module_FirebaseFirestoreWrapper--module.exports.RecordFromSnapshot) ⇒ <code>Record</code>
             * [.RecordsFromSnapshot(querySnapshot)](#module_FirebaseFirestoreWrapper--module.exports.RecordsFromSnapshot) ⇒ <code>Array.Record</code>
             * [.createUniqueReference(tablePath, refPath)](#module_FirebaseFirestoreWrapper--module.exports.createUniqueReference) ⇒ <code>DocumentReference</code>
-            * [.writeRecord(tablePath, data, refPath, batch, mergeOption)](#module_FirebaseFirestoreWrapper--module.exports.writeRecord) ⇒ <code>Promise.&lt;Record&gt;</code>
+            * [.writeRecord(tablePath, data, refPath, batch, mergeOption)](#module_FirebaseFirestoreWrapper--module.exports.writeRecord) ⇒ <code>Promise.Record</code>
             * [.writeRecordByRefPath(data, refPath, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper--module.exports.writeRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
-            * [.writeBack(data, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper--module.exports.writeBack) ⇒ <code>Promise.&lt;Record&gt;</code>
+            * [.writeBack(data, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper--module.exports.writeBack) ⇒ <code>Promise.Record</code>
             * [.collectRecords(tablePath, refPath)](#module_FirebaseFirestoreWrapper--module.exports.collectRecords) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
             * [.collectRecordsByFilter(tablePath, refPath, [filterArray], [sortArray], limit)](#module_FirebaseFirestoreWrapper--module.exports.collectRecordsByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
             * [.collectRecordsInGroup(tableName)](#module_FirebaseFirestoreWrapper--module.exports.collectRecordsInGroup) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
@@ -570,7 +570,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.localBatchReturn(incomingBatch, internalBatch)](#module_FirebaseFirestoreWrapper--module.exports.localBatchReturn) ⇒ <code>WriteBatch</code> \| <code>Transaction</code>
             * _Batch_
                 * [.runTransaction(updateFunction)](#module_FirebaseFirestoreWrapper--module.exports.runTransaction) ⇒ <code>Promise.object</code>
-                * [.openWriteBatch()](#module_FirebaseFirestoreWrapper--module.exports.openWriteBatch) ⇒ <code>Promise.&lt;WriteBatch&gt;</code>
+                * [.openWriteBatch()](#module_FirebaseFirestoreWrapper--module.exports.openWriteBatch) ⇒ <code>Promise.WriteBatch</code>
                 * [.closeWriteBatch(batch)](#module_FirebaseFirestoreWrapper--module.exports.closeWriteBatch) ⇒ <code>Promise.&lt;void&gt;</code>
                 * [.openBulkWriter()](#module_FirebaseFirestoreWrapper--module.exports.openBulkWriter) ⇒ <code>BulkWriter</code>
                 * [.closeBulkWriter(bulkWriter)](#module_FirebaseFirestoreWrapper--module.exports.closeBulkWriter) ⇒ <code>Promise.&lt;void&gt;</code>
@@ -583,11 +583,11 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                 * [.arrayRemoveFieldValue(arrayElements)](#module_FirebaseFirestoreWrapper--module.exports.arrayRemoveFieldValue) ⇒ <code>sentinelValue</code>
                 * [.arrayUnionFieldValue(arrayElements)](#module_FirebaseFirestoreWrapper--module.exports.arrayUnionFieldValue) ⇒ <code>sentinelValue</code>
             * _Listeners_
-                * [.ListenRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenRecords) ⇒ <code>unsubscribe</code>
-                * [.ListenQuery(table, [filterArray], [sortArray], refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenQuery) ⇒ <code>unsubscribe</code>
-                * [.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupRecords) ⇒ <code>callback</code>
-                * [.ListenCollectionGroupQuery(table, [filterArray], [sortArray], dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupQuery) ⇒ <code>unsubscribe</code>
-                * [.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenRecord) ⇒ <code>unsubscribe</code>
+                * [.ListenRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenRecords) ⇒ <code>function</code>
+                * [.ListenQuery(table, [filterArray], [sortArray], refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenQuery) ⇒ <code>function</code>
+                * [.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupRecords) ⇒ <code>function</code>
+                * [.ListenCollectionGroupQuery(table, [filterArray], [sortArray], dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupQuery) ⇒ <code>function</code>
+                * [.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenRecord) ⇒ <code>callback</code>
             * _Paginator_
                 * [.PaginateFetch](#module_FirebaseFirestoreWrapper--module.exports.PaginateFetch)
                     * [new exports.PaginateFetch(table, filterArray, sortArray, refPath, limit)](#new_module_FirebaseFirestoreWrapper--module.exports.PaginateFetch_new)
@@ -642,7 +642,16 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                 * [.typedCollectFromChild(child, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedCollectFromChild)
                 * [.typedListener(type, parent, batch, type, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.typedListener) ⇒ <code>callback</code>
         * _inner_
+            * [~dbReference(refPath)](#module_FirebaseFirestoreWrapper--module.exports..dbReference) ⇒ <code>DocumentReference</code>
+            * [~createRefFromPath(docPath, refPath)](#module_FirebaseFirestoreWrapper--module.exports..createRefFromPath) ⇒ <code>DocumentReference</code>
+            * [~filterQuery(query, [filterArray])](#module_FirebaseFirestoreWrapper--module.exports..filterQuery) ⇒ <code>Query</code>
+            * [~sortQuery(query, [sortArray])](#module_FirebaseFirestoreWrapper--module.exports..sortQuery) ⇒
+            * [~limitQuery(query, limit)](#module_FirebaseFirestoreWrapper--module.exports..limitQuery) ⇒ <code>Query</code>
+            * [~ListenRecordsCommon(reference, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports..ListenRecordsCommon) ⇒ <code>function</code>
             * [~Record](#module_FirebaseFirestoreWrapper--module.exports..Record) : <code>object</code>
+            * [~filterObject](#module_FirebaseFirestoreWrapper--module.exports..filterObject) : <code>Object</code>
+            * [~RecordListener](#module_FirebaseFirestoreWrapper--module.exports..RecordListener) : <code>function</code>
+            * [~CollectionListener](#module_FirebaseFirestoreWrapper--module.exports..CollectionListener) : <code>function</code>
 
 <a name="exp_module_FirebaseFirestoreWrapper--module.exports"></a>
 
@@ -694,7 +703,7 @@ returns an array of internal record structures from afirestore Query snapshot
 <a name="module_FirebaseFirestoreWrapper--module.exports.createUniqueReference"></a>
 
 #### module.exports.createUniqueReference(tablePath, refPath) ⇒ <code>DocumentReference</code>
-----------------------------------------------------------------------Creates a DocumentReference document to the collectionreferenced in parameter tablePath (relative to optional refPath).This is can be useful for Transactions and Batches, whichcan only get(), set() or update() existing documents. Tricksie!
+Creates a DocumentReference document to the collectionreferenced in parameter tablePath (relative to optional refPath).This is can be useful for Transactions and Batches, whichcan only get(), set() or update() existing documents. Tricksie!
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>DocumentReference</code> - Firestore Document Reference  
@@ -706,10 +715,12 @@ returns an array of internal record structures from afirestore Query snapshot
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.writeRecord"></a>
 
-#### module.exports.writeRecord(tablePath, data, refPath, batch, mergeOption) ⇒ <code>Promise.&lt;Record&gt;</code>
-----------------------------------------------------------------------Writes a Firestore record to collection indicated by tablePathrelative to option DocumentReference refPath
+#### module.exports.writeRecord(tablePath, data, refPath, batch, mergeOption) ⇒ <code>Promise.Record</code>
+Writes a Firestore record to collection indicated by tablePathrelative to option DocumentReference refPath
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+**Fulfil**: document record  
+**Reject**: error message  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -736,11 +747,11 @@ Writes given data object (or map) to the given documentReference
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.writeBack"></a>
 
-#### module.exports.writeBack(data, Transaction, mergeOption) ⇒ <code>Promise.&lt;Record&gt;</code>
-----------------------------------------------------------------------Writes a local-schema document back to the Firestore.  Assumeobject/map came from the firestore
+#### module.exports.writeBack(data, Transaction, mergeOption) ⇒ <code>Promise.Record</code>
+Writes a local-schema document back to the Firestore.  Assumeobject/map came from the firestore
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>Promise.&lt;Record&gt;</code> - record as written.  
+**Returns**: <code>Promise.Record</code> - record as written.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -764,10 +775,9 @@ query for a SET of records
 <a name="module_FirebaseFirestoreWrapper--module.exports.collectRecordsByFilter"></a>
 
 #### module.exports.collectRecordsByFilter(tablePath, refPath, [filterArray], [sortArray], limit) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-----------------------------------------------------------------------
+returns an array of documents from Firestore
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Descriptions**: returns an array of documents from Firestore  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -894,8 +904,6 @@ update record by fields - Allows use of FieldPath optionssuch as .delete(). Onl
 <a name="module_FirebaseFirestoreWrapper--module.exports.updateRecordByRefPath"></a>
 
 #### module.exports.updateRecordByRefPath(docRefPath, data, batch) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-----------------------------------------------------------------------
-
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
 | Param | Type | Description |
@@ -947,11 +955,11 @@ creates and runs a series of record operations(executed in the param function) 
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.openWriteBatch"></a>
 
-#### module.exports.openWriteBatch() ⇒ <code>Promise.&lt;WriteBatch&gt;</code>
+#### module.exports.openWriteBatch() ⇒ <code>Promise.WriteBatch</code>
 Creates a WriteBatch object to collect actions for Batch writing to backend
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>Promise.&lt;WriteBatch&gt;</code> - object that operations are added to for a bulkoperation  
+**Returns**: <code>Promise.WriteBatch</code> - object that operations are added to for a bulkoperation  
 **Category**: Batch  
 <a name="module_FirebaseFirestoreWrapper--module.exports.closeWriteBatch"></a>
 
@@ -968,7 +976,7 @@ Dispatches an asynchronous Closure to submit Batch
 <a name="module_FirebaseFirestoreWrapper--module.exports.openBulkWriter"></a>
 
 #### module.exports.openBulkWriter() ⇒ <code>BulkWriter</code>
-----------------------------------------------------------------------Creates a bulkWriter object to collect actions for Bulk writing to backendoffers parallel operations, writes only, does NOT check for contentions,admin/Node-side only.
+Creates a bulkWriter object to collect actions for Bulk writing to backendoffers parallel operations, writes only, does NOT check for contentions,admin/Node-side only.
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>BulkWriter</code> - object that operations are added to for a bulkoperation  
@@ -976,7 +984,7 @@ Dispatches an asynchronous Closure to submit Batch
 <a name="module_FirebaseFirestoreWrapper--module.exports.closeBulkWriter"></a>
 
 #### module.exports.closeBulkWriter(bulkWriter) ⇒ <code>Promise.&lt;void&gt;</code>
-----------------------------------------------------------------------Dispatches an asynchronous Closure to complete BulkWriter
+Dispatches an asynchronous Closure to complete BulkWriter
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Category**: Batch  
@@ -1047,11 +1055,11 @@ return a sentinel to add/join elements to array field
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenRecords"></a>
 
-#### module.exports.ListenRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>unsubscribe</code>
-----------------------------------------------------------------------sets up a listener for changes to a single record
+#### module.exports.ListenRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>function</code>
+sets up a listener for changes to a single record
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>unsubscribe</code> - function to be called to release subscription  
+**Returns**: <code>function</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
@@ -1063,11 +1071,11 @@ return a sentinel to add/join elements to array field
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenQuery"></a>
 
-#### module.exports.ListenQuery(table, [filterArray], [sortArray], refPath, dataCallback, errCallback) ⇒ <code>unsubscribe</code>
-----------------------------------------------------------------------Sets up a listener to a query
+#### module.exports.ListenQuery(table, [filterArray], [sortArray], refPath, dataCallback, errCallback) ⇒ <code>function</code>
+Sets up a listener to a query
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>unsubscribe</code> - function to be called to release subscription  
+**Returns**: <code>function</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
@@ -1081,11 +1089,11 @@ return a sentinel to add/join elements to array field
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupRecords"></a>
 
-#### module.exports.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>callback</code>
-----------------------------------------------------------------------sets up a listener for changes to a collectionGroup
+#### module.exports.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>function</code>
+sets up a listener for changes to a collectionGroup
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>callback</code> - function to be called to release subscription  
+**Returns**: <code>function</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
@@ -1097,11 +1105,11 @@ return a sentinel to add/join elements to array field
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupQuery"></a>
 
-#### module.exports.ListenCollectionGroupQuery(table, [filterArray], [sortArray], dataCallback, errCallback) ⇒ <code>unsubscribe</code>
-----------------------------------------------------------------------sets up a listener for changes to a collectionGroup by query
+#### module.exports.ListenCollectionGroupQuery(table, [filterArray], [sortArray], dataCallback, errCallback) ⇒ <code>function</code>
+sets up a listener for changes to a collectionGroup by query
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>unsubscribe</code> - function to be called to release subscription  
+**Returns**: <code>function</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
@@ -1114,11 +1122,11 @@ return a sentinel to add/join elements to array field
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenRecord"></a>
 
-#### module.exports.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback) ⇒ <code>unsubscribe</code>
+#### module.exports.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback) ⇒ <code>callback</code>
 Listen to changes to a single record
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>unsubscribe</code> - function to be called to release subscription  
+**Returns**: <code>callback</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
@@ -1741,6 +1749,80 @@ Uses the ownerFilter (above) to establish a listener to "just" theparts of a co
 | dataCallback | <code>CollectionListener</code> | function to be called with changes to record |
 | errCallback | <code>callback</code> | function to be called when an error occurs in listener |
 
+<a name="module_FirebaseFirestoreWrapper--module.exports..dbReference"></a>
+
+#### module.exports~dbReference(refPath) ⇒ <code>DocumentReference</code>
+generates a document reference from a pathif passed; else returns the db base reference
+
+**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| refPath | <code>string</code> | Path to base actions from. May be null |
+
+<a name="module_FirebaseFirestoreWrapper--module.exports..createRefFromPath"></a>
+
+#### module.exports~createRefFromPath(docPath, refPath) ⇒ <code>DocumentReference</code>
+Creates a DocumentReference from *relative* docPathand an (optional) absolute refPath
+
+**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| docPath | <code>string</code> |  | 
+| refPath | <code>refPath</code> | <code></code> | 
+
+<a name="module_FirebaseFirestoreWrapper--module.exports..filterQuery"></a>
+
+#### module.exports~filterQuery(query, [filterArray]) ⇒ <code>Query</code>
+builds and returns a query built from an array of filter (i.e. "where")conditions
+
+**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+**Returns**: <code>Query</code> - Firestore Query object  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| query | <code>Query</code> |  | collectionReference or Query to build filter upong |
+| [filterArray] | <code>filterObject</code> | <code></code> | an (optional) 3xn array of filter(i.e. "where") conditions |
+
+<a name="module_FirebaseFirestoreWrapper--module.exports..sortQuery"></a>
+
+#### module.exports~sortQuery(query, [sortArray]) ⇒
+builds and returns a query built from an array of filter (i.e. "where")conditions
+
+**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+**Returns**: Firestore Query object  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| query | <code>Query</code> |  | collectionReference or Query to build filter upong |
+| [sortArray] | <code>sortObject</code> | <code></code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
+
+<a name="module_FirebaseFirestoreWrapper--module.exports..limitQuery"></a>
+
+#### module.exports~limitQuery(query, limit) ⇒ <code>Query</code>
+builds and returns a query built from an array of filter (i.e. "where")conditions
+
+**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+**Returns**: <code>Query</code> - Firestore Query object  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| query | <code>Query</code> |  | collectionReference or Query to build filter upong |
+| limit | <code>number</code> | <code></code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
+
+<a name="module_FirebaseFirestoreWrapper--module.exports..ListenRecordsCommon"></a>
+
+#### module.exports~ListenRecordsCommon(reference, dataCallback, errCallback) ⇒ <code>function</code>
+**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+**Returns**: <code>function</code> - function to be called to release subscription  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| reference | <code>DocumentReference</code> |  |
+| dataCallback | <code>RecordListener</code> |  |
+| errCallback | <code>callback</code> | function to be called when an error occurs in listener |
+
 <a name="module_FirebaseFirestoreWrapper--module.exports..Record"></a>
 
 #### module.exports~Record : <code>object</code>
@@ -1753,6 +1835,36 @@ common properties of our database records
 | --- | --- | --- |
 | Id | <code>string</code> | Id of the document as stored in Firestore May be null for new objects |
 | refPath | <code>string</code> | string representing the full path to the Firestore document.  May be blank for new documents to be saved. |
+
+<a name="module_FirebaseFirestoreWrapper--module.exports..filterObject"></a>
+
+#### module.exports~filterObject : <code>Object</code>
+**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| fieldRef | <code>string</code> | 
+| opStr | <code>string</code> | 
+| value | <code>any</code> | 
+
+<a name="module_FirebaseFirestoreWrapper--module.exports..RecordListener"></a>
+
+#### module.exports~RecordListener : <code>function</code>
+**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+
+| Param | Type |
+| --- | --- |
+| documentSnapshot | <code>DocumentSnapshot</code> | 
+
+<a name="module_FirebaseFirestoreWrapper--module.exports..CollectionListener"></a>
+
+#### module.exports~CollectionListener : <code>function</code>
+**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+
+| Param | Type |
+| --- | --- |
+| querySnapshot | <code>QuerySnapshot</code> | 
 
 <a name="module_FirebaseStorageWrapper"></a>
 
