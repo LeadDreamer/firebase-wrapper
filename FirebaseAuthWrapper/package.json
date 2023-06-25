@@ -18,7 +18,11 @@
     "url": "http://dreamsandlogic.com"
   },
   "type": "module",
-  "files": ["*.js", "**/dist/*.js", "*.md"],
+  "files": [
+    "*.js",
+    "**/dist/*.js",
+    "*.md"
+  ],
   "main": "index.js",
   "exports": {
     "import": {
@@ -38,7 +42,7 @@
     "build": "$npm_execpath run transpile",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
     "prepublishOnly": "$npm_execpath run transpile",
-    "docs": "./node_modules/.bin/jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f *.js > README.md"
+    "docs": "jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f *.js > README.md"
   },
   "peerDependencies": {
     "firebase-admin": "^9.4.1",

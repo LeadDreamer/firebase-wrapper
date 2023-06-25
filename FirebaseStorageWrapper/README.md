@@ -30,50 +30,74 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 * [FirebaseStorageWrapper](#module_FirebaseStorageWrapper)
     * _static_
-        * [.FirebaseStorageWrapper(firebase)](#module_FirebaseStorageWrapper.FirebaseStorageWrapper)
+        * [.paginateListing](#module_FirebaseStorageWrapper.paginateListing)
+            * [new exports.paginateListing(storageReference, limit)](#new_module_FirebaseStorageWrapper.paginateListing_new)
+            * [.PageForward()](#module_FirebaseStorageWrapper.paginateListing+PageForward) ⇒ <code>Promise.&lt;Array.StorageReference&gt;</code>
         * [.makeStorageRefFromRecord(record, key, filename)](#module_FirebaseStorageWrapper.makeStorageRefFromRecord) ⇒ <code>StorageReference</code>
-        * [.listReference(storageReference, optionsObject)](#module_FirebaseStorageWrapper.listReference) ⇒ <code>ListResult</code>
-        * [.makeFileURLFromRecord(record, key, filename)](#module_FirebaseStorageWrapper.makeFileURLFromRecord) ⇒ <code>external:promise</code>
+        * [.listReference(storageReference, optionsObject)](#module_FirebaseStorageWrapper.listReference) ⇒ <code>Promise.&lt;ListResult&gt;</code>
+        * [.makeFileURLFromRecord(record, key, filename)](#module_FirebaseStorageWrapper.makeFileURLFromRecord) ⇒ <code>Promise.&lt;string&gt;</code>
         * [.makePrivateURLFromRecord(record, key)](#module_FirebaseStorageWrapper.makePrivateURLFromRecord) ⇒ <code>string</code>
         * [.makePrivateURLFromReference(reference, key)](#module_FirebaseStorageWrapper.makePrivateURLFromReference) ⇒ <code>string</code>
-        * [.makePrivateURLFromPath(fullPath)](#module_FirebaseStorageWrapper.makePrivateURLFromPath) ⇒ <code>string</code>
-        * [.storeBlobByRecord(blob, record, key, filename)](#module_FirebaseStorageWrapper.storeBlobByRecord) ⇒ <code>UploadTask</code>
-        * [.storeDataURLByRecord(dataURL, record, key, filename)](#module_FirebaseStorageWrapper.storeDataURLByRecord) ⇒
         * [.getDefaultImageURL(key)](#module_FirebaseStorageWrapper.getDefaultImageURL) ⇒ <code>string</code>
         * [.getURLFromFilePath(filePath)](#module_FirebaseStorageWrapper.getURLFromFilePath) ⇒ <code>string</code>
         * [.dataURLToBlob(dataURL)](#module_FirebaseStorageWrapper.dataURLToBlob) ⇒ <code>Object</code>
     * _inner_
+        * [~FirebaseStorageWrapper(firebase)](#module_FirebaseStorageWrapper..FirebaseStorageWrapper)
+        * [~makePrivateURLFromPath(fullPath)](#module_FirebaseStorageWrapper..makePrivateURLFromPath) ⇒ <code>string</code>
+        * [~storeBlobByRecord(blob, record, key, filename)](#module_FirebaseStorageWrapper..storeBlobByRecord) ⇒ <code>UploadTask</code>
+        * [~storeDataURLByRecord(dataURL, record, key, filename)](#module_FirebaseStorageWrapper..storeDataURLByRecord) ⇒ <code>UploadTask</code>
+        * [~ListOptions](#module_FirebaseStorageWrapper..ListOptions) : <code>object</code>
+        * [~ListResult](#module_FirebaseStorageWrapper..ListResult) : <code>object</code>
+        * [~PaginateList](#module_FirebaseStorageWrapper..PaginateList) : <code>object</code>
         * [~File](#module_FirebaseStorageWrapper..File) : <code>object</code>
         * [~FileMetadata](#module_FirebaseStorageWrapper..FileMetadata) : <code>object</code>
 
-<a name="module_FirebaseStorageWrapper.FirebaseStorageWrapper"></a>
+<a name="module_FirebaseStorageWrapper.paginateListing"></a>
 
-### FirebaseStorageWrapper.FirebaseStorageWrapper(firebase)
-Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
+### FirebaseStorageWrapper.paginateListing
+A class to manage paging through a listing of storage references
 
-**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Kind**: static class of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+
+* [.paginateListing](#module_FirebaseStorageWrapper.paginateListing)
+    * [new exports.paginateListing(storageReference, limit)](#new_module_FirebaseStorageWrapper.paginateListing_new)
+    * [.PageForward()](#module_FirebaseStorageWrapper.paginateListing+PageForward) ⇒ <code>Promise.&lt;Array.StorageReference&gt;</code>
+
+<a name="new_module_FirebaseStorageWrapper.paginateListing_new"></a>
+
+#### new exports.paginateListing(storageReference, limit)
+constructs an object to paginate through large Firestore Tables
+
 
 | Param | Type |
 | --- | --- |
-| firebase | <code>firebase</code> | 
+| storageReference | <code>StorageReference</code> | 
+| limit | <code>number</code> | 
 
-**Example**  
-```import * as firebase from "firebase/app";import "firebase/storage";import FirebaseStorage from "@leaddreamer/firebase-wrapper/FirebaseStorageWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseStorage(firebase);})(config);```
+<a name="module_FirebaseStorageWrapper.paginateListing+PageForward"></a>
+
+#### paginateListing.PageForward() ⇒ <code>Promise.&lt;Array.StorageReference&gt;</code>
+executes the query again to fetch the next set of records
+
+**Kind**: instance method of [<code>paginateListing</code>](#module_FirebaseStorageWrapper.paginateListing)  
+**Returns**: <code>Promise.&lt;Array.StorageReference&gt;</code> - returns an array of records - the next page  
 <a name="module_FirebaseStorageWrapper.makeStorageRefFromRecord"></a>
 
 ### FirebaseStorageWrapper.makeStorageRefFromRecord(record, key, filename) ⇒ <code>StorageReference</code>
+This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.The function takes a document record, and combines it with optional key andfilename to construct a '/' separated path to a stored item, , and returns aStorage reference to that item.Note this simply makes the Storage Ref - it does not carry out *any* operations
+
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 **Returns**: <code>StorageReference</code> - a Firestore Storage Reference  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | record | <code>string</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
-| key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
+| key | <code>string</code> | An optional string identifying the specific field a stored item is associated with |
 | filename | <code>string</code> | an optional name to be associated with the stored item. |
 
 <a name="module_FirebaseStorageWrapper.listReference"></a>
 
-### FirebaseStorageWrapper.listReference(storageReference, optionsObject) ⇒ <code>ListResult</code>
+### FirebaseStorageWrapper.listReference(storageReference, optionsObject) ⇒ <code>Promise.&lt;ListResult&gt;</code>
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 
 | Param | Type | Description |
@@ -83,7 +107,9 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 
 <a name="module_FirebaseStorageWrapper.makeFileURLFromRecord"></a>
 
-### FirebaseStorageWrapper.makeFileURLFromRecord(record, key, filename) ⇒ <code>external:promise</code>
+### FirebaseStorageWrapper.makeFileURLFromRecord(record, key, filename) ⇒ <code>Promise.&lt;string&gt;</code>
+This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a document record, and combines it with optional key andfilename to construct a '/' separated path to a stored item, , and returns aURL that can be used to access that item.Note this simply makes the URL - it does not carry out *any* operations
+
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 **Fulfil**: <code>string</code>  a "long-lived" URL to access the file.  
 **Reject**: <code>string</code>  
@@ -97,6 +123,8 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 <a name="module_FirebaseStorageWrapper.makePrivateURLFromRecord"></a>
 
 ### FirebaseStorageWrapper.makePrivateURLFromRecord(record, key) ⇒ <code>string</code>
+This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a document record, and combines it with optional key,to construct a '/' separated path to a stored item, , and returns aURL that can be used to access that item.Note this simply makes the URL - it does not carry out *any* operations
+
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 **Returns**: <code>string</code> - The resulting Security-Rule-compliant URL  
 
@@ -108,6 +136,8 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 <a name="module_FirebaseStorageWrapper.makePrivateURLFromReference"></a>
 
 ### FirebaseStorageWrapper.makePrivateURLFromReference(reference, key) ⇒ <code>string</code>
+This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a document record, and combines it with optional key,to construct a '/' separated path to a stored item, , and returns aURL that can be used to access that item.Note this simply makes the URL - it does not carry out *any* operations
+
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 **Returns**: <code>string</code> - The resulting Security-Rule-compliant URL  
 
@@ -115,48 +145,6 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | --- | --- | --- |
 | reference | <code>StorageReference</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
 | key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
-
-<a name="module_FirebaseStorageWrapper.makePrivateURLFromPath"></a>
-
-### FirebaseStorageWrapper.makePrivateURLFromPath(fullPath) ⇒ <code>string</code>
-This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a full path to a Storage object and turns it intoURL.  If "type"is not included, the URL will return the metadata, notthe contents.Note this simply makes the URL - it does not carry out *any* operations
-
-**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
-**Returns**: <code>string</code> - constructed Security-Rule-compliant URL  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| fullPath | <code>string</code> | required path to the stored item. |
-
-<a name="module_FirebaseStorageWrapper.storeBlobByRecord"></a>
-
-### FirebaseStorageWrapper.storeBlobByRecord(blob, record, key, filename) ⇒ <code>UploadTask</code>
-Firestore's document sizes can be limited - 1MB - so our system storeslarger digital "blobs" in a parallel Firestore Storage.
-
-**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
-**Returns**: <code>UploadTask</code> - Firestore Storage UploadTask Object  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| blob | <code>blob</code> | A data blob in DataURI format to store in Storage |
-| record | <code>RecordObject</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
-| key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
-| filename | <code>string</code> | an optional name to be associated with the stored item. |
-
-<a name="module_FirebaseStorageWrapper.storeDataURLByRecord"></a>
-
-### FirebaseStorageWrapper.storeDataURLByRecord(dataURL, record, key, filename) ⇒
-Firestore's document sizes can be limited - 1MB - so our system storeslarger digital "blobs" in a parallel Firestore Storage.
-
-**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
-**Returns**: Firestore Storage UploadTask Object  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| dataURL | <code>dataURL</code> | A data blob in DataURI format to store in Storage |
-| record | <code>RecordObject</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
-| key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
-| filename | <code>string</code> | an optional name to be associated with the stored item. |
 
 <a name="module_FirebaseStorageWrapper.getDefaultImageURL"></a>
 
@@ -185,6 +173,97 @@ Firestore's document sizes can be limited - 1MB - so our system storeslarger di
 | Param | Type |
 | --- | --- |
 | dataURL | <code>object</code> | 
+
+<a name="module_FirebaseStorageWrapper..FirebaseStorageWrapper"></a>
+
+### FirebaseStorageWrapper~FirebaseStorageWrapper(firebase)
+Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
+
+**Kind**: inner method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+
+| Param | Type |
+| --- | --- |
+| firebase | <code>firebase</code> | 
+
+**Example**  
+```import * as firebase from "firebase/app";import "firebase/storage";import FirebaseStorage from "@leaddreamer/firebase-wrapper/FirebaseStorageWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseStorage(firebase);})(config);```
+<a name="module_FirebaseStorageWrapper..makePrivateURLFromPath"></a>
+
+### FirebaseStorageWrapper~makePrivateURLFromPath(fullPath) ⇒ <code>string</code>
+This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a full path to a Storage object and turns it intoURL.  If "type"is not included, the URL will return the metadata, notthe contents.Note this simply makes the URL - it does not carry out *any* operations
+
+**Kind**: inner method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Returns**: <code>string</code> - constructed Security-Rule-compliant URL  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fullPath | <code>string</code> | required path to the stored item. |
+
+<a name="module_FirebaseStorageWrapper..storeBlobByRecord"></a>
+
+### FirebaseStorageWrapper~storeBlobByRecord(blob, record, key, filename) ⇒ <code>UploadTask</code>
+Firestore's document sizes can be limited - 1MB - so our system storeslarger digital "blobs" in a parallel Firestore Storage.
+
+**Kind**: inner method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Returns**: <code>UploadTask</code> - Firestore Storage UploadTask Object  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| blob | <code>blob</code> | A data blob in DataURI format to store in Storage |
+| record | <code>RecordObject</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
+| key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
+| filename | <code>string</code> | an optional name to be associated with the stored item. |
+
+<a name="module_FirebaseStorageWrapper..storeDataURLByRecord"></a>
+
+### FirebaseStorageWrapper~storeDataURLByRecord(dataURL, record, key, filename) ⇒ <code>UploadTask</code>
+Firestore's document sizes can be limited - 1MB - so our system storeslarger digital "blobs" in a parallel Firestore Storage.
+
+**Kind**: inner method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Returns**: <code>UploadTask</code> - Firestore Storage UploadTask Object  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| dataURL | <code>dataURL</code> | A data blob in DataURI format to store in Storage |
+| record | <code>RecordObject</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
+| key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
+| filename | <code>string</code> | an optional name to be associated with the stored item. |
+
+<a name="module_FirebaseStorageWrapper..ListOptions"></a>
+
+### FirebaseStorageWrapper~ListOptions : <code>object</code>
+**Kind**: inner typedef of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| maxResults | <code>number</code> | If set, limits the total number of prefixes and items to return. The default and maximum maxResults is 1000. |
+| pageToken | <code>string</code> | The nextPageToken from a previous call to list(). If provided, listing is resumed from the previous position. |
+
+<a name="module_FirebaseStorageWrapper..ListResult"></a>
+
+### FirebaseStorageWrapper~ListResult : <code>object</code>
+**Kind**: inner typedef of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| items | <code>Array.StorageReference</code> | 
+| prefixes | <code>Array.StorageReference</code> | 
+| nextPageToken | <code>string</code> | 
+
+<a name="module_FirebaseStorageWrapper..PaginateList"></a>
+
+### FirebaseStorageWrapper~PaginateList : <code>object</code>
+**Kind**: inner typedef of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| storageReference | <code>StorageReference</code> | 
+| status | <code>number</code> | 
+| limit | <code>number</code> | 
+| listOptions | <code>ListOptions</code> | 
 
 <a name="module_FirebaseStorageWrapper..File"></a>
 
@@ -252,36 +331,23 @@ A set of helper-wrapper functions around firebase storageIntent is to treat Fir
 
 
 * [FirebaseStorageAdminEmulator](#module_FirebaseStorageAdminEmulator)
-    * _static_
-        * [.FirebaseStorageAdminEmulator(firebase)](#module_FirebaseStorageAdminEmulator.FirebaseStorageAdminEmulator)
-    * _inner_
-        * [~adminRef](#module_FirebaseStorageAdminEmulator..adminRef)
-            * [new adminRef(bucket, path)](#new_module_FirebaseStorageAdminEmulator..adminRef_new)
-            * [.fileRef](#module_FirebaseStorageAdminEmulator..adminRef+fileRef) : <code>storageRef</code>
-            * [.fullPath](#module_FirebaseStorageAdminEmulator..adminRef+fullPath) : <code>string</code>
-            * [.name](#module_FirebaseStorageAdminEmulator..adminRef+name) : <code>string</code>
-            * [.bucket](#module_FirebaseStorageAdminEmulator..adminRef+bucket) : <code>string</code>
-            * [.parent](#module_FirebaseStorageAdminEmulator..adminRef+parent) : <code>storageRef</code>
-            * [.storage](#module_FirebaseStorageAdminEmulator..adminRef+storage) : <code>storageApp</code>
-            * [.metadata](#module_FirebaseStorageAdminEmulator..adminRef+metadata) : <code>string</code>
-        * [~childcreates and returns a new adminRef object from existin path(path)](#module_FirebaseStorageAdminEmulator..childcreates and returns a new adminRef object from existin path) ⇒ <code>StorageRefEmulation</code>
-        * [~deleteDeletes the referenced storage item()](#module_FirebaseStorageAdminEmulator..deleteDeletes the referenced storage item) ⇒ <code>Promise</code>
-        * [~getDownloadURLGenerates a long-lived (essentially permanent until revoked)Public-Access URL for a storage item in FIREBASE (not Cloud Storage)format()](#module_FirebaseStorageAdminEmulator..getDownloadURLGenerates a long-lived (essentially permanent until revoked)Public-Access URL for a storage item in FIREBASE (not Cloud Storage)format) ⇒ <code>string</code>
-        * [~getTokenFetches (or creates as needed) a unique token for a storage object()](#module_FirebaseStorageAdminEmulator..getTokenFetches (or creates as needed) a unique token for a storage object) ⇒ <code>Promise.&lt;string&gt;</code>
-        * [~getMetadataFetches the FileMetadata for the storage object. Custom/Client metadatais located in FileMetadata.metadata()](#module_FirebaseStorageAdminEmulator..getMetadataFetches the FileMetadata for the storage object. Custom/Client metadatais located in FileMetadata.metadata) ⇒ <code>FileMetadata</code>
-        * [~put(data, metadata)](#module_FirebaseStorageAdminEmulator..put) ⇒ <code>Promise.&lt;object&gt;</code>
-        * [~putString(dataString, stringFormat, metadata)](#module_FirebaseStorageAdminEmulator..putString) ⇒ <code>Promise.&lt;object&gt;</code>
-
-<a name="module_FirebaseStorageAdminEmulator.FirebaseStorageAdminEmulator"></a>
-
-### FirebaseStorageAdminEmulator.FirebaseStorageAdminEmulator(firebase)
-Initializes the Storage service of the provided firebase app.  Alsoinstantiates various constants and helper functions.This is a WRAPPER around CLOUD STORAGE (admin) functionsto emulate FIREBASE functionality, keeping a similar APIbetween client & cloud code.NOTE: admin "references" ARE NOT the same as client references, and are NOTinterchangeable.  Do not mix client & admin code (not actually possiblein this wrapper)
-
-**Kind**: static method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
-
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
+    * [~adminRef](#module_FirebaseStorageAdminEmulator..adminRef)
+        * [new adminRef(bucket, path)](#new_module_FirebaseStorageAdminEmulator..adminRef_new)
+        * [.fileRef](#module_FirebaseStorageAdminEmulator..adminRef+fileRef) : <code>storageRef</code>
+        * [.fullPath](#module_FirebaseStorageAdminEmulator..adminRef+fullPath) : <code>string</code>
+        * [.name](#module_FirebaseStorageAdminEmulator..adminRef+name) : <code>string</code>
+        * [.bucket](#module_FirebaseStorageAdminEmulator..adminRef+bucket) : <code>string</code>
+        * [.parent](#module_FirebaseStorageAdminEmulator..adminRef+parent) : <code>storageRef</code>
+        * [.storage](#module_FirebaseStorageAdminEmulator..adminRef+storage) : <code>storageApp</code>
+        * [.metadata](#module_FirebaseStorageAdminEmulator..adminRef+metadata) : <code>string</code>
+        * [.child(path)](#module_FirebaseStorageAdminEmulator..adminRef+child) ⇒ <code>Promise.&lt;StorageRefEmulation&gt;</code>
+        * [.delete()](#module_FirebaseStorageAdminEmulator..adminRef+delete) ⇒ <code>Promise.&lt;void&gt;</code>
+        * [.getDownloadURL()](#module_FirebaseStorageAdminEmulator..adminRef+getDownloadURL) ⇒ <code>Promise.&lt;string&gt;</code>
+        * [.getToken()](#module_FirebaseStorageAdminEmulator..adminRef+getToken) ⇒ <code>Promise.&lt;string&gt;</code>
+        * [.getMetadata()](#module_FirebaseStorageAdminEmulator..adminRef+getMetadata) ⇒ <code>Promise.&lt;FileMetadata&gt;</code>
+        * [.put(data, metadata)](#module_FirebaseStorageAdminEmulator..adminRef+put) ⇒ <code>Promise.&lt;object&gt;</code>
+        * [.putString(dataString, stringFormat, metadata)](#module_FirebaseStorageAdminEmulator..adminRef+putString) ⇒ <code>Promise.&lt;object&gt;</code>
+    * [~FirebaseStorageAdminEmulator(firebase)](#module_FirebaseStorageAdminEmulator..FirebaseStorageAdminEmulator)
 
 <a name="module_FirebaseStorageAdminEmulator..adminRef"></a>
 
@@ -297,6 +363,13 @@ Initializes the Storage service of the provided firebase app.  Alsoinstantiates
     * [.parent](#module_FirebaseStorageAdminEmulator..adminRef+parent) : <code>storageRef</code>
     * [.storage](#module_FirebaseStorageAdminEmulator..adminRef+storage) : <code>storageApp</code>
     * [.metadata](#module_FirebaseStorageAdminEmulator..adminRef+metadata) : <code>string</code>
+    * [.child(path)](#module_FirebaseStorageAdminEmulator..adminRef+child) ⇒ <code>Promise.&lt;StorageRefEmulation&gt;</code>
+    * [.delete()](#module_FirebaseStorageAdminEmulator..adminRef+delete) ⇒ <code>Promise.&lt;void&gt;</code>
+    * [.getDownloadURL()](#module_FirebaseStorageAdminEmulator..adminRef+getDownloadURL) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [.getToken()](#module_FirebaseStorageAdminEmulator..adminRef+getToken) ⇒ <code>Promise.&lt;string&gt;</code>
+    * [.getMetadata()](#module_FirebaseStorageAdminEmulator..adminRef+getMetadata) ⇒ <code>Promise.&lt;FileMetadata&gt;</code>
+    * [.put(data, metadata)](#module_FirebaseStorageAdminEmulator..adminRef+put) ⇒ <code>Promise.&lt;object&gt;</code>
+    * [.putString(dataString, stringFormat, metadata)](#module_FirebaseStorageAdminEmulator..adminRef+putString) ⇒ <code>Promise.&lt;object&gt;</code>
 
 <a name="new_module_FirebaseStorageAdminEmulator..adminRef_new"></a>
 
@@ -351,55 +424,76 @@ app instance
 access token
 
 **Kind**: instance property of [<code>adminRef</code>](#module_FirebaseStorageAdminEmulator..adminRef)  
-<a name="module_FirebaseStorageAdminEmulator..childcreates and returns a new adminRef object from existin path"></a>
+<a name="module_FirebaseStorageAdminEmulator..adminRef+child"></a>
 
-### FirebaseStorageAdminEmulator~childcreates and returns a new adminRef object from existin path(path) ⇒ <code>StorageRefEmulation</code>
-**Kind**: inner method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
+#### adminRef.child(path) ⇒ <code>Promise.&lt;StorageRefEmulation&gt;</code>
+creates and returns a new adminRef object from existin path
+
+**Kind**: instance method of [<code>adminRef</code>](#module_FirebaseStorageAdminEmulator..adminRef)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | path | <code>string</code> | a relative path *from* the existing storageRef to create child |
 
-<a name="module_FirebaseStorageAdminEmulator..deleteDeletes the referenced storage item"></a>
+<a name="module_FirebaseStorageAdminEmulator..adminRef+delete"></a>
 
-### FirebaseStorageAdminEmulator~deleteDeletes the referenced storage item() ⇒ <code>Promise</code>
-**Kind**: inner method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
-<a name="module_FirebaseStorageAdminEmulator..getDownloadURLGenerates a long-lived (essentially permanent until revoked)Public-Access URL for a storage item in FIREBASE (not Cloud Storage)format"></a>
+#### adminRef.delete() ⇒ <code>Promise.&lt;void&gt;</code>
+Deletes the referenced storage item
 
-### FirebaseStorageAdminEmulator~getDownloadURLGenerates a long-lived (essentially permanent until revoked)Public-Access URL for a storage item in FIREBASE (not Cloud Storage)format() ⇒ <code>string</code>
-**Kind**: inner method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
-<a name="module_FirebaseStorageAdminEmulator..getTokenFetches (or creates as needed) a unique token for a storage object"></a>
+**Kind**: instance method of [<code>adminRef</code>](#module_FirebaseStorageAdminEmulator..adminRef)  
+<a name="module_FirebaseStorageAdminEmulator..adminRef+getDownloadURL"></a>
 
-### FirebaseStorageAdminEmulator~getTokenFetches (or creates as needed) a unique token for a storage object() ⇒ <code>Promise.&lt;string&gt;</code>
-**Kind**: inner method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
-<a name="module_FirebaseStorageAdminEmulator..getMetadataFetches the FileMetadata for the storage object. Custom/Client metadatais located in FileMetadata.metadata"></a>
+#### adminRef.getDownloadURL() ⇒ <code>Promise.&lt;string&gt;</code>
+Generates a long-lived (essentially permanent until revoked)Public-Access URL for a storage item in FIREBASE (not Cloud Storage)format
 
-### FirebaseStorageAdminEmulator~getMetadataFetches the FileMetadata for the storage object. Custom/Client metadatais located in FileMetadata.metadata() ⇒ <code>FileMetadata</code>
-**Kind**: inner method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
-<a name="module_FirebaseStorageAdminEmulator..put"></a>
+**Kind**: instance method of [<code>adminRef</code>](#module_FirebaseStorageAdminEmulator..adminRef)  
+<a name="module_FirebaseStorageAdminEmulator..adminRef+getToken"></a>
 
-### FirebaseStorageAdminEmulator~put(data, metadata) ⇒ <code>Promise.&lt;object&gt;</code>
+#### adminRef.getToken() ⇒ <code>Promise.&lt;string&gt;</code>
+Fetches (or creates as needed) a unique token for a storage object
+
+**Kind**: instance method of [<code>adminRef</code>](#module_FirebaseStorageAdminEmulator..adminRef)  
+<a name="module_FirebaseStorageAdminEmulator..adminRef+getMetadata"></a>
+
+#### adminRef.getMetadata() ⇒ <code>Promise.&lt;FileMetadata&gt;</code>
+Fetches the FileMetadata for the storage object. Custom/Client metadatais located in FileMetadata.metadata
+
+**Kind**: instance method of [<code>adminRef</code>](#module_FirebaseStorageAdminEmulator..adminRef)  
+<a name="module_FirebaseStorageAdminEmulator..adminRef+put"></a>
+
+#### adminRef.put(data, metadata) ⇒ <code>Promise.&lt;object&gt;</code>
 puts a block of data (and optional metadata) into storage atlocation specified by adminRef
 
-**Kind**: inner method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
+**Kind**: instance method of [<code>adminRef</code>](#module_FirebaseStorageAdminEmulator..adminRef)  
 
-| Param | Type |
-| --- | --- |
-| data | <code>blob</code> | 
-| metadata | <code>object</code> | 
+| Param | Type | Default |
+| --- | --- | --- |
+| data | <code>blob</code> |  | 
+| metadata | <code>object</code> | <code></code> | 
 
-<a name="module_FirebaseStorageAdminEmulator..putString"></a>
+<a name="module_FirebaseStorageAdminEmulator..adminRef+putString"></a>
 
-### FirebaseStorageAdminEmulator~putString(dataString, stringFormat, metadata) ⇒ <code>Promise.&lt;object&gt;</code>
+#### adminRef.putString(dataString, stringFormat, metadata) ⇒ <code>Promise.&lt;object&gt;</code>
 puts a string (possibly encoded data) into a storage filedescribed by the provided reference.
 
+**Kind**: instance method of [<code>adminRef</code>](#module_FirebaseStorageAdminEmulator..adminRef)  
+
+| Param | Type | Default |
+| --- | --- | --- |
+| dataString | <code>string</code> |  | 
+| stringFormat | <code>string</code> | <code>null</code> | 
+| metadata | <code>FileMetadata</code> | <code></code> | 
+
+<a name="module_FirebaseStorageAdminEmulator..FirebaseStorageAdminEmulator"></a>
+
+### FirebaseStorageAdminEmulator~FirebaseStorageAdminEmulator(firebase)
+Initializes the Storage service of the provided firebase app.  Alsoinstantiates various constants and helper functions.This is a WRAPPER around CLOUD STORAGE (admin) functionsto emulate FIREBASE functionality, keeping a similar APIbetween client & cloud code.NOTE: admin "references" ARE NOT the same as client references, and are NOTinterchangeable.  Do not mix client & admin code (not actually possiblein this wrapper)
+
 **Kind**: inner method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
 
 | Param | Type |
 | --- | --- |
-| dataString | <code>string</code> | 
-| stringFormat | <code>string</code> | 
-| metadata | <code>FileMetadata</code> | 
+| firebase | <code>firebase</code> | 
 
 
 * * *
