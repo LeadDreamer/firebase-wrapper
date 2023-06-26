@@ -436,12 +436,12 @@ export async function collectRecords(tablePath, refPath = null) {
  * - always an ODD number of elements
  * @param {?string} refPath (optional) allows "table" parameter to reference a sub-collection
  * of an existing document reference (I use a LOT of structured collections)
- * @param {?filterObject} [filterArray] an array of filterObjects
+ * @param {?Array.filterObject} filterArray an array of filterObjects
  * The array is assumed to be sorted in the correct order -
  * i.e. filterArray[0] is added first; filterArray[length-1] last
  * returns data as an array of objects (not dissimilar to Redux State objects)
  * with both the documentID and documentReference added as fields.
- * @param {?sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
+ * @param {Arrayt.sortObject} sortArray a 2xn array of sort (i.e. "orderBy") conditions
  * @param {?number} limit limit result to this number (if at all)
  * @returns {Promise<Array<Record>>}
  */
@@ -991,7 +991,7 @@ export function ListenRecord(
 
 export class PaginateFetch {
   /**
-   * constructs an object to paginate through large Firestore Tables
+   * @classdesc constructs an object to paginate through large Firestore Tables
    * @param {string} table a properly formatted string representing the requested collection
    * - always an ODD number of elements
    * @param {array} filterArray an (optional) 3xn array of filter(i.e. "where") conditions
@@ -1021,7 +1021,6 @@ export class PaginateFetch {
     this.limit = limit;
     /**
      * underlying query for fetch
-     * @private
      * @type {Query}
      */
     this.Query = sortQuery(
@@ -1038,7 +1037,7 @@ export class PaginateFetch {
 
   /**
    * executes the query again to fetch the next set of records
-   * @returns {Promise<Array.Record>} returns an array of record - the next page
+   * @returns {Promise<Array.Record>} returns an array of records - the next page
    */
   async PageForward() {
     const runQuery = this.snapshot
@@ -1066,7 +1065,7 @@ export class PaginateFetch {
 
   /**
    * executes the query again to fetch the previous set of records
-   * @returns {Promise<Array.Record>} returns an array of record - the next page
+   * @returns {Promise<Array.Record>} returns an array of records - the next page
    */
   async PageBack() {
     const runQuery = this.snapshot
@@ -1092,18 +1091,14 @@ export class PaginateFetch {
 
 export class PaginateGroupFetch {
   /**
-   * constructs an object to paginate through large
-   * Firestore Tables
+   * @classdesc constructs an object to paginate through large Firestore Tables
    * @param {!string} group a properly formatted string representing the requested collection
    * - always an ODD number of elements
    * @param {?filterObject} [filterArray] an (optional) 3xn array of filter(i.e. "where") conditions
-   * @param {!sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
-   *
-   * The array(s) are assumed to be sorted in the correct order -
+   * The array is assumed to be sorted in the correct order -
    * i.e. filterArray[0] is added first; filterArray[length-1] last
-   * returns data as an array of objects (not dissimilar to Redux State objects)
-   * with both the documentID and documentReference added as fields.
-   * @param {?number} limit (optional)
+   * @param {!sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
+   * @param {?number} limit (optional) page size
    * @category Paginator
    */
   constructor(
@@ -1138,11 +1133,11 @@ export class PaginateGroupFetch {
 
   /**
    * executes the query again to fetch the next set of records
-   * @async
-   * @method
-   * @returns {Promise<Array.Record>} returns an array of record - the next page
+   * @returns {Promise<Array.Record>}
+   * returns data as an array of objects (not dissimilar to Redux State objects)
+   * with both the documentID and documentReference added as fields.
    */
-  PageForward() {
+  async PageForward() {
     const runQuery = this.snapshot
       ? this.Query.startAfter(last(this.snapshot.docs))
       : this.Query;
@@ -1166,11 +1161,11 @@ export class PaginateGroupFetch {
 
   /**
    * executes the query again to fetch the previous set of records
-   * @async
-   * @method
-   * @returns {Promise<Array.Record>} returns an array of record - the next page
+   * @returns {Promise<Array.Record>}
+   * returns data as an array of objects (not dissimilar to Redux State objects)
+   * with both the documentID and documentReference added as fields.
    */
-  PageBack() {
+  async PageBack() {
     const runQuery = this.snapshot
       ? this.Query.endBefore(this.snapshot.docs[0])
       : this.Query;
@@ -1194,23 +1189,23 @@ export class PaginateGroupFetch {
 
 export class PaginatedListener {
   /**
-   * Creates an object to allow for paginating a listener for table
+   * @classdesc Creates an object to allow for paginating a listener for table
    * read from Firestore. REQUIRES a sorting choice; masks some
    * subscribe/unsubscribe action for paging forward/backward
    * @param {!string} table a properly formatted string representing the requested collection
    * - always an ODD number of elements
    * @param {filterObject} [filterArray] an (optional) 3xn array of filter(i.e. "where") conditions
+   * The array is assumed to be sorted in the correct order -
+   * i.e. filterArray[0] is added first; filterArray[length-1] last
    * @param {!sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
    * @param {?refPath} refPath (optional) allows "table" parameter to reference a sub-collection
    * of an existing document reference (I use a LOT of structured collections)
    *
-   * The array is assumed to be sorted in the correct order -
-   * i.e. filterArray[0] is added first; filterArray[length-1] last
+   * @param {?number} limit (optional) pagesize
+   * @param {!RecordListener} dataCallback
    * returns data as an array of objects (not dissimilar to Redux State objects)
    * with both the documentID and documentReference added as fields.
-   * @param {?number} limit (optional)
-   * @param {!callback} dataCallback
-   * @param {!callback} errCallback
+   * @param {!RecordListener} errCallback
    * @category Paginator
    */
   constructor(
@@ -1224,25 +1219,21 @@ export class PaginatedListener {
   ) {
     /**
      * table path at base of listener query, relative to original refPath
-     * @private
      * @type {string}
      */
     this.table = table;
     /**
      * array of filter objects for listener query
-     * @private
      * @type {filterObject}
      */
     this.filterArray = filterArray;
     /**
      * array of sort objects for listener query
-     * @private
      * @type {sortObject}
      */
     this.sortArray = sortArray;
     /**
      * refPath as basis for listener query
-     * @private
      * @type {string}
      */
     this.refPath = refPath;
@@ -1254,13 +1245,11 @@ export class PaginatedListener {
     this._setQuery();
     /**
      * current dataCallback of listener query
-     * @private
      * @type {RecordListener}
      */
     this.dataCallback = dataCallback;
     /**
      * current errCallback of listener query
-     * @private
      * @type {callback}
      */
     this.errCallback = errCallback;
@@ -1273,8 +1262,6 @@ export class PaginatedListener {
 
   /**
    * reconstructs the basis query
-   * @private
-   * @method _setQuery
    * @returns {Query}
    */
   _setQuery() {
@@ -1301,11 +1288,9 @@ export class PaginatedListener {
    * resets the listener query to the next page of results.
    * Unsubscribes from the current listener, constructs a new query, and sets it
    * as the new listener
-   * @async
-   * @method
-   * @returns {unsubscribe} returns the unsubscriber function (for lifecycle events)
+   * @returns {callback} returns the unsubscriber function (for lifecycle events)
    */
-  PageForward() {
+  async PageForward() {
     const runQuery =
       this.unsubscriber && !this.snapshot.empty
         ? this.Query.startAfter(last(this.snapshot.docs))
@@ -1337,11 +1322,9 @@ export class PaginatedListener {
    * resets the listener query to the next page of results.
    * Unsubscribes from the current listener, constructs a new query, and sets it\
    * as the new listener
-   * @async
-   * @method
-   * @returns {unsubscribe} returns the unsubscriber function (for lifecycle events)
+   * @returns {callback} returns the unsubscriber function (for lifecycle events)
    */
-  PageBack() {
+  async PageBack() {
     const runQuery =
       this.unsubscriber && !this.snapshot.empty
         ? this.Query.endBefore(this.snapshot.docs[0])
@@ -1372,12 +1355,10 @@ export class PaginatedListener {
 
   /**
    * sets page size limit to new value, and restarts the paged listener
-   * @async
-   * @method
    * @param {number} newLimit
-   * @returns {unsubscribe} returns the unsubscriber function (for lifecycle events)
+   * @returns {callback} returns the unsubscriber function (for lifecycle events)
    */
-  ChangeLimit(newLimit) {
+  async ChangeLimit(newLimit) {
     const runQuery = this.Query;
 
     //IF unsubscribe function is set, run it.
@@ -1408,12 +1389,10 @@ export class PaginatedListener {
    * changes the filter on the subscription
    * This has to unsubscribe the current listener,
    * create a new query, then apply it as the listener
-   * @async
-   * @method
    * @param {filterObject} [filterArray] an array of filter descriptors
-   * @returns {unsubscribe} returns the unsubscriber function (for lifecycle events)
+   * @returns {callback} returns the unsubscriber function (for lifecycle events)
    */
-  ChangeFilter(filterArray) {
+  async ChangeFilter(filterArray) {
     //IF unsubscribe function is set, run it (and clear it)
     this.unsubscriber && this.unsubscriber();
 
@@ -1438,10 +1417,8 @@ export class PaginatedListener {
 
   /**
    * IF unsubscribe function is set, run it.
-   * @async
-   * @method
    */
-  unsubscribe() {
+  async unsubscribe() {
     //IF unsubscribe function is set, run it.
     this.unsubscriber && this.unsubscriber();
     this.unsubscriber = null;
@@ -1470,15 +1447,13 @@ export class PaginatedListener {
  * IMPORTANT NOTE:
  * Because this filter uses an INEQUALITY, .sortBy() conditions
  * are not supported
- * @function
- * @static
  * @category Tree Slice
  * @param {!Record} owner
  * @param {?filterObject} queryFilter additional filter parameters
  *
  * @returns {filterObject}
  */
-export const ownerFilter = (owner, queryFilter = null) => {
+export function ownerFilter(owner, queryFilter = null) {
   const ownerPath = owner.refPath;
   let nextPath = ownerPath.slice();
   const nextLength = nextPath.length;
@@ -1500,33 +1475,24 @@ export const ownerFilter = (owner, queryFilter = null) => {
     },
   ];
   return queryFilter ? ownerParts.concat(queryFilter) : ownerParts;
-};
+}
 
 /**
  * Uses the ownerFilter (above) to establish a listener to "just" the
  * parts of a collectionGroup that are descendants of the passed "owner"
  * record.
- * @function
- * @static
- * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} owner.refPath - string representing the full path to the
  * Firestore document.
  * @param {!string} collectionName name of the desired collectionGroup
- * @param {callback}  dataCallback function to be called with changes to record
- * @param {QuerySnapshot} response
- * @param {callback} errCallback function to be called when an error
+ * @param {RecordListener}  dataCallback function to be called with changes to record
+ * @param {RecordListener} errCallback function to be called when an error
  * occurs in listener
- * @param {string}  response
  * @returns {callback} function to be called to release subscription
+ * @category Tree Slice
  *
  */
-export const listenSlice = (
-  owner,
-  collectionName,
-  dataCallBack,
-  errCallBack
-) => {
+export function listenSlice(owner, collectionName, dataCallBack, errCallBack) {
   try {
     return ListenCollectionGroupQuery(
       collectionName,
@@ -1538,46 +1504,40 @@ export const listenSlice = (
   } catch (err) {
     console.log(`failed:listenSlice setup ${collectionName} err: ${err}`);
   }
-};
+}
 
 /**
  * Wrapper around database fetch, using ownerFilter above to
  * select/fetch just an "owner" parent document's descendants from a
  * collectionGroup
- * @async
- * @function
- * @static
- * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} owner.refPath - string representing the full path to the
  * Firestore document.
  * @param {!string} collectionName name of the desired collectionGroup
- * @returns {QuerySnapshot} response
+ * @returns {Promise.Array.Record} response
+ * @category Tree Slice
  */
-export const fetchSlice = (owner, collectionName) => {
+export async function fetchSlice(owner, collectionName) {
   try {
     return collectRecordsInGroupByFilter(collectionName, ownerFilter(owner));
   } catch (err) {
     console.log(`failed:fetchSlice setup ${collectionName} err: ${err}`);
   }
-};
+}
 
 /**
  * Wrapper around database fetch, using ownerFilter above to
  * select/fetch just an "owner" parent document's descendants from a
  * collectionGroup
- * @async
- * @function
- * @static
- * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} owner.refPath - string representing the full path to the
  * Firestore document.
  * @param {!string} collectionName name of the desired collectionGroup
- * @param {?filterObject} queryFilter filter parameters
- * @returns {QuerySnapshot} response
+ * @param {Array.filterObject} filterArray filter parameters
+ * @returns {Promise.Array.Record} response
+ * @category Tree Slice
  */
-export const querySlice = (owner, collectionName, filterArray) => {
+export async function querySlice(owner, collectionName, filterArray) {
   try {
     return collectRecordsInGroupByFilter(
       collectionName,
@@ -1586,35 +1546,31 @@ export const querySlice = (owner, collectionName, filterArray) => {
   } catch (err) {
     console.log(`failed:querySlice ${collectionName} err: ${err}`);
   }
-};
+}
 
 /**
  * Uses the ownerFilter (above) to establish a listener to "just" the
  * parts of a collectionGroup that are descendants of the passed "owner"
  * record.
- * @function
- * @static
  * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} owner.refPath - string representing the full path to the
  * Firestore document.
  * @param {!string} collectionName name of the desired collectionGroup
- * @param {?filterObject} filterArray filter parameters
- * @param {!callback}  dataCallback function to be called with changes to record
- * @param {QuerySnapshot} response
+ * @param {Array.filterObject} filterArray filter parameters
+ * @param {RecordListener}  dataCallback function to be called with changes to record
  * @param {!callback} errCallback function to be called when an error
  * occurs in listener
- * @param {string}  response
  * @returns {callback} function to be called to release subscription
  *
  */
-export const listenQuerySlice = (
+export function listenQuerySlice(
   owner,
   collectionName,
   filterArray,
   dataCallBack,
   errCallBack
-) => {
+) {
   try {
     return ListenCollectionGroupQuery(
       collectionName,
@@ -1626,33 +1582,29 @@ export const listenQuerySlice = (
   } catch (err) {
     console.log(`failed:listenQuerySlice setup ${collectionName} err: ${err}`);
   }
-};
+}
 
 /**
  * Returns the "type" (collection name) of the top-most parent of a
  * record, derived from the refPath
- * @function
- * @static
  * @category Tree Slice
  * @param {Record} record
  * @returns {string} the collection name
  */
-export const ownerType = (record) => {
+export function ownerType(record) {
   return record?.refPath.split(`/`)[0];
-};
+}
 
 /**
  * Returns the Id (documentId) of the top-most parent of a
  * record, derived from the refPath
- * @function
- * @static
  * @category Tree Slice
  * @param {Record} record
  * @returns {string} the Id
  */
-export const ownerId = (record) => {
+export function ownerId(record) {
   return record?.refPath.split(`/`)[1];
-};
+}
 
 /**
  * Returns the Id (documentId) of the top-most parent of a
@@ -1672,46 +1624,48 @@ export const ownerRefPath = (record) => {
 /**
  * Returns the bare owner record reference to the parent (root) of a
  * provided child
- * @function
- * @static
  * @category Tree Slice
  * @param {Record} record child record
  * @returns {Record} reference to the parent (root) record
  */
-export const ownerByChild = (record) => {
+export function ownerByChild(record) {
   return record?.refPath
     ? {
         Id: `${ownerId(record)}`,
         refPath: `${ownerType(record)}/${ownerId(record)}`,
       }
     : undefined;
-};
+}
 
-export const ownerByOwnerType = (ownerId, ownerType) => {
+/**
+ * returns the minimal reference record from an Id and "type"
+ * @category Tree Slice
+ * @param {!string} ownerId
+ * @param {!string} ownerType
+ * @returns {Record} reference to the parent (root) record
+ */
+export function ownerByOwnerType(ownerId, ownerType) {
   return {
     Id: ownerId,
     refPath: `${ownerType}/${ownerId}`,
   };
-};
+}
 
 /**
  * returns the record for the top-most parent of a record,
  * derived from the refPath
- * @async
- * @function
- * @static
  * @category Tree Slice
  * @param {Record} record
  * @returns {Document}
  */
-export const fetchOwner = (record) => {
+export async function fetchOwner(record) {
   return fetchRecord(
     ownerType(record), //type/collection
     ownerId(record), //Id of record desired
     null, //no refPath (top-level)
     null //no batch
   );
-};
+}
 
 /**
  * Returns the "type" (collection name) the passed record is
