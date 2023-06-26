@@ -36,9 +36,42 @@ let functions;
  * })(config)
  * ```
  */
-export default async function FirebaseCloudFunctions(firebase, config) {
-  if (config?.appId) functions = firebase.functions();
-  return Promise.resolve(null);
+/**
+ * Initializes the Auth service of the provided
+ * firebase app.  Also instantiates various constants and
+ * helper functions
+ * @param {firebase} firebase provided firebase app (allows use between client & server)
+ * @param {object} config - configuration object to detect client/server use
+ * @param {?string} config.appId - missing parameter indicates server
+ * @param {callback} thisLogger - passed logging function  (allows use between client & server)
+ * @returns {Promise<object|void>}
+ * @example
+ * ```
+ * import * as firebase from "firebase/app";
+ * import "firebase/functions";
+ * import FirebaseFunctions from "@leaddreamer/firebase-wrapper/FirebaseCloudFunctionsWrapper";
+ * import {config} from "whereever-you-put-it";
+ *
+ * ((myconfig) {
+ * try {
+ *   firebase.app();
+ * } catch (err) {
+ *   firebase.initializeApp(myconfig);
+ * }
+ * FirebaseFunctions(firebase);
+ * })(config)
+ * ```
+ */
+export default async function FirebaseCloudFunctions(
+  firebase,
+  config,
+  thisLogger
+) {
+  if (config?.appId) {
+    thisLogger("Cloud CLient");
+    functions = await firebase.functions();
+    return functions;
+  }
 }
 
 /**

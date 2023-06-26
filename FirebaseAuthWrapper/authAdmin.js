@@ -20,7 +20,6 @@ let FirebaseAuth;
  * asynchronously fetches user data from Firestore Authentication
  * @param {string} userID
  * @return {Promise.userData}
- *
  */
 export async function getUser(userID) {
   return FirebaseAuth.getUser(userID);
@@ -30,15 +29,13 @@ export async function getUser(userID) {
  * deletes a single user from the authentication system, identified by user ID
  * @param {!string} userID
  * @return {Promise.void}
- *
  */
 export async function DeleteUser(userID) {
   return FirebaseAuth.deleteUser(userID);
 }
 
 /**
- * sets custom claims on user object
- * overwrites other needed settings
+ * sets custom claims on user object - overwrites other needed settings
  * @param {string} uid user ID
  * @param {Object} customClaim claims object, less than 1000 Bytes. null clears
  * @returns {Promise.object}

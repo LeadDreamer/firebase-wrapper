@@ -45,10 +45,16 @@ export let FirebaseAuthSignInOptions;
  * Initializes the Auth service of the provided
  * firebase app.  Also instantiates various constants and
  * helper functions
- * @param {firebase} firebase
+ * @param {firebase} firebase provided firebase app (allows use between client & server)
+ * @param {callback} thisLogger - passed logging function  (allows use between client & server)
  */
-export default async function FirebaseAuthClient(firebase) {
-  FirebaseAuth = firebase.auth();
+export default async function FirebaseAuthClient(firebase, thisLogger) {
+  thisLogger("FirebaseAuthClient");
+  try {
+    FirebaseAuth = firebase.auth();
+  } catch (err) {
+    thisLogger("FirebaseAuthClient err", err);
+  }
   FirebaseAuthSignInOptions = [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
@@ -56,6 +62,8 @@ export default async function FirebaseAuthClient(firebase) {
     //firebase.auth.TwitterAuthProvider.PROVIDER_ID
   ];
   FirebaseAuthPersistence = firebase.auth.Auth.Persistence.LOCAL;
+  thisLogger("After Persistence");
+  return null;
 }
 
 /**

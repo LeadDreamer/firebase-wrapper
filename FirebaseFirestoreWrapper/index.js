@@ -42,8 +42,11 @@ function penultimate(array) {
  * Initializes the Firestore service of the provided
  * firebase app.  Also instantiates various constants and
  * helper functions
- * @param {firebase} firebase
- * @returns {Promise.void}
+ * @param {firebase} firebase provided firebase app (allows use between client & server)
+ * @param {object} config - configuration object to detect client/server use
+ * @param {?string} config.appId - missing parameter indicates server
+ * @param {callback} thisLogger - passed logging function  (allows use between client & server)
+ * @returns {Promise<object|void>}
  * @example
  * ```
  * import * as firebase from "firebase/app";
@@ -61,12 +64,18 @@ function penultimate(array) {
  * })(config)
  * ```
  */
-export default async function FirebaseFirestore(firebase, config) {
+export default async function FirebaseFirestore(firebase, config, thisLogger) {
+  thisLogger("Starting FirebaseFirestore");
   fdb = firebase.firestore();
+  thisLogger("fdb? ", !!fdb);
   fdb.settings({ ignoreUndefinedProperties: true, merge: true });
   //doesnt run firestore persistence in Admin/Node environment
-  !config?.appId ||
-    (await firebase.firestore().enablePersistence({ synchorizeTabs: true }));
+  thisLogger("fdb settings");
+  config = config.projectId ? config : JSON.parse(config);
+  if (!config?.appId) {
+    await firebase.firestore().enablePersistence({ synchorizeTabs: true });
+  }
+  thisLogger("persistence");
   aFieldValue = firebase.firestore.FieldValue;
   aFieldPath = firebase.firestore.FieldPath;
 
@@ -74,6 +83,7 @@ export default async function FirebaseFirestore(firebase, config) {
   documentId = aFieldPath.documentId();
   deleteFieldValue = aFieldValue.delete();
   serverTimestampFieldValue = aFieldValue.serverTimestamp();
+  thisLogger("Firestore");
 }
 
 /** @private */
@@ -143,6 +153,27 @@ export function incrementFieldValue(n) {
 }
 
 /**
+ * ----------------------------------------------------------------------
+ * return a sentinel to decrment/decrement a field
+ * NOT REALLY A FIREBASE FUNCTION
+ * Fire base has only increment; we implement this for legibility
+ * @category FieldValue
+ * @param n If either the operand or the current field value uses
+ *    floating point precision, all arithmetic follows IEEE 754
+ *    semantics. If both values are integers, values outside of
+ *    JavaScript's safe number range (Number.MIN_SAFE_INTEGER to
+ *    Number.MAX_SAFE_INTEGER) are also subject to precision loss.
+ *    Furthermore, once processed by the Firestore backend, all integer
+ *    operations are capped between -2^63 and 2^63-1.
+ *     If the current field value is not of type number, or if the field
+ *     does not yet exist, the transformation sets the field to the given value.
+ * @returns a sentinel value
+ **********************************************************************/
+export function decrementFieldValue(n) {
+  return aFieldValue.increment(-n);
+}
+
+/**
  * returns a sentinel to remove elements from array field
  * @category FieldValue
  * @param {any} arrayElements REST expanded list of elements to remove
@@ -194,9 +225,11 @@ export function RecordFromSnapshot(documentSnapshot) {
  * @returns {Array.Record}
  */
 export function RecordsFromSnapshot(querySnapshot) {
-  return querySnapshot.docs.map((docSnap) => {
-    return RecordFromSnapshot(docSnap);
-  });
+  return querySnapshot.empty
+    ? []
+    : querySnapshot.docs.map((docSnap) => {
+        return RecordFromSnapshot(docSnap);
+      });
 }
 
 /**
@@ -347,16 +380,17 @@ export async function writeRecord(
     cleanData.Id = docRef.id; //copy the newly generated ID into the record/document
     if (batch) {
       //if passed a transaction object, use it
-      return batch.set(docRef, cleanData, { merge: mergeOption });
+      await batch.set(docRef, cleanData, { merge: mergeOption });
     } else {
       //not a transaction
-      return docRef.set(cleanData, { merge: mergeOption }).then(() => {
-        return Promise.resolve({
-          ...data,
-          refPath: data.refPath || docRef.path,
-        });
-      });
+      await docRef.set(cleanData, { merge: mergeOption });
     }
+    return {
+      ...data,
+      Id: docRef.Id,
+      refPath: data.refPath || docRef.path, //short circuit
+    };
+
   } catch (err) {
     return Promise.reject(err);
   }
@@ -422,7 +456,7 @@ export async function collectRecords(tablePath, refPath = null) {
     .then((querySnapshot) => {
       // returns a promise
       return !querySnapshot.empty
-        ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
+        ? RecordsFromSnapshot(querySnapshot)
         : Promise.reject("noDocuments:collectRecords:" + tablePath);
     })
     .catch((err) => {
@@ -463,7 +497,7 @@ export async function collectRecordsByFilter(
     .then((querySnapshot) => {
       // returns a promise
       return !querySnapshot.empty
-        ? Promise.resolve(RecordsFromSnapshot(querySnapshot))
+        ? RecordsFromSnapshot(querySnapshot)
         : Promise.reject("noDocuments:collectRecordsByFilter:" + tablePath);
     })
     .catch((err) => {
@@ -489,7 +523,7 @@ export async function collectRecordsInGroup(tableName) {
     .then((querySnapshot) => {
       // returns a promise
       if (!querySnapshot.empty)
-        return Promise.resolve(RecordsFromSnapshot(querySnapshot));
+        return RecordsFromSnapshot(querySnapshot);
       else
         return Promise.reject("noDocuments:collectRecordsInGroup:" + tableName);
     })
@@ -502,7 +536,7 @@ export async function collectRecordsInGroup(tableName) {
  * queries for Records from a CollectionGroup, filtered by
  * the passed array of filterObjects
  * @param {!string} tableName string describing the Name of the collectiongroup
- * @param {?filterObject} [filterArray] array of objects describing filter
+ * @param {Array.filterObject} filterArray array of objects describing filter
  * operations
  * @returns {Promise<Array<Record>>}
  **/
