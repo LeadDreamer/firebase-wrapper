@@ -1,0 +1,63 @@
+{
+  // These tasks will run in order when initializing your CodeSandbox project.
+  "setupTasks": [
+    {
+      "name": "Install Dependencies",
+      "command": "yarn install"
+    }
+  ],
+
+  // These tasks can be run from CodeSandbox. Running one will open a log in the app.
+  "tasks": {
+    "transpile": {
+      "name": "transpile",
+      "command": "yarn transpile",
+      "runAtStart": false
+    },
+    "build": {
+      "name": "build",
+      "command": "yarn build",
+      "runAtStart": true
+    },
+    "rebuild": {
+      "name": "rebuild",
+      "command": "yarn rebuild",
+      "runAtStart": false
+    },
+    "rebuild_release": {
+      "name": "rebuild_release",
+      "command": "yarn rebuild_release",
+      "runAtStart": false
+    },
+    "prepublishOnly": {
+      "name": "prepublishOnly",
+      "command": "yarn prepublishOnly",
+      "runAtStart": false
+    },
+    "make_docs": {
+      "name": "make_docs",
+      "command": "yarn make_docs",
+      "runAtStart": false
+    },
+    "docs": {
+      "name": "docs",
+      "command": "yarn docs",
+      "runAtStart": false
+    },
+    "publish_beta": {
+      "name": "publish_beta",
+      "command": "yarn publish_beta",
+      "runAtStart": false
+    },
+    "publish_package": {
+      "name": "publish_package",
+      "command": "yarn publish_package",
+      "runAtStart": false
+    },
+    "publish_dry": {
+      "name": "publish_dry",
+      "command": "yarn publish_dry",
+      "runAtStart": false
+    }
+  }
+}

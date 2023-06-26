@@ -51,15 +51,22 @@ let FirebaseAuthSignInOptions;
  * @function FirebaseAuthClient
  * @param {firebase} firebase
  */
-export default function FirebaseAuthClient(firebase) {
-  FirebaseAuth = firebase.auth();
+export default async function FirebaseAuthClient(firebase, thisLogger) {
+  thisLogger("FirebaseAuthClient");
+  try {
+    FirebaseAuth = firebase.auth();
+  } catch (err) {
+    thisLogger("FirebaseAuthClient err", err);
+  }
   FirebaseAuthSignInOptions = [
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     //firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-    firebase.auth.EmailAuthProvider.PROVIDER_ID
+    firebase.auth.EmailAuthProvider.PROVIDER_ID,
     //firebase.auth.TwitterAuthProvider.PROVIDER_ID
   ];
   FirebaseAuthPersistence = firebase.auth.Auth.Persistence.LOCAL;
+  thisLogger("After Persistence");
+  return Promise.resolve();
 }
 
 /**
@@ -91,13 +98,12 @@ export const fetchToken = async (user) => {
  * @reject returns an err
  */
 
- export const fetchJWT = async (user) => {
+export const fetchJWT = async (user) => {
   const thisUser = user || FirebaseAuth.currentUser;
   //the "true" below forces a reset
   const JWT = await thisUser.getIdToken(true);
   return JWT;
-
- }
+};
 
 /**
  * triggers an update of the Firebase Auth user object.  A listener
@@ -188,48 +194,48 @@ export const doSignInWithEmailAndPassword = (email, password) =>
 
 /**
  * @function
-*/
+ */
 export const doSignInWithGoogle = (googleProvider) =>
   FirebaseAuth.signInWithPopup(googleProvider);
 
 /**
  * @function
-*/
+ */
 export const doSignInWithFacebook = (facebookProvider) =>
   FirebaseAuth.signInWithPopup(facebookProvider);
 
 /**
  * @function
-*/
+ */
 export const doSignInWithTwitter = (twitterProvider) =>
   FirebaseAuth.signInWithPopup(twitterProvider);
 
 /**
  * @function
-*/
+ */
 export const doSignOut = () => {
   return FirebaseAuth.signOut();
 };
 
 /**
  * @function
-*/
+ */
 export const doPasswordReset = (email) =>
   FirebaseAuth.sendPasswordResetEmail(email);
 
 /**
  * @static
  * @function doSendEmailVerification
-*/
+ */
 export const doSendEmailVerification = () =>
   FirebaseAuth.currentUser.sendEmailVerification({
-    url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT
+    url: process.env.REACT_APP_CONFIRMATION_EMAIL_REDIRECT,
   });
 
 /**
  * @static
  * @function doPasswordUpdate
-*/
+ */
 export const doPasswordUpdate = (password) =>
   FirebaseAuth.currentUser.updatePassword(password);
 
@@ -255,7 +261,7 @@ export const createAnonymousUser = () => {
  * @property {AuthChangeProcess} next
  * @return {callback} unsubscribe function
  *
-*/
+ */
 export const attachAuthUserListener = (next) => {
   return FirebaseAuth.onIdTokenChanged(next);
 };
@@ -263,9 +269,9 @@ export const attachAuthUserListener = (next) => {
 /**
  * @static
  * @function setPersistence
-*/
+ */
 export const setPersistence = () => {
   FirebaseAuth.setPersistence(FirebaseAuthPersistence);
 };
 
-export {FirebaseAuth, FirebaseAuthSignInOptions};
+export { FirebaseAuth, FirebaseAuthSignInOptions };

@@ -6,7 +6,7 @@ import {
   PAGINATE_END,
   PAGINATE_INIT,
   PAGINATE_PENDING,
-  PAGINATE_UPDATED
+  PAGINATE_UPDATED,
 } from "../FirebaseFirestoreWrapper/Common.js";
 
 //const uuidv4 = v4;
@@ -44,13 +44,22 @@ import {
  * })(config);
  * ```
  */
-export default async function FirebaseStorageWrapper(firebase, config) {
-  FirebaseStorage = firebase.storage();
-  if (!config?.appId) {
-    //FirebaseStorageAdminEmulator = await import("./adminStorage");
+let bucket_name;
+
+export default async function FirebaseStorageWrapper(
+  firebase,
+  config,
+  thisLogger
+) {
+  if (config && config.appId) {
+    thisLogger("Storage client");
+    FirebaseStorage = firebase.storage();
+  } else {
+    thisLogger("Storage admin");
     FirebaseStorage = FirebaseStorageAdminEmulator(firebase);
   }
 
+  config = config.projectId ? config : JSON.parse(config);
   bucket_name = config.storageBucket;
   return;
 }
@@ -58,7 +67,6 @@ export default async function FirebaseStorageWrapper(firebase, config) {
 let FirebaseStorage;
 const bucket_domain = "https://firebasestorage.googleapis.com/v0/b/";
 const bucket_head = "/o/";
-let bucket_name;
 
 //URL = `${bucket_domain}${bucket_name}${bucket_head}${fullPath}?alt=${filetype_parameter}`;
 
@@ -135,7 +143,7 @@ export class paginateListing {
     this.limit = limit;
     this.listOptions = {
       maxResults: limit,
-      pageToken: null
+      pageToken: null,
     };
   }
 
@@ -157,7 +165,7 @@ export class paginateListing {
 
     this.listOptions = {
       ...this.listOptions,
-      pageToken: result.newPageToken
+      pageToken: result.newPageToken,
     };
     return result.items;
   }
@@ -243,7 +251,7 @@ export const makePrivateURLFromReference = (reference) => {
  * the contents.
  * Note this simply makes the URL - it does not carry out *any* operations
  * @static
- * @function makePrivateURLFromPath
+ * @function
  * @param {!string} fullPath required path to the stored item.
  * @returns {string} constructed Security-Rule-compliant URL
  */
@@ -305,12 +313,12 @@ export const storeDataURLByRecord = (dataURL, record, key, filename) => {
  * @param {!string} key name/key of default image file
  * @returns {string}
  */
-export const getDefaultImageURL = (key) => {
+export async function getDefaultImageURL(key) {
   let filename = key + ".jpg";
   return Promise.resolve(
     FirebaseStorage.ref("/defaultImages").child(filename).getDownloadURL()
   );
-};
+}
 
 /**
  * @function
@@ -332,7 +340,7 @@ export const dataURLToBlob = (dataURL) => {
   var reg = /^data:image\/([\w+]+);base64,([\s\S]+)/;
   var match = dataURL.match(reg);
   var baseType = {
-    jpeg: "jpg"
+    jpeg: "jpg",
   };
 
   baseType["svg+xml"] = "svg";
@@ -345,7 +353,7 @@ export const dataURLToBlob = (dataURL) => {
 
   return {
     extname: "." + extname,
-    base64: match[2]
+    base64: match[2],
   };
 };
 
@@ -504,8 +512,8 @@ class adminRef {
       ...this.fileRef?.metadata,
       metadata: {
         ...this.fileRef?.metadata?.metadata,
-        firebaseStorageDownloadTokens: token
-      }
+        firebaseStorageDownloadTokens: token,
+      },
     };
   }
 
@@ -561,8 +569,8 @@ class adminRef {
       token = uuidv4();
       await this.fileRef.setMetadata({
         metadata: {
-          firebaseStorageDownloadTokens: token
-        }
+          firebaseStorageDownloadTokens: token,
+        },
       });
     }
     return token;
@@ -597,7 +605,7 @@ class adminRef {
     //the response below emulates Firestore Storage UploadTaskSnapshot
     return Promise.resolve({
       ref: this,
-      metadata: localmetadata
+      metadata: localmetadata,
     });
   }
 
@@ -622,7 +630,7 @@ class adminRef {
     return Promise.resolve({
       ref: this,
       downloadURL: url,
-      metadata: localmetadata
+      metadata: localmetadata,
     });
   }
 

@@ -58,27 +58,36 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper/index.js";
  * export * from "@leaddreamer/firebase-wrapper";
  * ```
  */
-const FirebaseWrapper = async (firebase, config) => {
+export default async function FirebaseWrapper(firebase, config, thisLogger) {
+  const localLogger = thisLogger || (() => {});
   try {
     await firebase.app();
   } catch (err) {
     try {
-      config?.appId
-        ? await firebase.initializeApp(config)
-        : await firebase.initializeApp();
-      await FirebaseAuthWrapper(firebase, config);
-      await FirebaseFirestore(firebase, config);
-      await FirebaseStorage(firebase, config);
-      await FirebaseCloudFunctions(firebase, config);
+      await (config?.appId
+        ? firebase.initializeApp(config)
+        : firebase.initializeApp());
+
+      const happ = await firebase.app();
+
+      localLogger("after init", !!happ);
+
+      await FirebaseAuthWrapper(firebase, config, localLogger);
+      localLogger("After Auth");
+      await FirebaseFirestore(firebase, config, localLogger);
+      localLogger("After Firestore");
+      await FirebaseStorage(firebase, config, localLogger);
+      localLogger("After Storage");
+      return FirebaseCloudFunctions(firebase, config, localLogger);
     } catch (err) {
       console.log("firebase initialize failed");
     }
   }
   return;
-};
+}
 
 export * from "./FirebaseFirestoreWrapper/index.js";
 export * from "./FirebaseStorageWrapper/index.js";
 export * from "./FirebaseAuthWrapper/index.js";
 export * from "./FirebaseCloudFunctionsWrapper/index.js";
-export default FirebaseWrapper;
+//export default FirebaseWrapper;
