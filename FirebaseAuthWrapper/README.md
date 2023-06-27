@@ -71,7 +71,7 @@ deletes a single user from the authentication system, identified by user ID
 <a name="module_FirebaseAuthWrapper/authAdmin--module.exports.setCustomClaims"></a>
 
 #### module.exports.setCustomClaims(uid, customClaim) ⇒ <code>Promise.object</code>
-sets custom claims on user objectoverwrites other needed settings
+sets custom claims on user object - overwrites other needed settings
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
 
@@ -124,12 +124,11 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 ```import * as firebase from "firebase/app";import "firebase/auth";import FirebaseAuth from "@leaddreamer/firebase-wrapper/FirebaseAuthWrapper";//the next is optional - if you want the React componentimport StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";import {config} from "wherever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseAuth(firebase, StyledFirebaseAuth);})(config)```
 
 * [FirebaseAuthWrapper/authClient](#module_FirebaseAuthWrapper/authClient)
-    * [module.exports(firebase)](#exp_module_FirebaseAuthWrapper/authClient--module.exports) ⏏
+    * [module.exports(firebase, thisLogger)](#exp_module_FirebaseAuthWrapper/authClient--module.exports) ⏏
         * _static_
             * [.FirebaseAuth](#module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuth) : <code>object</code>
-            * [.FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuthSignInOptions) : <code>Array.string</code>
             * [.fetchToken(user)](#module_FirebaseAuthWrapper/authClient--module.exports.fetchToken) ⇒ <code>Promise.Token</code>
-            * [.fetchJWT(user)](#module_FirebaseAuthWrapper/authClient--module.exports.fetchJWT) ⇒ <code>Promise.&lt;string&gt;</code>
+            * [.fetchJWT(user)](#module_FirebaseAuthWrapper/authClient--module.exports.fetchJWT) ⇒ <code>Promise.&lt;JWT&gt;</code>
             * [.refreshAuthUser()](#module_FirebaseAuthWrapper/authClient--module.exports.refreshAuthUser) ⇒ <code>Promise.void</code>
             * [.doCreateUserWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.doCreateUserWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
             * [.doSignInWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
@@ -144,6 +143,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.attachAuthUserListener(next)](#module_FirebaseAuthWrapper/authClient--module.exports.attachAuthUserListener) ⇒ <code>function</code>
             * [.setPersistence()](#module_FirebaseAuthWrapper/authClient--module.exports.setPersistence) ⇒ <code>Promise.void</code>
         * _inner_
+            * [~ID](#module_FirebaseAuthWrapper/authClient--module.exports..ID) : <code>Array.string</code>
             * [~AdditionalUserInfo](#module_FirebaseAuthWrapper/authClient--module.exports..AdditionalUserInfo) : <code>object</code>
             * [~AuthCredential](#module_FirebaseAuthWrapper/authClient--module.exports..AuthCredential) : <code>class</code>
             * [~GetIdToken](#module_FirebaseAuthWrapper/authClient--module.exports..GetIdToken) ⇒ <code>Promise.&lt;string&gt;</code>
@@ -154,25 +154,20 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 <a name="exp_module_FirebaseAuthWrapper/authClient--module.exports"></a>
 
-### module.exports(firebase) ⏏
+### module.exports(firebase, thisLogger) ⏏
 Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: Exported function  
 
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>firebase</code> | provided firebase app (allows use between client & server) |
+| thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
 
 <a name="module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuth"></a>
 
 #### module.exports.FirebaseAuth : <code>object</code>
 FirebaseAuth instance for various Login/Logout calls
-
-**Kind**: static property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuthSignInOptions"></a>
-
-#### module.exports.FirebaseAuthSignInOptions : <code>Array.string</code>
-codes for 3rd party Auth providers
 
 **Kind**: static property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
 <a name="module_FirebaseAuthWrapper/authClient--module.exports.fetchToken"></a>
@@ -190,7 +185,7 @@ fetches our specific custom claim values from firebase auth
 
 <a name="module_FirebaseAuthWrapper/authClient--module.exports.fetchJWT"></a>
 
-#### module.exports.fetchJWT(user) ⇒ <code>Promise.&lt;string&gt;</code>
+#### module.exports.fetchJWT(user) ⇒ <code>Promise.&lt;JWT&gt;</code>
 Fetch a JWT token for authenticated signed requests
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
@@ -297,6 +292,12 @@ SIGNS IN an existing authenticated user with the provided email and passwordCre
 
 #### module.exports.setPersistence() ⇒ <code>Promise.void</code>
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
+<a name="module_FirebaseAuthWrapper/authClient--module.exports..ID"></a>
+
+#### module.exports~ID : <code>Array.string</code>
+codes for 3rd party Auth providers
+
+**Kind**: inner property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
 <a name="module_FirebaseAuthWrapper/authClient--module.exports..AdditionalUserInfo"></a>
 
 #### module.exports~AdditionalUserInfo : <code>object</code>

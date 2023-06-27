@@ -12,7 +12,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 
 * [FirebaseFirestoreWrapper](#module_FirebaseFirestoreWrapper)
-    * [module.exports(firebase)](#exp_module_FirebaseFirestoreWrapper--module.exports) ⇒ <code>Promise.void</code> ⏏
+    * [module.exports(firebase, config, thisLogger)](#exp_module_FirebaseFirestoreWrapper--module.exports) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
         * _static_
             * [.timestamp](#module_FirebaseFirestoreWrapper--module.exports.timestamp)
             * [.MAX_CONCURRENCY](#module_FirebaseFirestoreWrapper--module.exports.MAX_CONCURRENCY)
@@ -25,7 +25,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.collectRecords(tablePath, refPath)](#module_FirebaseFirestoreWrapper--module.exports.collectRecords) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
             * [.collectRecordsByFilter(tablePath, refPath, filterArray, sortArray, limit)](#module_FirebaseFirestoreWrapper--module.exports.collectRecordsByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
             * [.collectRecordsInGroup(tableName)](#module_FirebaseFirestoreWrapper--module.exports.collectRecordsInGroup) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-            * [.collectRecordsInGroupByFilter(tableName, [filterArray])](#module_FirebaseFirestoreWrapper--module.exports.collectRecordsInGroupByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+            * [.collectRecordsInGroupByFilter(tableName, filterArray)](#module_FirebaseFirestoreWrapper--module.exports.collectRecordsInGroupByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
             * [.fetchRecord(tablePath, Id, refPath, batch)](#module_FirebaseFirestoreWrapper--module.exports.fetchRecord) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
             * [.fetchRecordByRefPath(docRefPath, batch)](#module_FirebaseFirestoreWrapper--module.exports.fetchRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
             * [.fetchRecordByFilter(table, [filterArray], refPath, batch)](#module_FirebaseFirestoreWrapper--module.exports.fetchRecordByFilter) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
@@ -48,14 +48,15 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                 * [.deleteFieldValue](#module_FirebaseFirestoreWrapper--module.exports.deleteFieldValue) : <code>Object</code>
                 * [.serverTimestampFieldValue](#module_FirebaseFirestoreWrapper--module.exports.serverTimestampFieldValue) : <code>Object</code>
                 * [.incrementFieldValue(n)](#module_FirebaseFirestoreWrapper--module.exports.incrementFieldValue) ⇒ <code>sentinelValue</code>
+                * [.decrementFieldValue(n)](#module_FirebaseFirestoreWrapper--module.exports.decrementFieldValue) ⇒
                 * [.arrayRemoveFieldValue(arrayElements)](#module_FirebaseFirestoreWrapper--module.exports.arrayRemoveFieldValue) ⇒ <code>sentinelValue</code>
                 * [.arrayUnionFieldValue(arrayElements)](#module_FirebaseFirestoreWrapper--module.exports.arrayUnionFieldValue) ⇒ <code>sentinelValue</code>
             * _Listeners_
-                * [.ListenRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenRecords) ⇒ <code>function</code>
-                * [.ListenQuery(table, [filterArray], [sortArray], refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenQuery) ⇒ <code>function</code>
-                * [.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupRecords) ⇒ <code>function</code>
-                * [.ListenCollectionGroupQuery(table, [filterArray], [sortArray], dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupQuery) ⇒ <code>function</code>
-                * [.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenRecord) ⇒ <code>callback</code>
+                * [.ListenRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenRecords) ⇒ <code>Unsubscribe</code>
+                * [.ListenQuery(tablePath, refPath, dataCallback, errCallback, filterArray, sortArray)](#module_FirebaseFirestoreWrapper--module.exports.ListenQuery) ⇒ <code>Unsubscribe</code>
+                * [.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupRecords) ⇒ <code>Unsubscribe</code>
+                * [.ListenCollectionGroupQuery(table, dataCallback, errCallback, filterArray, sortArray)](#module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupQuery) ⇒ <code>Unsubscribe</code>
+                * [.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenRecord) ⇒ <code>Unsubscribe</code>
             * _Paginator_
                 * [.PaginateFetch](#module_FirebaseFirestoreWrapper--module.exports.PaginateFetch)
                     * [new exports.PaginateFetch(table, filterArray, sortArray, refPath, limit)](#new_module_FirebaseFirestoreWrapper--module.exports.PaginateFetch_new)
@@ -71,8 +72,8 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                     * [.PageForward()](#module_FirebaseFirestoreWrapper--module.exports.PaginateGroupFetch+PageForward) ⇒ <code>Promise.&lt;Array.Record&gt;</code>
                     * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginateGroupFetch+PageBack) ⇒ <code>Promise.&lt;Array.Record&gt;</code>
                 * [.PaginatedListener](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)
-                    * [new exports.PaginatedListener(table, [filterArray], [sortArray], refPath, limit, dataCallback, errCallback)](#new_module_FirebaseFirestoreWrapper--module.exports.PaginatedListener_new)
-                    * [.table](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+table) : <code>string</code>
+                    * [new exports.PaginatedListener(tablePath, refPath, dataCallback, errCallback, limit, filterArray, sortArray)](#new_module_FirebaseFirestoreWrapper--module.exports.PaginatedListener_new)
+                    * [.tablePath](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+tablePath) : <code>string</code>
                     * [.filterArray](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+filterArray) : <code>filterObject</code>
                     * [.sortArray](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+sortArray) : <code>sortObject</code>
                     * [.refPath](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+refPath) : <code>string</code>
@@ -81,14 +82,14 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                     * [.errCallback](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+errCallback) : <code>callback</code>
                     * [.status](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+status) : <code>number</code>
                     * [._setQuery()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+_setQuery) ⇒ <code>Query</code>
-                    * [.PageForward()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageForward) ⇒ <code>callback</code>
-                    * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack) ⇒ <code>callback</code>
-                    * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit) ⇒ <code>callback</code>
-                    * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter) ⇒ <code>callback</code>
-                    * [.unsubscribe()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscribe)
+                    * [.PageForward()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageForward) ⇒ <code>Unsubscribe</code>
+                    * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack) ⇒ <code>Unsubscribe</code>
+                    * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit) ⇒ <code>Unsubscribe</code>
+                    * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter) ⇒ <code>Unsubscribe</code>
+                    * [.unsubscriber()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscriber)
             * _Tree Slice_
                 * [.ownerFilter(owner, queryFilter)](#module_FirebaseFirestoreWrapper--module.exports.ownerFilter) ⇒ <code>filterObject</code>
-                * [.listenSlice(owner, collectionName, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.listenSlice) ⇒ <code>callback</code>
+                * [.listenSlice(owner, collectionName, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.listenSlice) ⇒ <code>Unsubscribe</code>
                 * [.fetchSlice(owner, collectionName)](#module_FirebaseFirestoreWrapper--module.exports.fetchSlice) ⇒ <code>Promise.Array.Record</code>
                 * [.querySlice(owner, collectionName, filterArray)](#module_FirebaseFirestoreWrapper--module.exports.querySlice) ⇒ <code>Promise.Array.Record</code>
                 * [.listenQuerySlice(owner, collectionName, filterArray, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.listenQuerySlice) ⇒ <code>callback</code>
@@ -102,11 +103,11 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                 * [.typedPaginatedListener](#module_FirebaseFirestoreWrapper--module.exports.typedPaginatedListener) ⇐ <code>PaginatedListener</code>
                     * [new exports.typedPaginatedListener(type, parent, pageSize, dataCallback, errCallback)](#new_module_FirebaseFirestoreWrapper--module.exports.typedPaginatedListener_new)
                 * [.recordType(record)](#module_FirebaseFirestoreWrapper--module.exports.recordType) ⇒ <code>string</code>
-                * [.recordId()](#module_FirebaseFirestoreWrapper--module.exports.recordId) ⇒ <code>string</code>
-                * [.typedWrite(data, parent, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedWrite) ⇒ <code>Promise</code>
-                * [.typedWriteByTree(data, tree, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedWriteByTree) ⇒ <code>Promise</code>
-                * [.typedWriteByChild(data, tree, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedWriteByChild) ⇒ <code>Promise</code>
-                * [.typedCreate(data, parent, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedCreate) ⇒ <code>Promise</code>
+                * [.recordId(record)](#module_FirebaseFirestoreWrapper--module.exports.recordId) ⇒ <code>string</code>
+                * [.typedWrite(data, parent, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedWrite) ⇒ <code>Promise.ChainType</code>
+                * [.typedWriteByTree(data, tree, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedWriteByTree) ⇒ <code>Promise.ChainType</code>
+                * [.typedWriteByChild(data, tree, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedWriteByChild) ⇒ <code>Promise.ChainType</code>
+                * [.typedCreate(data, parent, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedCreate) ⇒ <code>Promise.ChainType</code>
                 * [.treeFromChild(child)](#module_FirebaseFirestoreWrapper--module.exports.treeFromChild) ⇒ <code>RecordTree</code>
                 * [.typedTablePathFromTree(tree, type, branchType)](#module_FirebaseFirestoreWrapper--module.exports.typedTablePathFromTree) ⇒ <code>string</code>
                 * [.typedRefPathFromTree(tree, type)](#module_FirebaseFirestoreWrapper--module.exports.typedRefPathFromTree) ⇒ <code>string</code>
@@ -121,25 +122,29 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * _inner_
             * [~dbReference(refPath)](#module_FirebaseFirestoreWrapper--module.exports..dbReference) ⇒ <code>DocumentReference</code>
             * [~createRefFromPath(docPath, refPath)](#module_FirebaseFirestoreWrapper--module.exports..createRefFromPath) ⇒ <code>DocumentReference</code>
-            * [~filterQuery(query, [filterArray])](#module_FirebaseFirestoreWrapper--module.exports..filterQuery) ⇒ <code>Query</code>
-            * [~sortQuery(query, [sortArray])](#module_FirebaseFirestoreWrapper--module.exports..sortQuery) ⇒
+            * [~filterQuery(query, filterArray)](#module_FirebaseFirestoreWrapper--module.exports..filterQuery) ⇒ <code>Query</code>
+            * [~sortQuery(query, sortArray)](#module_FirebaseFirestoreWrapper--module.exports..sortQuery) ⇒
             * [~limitQuery(query, limit)](#module_FirebaseFirestoreWrapper--module.exports..limitQuery) ⇒ <code>Query</code>
             * [~ListenRecordsCommon(reference, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports..ListenRecordsCommon) ⇒ <code>function</code>
             * [~Record](#module_FirebaseFirestoreWrapper--module.exports..Record) : <code>object</code>
             * [~filterObject](#module_FirebaseFirestoreWrapper--module.exports..filterObject) : <code>Object</code>
             * [~RecordListener](#module_FirebaseFirestoreWrapper--module.exports..RecordListener) : <code>function</code>
+            * [~Unsubscribe](#module_FirebaseFirestoreWrapper--module.exports..Unsubscribe) : <code>function</code>
             * [~CollectionListener](#module_FirebaseFirestoreWrapper--module.exports..CollectionListener) : <code>function</code>
 
 <a name="exp_module_FirebaseFirestoreWrapper--module.exports"></a>
 
-### module.exports(firebase) ⇒ <code>Promise.void</code> ⏏
+### module.exports(firebase, config, thisLogger) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
 Initializes the Firestore service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: Exported function  
 
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>firebase</code> | provided firebase app (allows use between client & server) |
+| config | <code>object</code> | configuration object to detect client/server use |
+| config.appId | <code>string</code> | missing parameter indicates server |
+| thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
 
 **Example**  
 ```import * as firebase from "firebase/app";import "firebase/firestore";import FirebaseFirestore from "@leaddreamer/firebase-wrapper/FirebaseFirestoreWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFirestore(firebase);})(config)```
@@ -277,7 +282,7 @@ query for a SET of records from a COLLECTIONGROUP - allcollections of a similar
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.collectRecordsInGroupByFilter"></a>
 
-#### module.exports.collectRecordsInGroupByFilter(tableName, [filterArray]) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+#### module.exports.collectRecordsInGroupByFilter(tableName, filterArray) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
 queries for Records from a CollectionGroup, filtered bythe passed array of filterObjects
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
@@ -285,7 +290,7 @@ queries for Records from a CollectionGroup, filtered bythe passed array of filt
 | Param | Type | Description |
 | --- | --- | --- |
 | tableName | <code>string</code> | string describing the Name of the collectiongroup |
-| [filterArray] | <code>filterObject</code> | array of objects describing filter operations |
+| filterArray | <code>Array.filterObject</code> | array of objects describing filter operations |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.fetchRecord"></a>
 
@@ -504,6 +509,19 @@ return a sentinel to incrment/decrement a field
 | --- | --- | --- |
 | n | <code>number</code> | If either the operand or the current field value uses    floating point precision, all arithmetic follows IEEE 754    semantics. If both values are integers, values outside of    JavaScript's safe number range (Number.MIN_SAFE_INTEGER to    Number.MAX_SAFE_INTEGER) are also subject to precision loss.    Furthermore, once processed by the Firestore backend, all integer    operations are capped between -2^63 and 2^63-1.     If the current field value is not of type number, or if the field     does not yet exist, the transformation sets the field to the given value. |
 
+<a name="module_FirebaseFirestoreWrapper--module.exports.decrementFieldValue"></a>
+
+#### module.exports.decrementFieldValue(n) ⇒
+----------------------------------------------------------------------return a sentinel to decrment/decrement a fieldNOT REALLY A FIREBASE FUNCTIONFire base has only increment; we implement this for legibility
+
+**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+**Returns**: a sentinel value  
+**Category**: FieldValue  
+
+| Param | Description |
+| --- | --- |
+| n | If either the operand or the current field value uses    floating point precision, all arithmetic follows IEEE 754    semantics. If both values are integers, values outside of    JavaScript's safe number range (Number.MIN_SAFE_INTEGER to    Number.MAX_SAFE_INTEGER) are also subject to precision loss.    Furthermore, once processed by the Firestore backend, all integer    operations are capped between -2^63 and 2^63-1.     If the current field value is not of type number, or if the field     does not yet exist, the transformation sets the field to the given value. |
+
 <a name="module_FirebaseFirestoreWrapper--module.exports.arrayRemoveFieldValue"></a>
 
 #### module.exports.arrayRemoveFieldValue(arrayElements) ⇒ <code>sentinelValue</code>
@@ -532,11 +550,11 @@ return a sentinel to add/join elements to array field
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenRecords"></a>
 
-#### module.exports.ListenRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>function</code>
+#### module.exports.ListenRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>Unsubscribe</code>
 sets up a listener for changes to a single record
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>function</code> - function to be called to release subscription  
+**Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
@@ -548,29 +566,29 @@ sets up a listener for changes to a single record
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenQuery"></a>
 
-#### module.exports.ListenQuery(table, [filterArray], [sortArray], refPath, dataCallback, errCallback) ⇒ <code>function</code>
+#### module.exports.ListenQuery(tablePath, refPath, dataCallback, errCallback, filterArray, sortArray) ⇒ <code>Unsubscribe</code>
 Sets up a listener to a query
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>function</code> - function to be called to release subscription  
+**Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| table | <code>string</code> | Name of table to query too - may be sub-collection of optional reference |
-| [filterArray] | <code>filterObject</code> | a 3xn array of filter(i.e. "where") conditions |
-| [sortArray] | <code>sortObject</code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
+| tablePath | <code>string</code> | Name (or pathname) of table to query too - may be sub-collection of optional reference |
 | refPath | <code>string</code> | An optional Firestore DocumentReference. If present, the "table" parameter above is relative to this reference |
 | dataCallback | <code>CollectionListener</code> | callback function with query results |
 | errCallback | <code>callback</code> | callback function with error results |
+| filterArray | <code>Array.filterObject</code> | a 3xn array of filter(i.e. "where") conditions |
+| sortArray | <code>Array.sortObject</code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupRecords"></a>
 
-#### module.exports.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>function</code>
+#### module.exports.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>Unsubscribe</code>
 sets up a listener for changes to a collectionGroup
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>function</code> - function to be called to release subscription  
+**Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
@@ -582,28 +600,28 @@ sets up a listener for changes to a collectionGroup
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupQuery"></a>
 
-#### module.exports.ListenCollectionGroupQuery(table, [filterArray], [sortArray], dataCallback, errCallback) ⇒ <code>function</code>
+#### module.exports.ListenCollectionGroupQuery(table, dataCallback, errCallback, filterArray, sortArray) ⇒ <code>Unsubscribe</code>
 sets up a listener for changes to a collectionGroup by query
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>function</code> - function to be called to release subscription  
+**Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | table | <code>string</code> | string describing the name of a collectionGroup |
-| [filterArray] | <code>filterObject</code> | a 3xn array of filter(i.e. "where") conditions |
-| [sortArray] | <code>sortObject</code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
 | dataCallback | <code>CollectionListener</code> | function to be called with changes to record |
 | errCallback | <code>callback</code> | function to be called when an error occurs in listener |
+| filterArray | <code>Array.filterObject</code> | a 3xn array of filter(i.e. "where") conditions |
+| sortArray | <code>Array.sortObject</code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenRecord"></a>
 
-#### module.exports.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback) ⇒ <code>callback</code>
+#### module.exports.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback) ⇒ <code>Unsubscribe</code>
 Listen to changes to a single record
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>callback</code> - function to be called to release subscription  
+**Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
@@ -735,8 +753,8 @@ Creates an object to allow for paginating a listener for tableread from Firesto
 **Category**: Paginator  
 
 * [.PaginatedListener](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)
-    * [new exports.PaginatedListener(table, [filterArray], [sortArray], refPath, limit, dataCallback, errCallback)](#new_module_FirebaseFirestoreWrapper--module.exports.PaginatedListener_new)
-    * [.table](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+table) : <code>string</code>
+    * [new exports.PaginatedListener(tablePath, refPath, dataCallback, errCallback, limit, filterArray, sortArray)](#new_module_FirebaseFirestoreWrapper--module.exports.PaginatedListener_new)
+    * [.tablePath](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+tablePath) : <code>string</code>
     * [.filterArray](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+filterArray) : <code>filterObject</code>
     * [.sortArray](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+sortArray) : <code>sortObject</code>
     * [.refPath](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+refPath) : <code>string</code>
@@ -745,29 +763,29 @@ Creates an object to allow for paginating a listener for tableread from Firesto
     * [.errCallback](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+errCallback) : <code>callback</code>
     * [.status](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+status) : <code>number</code>
     * [._setQuery()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+_setQuery) ⇒ <code>Query</code>
-    * [.PageForward()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageForward) ⇒ <code>callback</code>
-    * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack) ⇒ <code>callback</code>
-    * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit) ⇒ <code>callback</code>
-    * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter) ⇒ <code>callback</code>
-    * [.unsubscribe()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscribe)
+    * [.PageForward()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageForward) ⇒ <code>Unsubscribe</code>
+    * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack) ⇒ <code>Unsubscribe</code>
+    * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit) ⇒ <code>Unsubscribe</code>
+    * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter) ⇒ <code>Unsubscribe</code>
+    * [.unsubscriber()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscriber)
 
 <a name="new_module_FirebaseFirestoreWrapper--module.exports.PaginatedListener_new"></a>
 
-##### new exports.PaginatedListener(table, [filterArray], [sortArray], refPath, limit, dataCallback, errCallback)
+##### new exports.PaginatedListener(tablePath, refPath, dataCallback, errCallback, limit, filterArray, sortArray)
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| table | <code>string</code> |  | a properly formatted string representing the requested collection - always an ODD number of elements |
-| [filterArray] | <code>filterObject</code> | <code></code> | an (optional) 3xn array of filter(i.e. "where") conditions The array is assumed to be sorted in the correct order - i.e. filterArray[0] is added first; filterArray[length-1] last |
-| [sortArray] | <code>sortObject</code> |  | a 2xn array of sort (i.e. "orderBy") conditions |
+| tablePath | <code>string</code> |  | a properly formatted string representing the requested collection - always an ODD number of elements |
 | refPath | <code>refPath</code> | <code></code> | (optional) allows "table" parameter to reference a sub-collection of an existing document reference (I use a LOT of structured collections) |
-| limit | <code>number</code> |  | (optional) pagesize |
 | dataCallback | <code>RecordListener</code> | <code></code> | returns data as an array of objects (not dissimilar to Redux State objects) with both the documentID and documentReference added as fields. |
 | errCallback | <code>RecordListener</code> | <code></code> |  |
+| limit | <code>number</code> |  | (optional) pagesize |
+| filterArray | <code>Array.filterObject</code> | <code></code> | an (optional) 3xn array of filter(i.e. "where") conditions The array is assumed to be sorted in the correct order - i.e. filterArray[0] is added first; filterArray[length-1] last |
+| sortArray | <code>Array.sortObject</code> |  | a 2xn array of sort (i.e. "orderBy") conditions |
 
-<a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+table"></a>
+<a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+tablePath"></a>
 
-##### paginatedListener.table : <code>string</code>
+##### paginatedListener.tablePath : <code>string</code>
 table path at base of listener query, relative to original refPath
 
 **Kind**: instance property of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
@@ -821,25 +839,25 @@ reconstructs the basis query
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageForward"></a>
 
-##### paginatedListener.PageForward() ⇒ <code>callback</code>
+##### paginatedListener.PageForward() ⇒ <code>Unsubscribe</code>
 resets the listener query to the next page of results.Unsubscribes from the current listener, constructs a new query, and sets itas the new listener
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
-**Returns**: <code>callback</code> - returns the unsubscriber function (for lifecycle events)  
+**Returns**: <code>Unsubscribe</code> - returns the unsubscriber function (for lifecycle events)  
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack"></a>
 
-##### paginatedListener.PageBack() ⇒ <code>callback</code>
+##### paginatedListener.PageBack() ⇒ <code>Unsubscribe</code>
 resets the listener query to the next page of results.Unsubscribes from the current listener, constructs a new query, and sets it\as the new listener
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
-**Returns**: <code>callback</code> - returns the unsubscriber function (for lifecycle events)  
+**Returns**: <code>Unsubscribe</code> - returns the unsubscriber function (for lifecycle events)  
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit"></a>
 
-##### paginatedListener.ChangeLimit(newLimit) ⇒ <code>callback</code>
+##### paginatedListener.ChangeLimit(newLimit) ⇒ <code>Unsubscribe</code>
 sets page size limit to new value, and restarts the paged listener
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
-**Returns**: <code>callback</code> - returns the unsubscriber function (for lifecycle events)  
+**Returns**: <code>Unsubscribe</code> - returns the unsubscriber function (for lifecycle events)  
 
 | Param | Type |
 | --- | --- |
@@ -847,19 +865,19 @@ sets page size limit to new value, and restarts the paged listener
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter"></a>
 
-##### paginatedListener.ChangeFilter([filterArray]) ⇒ <code>callback</code>
+##### paginatedListener.ChangeFilter([filterArray]) ⇒ <code>Unsubscribe</code>
 changes the filter on the subscriptionThis has to unsubscribe the current listener,create a new query, then apply it as the listener
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
-**Returns**: <code>callback</code> - returns the unsubscriber function (for lifecycle events)  
+**Returns**: <code>Unsubscribe</code> - returns the unsubscriber function (for lifecycle events)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | [filterArray] | <code>filterObject</code> | an array of filter descriptors |
 
-<a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscribe"></a>
+<a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscriber"></a>
 
-##### paginatedListener.unsubscribe()
+##### paginatedListener.unsubscriber()
 IF unsubscribe function is set, run it.
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
@@ -878,11 +896,11 @@ Contructs a filter that selects only the "owner" section of acollectionGroup qu
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.listenSlice"></a>
 
-#### module.exports.listenSlice(owner, collectionName, dataCallback, errCallback) ⇒ <code>callback</code>
+#### module.exports.listenSlice(owner, collectionName, dataCallback, errCallback) ⇒ <code>Unsubscribe</code>
 Uses the ownerFilter (above) to establish a listener to "just" theparts of a collectionGroup that are descendants of the passed "owner"record.
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>callback</code> - function to be called to release subscription  
+**Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
 **Category**: Tree Slice  
 
 | Param | Type | Description |
@@ -1056,19 +1074,24 @@ Returns the "type" (collection name) the passed record isstored in, derived fro
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.recordId"></a>
 
-#### module.exports.recordId() ⇒ <code>string</code>
+#### module.exports.recordId(record) ⇒ <code>string</code>
 Returns the Id (documentId) of the passed record derived from the refPath
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>string</code> - the Id  
 **Category**: Typed  
+
+| Param | Type |
+| --- | --- |
+| record | <code>Record</code> | 
+
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedWrite"></a>
 
-#### module.exports.typedWrite(data, parent, type, batch) ⇒ <code>Promise</code>
+#### module.exports.typedWrite(data, parent, type, batch) ⇒ <code>Promise.ChainType</code>
 optionally batched record update - abstracts batch process from specific types
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
+**Returns**: <code>Promise.ChainType</code> - WriteBatch, Transaction or Void  
 **Category**: Typed  
 
 | Param | Type | Description |
@@ -1082,11 +1105,11 @@ optionally batched record update - abstracts batch process from specific types
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedWriteByTree"></a>
 
-#### module.exports.typedWriteByTree(data, tree, type, batch) ⇒ <code>Promise</code>
+#### module.exports.typedWriteByTree(data, tree, type, batch) ⇒ <code>Promise.ChainType</code>
 optionally batched record update - abstracts batch process from specific types
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
+**Returns**: <code>Promise.ChainType</code> - WriteBatch, Transaction or Void  
 **Category**: Typed  
 
 | Param | Type | Description |
@@ -1098,11 +1121,11 @@ optionally batched record update - abstracts batch process from specific types
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedWriteByChild"></a>
 
-#### module.exports.typedWriteByChild(data, tree, type, batch) ⇒ <code>Promise</code>
+#### module.exports.typedWriteByChild(data, tree, type, batch) ⇒ <code>Promise.ChainType</code>
 optionally batched record update - abstracts batch process from specific types
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
+**Returns**: <code>Promise.ChainType</code> - WriteBatch, Transaction or Void  
 **Category**: Typed  
 
 | Param | Type | Description |
@@ -1114,11 +1137,11 @@ optionally batched record update - abstracts batch process from specific types
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedCreate"></a>
 
-#### module.exports.typedCreate(data, parent, type, batch) ⇒ <code>Promise</code>
+#### module.exports.typedCreate(data, parent, type, batch) ⇒ <code>Promise.ChainType</code>
 Creates a new document reference of the indicated type, and writesit to the backend. Specific intent is when the Id needs to bepre-specified, or shared outside this function. Normal writingaction will silently create a new document, which has to then befound by query
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
+**Returns**: <code>Promise.ChainType</code> - WriteBatch, Transaction or Void  
 **Category**: Typed  
 
 | Param | Type | Description |
@@ -1228,7 +1251,7 @@ function to fetch a document from "up" the collection/document tree of a child d
 | child | <code>Record</code> | assumed to be an object in a collection/document Tree |
 | refPath | <code>string</code> |  |
 | type | <code>string</code> | type/collection to fetch parent document from |
-| batch | <code>WriteBatch</code> \| <code>Transaction</code> | optional batch object to chain |
+| batch | <code>ChainType</code> | optional batch object to chain |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedFetchFromTree"></a>
 
@@ -1317,7 +1340,7 @@ Creates a DocumentReference from *relative* docPathand an (optional) absolute r
 
 <a name="module_FirebaseFirestoreWrapper--module.exports..filterQuery"></a>
 
-#### module.exports~filterQuery(query, [filterArray]) ⇒ <code>Query</code>
+#### module.exports~filterQuery(query, filterArray) ⇒ <code>Query</code>
 builds and returns a query built from an array of filter (i.e. "where")conditions
 
 **Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
@@ -1326,11 +1349,11 @@ builds and returns a query built from an array of filter (i.e. "where")conditio
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | query | <code>Query</code> |  | collectionReference or Query to build filter upong |
-| [filterArray] | <code>filterObject</code> | <code></code> | an (optional) 3xn array of filter(i.e. "where") conditions |
+| filterArray | <code>Array.filterObject</code> | <code></code> | an (optional) 3xn array of filter(i.e. "where") conditions |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports..sortQuery"></a>
 
-#### module.exports~sortQuery(query, [sortArray]) ⇒
+#### module.exports~sortQuery(query, sortArray) ⇒
 builds and returns a query built from an array of filter (i.e. "where")conditions
 
 **Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
@@ -1339,7 +1362,7 @@ builds and returns a query built from an array of filter (i.e. "where")conditio
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | query | <code>Query</code> |  | collectionReference or Query to build filter upong |
-| [sortArray] | <code>sortObject</code> | <code></code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
+| sortArray | <code>Array.sortObject</code> | <code></code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports..limitQuery"></a>
 
@@ -1400,6 +1423,10 @@ common properties of our database records
 | --- | --- |
 | documentSnapshot | <code>DocumentSnapshot</code> | 
 
+<a name="module_FirebaseFirestoreWrapper--module.exports..Unsubscribe"></a>
+
+#### module.exports~Unsubscribe : <code>function</code>
+**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 <a name="module_FirebaseFirestoreWrapper--module.exports..CollectionListener"></a>
 
 #### module.exports~CollectionListener : <code>function</code>

@@ -559,7 +559,7 @@ export async function collectRecordsInGroupByFilter(
     .then((querySnapshot) => {
       // returns a promise
       return !querySnapshot.empty
-        ? (RecordsFromSnapshot(querySnapshot)
+        ? RecordsFromSnapshot(querySnapshot)
         : Promise.reject(
             "noDocuments:collectRecordsInGroupByFilter:" + tableName
           );

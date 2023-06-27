@@ -56,15 +56,19 @@ Intent is to treat Firestore as a hierarchical
 record-oriented database and Storage as a parallel structure
 originally conceived to port from one database to another.</p>
 </dd>
-<dt><a href="#module_FirebaseAuthWrapper/authAdmin">FirebaseAuthWrapper/authAdmin</a></dt>
-<dd><p>A set of helpers around Firebase admin SDK auth.
-Specific to use in Cloud Functions</p>
-</dd>
-<dt><a href="#module_FirebaseAuthWrapper/authClient">FirebaseAuthWrapper/authClient</a></dt>
+<dt><a href="#module_FirebaseWrapper">FirebaseWrapper</a></dt>
 <dd><p>A set of helper-wrapper functions around firebase firestore, storage
-and auth. Intent is to treat Firestore as a hierarchical
+and auth.
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebase
+functions, with a consistent interface.  There is a parallel set for
+ADMIN-SIDE functions as well.
+Intent is to treat Firestore as a hierarchical
 record-oriented database; originally conceived to port from one
-database to another.</p>
+database to another.
+NOTE:
+Most helpers return PROMISE.REJECT if no documents are returned.
+it is assumed projects using this library <em>might</em> want to have an
+explicitly error trap for such events.</p>
 </dd>
 </dl>
 
@@ -101,9 +105,23 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 * [FirebaseWrapper](#module_FirebaseWrapper)
     * _static_
         * [.FirebaseWrapper(config)](#module_FirebaseWrapper.FirebaseWrapper) ⇒
+        * [.FirebaseWrapper(config)](#module_FirebaseWrapper.FirebaseWrapper) ⇒
     * _inner_
         * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
+        * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
 
+<a name="module_FirebaseWrapper.FirebaseWrapper"></a>
+
+### FirebaseWrapper.FirebaseWrapper(config) ⇒
+**Kind**: static method of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
+**Returns**: none  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
+
+**Example**  
+```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
 <a name="module_FirebaseWrapper.FirebaseWrapper"></a>
 
 ### FirebaseWrapper.FirebaseWrapper(config) ⇒
@@ -136,6 +154,26 @@ only authDomain, databaseURL and storageBucket are present whencalled from a cl
 | measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
 | mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
 
+<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
+
+### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
+only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
+
+**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| apiKey | <code>string</code> | required api Key from Firebase Console, |
+| appId | <code>string</code> | required app ID from Firebase Console |
+| projectId | <code>string</code> | required Firebase projectID from Firebase console |
+| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
+| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
+| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
+| messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
+| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
+| mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
+
 <a name="module_FirebaseAuthWrapper/authAdmin"></a>
 
 ## FirebaseAuthWrapper/authAdmin
@@ -144,21 +182,12 @@ A set of helpers around Firebase admin SDK auth.Specific to use in Cloud Functi
 
 * [FirebaseAuthWrapper/authAdmin](#module_FirebaseAuthWrapper/authAdmin)
     * [module.exports(firebase)](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports) ⏏
-        * _static_
-            * [.getUser(userID)](#module_FirebaseAuthWrapper/authAdmin--module.exports.getUser) ⇒ <code>Promise.userData</code>
-            * [.DeleteUser(userID)](#module_FirebaseAuthWrapper/authAdmin--module.exports.DeleteUser) ⇒ <code>Promise.void</code>
-            * [.setCustomClaims(uid, customClaim)](#module_FirebaseAuthWrapper/authAdmin--module.exports.setCustomClaims) ⇒ <code>Promise.object</code>
-            * [.addCustomClaims(uid, customClaim)](#module_FirebaseAuthWrapper/authAdmin--module.exports.addCustomClaims) ⇒ <code>Promise.object</code>
-            * [.clearCustomClaims(uid)](#module_FirebaseAuthWrapper/authAdmin--module.exports.clearCustomClaims) ⇒ <code>Promise.void</code>
-            * [.PageUsers(pageSize, pageToken)](#module_FirebaseAuthWrapper/authAdmin--module.exports.PageUsers) ⇒ <code>Promise.Array.object</code>
-        * _inner_
-            * [~FirebaseAuthAdminWrapper(firebase)](#module_FirebaseAuthWrapper/authAdmin--module.exports..FirebaseAuthAdminWrapper)
-            * [~getUser(userID)](#module_FirebaseAuthWrapper/authAdmin--module.exports..getUser) ⇒ <code>Promise.userData</code>
-            * [~_getUser(userID)](#module_FirebaseAuthWrapper/authAdmin--module.exports.._getUser) ⇒ <code>Promise.void</code>
-            * [~_DeleteUser(uid, customClaim)](#module_FirebaseAuthWrapper/authAdmin--module.exports.._DeleteUser) ⇒ <code>Promise.object</code>
-            * [~_setCustomClaims(uid, customClaim)](#module_FirebaseAuthWrapper/authAdmin--module.exports.._setCustomClaims) ⇒ <code>Promise.object</code>
-            * [~_addCustomClaims(uid)](#module_FirebaseAuthWrapper/authAdmin--module.exports.._addCustomClaims) ⇒ <code>Promise.void</code>
-            * [~_clearCustomClaims(pageSize, pageToken)](#module_FirebaseAuthWrapper/authAdmin--module.exports.._clearCustomClaims) ⇒ <code>Promise.Array.object</code>
+        * [.getUser(userID)](#module_FirebaseAuthWrapper/authAdmin--module.exports.getUser) ⇒ <code>Promise.userData</code>
+        * [.DeleteUser(userID)](#module_FirebaseAuthWrapper/authAdmin--module.exports.DeleteUser) ⇒ <code>Promise.void</code>
+        * [.setCustomClaims(uid, customClaim)](#module_FirebaseAuthWrapper/authAdmin--module.exports.setCustomClaims) ⇒ <code>Promise.object</code>
+        * [.addCustomClaims(uid, customClaim)](#module_FirebaseAuthWrapper/authAdmin--module.exports.addCustomClaims) ⇒ <code>Promise.object</code>
+        * [.clearCustomClaims(uid)](#module_FirebaseAuthWrapper/authAdmin--module.exports.clearCustomClaims) ⇒ <code>Promise.void</code>
+        * [.PageUsers(pageSize, pageToken)](#module_FirebaseAuthWrapper/authAdmin--module.exports.PageUsers) ⇒ <code>Promise.Array.object</code>
 
 <a name="exp_module_FirebaseAuthWrapper/authAdmin--module.exports"></a>
 
@@ -196,7 +225,7 @@ deletes a single user from the authentication system, identified by user ID
 <a name="module_FirebaseAuthWrapper/authAdmin--module.exports.setCustomClaims"></a>
 
 #### module.exports.setCustomClaims(uid, customClaim) ⇒ <code>Promise.object</code>
-sets custom claims on user objectoverwrites other needed settings
+sets custom claims on user object - overwrites other needed settings
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
 
@@ -240,86 +269,6 @@ pages through the full list of users. Woefully inefficient.
 | pageSize | <code>number</code> | default 1000 |
 | pageToken | <code>object</code> | default null |
 
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports..FirebaseAuthAdminWrapper"></a>
-
-#### module.exports~FirebaseAuthAdminWrapper(firebase)
-Initializes the administrative Auth service of the providedfirebase app.  Also instantiates various constants and helper functions
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports..getUser"></a>
-
-#### module.exports~getUser(userID) ⇒ <code>Promise.userData</code>
-asynchronously fetches user data from Firestore Authentication
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| userID | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.._getUser"></a>
-
-#### module.exports~\_getUser(userID) ⇒ <code>Promise.void</code>
-deletes a single user from the authentication system, identified by user ID
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| userID | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.._DeleteUser"></a>
-
-#### module.exports~\_DeleteUser(uid, customClaim) ⇒ <code>Promise.object</code>
-sets custom claims on user objectoverwrites other needed settings
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| uid | <code>string</code> | user ID |
-| customClaim | <code>Object</code> | claims object, less than 1000 Bytes. null clears |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.._setCustomClaims"></a>
-
-#### module.exports~\_setCustomClaims(uid, customClaim) ⇒ <code>Promise.object</code>
-adds/merges to new claims to user customClaims
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| uid | <code>string</code> | user ID |
-| customClaim | <code>Object</code> | claims object to be merged with existing claims |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.._addCustomClaims"></a>
-
-#### module.exports~\_addCustomClaims(uid) ⇒ <code>Promise.void</code>
-removes all current customClaims on user (sets to null)
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| uid | <code>string</code> | user ID |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.._clearCustomClaims"></a>
-
-#### module.exports~\_clearCustomClaims(pageSize, pageToken) ⇒ <code>Promise.Array.object</code>
-pages through the full list of users. Woefully inefficient.
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| pageSize | <code>number</code> | default 1000 |
-| pageToken | <code>object</code> | default null |
-
 <a name="module_FirebaseAuthWrapper/authClient"></a>
 
 ## FirebaseAuthWrapper/authClient
@@ -329,13 +278,11 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 ```import * as firebase from "firebase/app";import "firebase/auth";import FirebaseAuth from "@leaddreamer/firebase-wrapper/FirebaseAuthWrapper";//the next is optional - if you want the React componentimport StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";import {config} from "wherever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseAuth(firebase, StyledFirebaseAuth);})(config)```
 
 * [FirebaseAuthWrapper/authClient](#module_FirebaseAuthWrapper/authClient)
-    * [module.exports(firebase)](#exp_module_FirebaseAuthWrapper/authClient--module.exports) ⏏
+    * [module.exports(firebase, thisLogger)](#exp_module_FirebaseAuthWrapper/authClient--module.exports) ⏏
         * _static_
             * [.FirebaseAuth](#module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuth) : <code>object</code>
-            * [.FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuthSignInOptions) : <code>Array.string</code>
-            * [.FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuthSignInOptions)
             * [.fetchToken(user)](#module_FirebaseAuthWrapper/authClient--module.exports.fetchToken) ⇒ <code>Promise.Token</code>
-            * [.fetchJWT(user)](#module_FirebaseAuthWrapper/authClient--module.exports.fetchJWT) ⇒ <code>Promise.&lt;string&gt;</code>
+            * [.fetchJWT(user)](#module_FirebaseAuthWrapper/authClient--module.exports.fetchJWT) ⇒ <code>Promise.&lt;JWT&gt;</code>
             * [.refreshAuthUser()](#module_FirebaseAuthWrapper/authClient--module.exports.refreshAuthUser) ⇒ <code>Promise.void</code>
             * [.doCreateUserWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.doCreateUserWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
             * [.doSignInWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
@@ -350,30 +297,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.attachAuthUserListener(next)](#module_FirebaseAuthWrapper/authClient--module.exports.attachAuthUserListener) ⇒ <code>function</code>
             * [.setPersistence()](#module_FirebaseAuthWrapper/authClient--module.exports.setPersistence) ⇒ <code>Promise.void</code>
         * _inner_
-            * [~FirebaseAuth](#module_FirebaseAuthWrapper/authClient--module.exports..FirebaseAuth) : <code>object</code>
-            * [~FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper/authClient--module.exports..FirebaseAuthSignInOptions) : <code>Array.string</code>
-            * [~_FirebaseAuthClient(user)](#module_FirebaseAuthWrapper/authClient--module.exports.._FirebaseAuthClient) ⇒ <code>Promise.Token</code>
-            * [~_fetchToken(user)](#module_FirebaseAuthWrapper/authClient--module.exports.._fetchToken) ⇒ <code>Promise.&lt;string&gt;</code>
-            * [~_fetchJWT()](#module_FirebaseAuthWrapper/authClient--module.exports.._fetchJWT) ⇒ <code>Promise.void</code>
-            * [~_refreshAuthUser(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.._refreshAuthUser) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [~_doCreateUserWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.._doCreateUserWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [~_doSignInWithEmailAndPassword(googleProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [~_doSignInWithGoogle(facebookProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithGoogle) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [~_doSignInWithFacebook(twitterProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithFacebook) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [~_doSignInWithTwitter()](#module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithTwitter) ⇒ <code>Promise.void</code>
-            * [~_doSignOut()](#module_FirebaseAuthWrapper/authClient--module.exports.._doSignOut) ⇒ <code>Promise.void</code>
-            * [~_doPasswordReset()](#module_FirebaseAuthWrapper/authClient--module.exports.._doPasswordReset) ⇒ <code>Promise.void</code>
-            * [~_doSendEmailVerification(password)](#module_FirebaseAuthWrapper/authClient--module.exports.._doSendEmailVerification) ⇒ <code>Promise.void</code>
-            * [~_doPasswordUpdate()](#module_FirebaseAuthWrapper/authClient--module.exports.._doPasswordUpdate) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [~_createAnonymousUser(next)](#module_FirebaseAuthWrapper/authClient--module.exports.._createAnonymousUser) ⇒ <code>function</code>
-            * [~_attachAuthUserListener()](#module_FirebaseAuthWrapper/authClient--module.exports.._attachAuthUserListener) ⇒ <code>Promise.void</code>
-            * [~AdditionalUserInfo](#module_FirebaseAuthWrapper/authClient--module.exports..AdditionalUserInfo) : <code>object</code>
-            * [~AuthCredential](#module_FirebaseAuthWrapper/authClient--module.exports..AuthCredential) : <code>class</code>
-            * [~GetIdToken](#module_FirebaseAuthWrapper/authClient--module.exports..GetIdToken) ⇒ <code>Promise.&lt;string&gt;</code>
-            * [~Delete](#module_FirebaseAuthWrapper/authClient--module.exports..Delete) ⇒ <code>Promise.&lt;void&gt;</code>
-            * [~User](#module_FirebaseAuthWrapper/authClient--module.exports..User) : <code>object</code>
-            * [~UserCredential](#module_FirebaseAuthWrapper/authClient--module.exports..UserCredential) : <code>object</code>
-            * [~AuthChangeProcess](#module_FirebaseAuthWrapper/authClient--module.exports..AuthChangeProcess) ⇒ <code>Promise.void</code>
+            * [~ID](#module_FirebaseAuthWrapper/authClient--module.exports..ID) : <code>Array.string</code>
             * [~AdditionalUserInfo](#module_FirebaseAuthWrapper/authClient--module.exports..AdditionalUserInfo) : <code>object</code>
             * [~AuthCredential](#module_FirebaseAuthWrapper/authClient--module.exports..AuthCredential) : <code>class</code>
             * [~GetIdToken](#module_FirebaseAuthWrapper/authClient--module.exports..GetIdToken) ⇒ <code>Promise.&lt;string&gt;</code>
@@ -384,14 +308,15 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 <a name="exp_module_FirebaseAuthWrapper/authClient--module.exports"></a>
 
-### module.exports(firebase) ⏏
+### module.exports(firebase, thisLogger) ⏏
 Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: Exported function  
 
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>firebase</code> | provided firebase app (allows use between client & server) |
+| thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
 
 <a name="module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuth"></a>
 
@@ -399,23 +324,6 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 FirebaseAuth instance for various Login/Logout calls
 
 **Kind**: static property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuthSignInOptions"></a>
-
-#### module.exports.FirebaseAuthSignInOptions : <code>Array.string</code>
-codes for 3rd party Auth providers
-
-**Kind**: static property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuthSignInOptions"></a>
-
-#### module.exports.FirebaseAuthSignInOptions
-Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
-
-**Kind**: static property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
-
 <a name="module_FirebaseAuthWrapper/authClient--module.exports.fetchToken"></a>
 
 #### module.exports.fetchToken(user) ⇒ <code>Promise.Token</code>
@@ -431,7 +339,7 @@ fetches our specific custom claim values from firebase auth
 
 <a name="module_FirebaseAuthWrapper/authClient--module.exports.fetchJWT"></a>
 
-#### module.exports.fetchJWT(user) ⇒ <code>Promise.&lt;string&gt;</code>
+#### module.exports.fetchJWT(user) ⇒ <code>Promise.&lt;JWT&gt;</code>
 Fetch a JWT token for authenticated signed requests
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
@@ -538,229 +446,12 @@ SIGNS IN an existing authenticated user with the provided email and passwordCre
 
 #### module.exports.setPersistence() ⇒ <code>Promise.void</code>
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..FirebaseAuth"></a>
+<a name="module_FirebaseAuthWrapper/authClient--module.exports..ID"></a>
 
-#### module.exports~FirebaseAuth : <code>object</code>
-FirebaseAuth instance for various Login/Logout calls
-
-**Kind**: inner property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..FirebaseAuthSignInOptions"></a>
-
-#### module.exports~FirebaseAuthSignInOptions : <code>Array.string</code>
+#### module.exports~ID : <code>Array.string</code>
 codes for 3rd party Auth providers
 
 **Kind**: inner property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._FirebaseAuthClient"></a>
-
-#### module.exports~\_FirebaseAuthClient(user) ⇒ <code>Promise.Token</code>
-fetches our specific custom claim values from firebase auth
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Fulfil**: Returns a user token object  
-**Reject**: returns err  
-
-| Param | Type |
-| --- | --- |
-| user | <code>FirebaseAuthUser</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._fetchToken"></a>
-
-#### module.exports~\_fetchToken(user) ⇒ <code>Promise.&lt;string&gt;</code>
-Fetch a JWT token for authenticated signed requests
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Fulfil**: Returnsa JWT token  
-**Reject**: returns an err  
-
-| Param | Type |
-| --- | --- |
-| user | <code>FirebaseAuthUser</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._fetchJWT"></a>
-
-#### module.exports~\_fetchJWT() ⇒ <code>Promise.void</code>
-triggers an update of the Firebase Auth user object.  A listenercan be set to monitor these changes
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._refreshAuthUser"></a>
-
-#### module.exports~\_refreshAuthUser(email, password) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-Creates AND SIGNS IN an authenticated user with the provided email and passwordCreates a new user account associated with the specified emailaddress and password.On successful creation of the user account, this user will also besigned in to your application.User account creation can fail if the account already exists or thepassword is invalid.Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| email | <code>string</code> | 
-| password | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doCreateUserWithEmailAndPassword"></a>
-
-#### module.exports~\_doCreateUserWithEmailAndPassword(email, password) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-SIGNS IN an existing authenticated user with the provided email and passwordCreates a new user account associated with the specified emailaddress and password.On successful creation of the user account, this user will also besigned in to your application.User account creation can fail if the account already exists or thepassword is invalid.Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| email | <code>string</code> | 
-| password | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithEmailAndPassword"></a>
-
-#### module.exports~\_doSignInWithEmailAndPassword(googleProvider) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| googleProvider | <code>GoogleProvider</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithGoogle"></a>
-
-#### module.exports~\_doSignInWithGoogle(facebookProvider) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| facebookProvider | <code>FacebookProvider</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithFacebook"></a>
-
-#### module.exports~\_doSignInWithFacebook(twitterProvider) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| twitterProvider | <code>TwitterProvider</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithTwitter"></a>
-
-#### module.exports~\_doSignInWithTwitter() ⇒ <code>Promise.void</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doSignOut"></a>
-
-#### module.exports~\_doSignOut() ⇒ <code>Promise.void</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doPasswordReset"></a>
-
-#### module.exports~\_doPasswordReset() ⇒ <code>Promise.void</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doSendEmailVerification"></a>
-
-#### module.exports~\_doSendEmailVerification(password) ⇒ <code>Promise.void</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| password | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doPasswordUpdate"></a>
-
-#### module.exports~\_doPasswordUpdate() ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._createAnonymousUser"></a>
-
-#### module.exports~\_createAnonymousUser(next) ⇒ <code>function</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Returns**: <code>function</code> - unsubscribe function  
-
-| Param | Type |
-| --- | --- |
-| next | <code>AuthChangeProcess</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._attachAuthUserListener"></a>
-
-#### module.exports~\_attachAuthUserListener() ⇒ <code>Promise.void</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..AdditionalUserInfo"></a>
-
-#### module.exports~AdditionalUserInfo : <code>object</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| isNewUser | <code>boolean</code> | 
-| profile | <code>object</code> | 
-| providerId | <code>string</code> | 
-| username | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..AuthCredential"></a>
-
-#### module.exports~AuthCredential : <code>class</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| providerId | <code>string</code> | 
-| signInMethod | <code>string</code> | 
-| toJSON | <code>method</code> | 
-| fromJSON | <code>method</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..GetIdToken"></a>
-
-#### module.exports~GetIdToken ⇒ <code>Promise.&lt;string&gt;</code>
-Returns a JSON Web Token (JWT) used to identify the user to a Firebase service.Returns the current token if it has not expired. Otherwise, this will refresh the token and return a new one.
-
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| forceRefresh | <code>boolean</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..Delete"></a>
-
-#### module.exports~Delete ⇒ <code>Promise.&lt;void&gt;</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..User"></a>
-
-#### module.exports~User : <code>object</code>
-See https://firebase.google.com/docs/reference/js/v8/firebase.User
-
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| displayName | <code>string</code> \| <code>null</code> |  |
-| email | <code>string</code> \| <code>null</code> |  |
-| emailVerified | <code>boolean</code> |  |
-| IsAnonymous | <code>boolean</code> |  |
-| metadata | <code>UserMetadata</code> |  |
-| multiFactor | <code>MultiFactorUser</code> |  |
-| phoneNumber | <code>string</code> \| <code>null</code> |  |
-| photoURL | <code>string</code> \| <code>null</code> |  |
-| providerData | <code>UserInfo</code> |  |
-| providerId | <code>string</code> |  |
-| refreshToken | <code>string</code> |  |
-| tenantId | <code>string</code> \| <code>null</code> | The current user's tenant ID. This is a read-only property, which indicates the tenant ID used to sign in the current user. This is null if the user is signed in from the parent project. |
-| uid | <code>string</code> | The user's unique ID. |
-| delete | <code>Delete</code> |  |
-| getIdToken | <code>GetIdToken</code> |  |
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..UserCredential"></a>
-
-#### module.exports~UserCredential : <code>object</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| additionalUserInfo | <code>AdditionalUserInfo</code> | 
-| credential | <code>AuthCredential</code> | 
-| operationType | <code>&quot;signin&quot;</code> \| <code>&quot;link&quot;</code> \| <code>&quot;reauthenticate&quot;</code> | 
-| user | <code>&quot;User&quot;</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..AuthChangeProcess"></a>
-
-#### module.exports~AuthChangeProcess ⇒ <code>Promise.void</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| user | <code>User</code> | 
-
 <a name="module_FirebaseAuthWrapper/authClient--module.exports..AdditionalUserInfo"></a>
 
 #### module.exports~AdditionalUserInfo : <code>object</code>
@@ -857,20 +548,23 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 
 * [FirebaseCloudFunctionsWrapper](#module_FirebaseCloudFunctionsWrapper)
-    * [module.exports(firebase)](#exp_module_FirebaseCloudFunctionsWrapper--module.exports) ⏏
+    * [module.exports(firebase, config, thisLogger)](#exp_module_FirebaseCloudFunctionsWrapper--module.exports) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
         * [.CloudFunctions()](#module_FirebaseCloudFunctionsWrapper--module.exports.CloudFunctions) ⇒ <code>Promise</code>
         * [.treeFromParams(Params)](#module_FirebaseCloudFunctionsWrapper--module.exports.treeFromParams) ⇒ <code>Map</code>
 
 <a name="exp_module_FirebaseCloudFunctionsWrapper--module.exports"></a>
 
-### module.exports(firebase) ⏏
-Initializes the FirebaseCloud function support
+### module.exports(firebase, config, thisLogger) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
+Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: Exported function  
 
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>firebase</code> | provided firebase app (allows use between client & server) |
+| config | <code>object</code> | configuration object to detect client/server use |
+| config.appId | <code>string</code> | missing parameter indicates server |
+| thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
 
 **Example**  
 ```import * as firebase from "firebase/app";import "firebase/functions";import FirebaseFunctions from "@leaddreamer/firebase-wrapper/FirebaseCloudFunctionsWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFunctions(firebase);})(config)```
@@ -902,7 +596,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 
 * [FirebaseFirestoreWrapper](#module_FirebaseFirestoreWrapper)
-    * [module.exports(firebase)](#exp_module_FirebaseFirestoreWrapper--module.exports) ⇒ <code>Promise.void</code> ⏏
+    * [module.exports(firebase, config, thisLogger)](#exp_module_FirebaseFirestoreWrapper--module.exports) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
         * _static_
             * [.timestamp](#module_FirebaseFirestoreWrapper--module.exports.timestamp)
             * [.MAX_CONCURRENCY](#module_FirebaseFirestoreWrapper--module.exports.MAX_CONCURRENCY)
@@ -915,7 +609,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.collectRecords(tablePath, refPath)](#module_FirebaseFirestoreWrapper--module.exports.collectRecords) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
             * [.collectRecordsByFilter(tablePath, refPath, filterArray, sortArray, limit)](#module_FirebaseFirestoreWrapper--module.exports.collectRecordsByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
             * [.collectRecordsInGroup(tableName)](#module_FirebaseFirestoreWrapper--module.exports.collectRecordsInGroup) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-            * [.collectRecordsInGroupByFilter(tableName, [filterArray])](#module_FirebaseFirestoreWrapper--module.exports.collectRecordsInGroupByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+            * [.collectRecordsInGroupByFilter(tableName, filterArray)](#module_FirebaseFirestoreWrapper--module.exports.collectRecordsInGroupByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
             * [.fetchRecord(tablePath, Id, refPath, batch)](#module_FirebaseFirestoreWrapper--module.exports.fetchRecord) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
             * [.fetchRecordByRefPath(docRefPath, batch)](#module_FirebaseFirestoreWrapper--module.exports.fetchRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
             * [.fetchRecordByFilter(table, [filterArray], refPath, batch)](#module_FirebaseFirestoreWrapper--module.exports.fetchRecordByFilter) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
@@ -938,14 +632,15 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                 * [.deleteFieldValue](#module_FirebaseFirestoreWrapper--module.exports.deleteFieldValue) : <code>Object</code>
                 * [.serverTimestampFieldValue](#module_FirebaseFirestoreWrapper--module.exports.serverTimestampFieldValue) : <code>Object</code>
                 * [.incrementFieldValue(n)](#module_FirebaseFirestoreWrapper--module.exports.incrementFieldValue) ⇒ <code>sentinelValue</code>
+                * [.decrementFieldValue(n)](#module_FirebaseFirestoreWrapper--module.exports.decrementFieldValue) ⇒
                 * [.arrayRemoveFieldValue(arrayElements)](#module_FirebaseFirestoreWrapper--module.exports.arrayRemoveFieldValue) ⇒ <code>sentinelValue</code>
                 * [.arrayUnionFieldValue(arrayElements)](#module_FirebaseFirestoreWrapper--module.exports.arrayUnionFieldValue) ⇒ <code>sentinelValue</code>
             * _Listeners_
-                * [.ListenRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenRecords) ⇒ <code>function</code>
-                * [.ListenQuery(table, [filterArray], [sortArray], refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenQuery) ⇒ <code>function</code>
-                * [.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupRecords) ⇒ <code>function</code>
-                * [.ListenCollectionGroupQuery(table, [filterArray], [sortArray], dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupQuery) ⇒ <code>function</code>
-                * [.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenRecord) ⇒ <code>callback</code>
+                * [.ListenRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenRecords) ⇒ <code>Unsubscribe</code>
+                * [.ListenQuery(tablePath, refPath, dataCallback, errCallback, filterArray, sortArray)](#module_FirebaseFirestoreWrapper--module.exports.ListenQuery) ⇒ <code>Unsubscribe</code>
+                * [.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupRecords) ⇒ <code>Unsubscribe</code>
+                * [.ListenCollectionGroupQuery(table, dataCallback, errCallback, filterArray, sortArray)](#module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupQuery) ⇒ <code>Unsubscribe</code>
+                * [.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.ListenRecord) ⇒ <code>Unsubscribe</code>
             * _Paginator_
                 * [.PaginateFetch](#module_FirebaseFirestoreWrapper--module.exports.PaginateFetch)
                     * [new exports.PaginateFetch(table, filterArray, sortArray, refPath, limit)](#new_module_FirebaseFirestoreWrapper--module.exports.PaginateFetch_new)
@@ -961,8 +656,8 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                     * [.PageForward()](#module_FirebaseFirestoreWrapper--module.exports.PaginateGroupFetch+PageForward) ⇒ <code>Promise.&lt;Array.Record&gt;</code>
                     * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginateGroupFetch+PageBack) ⇒ <code>Promise.&lt;Array.Record&gt;</code>
                 * [.PaginatedListener](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)
-                    * [new exports.PaginatedListener(table, [filterArray], [sortArray], refPath, limit, dataCallback, errCallback)](#new_module_FirebaseFirestoreWrapper--module.exports.PaginatedListener_new)
-                    * [.table](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+table) : <code>string</code>
+                    * [new exports.PaginatedListener(tablePath, refPath, dataCallback, errCallback, limit, filterArray, sortArray)](#new_module_FirebaseFirestoreWrapper--module.exports.PaginatedListener_new)
+                    * [.tablePath](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+tablePath) : <code>string</code>
                     * [.filterArray](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+filterArray) : <code>filterObject</code>
                     * [.sortArray](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+sortArray) : <code>sortObject</code>
                     * [.refPath](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+refPath) : <code>string</code>
@@ -971,14 +666,14 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                     * [.errCallback](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+errCallback) : <code>callback</code>
                     * [.status](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+status) : <code>number</code>
                     * [._setQuery()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+_setQuery) ⇒ <code>Query</code>
-                    * [.PageForward()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageForward) ⇒ <code>callback</code>
-                    * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack) ⇒ <code>callback</code>
-                    * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit) ⇒ <code>callback</code>
-                    * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter) ⇒ <code>callback</code>
-                    * [.unsubscribe()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscribe)
+                    * [.PageForward()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageForward) ⇒ <code>Unsubscribe</code>
+                    * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack) ⇒ <code>Unsubscribe</code>
+                    * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit) ⇒ <code>Unsubscribe</code>
+                    * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter) ⇒ <code>Unsubscribe</code>
+                    * [.unsubscriber()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscriber)
             * _Tree Slice_
                 * [.ownerFilter(owner, queryFilter)](#module_FirebaseFirestoreWrapper--module.exports.ownerFilter) ⇒ <code>filterObject</code>
-                * [.listenSlice(owner, collectionName, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.listenSlice) ⇒ <code>callback</code>
+                * [.listenSlice(owner, collectionName, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.listenSlice) ⇒ <code>Unsubscribe</code>
                 * [.fetchSlice(owner, collectionName)](#module_FirebaseFirestoreWrapper--module.exports.fetchSlice) ⇒ <code>Promise.Array.Record</code>
                 * [.querySlice(owner, collectionName, filterArray)](#module_FirebaseFirestoreWrapper--module.exports.querySlice) ⇒ <code>Promise.Array.Record</code>
                 * [.listenQuerySlice(owner, collectionName, filterArray, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.listenQuerySlice) ⇒ <code>callback</code>
@@ -992,11 +687,11 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                 * [.typedPaginatedListener](#module_FirebaseFirestoreWrapper--module.exports.typedPaginatedListener) ⇐ <code>PaginatedListener</code>
                     * [new exports.typedPaginatedListener(type, parent, pageSize, dataCallback, errCallback)](#new_module_FirebaseFirestoreWrapper--module.exports.typedPaginatedListener_new)
                 * [.recordType(record)](#module_FirebaseFirestoreWrapper--module.exports.recordType) ⇒ <code>string</code>
-                * [.recordId()](#module_FirebaseFirestoreWrapper--module.exports.recordId) ⇒ <code>string</code>
-                * [.typedWrite(data, parent, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedWrite) ⇒ <code>Promise</code>
-                * [.typedWriteByTree(data, tree, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedWriteByTree) ⇒ <code>Promise</code>
-                * [.typedWriteByChild(data, tree, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedWriteByChild) ⇒ <code>Promise</code>
-                * [.typedCreate(data, parent, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedCreate) ⇒ <code>Promise</code>
+                * [.recordId(record)](#module_FirebaseFirestoreWrapper--module.exports.recordId) ⇒ <code>string</code>
+                * [.typedWrite(data, parent, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedWrite) ⇒ <code>Promise.ChainType</code>
+                * [.typedWriteByTree(data, tree, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedWriteByTree) ⇒ <code>Promise.ChainType</code>
+                * [.typedWriteByChild(data, tree, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedWriteByChild) ⇒ <code>Promise.ChainType</code>
+                * [.typedCreate(data, parent, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedCreate) ⇒ <code>Promise.ChainType</code>
                 * [.treeFromChild(child)](#module_FirebaseFirestoreWrapper--module.exports.treeFromChild) ⇒ <code>RecordTree</code>
                 * [.typedTablePathFromTree(tree, type, branchType)](#module_FirebaseFirestoreWrapper--module.exports.typedTablePathFromTree) ⇒ <code>string</code>
                 * [.typedRefPathFromTree(tree, type)](#module_FirebaseFirestoreWrapper--module.exports.typedRefPathFromTree) ⇒ <code>string</code>
@@ -1011,25 +706,29 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * _inner_
             * [~dbReference(refPath)](#module_FirebaseFirestoreWrapper--module.exports..dbReference) ⇒ <code>DocumentReference</code>
             * [~createRefFromPath(docPath, refPath)](#module_FirebaseFirestoreWrapper--module.exports..createRefFromPath) ⇒ <code>DocumentReference</code>
-            * [~filterQuery(query, [filterArray])](#module_FirebaseFirestoreWrapper--module.exports..filterQuery) ⇒ <code>Query</code>
-            * [~sortQuery(query, [sortArray])](#module_FirebaseFirestoreWrapper--module.exports..sortQuery) ⇒
+            * [~filterQuery(query, filterArray)](#module_FirebaseFirestoreWrapper--module.exports..filterQuery) ⇒ <code>Query</code>
+            * [~sortQuery(query, sortArray)](#module_FirebaseFirestoreWrapper--module.exports..sortQuery) ⇒
             * [~limitQuery(query, limit)](#module_FirebaseFirestoreWrapper--module.exports..limitQuery) ⇒ <code>Query</code>
             * [~ListenRecordsCommon(reference, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports..ListenRecordsCommon) ⇒ <code>function</code>
             * [~Record](#module_FirebaseFirestoreWrapper--module.exports..Record) : <code>object</code>
             * [~filterObject](#module_FirebaseFirestoreWrapper--module.exports..filterObject) : <code>Object</code>
             * [~RecordListener](#module_FirebaseFirestoreWrapper--module.exports..RecordListener) : <code>function</code>
+            * [~Unsubscribe](#module_FirebaseFirestoreWrapper--module.exports..Unsubscribe) : <code>function</code>
             * [~CollectionListener](#module_FirebaseFirestoreWrapper--module.exports..CollectionListener) : <code>function</code>
 
 <a name="exp_module_FirebaseFirestoreWrapper--module.exports"></a>
 
-### module.exports(firebase) ⇒ <code>Promise.void</code> ⏏
+### module.exports(firebase, config, thisLogger) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
 Initializes the Firestore service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: Exported function  
 
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>firebase</code> | provided firebase app (allows use between client & server) |
+| config | <code>object</code> | configuration object to detect client/server use |
+| config.appId | <code>string</code> | missing parameter indicates server |
+| thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
 
 **Example**  
 ```import * as firebase from "firebase/app";import "firebase/firestore";import FirebaseFirestore from "@leaddreamer/firebase-wrapper/FirebaseFirestoreWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFirestore(firebase);})(config)```
@@ -1167,7 +866,7 @@ query for a SET of records from a COLLECTIONGROUP - allcollections of a similar
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.collectRecordsInGroupByFilter"></a>
 
-#### module.exports.collectRecordsInGroupByFilter(tableName, [filterArray]) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
+#### module.exports.collectRecordsInGroupByFilter(tableName, filterArray) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
 queries for Records from a CollectionGroup, filtered bythe passed array of filterObjects
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
@@ -1175,7 +874,7 @@ queries for Records from a CollectionGroup, filtered bythe passed array of filt
 | Param | Type | Description |
 | --- | --- | --- |
 | tableName | <code>string</code> | string describing the Name of the collectiongroup |
-| [filterArray] | <code>filterObject</code> | array of objects describing filter operations |
+| filterArray | <code>Array.filterObject</code> | array of objects describing filter operations |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.fetchRecord"></a>
 
@@ -1394,6 +1093,19 @@ return a sentinel to incrment/decrement a field
 | --- | --- | --- |
 | n | <code>number</code> | If either the operand or the current field value uses    floating point precision, all arithmetic follows IEEE 754    semantics. If both values are integers, values outside of    JavaScript's safe number range (Number.MIN_SAFE_INTEGER to    Number.MAX_SAFE_INTEGER) are also subject to precision loss.    Furthermore, once processed by the Firestore backend, all integer    operations are capped between -2^63 and 2^63-1.     If the current field value is not of type number, or if the field     does not yet exist, the transformation sets the field to the given value. |
 
+<a name="module_FirebaseFirestoreWrapper--module.exports.decrementFieldValue"></a>
+
+#### module.exports.decrementFieldValue(n) ⇒
+----------------------------------------------------------------------return a sentinel to decrment/decrement a fieldNOT REALLY A FIREBASE FUNCTIONFire base has only increment; we implement this for legibility
+
+**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+**Returns**: a sentinel value  
+**Category**: FieldValue  
+
+| Param | Description |
+| --- | --- |
+| n | If either the operand or the current field value uses    floating point precision, all arithmetic follows IEEE 754    semantics. If both values are integers, values outside of    JavaScript's safe number range (Number.MIN_SAFE_INTEGER to    Number.MAX_SAFE_INTEGER) are also subject to precision loss.    Furthermore, once processed by the Firestore backend, all integer    operations are capped between -2^63 and 2^63-1.     If the current field value is not of type number, or if the field     does not yet exist, the transformation sets the field to the given value. |
+
 <a name="module_FirebaseFirestoreWrapper--module.exports.arrayRemoveFieldValue"></a>
 
 #### module.exports.arrayRemoveFieldValue(arrayElements) ⇒ <code>sentinelValue</code>
@@ -1422,11 +1134,11 @@ return a sentinel to add/join elements to array field
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenRecords"></a>
 
-#### module.exports.ListenRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>function</code>
+#### module.exports.ListenRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>Unsubscribe</code>
 sets up a listener for changes to a single record
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>function</code> - function to be called to release subscription  
+**Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
@@ -1438,29 +1150,29 @@ sets up a listener for changes to a single record
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenQuery"></a>
 
-#### module.exports.ListenQuery(table, [filterArray], [sortArray], refPath, dataCallback, errCallback) ⇒ <code>function</code>
+#### module.exports.ListenQuery(tablePath, refPath, dataCallback, errCallback, filterArray, sortArray) ⇒ <code>Unsubscribe</code>
 Sets up a listener to a query
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>function</code> - function to be called to release subscription  
+**Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| table | <code>string</code> | Name of table to query too - may be sub-collection of optional reference |
-| [filterArray] | <code>filterObject</code> | a 3xn array of filter(i.e. "where") conditions |
-| [sortArray] | <code>sortObject</code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
+| tablePath | <code>string</code> | Name (or pathname) of table to query too - may be sub-collection of optional reference |
 | refPath | <code>string</code> | An optional Firestore DocumentReference. If present, the "table" parameter above is relative to this reference |
 | dataCallback | <code>CollectionListener</code> | callback function with query results |
 | errCallback | <code>callback</code> | callback function with error results |
+| filterArray | <code>Array.filterObject</code> | a 3xn array of filter(i.e. "where") conditions |
+| sortArray | <code>Array.sortObject</code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupRecords"></a>
 
-#### module.exports.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>function</code>
+#### module.exports.ListenCollectionGroupRecords(tablePath, refPath, dataCallback, errCallback) ⇒ <code>Unsubscribe</code>
 sets up a listener for changes to a collectionGroup
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>function</code> - function to be called to release subscription  
+**Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
@@ -1472,28 +1184,28 @@ sets up a listener for changes to a collectionGroup
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenCollectionGroupQuery"></a>
 
-#### module.exports.ListenCollectionGroupQuery(table, [filterArray], [sortArray], dataCallback, errCallback) ⇒ <code>function</code>
+#### module.exports.ListenCollectionGroupQuery(table, dataCallback, errCallback, filterArray, sortArray) ⇒ <code>Unsubscribe</code>
 sets up a listener for changes to a collectionGroup by query
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>function</code> - function to be called to release subscription  
+**Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | table | <code>string</code> | string describing the name of a collectionGroup |
-| [filterArray] | <code>filterObject</code> | a 3xn array of filter(i.e. "where") conditions |
-| [sortArray] | <code>sortObject</code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
 | dataCallback | <code>CollectionListener</code> | function to be called with changes to record |
 | errCallback | <code>callback</code> | function to be called when an error occurs in listener |
+| filterArray | <code>Array.filterObject</code> | a 3xn array of filter(i.e. "where") conditions |
+| sortArray | <code>Array.sortObject</code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.ListenRecord"></a>
 
-#### module.exports.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback) ⇒ <code>callback</code>
+#### module.exports.ListenRecord(tablePath, Id, refPath, dataCallback, errCallback) ⇒ <code>Unsubscribe</code>
 Listen to changes to a single record
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>callback</code> - function to be called to release subscription  
+**Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
 **Category**: Listeners  
 
 | Param | Type | Description |
@@ -1625,8 +1337,8 @@ Creates an object to allow for paginating a listener for tableread from Firesto
 **Category**: Paginator  
 
 * [.PaginatedListener](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)
-    * [new exports.PaginatedListener(table, [filterArray], [sortArray], refPath, limit, dataCallback, errCallback)](#new_module_FirebaseFirestoreWrapper--module.exports.PaginatedListener_new)
-    * [.table](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+table) : <code>string</code>
+    * [new exports.PaginatedListener(tablePath, refPath, dataCallback, errCallback, limit, filterArray, sortArray)](#new_module_FirebaseFirestoreWrapper--module.exports.PaginatedListener_new)
+    * [.tablePath](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+tablePath) : <code>string</code>
     * [.filterArray](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+filterArray) : <code>filterObject</code>
     * [.sortArray](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+sortArray) : <code>sortObject</code>
     * [.refPath](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+refPath) : <code>string</code>
@@ -1635,29 +1347,29 @@ Creates an object to allow for paginating a listener for tableread from Firesto
     * [.errCallback](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+errCallback) : <code>callback</code>
     * [.status](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+status) : <code>number</code>
     * [._setQuery()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+_setQuery) ⇒ <code>Query</code>
-    * [.PageForward()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageForward) ⇒ <code>callback</code>
-    * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack) ⇒ <code>callback</code>
-    * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit) ⇒ <code>callback</code>
-    * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter) ⇒ <code>callback</code>
-    * [.unsubscribe()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscribe)
+    * [.PageForward()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageForward) ⇒ <code>Unsubscribe</code>
+    * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack) ⇒ <code>Unsubscribe</code>
+    * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit) ⇒ <code>Unsubscribe</code>
+    * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter) ⇒ <code>Unsubscribe</code>
+    * [.unsubscriber()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscriber)
 
 <a name="new_module_FirebaseFirestoreWrapper--module.exports.PaginatedListener_new"></a>
 
-##### new exports.PaginatedListener(table, [filterArray], [sortArray], refPath, limit, dataCallback, errCallback)
+##### new exports.PaginatedListener(tablePath, refPath, dataCallback, errCallback, limit, filterArray, sortArray)
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| table | <code>string</code> |  | a properly formatted string representing the requested collection - always an ODD number of elements |
-| [filterArray] | <code>filterObject</code> | <code></code> | an (optional) 3xn array of filter(i.e. "where") conditions The array is assumed to be sorted in the correct order - i.e. filterArray[0] is added first; filterArray[length-1] last |
-| [sortArray] | <code>sortObject</code> |  | a 2xn array of sort (i.e. "orderBy") conditions |
+| tablePath | <code>string</code> |  | a properly formatted string representing the requested collection - always an ODD number of elements |
 | refPath | <code>refPath</code> | <code></code> | (optional) allows "table" parameter to reference a sub-collection of an existing document reference (I use a LOT of structured collections) |
-| limit | <code>number</code> |  | (optional) pagesize |
 | dataCallback | <code>RecordListener</code> | <code></code> | returns data as an array of objects (not dissimilar to Redux State objects) with both the documentID and documentReference added as fields. |
 | errCallback | <code>RecordListener</code> | <code></code> |  |
+| limit | <code>number</code> |  | (optional) pagesize |
+| filterArray | <code>Array.filterObject</code> | <code></code> | an (optional) 3xn array of filter(i.e. "where") conditions The array is assumed to be sorted in the correct order - i.e. filterArray[0] is added first; filterArray[length-1] last |
+| sortArray | <code>Array.sortObject</code> |  | a 2xn array of sort (i.e. "orderBy") conditions |
 
-<a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+table"></a>
+<a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+tablePath"></a>
 
-##### paginatedListener.table : <code>string</code>
+##### paginatedListener.tablePath : <code>string</code>
 table path at base of listener query, relative to original refPath
 
 **Kind**: instance property of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
@@ -1711,25 +1423,25 @@ reconstructs the basis query
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageForward"></a>
 
-##### paginatedListener.PageForward() ⇒ <code>callback</code>
+##### paginatedListener.PageForward() ⇒ <code>Unsubscribe</code>
 resets the listener query to the next page of results.Unsubscribes from the current listener, constructs a new query, and sets itas the new listener
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
-**Returns**: <code>callback</code> - returns the unsubscriber function (for lifecycle events)  
+**Returns**: <code>Unsubscribe</code> - returns the unsubscriber function (for lifecycle events)  
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack"></a>
 
-##### paginatedListener.PageBack() ⇒ <code>callback</code>
+##### paginatedListener.PageBack() ⇒ <code>Unsubscribe</code>
 resets the listener query to the next page of results.Unsubscribes from the current listener, constructs a new query, and sets it\as the new listener
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
-**Returns**: <code>callback</code> - returns the unsubscriber function (for lifecycle events)  
+**Returns**: <code>Unsubscribe</code> - returns the unsubscriber function (for lifecycle events)  
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit"></a>
 
-##### paginatedListener.ChangeLimit(newLimit) ⇒ <code>callback</code>
+##### paginatedListener.ChangeLimit(newLimit) ⇒ <code>Unsubscribe</code>
 sets page size limit to new value, and restarts the paged listener
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
-**Returns**: <code>callback</code> - returns the unsubscriber function (for lifecycle events)  
+**Returns**: <code>Unsubscribe</code> - returns the unsubscriber function (for lifecycle events)  
 
 | Param | Type |
 | --- | --- |
@@ -1737,19 +1449,19 @@ sets page size limit to new value, and restarts the paged listener
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter"></a>
 
-##### paginatedListener.ChangeFilter([filterArray]) ⇒ <code>callback</code>
+##### paginatedListener.ChangeFilter([filterArray]) ⇒ <code>Unsubscribe</code>
 changes the filter on the subscriptionThis has to unsubscribe the current listener,create a new query, then apply it as the listener
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
-**Returns**: <code>callback</code> - returns the unsubscriber function (for lifecycle events)  
+**Returns**: <code>Unsubscribe</code> - returns the unsubscriber function (for lifecycle events)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | [filterArray] | <code>filterObject</code> | an array of filter descriptors |
 
-<a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscribe"></a>
+<a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscriber"></a>
 
-##### paginatedListener.unsubscribe()
+##### paginatedListener.unsubscriber()
 IF unsubscribe function is set, run it.
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
@@ -1768,11 +1480,11 @@ Contructs a filter that selects only the "owner" section of acollectionGroup qu
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.listenSlice"></a>
 
-#### module.exports.listenSlice(owner, collectionName, dataCallback, errCallback) ⇒ <code>callback</code>
+#### module.exports.listenSlice(owner, collectionName, dataCallback, errCallback) ⇒ <code>Unsubscribe</code>
 Uses the ownerFilter (above) to establish a listener to "just" theparts of a collectionGroup that are descendants of the passed "owner"record.
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>callback</code> - function to be called to release subscription  
+**Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
 **Category**: Tree Slice  
 
 | Param | Type | Description |
@@ -1946,19 +1658,24 @@ Returns the "type" (collection name) the passed record isstored in, derived fro
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.recordId"></a>
 
-#### module.exports.recordId() ⇒ <code>string</code>
+#### module.exports.recordId(record) ⇒ <code>string</code>
 Returns the Id (documentId) of the passed record derived from the refPath
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>string</code> - the Id  
 **Category**: Typed  
+
+| Param | Type |
+| --- | --- |
+| record | <code>Record</code> | 
+
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedWrite"></a>
 
-#### module.exports.typedWrite(data, parent, type, batch) ⇒ <code>Promise</code>
+#### module.exports.typedWrite(data, parent, type, batch) ⇒ <code>Promise.ChainType</code>
 optionally batched record update - abstracts batch process from specific types
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
+**Returns**: <code>Promise.ChainType</code> - WriteBatch, Transaction or Void  
 **Category**: Typed  
 
 | Param | Type | Description |
@@ -1972,11 +1689,11 @@ optionally batched record update - abstracts batch process from specific types
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedWriteByTree"></a>
 
-#### module.exports.typedWriteByTree(data, tree, type, batch) ⇒ <code>Promise</code>
+#### module.exports.typedWriteByTree(data, tree, type, batch) ⇒ <code>Promise.ChainType</code>
 optionally batched record update - abstracts batch process from specific types
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
+**Returns**: <code>Promise.ChainType</code> - WriteBatch, Transaction or Void  
 **Category**: Typed  
 
 | Param | Type | Description |
@@ -1988,11 +1705,11 @@ optionally batched record update - abstracts batch process from specific types
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedWriteByChild"></a>
 
-#### module.exports.typedWriteByChild(data, tree, type, batch) ⇒ <code>Promise</code>
+#### module.exports.typedWriteByChild(data, tree, type, batch) ⇒ <code>Promise.ChainType</code>
 optionally batched record update - abstracts batch process from specific types
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
+**Returns**: <code>Promise.ChainType</code> - WriteBatch, Transaction or Void  
 **Category**: Typed  
 
 | Param | Type | Description |
@@ -2004,11 +1721,11 @@ optionally batched record update - abstracts batch process from specific types
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedCreate"></a>
 
-#### module.exports.typedCreate(data, parent, type, batch) ⇒ <code>Promise</code>
+#### module.exports.typedCreate(data, parent, type, batch) ⇒ <code>Promise.ChainType</code>
 Creates a new document reference of the indicated type, and writesit to the backend. Specific intent is when the Id needs to bepre-specified, or shared outside this function. Normal writingaction will silently create a new document, which has to then befound by query
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>Promise</code> - WriteBatch, Transaction or Void  
+**Returns**: <code>Promise.ChainType</code> - WriteBatch, Transaction or Void  
 **Category**: Typed  
 
 | Param | Type | Description |
@@ -2118,7 +1835,7 @@ function to fetch a document from "up" the collection/document tree of a child d
 | child | <code>Record</code> | assumed to be an object in a collection/document Tree |
 | refPath | <code>string</code> |  |
 | type | <code>string</code> | type/collection to fetch parent document from |
-| batch | <code>WriteBatch</code> \| <code>Transaction</code> | optional batch object to chain |
+| batch | <code>ChainType</code> | optional batch object to chain |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedFetchFromTree"></a>
 
@@ -2207,7 +1924,7 @@ Creates a DocumentReference from *relative* docPathand an (optional) absolute r
 
 <a name="module_FirebaseFirestoreWrapper--module.exports..filterQuery"></a>
 
-#### module.exports~filterQuery(query, [filterArray]) ⇒ <code>Query</code>
+#### module.exports~filterQuery(query, filterArray) ⇒ <code>Query</code>
 builds and returns a query built from an array of filter (i.e. "where")conditions
 
 **Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
@@ -2216,11 +1933,11 @@ builds and returns a query built from an array of filter (i.e. "where")conditio
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | query | <code>Query</code> |  | collectionReference or Query to build filter upong |
-| [filterArray] | <code>filterObject</code> | <code></code> | an (optional) 3xn array of filter(i.e. "where") conditions |
+| filterArray | <code>Array.filterObject</code> | <code></code> | an (optional) 3xn array of filter(i.e. "where") conditions |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports..sortQuery"></a>
 
-#### module.exports~sortQuery(query, [sortArray]) ⇒
+#### module.exports~sortQuery(query, sortArray) ⇒
 builds and returns a query built from an array of filter (i.e. "where")conditions
 
 **Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
@@ -2229,7 +1946,7 @@ builds and returns a query built from an array of filter (i.e. "where")conditio
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | query | <code>Query</code> |  | collectionReference or Query to build filter upong |
-| [sortArray] | <code>sortObject</code> | <code></code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
+| sortArray | <code>Array.sortObject</code> | <code></code> | an (optional) 2xn array of sort (i.e. "orderBy") conditions |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports..limitQuery"></a>
 
@@ -2290,6 +2007,10 @@ common properties of our database records
 | --- | --- |
 | documentSnapshot | <code>DocumentSnapshot</code> | 
 
+<a name="module_FirebaseFirestoreWrapper--module.exports..Unsubscribe"></a>
+
+#### module.exports~Unsubscribe : <code>function</code>
+**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 <a name="module_FirebaseFirestoreWrapper--module.exports..CollectionListener"></a>
 
 #### module.exports~CollectionListener : <code>function</code>
@@ -2315,12 +2036,12 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.makeFileURLFromRecord(record, key, filename)](#module_FirebaseStorageWrapper.makeFileURLFromRecord) ⇒ <code>Promise.&lt;string&gt;</code>
         * [.makePrivateURLFromRecord(record, key)](#module_FirebaseStorageWrapper.makePrivateURLFromRecord) ⇒ <code>string</code>
         * [.makePrivateURLFromReference(reference, key)](#module_FirebaseStorageWrapper.makePrivateURLFromReference) ⇒ <code>string</code>
+        * [.makePrivateURLFromPath(fullPath)](#module_FirebaseStorageWrapper.makePrivateURLFromPath) ⇒ <code>string</code>
         * [.getDefaultImageURL(key)](#module_FirebaseStorageWrapper.getDefaultImageURL) ⇒ <code>string</code>
         * [.getURLFromFilePath(filePath)](#module_FirebaseStorageWrapper.getURLFromFilePath) ⇒ <code>string</code>
         * [.dataURLToBlob(dataURL)](#module_FirebaseStorageWrapper.dataURLToBlob) ⇒ <code>Object</code>
     * _inner_
         * [~FirebaseStorageWrapper(firebase)](#module_FirebaseStorageWrapper..FirebaseStorageWrapper)
-        * [~makePrivateURLFromPath(fullPath)](#module_FirebaseStorageWrapper..makePrivateURLFromPath) ⇒ <code>string</code>
         * [~storeBlobByRecord(blob, record, key, filename)](#module_FirebaseStorageWrapper..storeBlobByRecord) ⇒ <code>UploadTask</code>
         * [~storeDataURLByRecord(dataURL, record, key, filename)](#module_FirebaseStorageWrapper..storeDataURLByRecord) ⇒ <code>UploadTask</code>
         * [~ListOptions](#module_FirebaseStorageWrapper..ListOptions) : <code>object</code>
@@ -2369,7 +2090,7 @@ This function is part of a storage scheme that uses parallel structuresbetween 
 | Param | Type | Description |
 | --- | --- | --- |
 | record | <code>string</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
-| key | <code>string</code> | An optional string identifying the specific field a stored item is associated with |
+| key | <code>string</code> | An optional string identifying the specific field stored item is associated with |
 | filename | <code>string</code> | an optional name to be associated with the stored item. |
 
 <a name="module_FirebaseStorageWrapper.listReference"></a>
@@ -2423,6 +2144,18 @@ This function is part of a storage scheme that uses parallel structuresbetween 
 | reference | <code>StorageReference</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
 | key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
 
+<a name="module_FirebaseStorageWrapper.makePrivateURLFromPath"></a>
+
+### FirebaseStorageWrapper.makePrivateURLFromPath(fullPath) ⇒ <code>string</code>
+This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a full path to a Storage object and turns it intoURL.  If "type"is not included, the URL will return the metadata, notthe contents.Note this simply makes the URL - it does not carry out *any* operations
+
+**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Returns**: <code>string</code> - constructed Security-Rule-compliant URL  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fullPath | <code>string</code> | required path to the stored item. |
+
 <a name="module_FirebaseStorageWrapper.getDefaultImageURL"></a>
 
 ### FirebaseStorageWrapper.getDefaultImageURL(key) ⇒ <code>string</code>
@@ -2464,18 +2197,6 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 
 **Example**  
 ```import * as firebase from "firebase/app";import "firebase/storage";import FirebaseStorage from "@leaddreamer/firebase-wrapper/FirebaseStorageWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseStorage(firebase);})(config);```
-<a name="module_FirebaseStorageWrapper..makePrivateURLFromPath"></a>
-
-### FirebaseStorageWrapper~makePrivateURLFromPath(fullPath) ⇒ <code>string</code>
-This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a full path to a Storage object and turns it intoURL.  If "type"is not included, the URL will return the metadata, notthe contents.Note this simply makes the URL - it does not carry out *any* operations
-
-**Kind**: inner method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
-**Returns**: <code>string</code> - constructed Security-Rule-compliant URL  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| fullPath | <code>string</code> | required path to the stored item. |
-
 <a name="module_FirebaseStorageWrapper..storeBlobByRecord"></a>
 
 ### FirebaseStorageWrapper~storeBlobByRecord(blob, record, key, filename) ⇒ <code>UploadTask</code>
@@ -2772,719 +2493,83 @@ Initializes the Storage service of the provided firebase app.  Alsoinstantiates
 | --- | --- |
 | firebase | <code>firebase</code> | 
 
-<a name="module_FirebaseAuthWrapper/authAdmin"></a>
+<a name="module_FirebaseWrapper"></a>
 
-## FirebaseAuthWrapper/authAdmin
-A set of helpers around Firebase admin SDK auth.Specific to use in Cloud Functions
+## FirebaseWrapper
+A set of helper-wrapper functions around firebase firestore, storageand auth.all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.NOTE:Most helpers return PROMISE.REJECT if no documents are returned.it is assumed projects using this library *might* want to have anexplicitly error trap for such events.
 
 
-* [FirebaseAuthWrapper/authAdmin](#module_FirebaseAuthWrapper/authAdmin)
-    * [module.exports(firebase)](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports) ⏏
-        * _static_
-            * [.getUser(userID)](#module_FirebaseAuthWrapper/authAdmin--module.exports.getUser) ⇒ <code>Promise.userData</code>
-            * [.DeleteUser(userID)](#module_FirebaseAuthWrapper/authAdmin--module.exports.DeleteUser) ⇒ <code>Promise.void</code>
-            * [.setCustomClaims(uid, customClaim)](#module_FirebaseAuthWrapper/authAdmin--module.exports.setCustomClaims) ⇒ <code>Promise.object</code>
-            * [.addCustomClaims(uid, customClaim)](#module_FirebaseAuthWrapper/authAdmin--module.exports.addCustomClaims) ⇒ <code>Promise.object</code>
-            * [.clearCustomClaims(uid)](#module_FirebaseAuthWrapper/authAdmin--module.exports.clearCustomClaims) ⇒ <code>Promise.void</code>
-            * [.PageUsers(pageSize, pageToken)](#module_FirebaseAuthWrapper/authAdmin--module.exports.PageUsers) ⇒ <code>Promise.Array.object</code>
-        * _inner_
-            * [~FirebaseAuthAdminWrapper(firebase)](#module_FirebaseAuthWrapper/authAdmin--module.exports..FirebaseAuthAdminWrapper)
-            * [~getUser(userID)](#module_FirebaseAuthWrapper/authAdmin--module.exports..getUser) ⇒ <code>Promise.userData</code>
-            * [~_getUser(userID)](#module_FirebaseAuthWrapper/authAdmin--module.exports.._getUser) ⇒ <code>Promise.void</code>
-            * [~_DeleteUser(uid, customClaim)](#module_FirebaseAuthWrapper/authAdmin--module.exports.._DeleteUser) ⇒ <code>Promise.object</code>
-            * [~_setCustomClaims(uid, customClaim)](#module_FirebaseAuthWrapper/authAdmin--module.exports.._setCustomClaims) ⇒ <code>Promise.object</code>
-            * [~_addCustomClaims(uid)](#module_FirebaseAuthWrapper/authAdmin--module.exports.._addCustomClaims) ⇒ <code>Promise.void</code>
-            * [~_clearCustomClaims(pageSize, pageToken)](#module_FirebaseAuthWrapper/authAdmin--module.exports.._clearCustomClaims) ⇒ <code>Promise.Array.object</code>
+* [FirebaseWrapper](#module_FirebaseWrapper)
+    * _static_
+        * [.FirebaseWrapper(config)](#module_FirebaseWrapper.FirebaseWrapper) ⇒
+        * [.FirebaseWrapper(config)](#module_FirebaseWrapper.FirebaseWrapper) ⇒
+    * _inner_
+        * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
+        * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
 
-<a name="exp_module_FirebaseAuthWrapper/authAdmin--module.exports"></a>
+<a name="module_FirebaseWrapper.FirebaseWrapper"></a>
 
-### module.exports(firebase) ⏏
-Initializes the administrative Auth service of the providedfirebase app.  Also instantiates various constants and helper functions
-
-**Kind**: Exported function  
-
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.getUser"></a>
-
-#### module.exports.getUser(userID) ⇒ <code>Promise.userData</code>
-asynchronously fetches user data from Firestore Authentication
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| userID | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.DeleteUser"></a>
-
-#### module.exports.DeleteUser(userID) ⇒ <code>Promise.void</code>
-deletes a single user from the authentication system, identified by user ID
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| userID | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.setCustomClaims"></a>
-
-#### module.exports.setCustomClaims(uid, customClaim) ⇒ <code>Promise.object</code>
-sets custom claims on user objectoverwrites other needed settings
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
+### FirebaseWrapper.FirebaseWrapper(config) ⇒
+**Kind**: static method of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
+**Returns**: none  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| uid | <code>string</code> | user ID |
-| customClaim | <code>Object</code> | claims object, less than 1000 Bytes. null clears |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.addCustomClaims"></a>
-
-#### module.exports.addCustomClaims(uid, customClaim) ⇒ <code>Promise.object</code>
-adds/merges to new claims to user customClaims
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| uid | <code>string</code> | user ID |
-| customClaim | <code>Object</code> | claims object to be merged with existing claims |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.clearCustomClaims"></a>
-
-#### module.exports.clearCustomClaims(uid) ⇒ <code>Promise.void</code>
-removes all current customClaims on user (sets to null)
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| uid | <code>string</code> | user ID |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.PageUsers"></a>
-
-#### module.exports.PageUsers(pageSize, pageToken) ⇒ <code>Promise.Array.object</code>
-pages through the full list of users. Woefully inefficient.
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| pageSize | <code>number</code> | default 1000 |
-| pageToken | <code>object</code> | default null |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports..FirebaseAuthAdminWrapper"></a>
-
-#### module.exports~FirebaseAuthAdminWrapper(firebase)
-Initializes the administrative Auth service of the providedfirebase app.  Also instantiates various constants and helper functions
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports..getUser"></a>
-
-#### module.exports~getUser(userID) ⇒ <code>Promise.userData</code>
-asynchronously fetches user data from Firestore Authentication
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| userID | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.._getUser"></a>
-
-#### module.exports~\_getUser(userID) ⇒ <code>Promise.void</code>
-deletes a single user from the authentication system, identified by user ID
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| userID | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.._DeleteUser"></a>
-
-#### module.exports~\_DeleteUser(uid, customClaim) ⇒ <code>Promise.object</code>
-sets custom claims on user objectoverwrites other needed settings
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| uid | <code>string</code> | user ID |
-| customClaim | <code>Object</code> | claims object, less than 1000 Bytes. null clears |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.._setCustomClaims"></a>
-
-#### module.exports~\_setCustomClaims(uid, customClaim) ⇒ <code>Promise.object</code>
-adds/merges to new claims to user customClaims
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| uid | <code>string</code> | user ID |
-| customClaim | <code>Object</code> | claims object to be merged with existing claims |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.._addCustomClaims"></a>
-
-#### module.exports~\_addCustomClaims(uid) ⇒ <code>Promise.void</code>
-removes all current customClaims on user (sets to null)
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| uid | <code>string</code> | user ID |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.._clearCustomClaims"></a>
-
-#### module.exports~\_clearCustomClaims(pageSize, pageToken) ⇒ <code>Promise.Array.object</code>
-pages through the full list of users. Woefully inefficient.
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| pageSize | <code>number</code> | default 1000 |
-| pageToken | <code>object</code> | default null |
-
-<a name="module_FirebaseAuthWrapper/authClient"></a>
-
-## FirebaseAuthWrapper/authClient
-A set of helper-wrapper functions around firebase firestore, storageand auth. Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.
+| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
 
 **Example**  
-```import * as firebase from "firebase/app";import "firebase/auth";import FirebaseAuth from "@leaddreamer/firebase-wrapper/FirebaseAuthWrapper";//the next is optional - if you want the React componentimport StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";import {config} from "wherever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseAuth(firebase, StyledFirebaseAuth);})(config)```
+```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
+<a name="module_FirebaseWrapper.FirebaseWrapper"></a>
 
-* [FirebaseAuthWrapper/authClient](#module_FirebaseAuthWrapper/authClient)
-    * [module.exports(firebase)](#exp_module_FirebaseAuthWrapper/authClient--module.exports) ⏏
-        * _static_
-            * [.FirebaseAuth](#module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuth) : <code>object</code>
-            * [.FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuthSignInOptions) : <code>Array.string</code>
-            * [.FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuthSignInOptions)
-            * [.fetchToken(user)](#module_FirebaseAuthWrapper/authClient--module.exports.fetchToken) ⇒ <code>Promise.Token</code>
-            * [.fetchJWT(user)](#module_FirebaseAuthWrapper/authClient--module.exports.fetchJWT) ⇒ <code>Promise.&lt;string&gt;</code>
-            * [.refreshAuthUser()](#module_FirebaseAuthWrapper/authClient--module.exports.refreshAuthUser) ⇒ <code>Promise.void</code>
-            * [.doCreateUserWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.doCreateUserWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [.doSignInWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [.doSignInWithGoogle(googleProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithGoogle) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [.doSignInWithFacebook(facebookProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithFacebook) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [.doSignInWithTwitter(twitterProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithTwitter) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [.doSignOut()](#module_FirebaseAuthWrapper/authClient--module.exports.doSignOut) ⇒ <code>Promise.void</code>
-            * [.doPasswordReset()](#module_FirebaseAuthWrapper/authClient--module.exports.doPasswordReset) ⇒ <code>Promise.void</code>
-            * [.doSendEmailVerification()](#module_FirebaseAuthWrapper/authClient--module.exports.doSendEmailVerification) ⇒ <code>Promise.void</code>
-            * [.doPasswordUpdate(password)](#module_FirebaseAuthWrapper/authClient--module.exports.doPasswordUpdate) ⇒ <code>Promise.void</code>
-            * [.createAnonymousUser()](#module_FirebaseAuthWrapper/authClient--module.exports.createAnonymousUser) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [.attachAuthUserListener(next)](#module_FirebaseAuthWrapper/authClient--module.exports.attachAuthUserListener) ⇒ <code>function</code>
-            * [.setPersistence()](#module_FirebaseAuthWrapper/authClient--module.exports.setPersistence) ⇒ <code>Promise.void</code>
-        * _inner_
-            * [~FirebaseAuth](#module_FirebaseAuthWrapper/authClient--module.exports..FirebaseAuth) : <code>object</code>
-            * [~FirebaseAuthSignInOptions](#module_FirebaseAuthWrapper/authClient--module.exports..FirebaseAuthSignInOptions) : <code>Array.string</code>
-            * [~_FirebaseAuthClient(user)](#module_FirebaseAuthWrapper/authClient--module.exports.._FirebaseAuthClient) ⇒ <code>Promise.Token</code>
-            * [~_fetchToken(user)](#module_FirebaseAuthWrapper/authClient--module.exports.._fetchToken) ⇒ <code>Promise.&lt;string&gt;</code>
-            * [~_fetchJWT()](#module_FirebaseAuthWrapper/authClient--module.exports.._fetchJWT) ⇒ <code>Promise.void</code>
-            * [~_refreshAuthUser(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.._refreshAuthUser) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [~_doCreateUserWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.._doCreateUserWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [~_doSignInWithEmailAndPassword(googleProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [~_doSignInWithGoogle(facebookProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithGoogle) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [~_doSignInWithFacebook(twitterProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithFacebook) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [~_doSignInWithTwitter()](#module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithTwitter) ⇒ <code>Promise.void</code>
-            * [~_doSignOut()](#module_FirebaseAuthWrapper/authClient--module.exports.._doSignOut) ⇒ <code>Promise.void</code>
-            * [~_doPasswordReset()](#module_FirebaseAuthWrapper/authClient--module.exports.._doPasswordReset) ⇒ <code>Promise.void</code>
-            * [~_doSendEmailVerification(password)](#module_FirebaseAuthWrapper/authClient--module.exports.._doSendEmailVerification) ⇒ <code>Promise.void</code>
-            * [~_doPasswordUpdate()](#module_FirebaseAuthWrapper/authClient--module.exports.._doPasswordUpdate) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-            * [~_createAnonymousUser(next)](#module_FirebaseAuthWrapper/authClient--module.exports.._createAnonymousUser) ⇒ <code>function</code>
-            * [~_attachAuthUserListener()](#module_FirebaseAuthWrapper/authClient--module.exports.._attachAuthUserListener) ⇒ <code>Promise.void</code>
-            * [~AdditionalUserInfo](#module_FirebaseAuthWrapper/authClient--module.exports..AdditionalUserInfo) : <code>object</code>
-            * [~AuthCredential](#module_FirebaseAuthWrapper/authClient--module.exports..AuthCredential) : <code>class</code>
-            * [~GetIdToken](#module_FirebaseAuthWrapper/authClient--module.exports..GetIdToken) ⇒ <code>Promise.&lt;string&gt;</code>
-            * [~Delete](#module_FirebaseAuthWrapper/authClient--module.exports..Delete) ⇒ <code>Promise.&lt;void&gt;</code>
-            * [~User](#module_FirebaseAuthWrapper/authClient--module.exports..User) : <code>object</code>
-            * [~UserCredential](#module_FirebaseAuthWrapper/authClient--module.exports..UserCredential) : <code>object</code>
-            * [~AuthChangeProcess](#module_FirebaseAuthWrapper/authClient--module.exports..AuthChangeProcess) ⇒ <code>Promise.void</code>
-            * [~AdditionalUserInfo](#module_FirebaseAuthWrapper/authClient--module.exports..AdditionalUserInfo) : <code>object</code>
-            * [~AuthCredential](#module_FirebaseAuthWrapper/authClient--module.exports..AuthCredential) : <code>class</code>
-            * [~GetIdToken](#module_FirebaseAuthWrapper/authClient--module.exports..GetIdToken) ⇒ <code>Promise.&lt;string&gt;</code>
-            * [~Delete](#module_FirebaseAuthWrapper/authClient--module.exports..Delete) ⇒ <code>Promise.&lt;void&gt;</code>
-            * [~User](#module_FirebaseAuthWrapper/authClient--module.exports..User) : <code>object</code>
-            * [~UserCredential](#module_FirebaseAuthWrapper/authClient--module.exports..UserCredential) : <code>object</code>
-            * [~AuthChangeProcess](#module_FirebaseAuthWrapper/authClient--module.exports..AuthChangeProcess) ⇒ <code>Promise.void</code>
+### FirebaseWrapper.FirebaseWrapper(config) ⇒
+**Kind**: static method of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
+**Returns**: none  
 
-<a name="exp_module_FirebaseAuthWrapper/authClient--module.exports"></a>
+| Param | Type | Description |
+| --- | --- | --- |
+| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
 
-### module.exports(firebase) ⏏
-Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
+**Example**  
+```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
+<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
 
-**Kind**: Exported function  
+### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
+only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
 
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuth"></a>
-
-#### module.exports.FirebaseAuth : <code>object</code>
-FirebaseAuth instance for various Login/Logout calls
-
-**Kind**: static property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuthSignInOptions"></a>
-
-#### module.exports.FirebaseAuthSignInOptions : <code>Array.string</code>
-codes for 3rd party Auth providers
-
-**Kind**: static property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.FirebaseAuthSignInOptions"></a>
-
-#### module.exports.FirebaseAuthSignInOptions
-Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
-
-**Kind**: static property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.fetchToken"></a>
-
-#### module.exports.fetchToken(user) ⇒ <code>Promise.Token</code>
-fetches our specific custom claim values from firebase auth
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Fulfil**: Returns a user token object  
-**Reject**: returns err  
-
-| Param | Type |
-| --- | --- |
-| user | <code>FirebaseAuthUser</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.fetchJWT"></a>
-
-#### module.exports.fetchJWT(user) ⇒ <code>Promise.&lt;string&gt;</code>
-Fetch a JWT token for authenticated signed requests
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Fulfil**: Returnsa JWT token  
-**Reject**: returns an err  
-
-| Param | Type |
-| --- | --- |
-| user | <code>FirebaseAuthUser</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.refreshAuthUser"></a>
-
-#### module.exports.refreshAuthUser() ⇒ <code>Promise.void</code>
-triggers an update of the Firebase Auth user object.  A listenercan be set to monitor these changes
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.doCreateUserWithEmailAndPassword"></a>
-
-#### module.exports.doCreateUserWithEmailAndPassword(email, password) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-Creates AND SIGNS IN an authenticated user with the provided email and passwordCreates a new user account associated with the specified emailaddress and password.On successful creation of the user account, this user will also besigned in to your application.User account creation can fail if the account already exists or thepassword is invalid.Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| email | <code>string</code> | 
-| password | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithEmailAndPassword"></a>
-
-#### module.exports.doSignInWithEmailAndPassword(email, password) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-SIGNS IN an existing authenticated user with the provided email and passwordCreates a new user account associated with the specified emailaddress and password.On successful creation of the user account, this user will also besigned in to your application.User account creation can fail if the account already exists or thepassword is invalid.Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| email | <code>string</code> | 
-| password | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithGoogle"></a>
-
-#### module.exports.doSignInWithGoogle(googleProvider) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| googleProvider | <code>GoogleProvider</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithFacebook"></a>
-
-#### module.exports.doSignInWithFacebook(facebookProvider) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| facebookProvider | <code>FacebookProvider</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithTwitter"></a>
-
-#### module.exports.doSignInWithTwitter(twitterProvider) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| twitterProvider | <code>TwitterProvider</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.doSignOut"></a>
-
-#### module.exports.doSignOut() ⇒ <code>Promise.void</code>
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.doPasswordReset"></a>
-
-#### module.exports.doPasswordReset() ⇒ <code>Promise.void</code>
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.doSendEmailVerification"></a>
-
-#### module.exports.doSendEmailVerification() ⇒ <code>Promise.void</code>
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.doPasswordUpdate"></a>
-
-#### module.exports.doPasswordUpdate(password) ⇒ <code>Promise.void</code>
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| password | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.createAnonymousUser"></a>
-
-#### module.exports.createAnonymousUser() ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.attachAuthUserListener"></a>
-
-#### module.exports.attachAuthUserListener(next) ⇒ <code>function</code>
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Returns**: <code>function</code> - unsubscribe function  
-
-| Param | Type |
-| --- | --- |
-| next | <code>AuthChangeProcess</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.setPersistence"></a>
-
-#### module.exports.setPersistence() ⇒ <code>Promise.void</code>
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..FirebaseAuth"></a>
-
-#### module.exports~FirebaseAuth : <code>object</code>
-FirebaseAuth instance for various Login/Logout calls
-
-**Kind**: inner property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..FirebaseAuthSignInOptions"></a>
-
-#### module.exports~FirebaseAuthSignInOptions : <code>Array.string</code>
-codes for 3rd party Auth providers
-
-**Kind**: inner property of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._FirebaseAuthClient"></a>
-
-#### module.exports~\_FirebaseAuthClient(user) ⇒ <code>Promise.Token</code>
-fetches our specific custom claim values from firebase auth
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Fulfil**: Returns a user token object  
-**Reject**: returns err  
-
-| Param | Type |
-| --- | --- |
-| user | <code>FirebaseAuthUser</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._fetchToken"></a>
-
-#### module.exports~\_fetchToken(user) ⇒ <code>Promise.&lt;string&gt;</code>
-Fetch a JWT token for authenticated signed requests
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Fulfil**: Returnsa JWT token  
-**Reject**: returns an err  
-
-| Param | Type |
-| --- | --- |
-| user | <code>FirebaseAuthUser</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._fetchJWT"></a>
-
-#### module.exports~\_fetchJWT() ⇒ <code>Promise.void</code>
-triggers an update of the Firebase Auth user object.  A listenercan be set to monitor these changes
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._refreshAuthUser"></a>
-
-#### module.exports~\_refreshAuthUser(email, password) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-Creates AND SIGNS IN an authenticated user with the provided email and passwordCreates a new user account associated with the specified emailaddress and password.On successful creation of the user account, this user will also besigned in to your application.User account creation can fail if the account already exists or thepassword is invalid.Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| email | <code>string</code> | 
-| password | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doCreateUserWithEmailAndPassword"></a>
-
-#### module.exports~\_doCreateUserWithEmailAndPassword(email, password) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-SIGNS IN an existing authenticated user with the provided email and passwordCreates a new user account associated with the specified emailaddress and password.On successful creation of the user account, this user will also besigned in to your application.User account creation can fail if the account already exists or thepassword is invalid.Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| email | <code>string</code> | 
-| password | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithEmailAndPassword"></a>
-
-#### module.exports~\_doSignInWithEmailAndPassword(googleProvider) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| googleProvider | <code>GoogleProvider</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithGoogle"></a>
-
-#### module.exports~\_doSignInWithGoogle(facebookProvider) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| facebookProvider | <code>FacebookProvider</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithFacebook"></a>
-
-#### module.exports~\_doSignInWithFacebook(twitterProvider) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| twitterProvider | <code>TwitterProvider</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doSignInWithTwitter"></a>
-
-#### module.exports~\_doSignInWithTwitter() ⇒ <code>Promise.void</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doSignOut"></a>
-
-#### module.exports~\_doSignOut() ⇒ <code>Promise.void</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doPasswordReset"></a>
-
-#### module.exports~\_doPasswordReset() ⇒ <code>Promise.void</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doSendEmailVerification"></a>
-
-#### module.exports~\_doSendEmailVerification(password) ⇒ <code>Promise.void</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| password | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._doPasswordUpdate"></a>
-
-#### module.exports~\_doPasswordUpdate() ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._createAnonymousUser"></a>
-
-#### module.exports~\_createAnonymousUser(next) ⇒ <code>function</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Returns**: <code>function</code> - unsubscribe function  
-
-| Param | Type |
-| --- | --- |
-| next | <code>AuthChangeProcess</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports.._attachAuthUserListener"></a>
-
-#### module.exports~\_attachAuthUserListener() ⇒ <code>Promise.void</code>
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..AdditionalUserInfo"></a>
-
-#### module.exports~AdditionalUserInfo : <code>object</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| isNewUser | <code>boolean</code> | 
-| profile | <code>object</code> | 
-| providerId | <code>string</code> | 
-| username | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..AuthCredential"></a>
-
-#### module.exports~AuthCredential : <code>class</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| providerId | <code>string</code> | 
-| signInMethod | <code>string</code> | 
-| toJSON | <code>method</code> | 
-| fromJSON | <code>method</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..GetIdToken"></a>
-
-#### module.exports~GetIdToken ⇒ <code>Promise.&lt;string&gt;</code>
-Returns a JSON Web Token (JWT) used to identify the user to a Firebase service.Returns the current token if it has not expired. Otherwise, this will refresh the token and return a new one.
-
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| forceRefresh | <code>boolean</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..Delete"></a>
-
-#### module.exports~Delete ⇒ <code>Promise.&lt;void&gt;</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..User"></a>
-
-#### module.exports~User : <code>object</code>
-See https://firebase.google.com/docs/reference/js/v8/firebase.User
-
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
+**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| displayName | <code>string</code> \| <code>null</code> |  |
-| email | <code>string</code> \| <code>null</code> |  |
-| emailVerified | <code>boolean</code> |  |
-| IsAnonymous | <code>boolean</code> |  |
-| metadata | <code>UserMetadata</code> |  |
-| multiFactor | <code>MultiFactorUser</code> |  |
-| phoneNumber | <code>string</code> \| <code>null</code> |  |
-| photoURL | <code>string</code> \| <code>null</code> |  |
-| providerData | <code>UserInfo</code> |  |
-| providerId | <code>string</code> |  |
-| refreshToken | <code>string</code> |  |
-| tenantId | <code>string</code> \| <code>null</code> | The current user's tenant ID. This is a read-only property, which indicates the tenant ID used to sign in the current user. This is null if the user is signed in from the parent project. |
-| uid | <code>string</code> | The user's unique ID. |
-| delete | <code>Delete</code> |  |
-| getIdToken | <code>GetIdToken</code> |  |
+| apiKey | <code>string</code> | required api Key from Firebase Console, |
+| appId | <code>string</code> | required app ID from Firebase Console |
+| projectId | <code>string</code> | required Firebase projectID from Firebase console |
+| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
+| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
+| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
+| messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
+| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
+| mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
 
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..UserCredential"></a>
+<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
 
-#### module.exports~UserCredential : <code>object</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Properties**
+### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
+only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
 
-| Name | Type |
-| --- | --- |
-| additionalUserInfo | <code>AdditionalUserInfo</code> | 
-| credential | <code>AuthCredential</code> | 
-| operationType | <code>&quot;signin&quot;</code> \| <code>&quot;link&quot;</code> \| <code>&quot;reauthenticate&quot;</code> | 
-| user | <code>&quot;User&quot;</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..AuthChangeProcess"></a>
-
-#### module.exports~AuthChangeProcess ⇒ <code>Promise.void</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| user | <code>User</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..AdditionalUserInfo"></a>
-
-#### module.exports~AdditionalUserInfo : <code>object</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| isNewUser | <code>boolean</code> | 
-| profile | <code>object</code> | 
-| providerId | <code>string</code> | 
-| username | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..AuthCredential"></a>
-
-#### module.exports~AuthCredential : <code>class</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| providerId | <code>string</code> | 
-| signInMethod | <code>string</code> | 
-| toJSON | <code>method</code> | 
-| fromJSON | <code>method</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..GetIdToken"></a>
-
-#### module.exports~GetIdToken ⇒ <code>Promise.&lt;string&gt;</code>
-Returns a JSON Web Token (JWT) used to identify the user to a Firebase service.Returns the current token if it has not expired. Otherwise, this will refresh the token and return a new one.
-
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| forceRefresh | <code>boolean</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..Delete"></a>
-
-#### module.exports~Delete ⇒ <code>Promise.&lt;void&gt;</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..User"></a>
-
-#### module.exports~User : <code>object</code>
-See https://firebase.google.com/docs/reference/js/v8/firebase.User
-
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
+**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
 **Properties**
 
 | Name | Type | Description |
 | --- | --- | --- |
-| displayName | <code>string</code> \| <code>null</code> |  |
-| email | <code>string</code> \| <code>null</code> |  |
-| emailVerified | <code>boolean</code> |  |
-| IsAnonymous | <code>boolean</code> |  |
-| metadata | <code>UserMetadata</code> |  |
-| multiFactor | <code>MultiFactorUser</code> |  |
-| phoneNumber | <code>string</code> \| <code>null</code> |  |
-| photoURL | <code>string</code> \| <code>null</code> |  |
-| providerData | <code>UserInfo</code> |  |
-| providerId | <code>string</code> |  |
-| refreshToken | <code>string</code> |  |
-| tenantId | <code>string</code> \| <code>null</code> | The current user's tenant ID. This is a read-only property, which indicates the tenant ID used to sign in the current user. This is null if the user is signed in from the parent project. |
-| uid | <code>string</code> | The user's unique ID. |
-| delete | <code>Delete</code> |  |
-| getIdToken | <code>GetIdToken</code> |  |
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..UserCredential"></a>
-
-#### module.exports~UserCredential : <code>object</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-**Properties**
-
-| Name | Type |
-| --- | --- |
-| additionalUserInfo | <code>AdditionalUserInfo</code> | 
-| credential | <code>AuthCredential</code> | 
-| operationType | <code>&quot;signin&quot;</code> \| <code>&quot;link&quot;</code> \| <code>&quot;reauthenticate&quot;</code> | 
-| user | <code>&quot;User&quot;</code> | 
-
-<a name="module_FirebaseAuthWrapper/authClient--module.exports..AuthChangeProcess"></a>
-
-#### module.exports~AuthChangeProcess ⇒ <code>Promise.void</code>
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| user | <code>User</code> | 
+| apiKey | <code>string</code> | required api Key from Firebase Console, |
+| appId | <code>string</code> | required app ID from Firebase Console |
+| projectId | <code>string</code> | required Firebase projectID from Firebase console |
+| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
+| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
+| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
+| messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
+| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
+| mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
 
 <a name="PAGINATE_INIT"></a>
 

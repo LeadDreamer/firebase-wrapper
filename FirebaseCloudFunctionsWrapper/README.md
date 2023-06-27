@@ -12,20 +12,23 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 
 * [FirebaseCloudFunctionsWrapper](#module_FirebaseCloudFunctionsWrapper)
-    * [module.exports(firebase)](#exp_module_FirebaseCloudFunctionsWrapper--module.exports) ⏏
+    * [module.exports(firebase, config, thisLogger)](#exp_module_FirebaseCloudFunctionsWrapper--module.exports) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
         * [.CloudFunctions()](#module_FirebaseCloudFunctionsWrapper--module.exports.CloudFunctions) ⇒ <code>Promise</code>
         * [.treeFromParams(Params)](#module_FirebaseCloudFunctionsWrapper--module.exports.treeFromParams) ⇒ <code>Map</code>
 
 <a name="exp_module_FirebaseCloudFunctionsWrapper--module.exports"></a>
 
-### module.exports(firebase) ⏏
-Initializes the FirebaseCloud function support
+### module.exports(firebase, config, thisLogger) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
+Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: Exported function  
 
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>firebase</code> | provided firebase app (allows use between client & server) |
+| config | <code>object</code> | configuration object to detect client/server use |
+| config.appId | <code>string</code> | missing parameter indicates server |
+| thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
 
 **Example**  
 ```import * as firebase from "firebase/app";import "firebase/functions";import FirebaseFunctions from "@leaddreamer/firebase-wrapper/FirebaseCloudFunctionsWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFunctions(firebase);})(config)```

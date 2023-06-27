@@ -38,12 +38,12 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.makeFileURLFromRecord(record, key, filename)](#module_FirebaseStorageWrapper.makeFileURLFromRecord) ⇒ <code>Promise.&lt;string&gt;</code>
         * [.makePrivateURLFromRecord(record, key)](#module_FirebaseStorageWrapper.makePrivateURLFromRecord) ⇒ <code>string</code>
         * [.makePrivateURLFromReference(reference, key)](#module_FirebaseStorageWrapper.makePrivateURLFromReference) ⇒ <code>string</code>
+        * [.makePrivateURLFromPath(fullPath)](#module_FirebaseStorageWrapper.makePrivateURLFromPath) ⇒ <code>string</code>
         * [.getDefaultImageURL(key)](#module_FirebaseStorageWrapper.getDefaultImageURL) ⇒ <code>string</code>
         * [.getURLFromFilePath(filePath)](#module_FirebaseStorageWrapper.getURLFromFilePath) ⇒ <code>string</code>
         * [.dataURLToBlob(dataURL)](#module_FirebaseStorageWrapper.dataURLToBlob) ⇒ <code>Object</code>
     * _inner_
         * [~FirebaseStorageWrapper(firebase)](#module_FirebaseStorageWrapper..FirebaseStorageWrapper)
-        * [~makePrivateURLFromPath(fullPath)](#module_FirebaseStorageWrapper..makePrivateURLFromPath) ⇒ <code>string</code>
         * [~storeBlobByRecord(blob, record, key, filename)](#module_FirebaseStorageWrapper..storeBlobByRecord) ⇒ <code>UploadTask</code>
         * [~storeDataURLByRecord(dataURL, record, key, filename)](#module_FirebaseStorageWrapper..storeDataURLByRecord) ⇒ <code>UploadTask</code>
         * [~ListOptions](#module_FirebaseStorageWrapper..ListOptions) : <code>object</code>
@@ -92,7 +92,7 @@ This function is part of a storage scheme that uses parallel structuresbetween 
 | Param | Type | Description |
 | --- | --- | --- |
 | record | <code>string</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
-| key | <code>string</code> | An optional string identifying the specific field a stored item is associated with |
+| key | <code>string</code> | An optional string identifying the specific field stored item is associated with |
 | filename | <code>string</code> | an optional name to be associated with the stored item. |
 
 <a name="module_FirebaseStorageWrapper.listReference"></a>
@@ -146,6 +146,18 @@ This function is part of a storage scheme that uses parallel structuresbetween 
 | reference | <code>StorageReference</code> | A firestore document Record - the '/' separated collection/ document path is used as the path to the stored item. |
 | key | <code>string</code> | An optional string identifying the specific field an stored item is associated with |
 
+<a name="module_FirebaseStorageWrapper.makePrivateURLFromPath"></a>
+
+### FirebaseStorageWrapper.makePrivateURLFromPath(fullPath) ⇒ <code>string</code>
+This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a full path to a Storage object and turns it intoURL.  If "type"is not included, the URL will return the metadata, notthe contents.Note this simply makes the URL - it does not carry out *any* operations
+
+**Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
+**Returns**: <code>string</code> - constructed Security-Rule-compliant URL  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fullPath | <code>string</code> | required path to the stored item. |
+
 <a name="module_FirebaseStorageWrapper.getDefaultImageURL"></a>
 
 ### FirebaseStorageWrapper.getDefaultImageURL(key) ⇒ <code>string</code>
@@ -187,18 +199,6 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 
 **Example**  
 ```import * as firebase from "firebase/app";import "firebase/storage";import FirebaseStorage from "@leaddreamer/firebase-wrapper/FirebaseStorageWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseStorage(firebase);})(config);```
-<a name="module_FirebaseStorageWrapper..makePrivateURLFromPath"></a>
-
-### FirebaseStorageWrapper~makePrivateURLFromPath(fullPath) ⇒ <code>string</code>
-This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a full path to a Storage object and turns it intoURL.  If "type"is not included, the URL will return the metadata, notthe contents.Note this simply makes the URL - it does not carry out *any* operations
-
-**Kind**: inner method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
-**Returns**: <code>string</code> - constructed Security-Rule-compliant URL  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| fullPath | <code>string</code> | required path to the stored item. |
-
 <a name="module_FirebaseStorageWrapper..storeBlobByRecord"></a>
 
 ### FirebaseStorageWrapper~storeBlobByRecord(blob, record, key, filename) ⇒ <code>UploadTask</code>
