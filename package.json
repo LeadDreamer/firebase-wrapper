@@ -72,6 +72,7 @@
     "FSW_docs": "cd FirebaseStorageWrapper && $npm_execpath run docs && cd ..",
     "rebuild_all": "$npm_execpath run FAW && $npm_execpath run FCFW && $npm_execpath run FFW && $npm_execpath run FSW && $npm_execpath run rebuild",
     "docs_all": "$npm_execpath run FAW_docs && $npm_execpath run FCFW_docs && $npm_execpath run FFW_docs && $npm_execpath run FSW_docs && $npm_execpath run docs",
+    "publish_beta": "$npm_execpath publish --tag=beta",
     "publish_package": "$npm_execpath publish",
     "publish_dry": "$npm_execpath publish --dry-run"
   },
