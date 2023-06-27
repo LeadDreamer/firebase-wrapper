@@ -38,6 +38,7 @@ let FirebaseAuthPersistence;
 /**
  * codes for 3rd party Auth providers
  * @var {Array.string}
+ * ID codes for 3rd party Auth providers
  */
 export let FirebaseAuthSignInOptions;
 
@@ -84,7 +85,7 @@ export async function fetchToken(user) {
 /**
  * Fetch a JWT token for authenticated signed requests
  * @param {FirebaseAuthUser} user
- * @returns {Promise<string>}
+ * @returns {Promise<JWT>}
  * @fulfil Returnsa JWT token
  * @reject returns an err
  */
