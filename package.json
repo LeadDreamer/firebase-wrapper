@@ -25,33 +25,78 @@
     "*.md",
     "/*/*.md"
   ],
-  "main": "index.js",
+  "main": "./index.js",
   "exports": {
-    "import": {
-      ".": "./index.js",
-      "./firebase-wrapper": "./index.js",
-      "./FirebaseAuthWrapper": "./FirebaseAuthWrapper/index.js",
-      "./FirebaseCloudFunctionsWrapper": "./FirebaseCloudFunctionsWrapper/index.js",
-      "./FirebaseFirestoreWrapper": "./FirebaseFirestoreWrapper/index.js",
-      "./FirebaseStorageWrapper": "./FirebaseStorageWrapper/index.js",
-      "./FirebaseAuthWrapper/*.js": "./FirebaseAuthWrapper/*.js",
-      "./FirebaseCloudFunctionsWrapper/*.js": "./FirebaseCloudFunctionsWrapper/*.js",
-      "./FirebaseFirestoreWrapper/*.js": "./FirebaseFirestoreWrapper/*.js",
-      "./FirebaseStorageWrapper/*.js": "./FirebaseStorageWrapper/*.js"
+    ".": {
+      "node": {
+        "import": "./index.js",
+        "require": "./dist/index.js"
+      },
+      "default": "./index.js"
     },
-    "require": {
-      ".": "./index.js",
-      "./firebase-wrapper": "./dist/index.js",
-      "./FirebaseAuthWrapper": "./FirebaseAuthWrapper/dist/index.js",
-      "./FirebaseCloudFunctionsWrapper": "./FirebaseCloudFunctionsWrapper/dist/index.js",
-      "./FirebaseFirestoreWrapper": "./FirebaseFirestoreWrapper/dist/index.js",
-      "./FirebaseStorageWrapper": "./FirebaseStorageWrapper/dist/index.js",
-      "./FirebaseAuthWrapper/*.js": "./FirebaseAuthWrapper/dist/*.js",
-      "./FirebaseCloudFunctionsWrapper/*.js": "./FirebaseCloudFunctionsWrapper/dist/*.js",
-      "./FirebaseFirestoreWrapper/*.js": "./FirebaseFirestoreWrapper/dist/*.js",
-      "./FirebaseStorageWrapper/*.js": "./FirebaseStorageWrapper/dist/*.js"
+    "./firebase-wrapper": {
+      "node": {
+        "import": "./index.js",
+        "require": "./dist/index.js"
+      },
+      "default": "./index.js"
     },
-    "./package.json": "./package.json"
+    "./FirebaseAuthWrapper": {
+      "node": {
+        "import": "./FirebaseAuthWrapper/index.js",
+        "require": "./dist/FirebaseAuthWrapper/index.js"
+      },
+      "default": "./FirebaseAuthWrapper/index.js"
+    },
+    "./FirebaseAuthWrapper/*.js": {
+      "node": {
+        "import": "./FirebaseAuthWrapper/*.js",
+        "require": "./dist/FirebaseAuthWrapper/*.js"
+      },
+      "default": "./FirebaseAuthWrapper/*.js"
+    },
+    "./FirebaseCloudFunctionsWrapper": {
+      "node": {
+        "import": "./FirebaseCloudFunctionsWrapper/index.js",
+        "require": "./dist/FirebaseCloudFunctionsWrapper/index.js"
+      },
+      "default": "./FirebaseCloudFunctionsWrapper/index.js"
+    },
+    "./FirebaseCloudFunctionsWrapper/*.js": {
+      "node": {
+        "import": "./FirebaseCloudFunctionsWrapper/*.js",
+        "require": "./dist/FirebaseCloudFunctionsWrapper/*.js"
+      },
+      "default": "./FirebaseCloudFunctionsWrapper/*.js"
+    },
+    "./FirebaseFirestoreWrapper": {
+      "node": {
+        "import": "./FirebaseFirestoreWrapper/index.js",
+        "require": "./dist/FirebaseFirestoreWrapper/index.js"
+      },
+      "default": "./FirebaseFirestoreWrapper/index.js"
+    },
+    "./FirebaseFirestoreWrapper/*.js": {
+      "node": {
+        "import": "./FirebaseFirestoreWrapper/*.js",
+        "require": "./dist/FirebaseFirestoreWrapper/*.js"
+      },
+      "default": "./FirebaseFirestoreWrapper/*.js"
+    },
+    "./FirebaseStorageWrapper": {
+      "node": {
+        "import": "./FirebaseStorageWrapper/index.js",
+        "require": "./dist/FirebaseStorageWrapper/index.js"
+      },
+      "default": "./FirebaseStorageWrapper/index.js"
+    },
+    "./FirebaseStorageWrapper/*.js": {
+      "node": {
+        "import": "./FirebaseStorageWrapper/*.js",
+        "require": "./dist/FirebaseStorageWrapper/*.js"
+      },
+      "default": "./FirebaseStorageWrapper/*.js"
+    }
   },
   "scripts": {
     "transpile": "babel *.js --out-dir ./dist",
