@@ -31,14 +31,13 @@
       "./FirebaseFiretoreWrapper/*.js": "./*.js"
     },
     "require": {
-      ".": "./dist/index.js",
-      "./FirebaseFirestoreWrapper": "./dist/index.js",
-      "./FirebaseFiretoreWrapper/*.js": "./dist/*.js"
-    },
-    "./package.json": "./package.json"
+      ".": "../dist/FirebaseFirestoreWrapper/index.js",
+      "./FirebaseFirestoreWrapper": "../dist/FirebaseFirestoreWrapper/index.js",
+      "./FirebaseFiretoreWrapper/*.js": "../dist/FirebaseFirestoreWrapper/*.js"
+    }
   },
   "scripts": {
-    "transpile": "babel --root-mode upward *.js --out-dir ./dist",
+    "transpile": "babel --root-mode upward *.js --out-dir ../dist/FirebaseFirestoreWrapper",
     "build": "$npm_execpath run transpile",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
     "docs": "jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f index.js > README.md"

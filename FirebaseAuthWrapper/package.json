@@ -24,7 +24,7 @@
     "*.md"
   ],
   "main": "index.js",
-  "exports": {
+  "exports": { 
     "import": {
       ".": "./index.js",
       "./FirebaseAuthWrapper": "./index.js",
