@@ -17,7 +17,6 @@
     "email": "tracy@dreamsandlogic.com",
     "url": "http://dreamsandlogic.com"
   },
-  "type": "module",
   "files": [
     "*.js",
     "**/*.js",
