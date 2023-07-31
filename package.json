@@ -124,11 +124,11 @@
     "access": "public"
   },
   "dependencies": {
-    "firebase": "^8.10.0"
+    "firebase": "8.10.0"
   },
   "peerDependencies": {
-    "firebase-admin": "^9.4.1",
-    "firebase": "^8.10.0"
+    "firebase-admin": "9.4.1",
+    "firebase": "8.10.0"
   },
   "peerDependenciesMeta": {
     "firebase-admin": {
@@ -145,7 +145,7 @@
     "@babel/plugin-transform-runtime": "7.15.0",
     "@babel/preset-env": "7.15.4",
     "jsdoc-to-markdown": "7.0.1",
-    "rimraf": "^3.0.2"
+    "rimraf": "3.0.2"
   },
   "keywords": [
     "firebase",

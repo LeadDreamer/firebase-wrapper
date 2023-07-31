@@ -43,7 +43,7 @@
     "docs": "jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f index.js > README.md"
   },
   "peerDependencies": {
-    "firebase-admin": "^9.4.1"
+    "firebase-admin": "9.4.1"
   },
   "peerDependenciesMeta": {
     "firebase-admin": {
@@ -60,7 +60,7 @@
     "@babel/plugin-transform-runtime": "7.17.0",
     "@babel/preset-env": "7.16.11",
     "jsdoc-to-markdown": "7.1.1",
-    "rimraf": "^3.0.2"
+    "rimraf": "3.0.2"
   },
   "keywords": [
     "firebase",
