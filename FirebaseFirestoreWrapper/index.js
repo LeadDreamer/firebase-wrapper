@@ -1917,7 +1917,7 @@ export const typedWrite = async (data, parent, type, batch = null) => {
  * @function
  * @category Typed
  * @param {Record} data - the data object/record to update.  This will create a new one if it doesn't exist
- * @param {ArtistTree} tree - Object with properties of refPath segments
+ * @param {RecordTree} tree - Object with properties of refPath segments
  * @param {string} type - name of type of object - i.e. the sub-collection name
  * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
  * @return {Promise} record, with Id & refpath
@@ -1939,7 +1939,7 @@ export const typedWriteByTree = async (data, tree, type, batch = null) => {
  * @static
  * @category Typed
  * @param {Record} data - the data object/record to update.  This will create a new one if it doesn't exist
- * @param {ArtistTree} tree - Object with properties of refPath segments
+ * @param {RecordTree} tree - Object with properties of refPath segments
  * @param {string} type - name of type of object - i.e. the sub-collection name
  * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
  * @return {Promise} WriteBatch, Transaction or Void
@@ -1996,13 +1996,15 @@ export const typedCreate = (data, parent, type, batch = null) => {
 };
 
 /**
+ * a RecordTree is a Map of the "types" (collection names) and Id's of a record,
+ * and all it's parent records/collections.  Useful for structured database operations.
  * @private
  * @typedef {Map} RecordTree
  * @category Typed
  */
 
 /**
- * Extracts a tree of document ID's from a child document (assumes is a child)
+ * Extracts a tree of document ID's from a child document (assumes it is a child)
  * @function
  * @static
  * @category Typed
@@ -2039,7 +2041,7 @@ export const treeFromChild = (child) => {
 export const typedTablePathFromTree = (tree, type, branchType) => {
   let pathString = "";
   let lastId = "";
-  for (let [collection, docId] of tree) {
+  for (const [collection, docId] of tree) {
     pathString = `${pathString}${lastId}${collection}/`;
     if (collection === type) {
       //reached requested depth
@@ -2068,7 +2070,7 @@ export const typedTablePathFromTree = (tree, type, branchType) => {
  */
 export const typedRefPathFromTree = (tree, type) => {
   let pathString = "";
-  for (let [collection, docId] of tree) {
+  for (const [collection, docId] of tree) {
     pathString = `${pathString}${collection}/${docId}`;
     if (collection === type) {
       //reached requested depth

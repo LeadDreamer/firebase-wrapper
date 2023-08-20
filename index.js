@@ -63,6 +63,7 @@ export default async function FirebaseWrapper(firebase, config, thisLogger) {
   try {
     await firebase.app();
   } catch (err) {
+    console.log("app not loaded or failed");
     try {
       await (config?.appId
         ? firebase.initializeApp(config)
@@ -70,14 +71,14 @@ export default async function FirebaseWrapper(firebase, config, thisLogger) {
 
       const happ = await firebase.app();
 
-      localLogger("after init", !!happ);
+      console.log("after init", !!happ);
 
       await FirebaseAuthWrapper(firebase, config, localLogger);
-      localLogger("After Auth");
+      console.log("After Auth");
       await FirebaseFirestore(firebase, config, localLogger);
-      localLogger("After Firestore");
+      console.log("After Firestore");
       await FirebaseStorage(firebase, config, localLogger);
-      localLogger("After Storage");
+      console.log("After Storage");
       return FirebaseCloudFunctions(firebase, config, localLogger);
     } catch (err) {
       console.log("firebase initialize failed");
