@@ -103,17 +103,33 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 
 
 * [FirebaseWrapper](#module_FirebaseWrapper)
-    * _static_
-        * [.FirebaseWrapper(config)](#module_FirebaseWrapper.FirebaseWrapper) ⇒
-        * [.FirebaseWrapper(config)](#module_FirebaseWrapper.FirebaseWrapper) ⇒
-    * _inner_
-        * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
-        * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
+    * [module.exports(firebase, config, thislogger)](#exp_module_FirebaseWrapper--module.exports) ⇒ ⏏
+        * _static_
+            * [.FirebaseWrapper(config)](#module_FirebaseWrapper--module.exports.FirebaseWrapper) ⇒
+        * _inner_
+            * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+            * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
 
-<a name="module_FirebaseWrapper.FirebaseWrapper"></a>
+<a name="exp_module_FirebaseWrapper--module.exports"></a>
 
-### FirebaseWrapper.FirebaseWrapper(config) ⇒
-**Kind**: static method of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
+### module.exports(firebase, config, thislogger) ⇒ ⏏
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
+
+**Kind**: Exported function  
+**Returns**: none  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
+| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
+| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
+
+**Example**  
+```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
+<a name="module_FirebaseWrapper--module.exports.FirebaseWrapper"></a>
+
+#### module.exports.FirebaseWrapper(config) ⇒
+**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
 **Returns**: none  
 
 | Param | Type | Description |
@@ -122,24 +138,12 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 
 **Example**  
 ```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper.FirebaseWrapper"></a>
+<a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
 
-### FirebaseWrapper.FirebaseWrapper(config) ⇒
-**Kind**: static method of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
-**Returns**: none  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
-
-**Example**  
-```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
-
-### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
+#### module.exports~FirebaseConfigObject : <code>Object</code>
 only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
 
-**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
+**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
 **Properties**
 
 | Name | Type | Description |
@@ -154,12 +158,12 @@ only authDomain, databaseURL and storageBucket are present whencalled from a cl
 | measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
 | mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
 
-<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
+<a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
 
-### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
+#### module.exports~FirebaseConfigObject : <code>Object</code>
 only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
 
-**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
+**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
 **Properties**
 
 | Name | Type | Description |
@@ -2500,17 +2504,33 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 
 
 * [FirebaseWrapper](#module_FirebaseWrapper)
-    * _static_
-        * [.FirebaseWrapper(config)](#module_FirebaseWrapper.FirebaseWrapper) ⇒
-        * [.FirebaseWrapper(config)](#module_FirebaseWrapper.FirebaseWrapper) ⇒
-    * _inner_
-        * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
-        * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
+    * [module.exports(firebase, config, thislogger)](#exp_module_FirebaseWrapper--module.exports) ⇒ ⏏
+        * _static_
+            * [.FirebaseWrapper(config)](#module_FirebaseWrapper--module.exports.FirebaseWrapper) ⇒
+        * _inner_
+            * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+            * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
 
-<a name="module_FirebaseWrapper.FirebaseWrapper"></a>
+<a name="exp_module_FirebaseWrapper--module.exports"></a>
 
-### FirebaseWrapper.FirebaseWrapper(config) ⇒
-**Kind**: static method of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
+### module.exports(firebase, config, thislogger) ⇒ ⏏
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
+
+**Kind**: Exported function  
+**Returns**: none  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
+| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
+| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
+
+**Example**  
+```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
+<a name="module_FirebaseWrapper--module.exports.FirebaseWrapper"></a>
+
+#### module.exports.FirebaseWrapper(config) ⇒
+**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
 **Returns**: none  
 
 | Param | Type | Description |
@@ -2519,24 +2539,12 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 
 **Example**  
 ```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper.FirebaseWrapper"></a>
+<a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
 
-### FirebaseWrapper.FirebaseWrapper(config) ⇒
-**Kind**: static method of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
-**Returns**: none  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
-
-**Example**  
-```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
-
-### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
+#### module.exports~FirebaseConfigObject : <code>Object</code>
 only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
 
-**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
+**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
 **Properties**
 
 | Name | Type | Description |
@@ -2551,12 +2559,12 @@ only authDomain, databaseURL and storageBucket are present whencalled from a cl
 | measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
 | mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
 
-<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
+<a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
 
-### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
+#### module.exports~FirebaseConfigObject : <code>Object</code>
 only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
 
-**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
+**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
 **Properties**
 
 | Name | Type | Description |
