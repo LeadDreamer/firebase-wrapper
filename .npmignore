@@ -1,9 +1,1 @@
-node_modules
-./FirebaseAuthWrapper/node_modules
-./FirebaseCloudFunctionsWrapper/node_modules
-./FirebaseFirestoreWrapper/node_modules
-./FirebaseStorageWrapper/node_modules
-babel.config.json
-jsdoc.conf.json
-.codesandbox/*
-.npmrc
+*.js

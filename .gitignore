@@ -8,7 +8,7 @@ dist/*.js
 ./dist/*.js
 ./**/dist/*.js
 
-node_modules
-./node_modules
-./**/node_modules
+node_modules/
+./node_modules/
+./**/node_modules/
 .npmrc

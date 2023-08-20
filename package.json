@@ -3,7 +3,7 @@
   "engines": {
     "node": "16"
   },
-  "version": "1.3.4-beta.20",
+  "version": "1.3.4-beta.21",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another.",
   "repository": "LeadDreamer/firebase-wrapper",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -117,9 +117,9 @@
     "FSW_docs": "cd FirebaseStorageWrapper && $npm_execpath run docs && cd ..",
     "rebuild_lower": "$npm_execpath run FAW && $npm_execpath run FCFW && $npm_execpath run FFW && $npm_execpath run FSW",
     "docs_all": "$npm_execpath run FAW_docs && $npm_execpath run FCFW_docs && $npm_execpath run FFW_docs && $npm_execpath run FSW_docs && $npm_execpath run docs",
-    "publish_beta": "$npm_execpath publish --tag=beta",
-    "publish_package": "$npm_execpath publish",
-    "publish_dry": "$npm_execpath publish --dry-run"
+    "publish_beta": "npm publish --tag=beta",
+    "publish_package": "npm publish",
+    "publish_dry": "npm publish --dry-run"
   },
   "publishConfig": {
     "access": "public"
