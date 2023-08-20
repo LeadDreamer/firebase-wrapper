@@ -62,15 +62,21 @@ const FirebaseWrapper = async (firebase, config) => {
   try {
     await firebase.app();
   } catch (err) {
+    console.log("not loaded");
     try {
       config?.appId
         ? await firebase.initializeApp(config)
         : await firebase.initializeApp();
-      await FirebaseAuthWrapper(firebase, config);
-      await FirebaseFirestore(firebase, config);
-      await FirebaseStorage(firebase, config);
-      await FirebaseCloudFunctions(firebase, config);
-    } catch (err) {
+        console.log("init");
+        await FirebaseAuthWrapper(firebase, config);
+        console.log("auth");
+        await FirebaseFirestore(firebase, config);
+        console.log("firestore");
+        await FirebaseStorage(firebase, config);
+        console.log("storage");
+        await FirebaseCloudFunctions(firebase, config);
+        console.log("cloud");
+      } catch (err) {
       console.log("firebase initialize failed");
     }
   }
