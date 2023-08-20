@@ -1,18 +1,16 @@
 {
   "name": "@leaddreamer/firebase-wrapper",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
       "name": "@leaddreamer/firebase-wrapper",
-      "version": "1.2.6",
+      "version": "1.2.7",
       "license": "MIT",
       "devDependencies": {
         "@babel/cli": "7.22.9",
         "@babel/core": "7.22.9",
-        "@babel/plugin-proposal-class-properties": "7.18.6",
-        "@babel/plugin-proposal-private-property-in-object": "7.21.11",
         "@babel/plugin-transform-runtime": "7.22.9",
         "@babel/preset-env": "7.22.9",
         "jsdoc-to-markdown": "8.0.0",
@@ -520,40 +518,6 @@
       },
       "peerDependencies": {
         "@babel/core": "^7.13.0"
-      }
-    },
-    "node_modules/@babel/plugin-proposal-class-properties": {
-      "version": "7.18.6",
-      "resolved": "https://registry.npmjs.org/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.18.6.tgz",
-      "integrity": "sha512-cumfXOF0+nzZrrN8Rf0t7M+tF6sZc7vhQwYQck9q1/5w2OExlD+b4v4RpMJFaV1Z7WcDRgO6FqvxqxGlwo+RHQ==",
-      "dev": true,
-      "dependencies": {
-        "@babel/helper-create-class-features-plugin": "^7.18.6",
-        "@babel/helper-plugin-utils": "^7.18.6"
-      },
-      "engines": {
-        "node": ">=6.9.0"
-      },
-      "peerDependencies": {
-        "@babel/core": "^7.0.0-0"
-      }
-    },
-    "node_modules/@babel/plugin-proposal-private-property-in-object": {
-      "version": "7.21.11",
-      "resolved": "https://registry.npmjs.org/@babel/plugin-proposal-private-property-in-object/-/plugin-proposal-private-property-in-object-7.21.11.tgz",
-      "integrity": "sha512-0QZ8qP/3RLDVBwBFoWAwCtgcDZJVwA5LUJRZU8x2YFfKNuFq161wK3cuGrALu5yiPu+vzwTAg/sMWVNeWeNyaw==",
-      "dev": true,
-      "dependencies": {
-        "@babel/helper-annotate-as-pure": "^7.18.6",
-        "@babel/helper-create-class-features-plugin": "^7.21.0",
-        "@babel/helper-plugin-utils": "^7.20.2",
-        "@babel/plugin-syntax-private-property-in-object": "^7.14.5"
-      },
-      "engines": {
-        "node": ">=6.9.0"
-      },
-      "peerDependencies": {
-        "@babel/core": "^7.0.0-0"
       }
     },
     "node_modules/@babel/plugin-proposal-unicode-property-regex": {
@@ -4492,28 +4456,6 @@
         "@babel/helper-plugin-utils": "^7.22.5",
         "@babel/helper-skip-transparent-expression-wrappers": "^7.22.5",
         "@babel/plugin-transform-optional-chaining": "^7.22.5"
-      }
-    },
-    "@babel/plugin-proposal-class-properties": {
-      "version": "7.18.6",
-      "resolved": "https://registry.npmjs.org/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.18.6.tgz",
-      "integrity": "sha512-cumfXOF0+nzZrrN8Rf0t7M+tF6sZc7vhQwYQck9q1/5w2OExlD+b4v4RpMJFaV1Z7WcDRgO6FqvxqxGlwo+RHQ==",
-      "dev": true,
-      "requires": {
-        "@babel/helper-create-class-features-plugin": "^7.18.6",
-        "@babel/helper-plugin-utils": "^7.18.6"
-      }
-    },
-    "@babel/plugin-proposal-private-property-in-object": {
-      "version": "7.21.11",
-      "resolved": "https://registry.npmjs.org/@babel/plugin-proposal-private-property-in-object/-/plugin-proposal-private-property-in-object-7.21.11.tgz",
-      "integrity": "sha512-0QZ8qP/3RLDVBwBFoWAwCtgcDZJVwA5LUJRZU8x2YFfKNuFq161wK3cuGrALu5yiPu+vzwTAg/sMWVNeWeNyaw==",
-      "dev": true,
-      "requires": {
-        "@babel/helper-annotate-as-pure": "^7.18.6",
-        "@babel/helper-create-class-features-plugin": "^7.21.0",
-        "@babel/helper-plugin-utils": "^7.20.2",
-        "@babel/plugin-syntax-private-property-in-object": "^7.14.5"
       }
     },
     "@babel/plugin-proposal-unicode-property-regex": {

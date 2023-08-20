@@ -12,7 +12,7 @@
     "build": {
       "name": "build",
       "command": "npm run build",
-      "runAtStart": false
+      "runAtStart": true
     },
     "rebuild": {
       "name": "rebuild",
