@@ -39,14 +39,14 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper/index.js";
  */
 
 /**
- * @function FirebaseWrapper
- * @static
  * all-in-one wrapper for a solid subset of CLIENT-SIDE Firebase
  * functions, with a consistent interface.  There is a parallel set for
  * ADMIN-SIDE functions as well.
  * Call/initialize with Firebase Configuration settings in an object as
  * described below
+ * @param {Firebase} firebase Local (client or server) version of firebase app
  * @param {FirebaseConfigObject} config Firebase Admin object
+ * @param {callback} thislogger Local (client or server) version of a (console) logger
  * @return none
  * @example
  * ```
@@ -58,33 +58,36 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper/index.js";
  * export * from "@leaddreamer/firebase-wrapper";
  * ```
  */
-const FirebaseWrapper = async (firebase, config) => {
+export default async function FirebaseWrapper(firebase, config, thisLogger) {
+  const localLogger = thisLogger || (() => {});
   try {
     await firebase.app();
   } catch (err) {
-    console.log("not loaded");
     try {
-      config?.appId
-        ? await firebase.initializeApp(config)
-        : await firebase.initializeApp();
-        console.log("init");
-        await FirebaseAuthWrapper(firebase, config);
-        console.log("auth");
-        await FirebaseFirestore(firebase, config);
-        console.log("firestore");
-        await FirebaseStorage(firebase, config);
-        console.log("storage");
-        await FirebaseCloudFunctions(firebase, config);
-        console.log("cloud");
-      } catch (err) {
+      await (config?.appId
+        ? firebase.initializeApp(config)
+        : firebase.initializeApp());
+
+      const happ = await firebase.app();
+
+      localLogger("after init", !!happ);
+
+      await FirebaseAuthWrapper(firebase, config, localLogger);
+      localLogger("After Auth");
+      await FirebaseFirestore(firebase, config, localLogger);
+      localLogger("After Firestore");
+      await FirebaseStorage(firebase, config, localLogger);
+      localLogger("After Storage");
+      return FirebaseCloudFunctions(firebase, config, localLogger);
+    } catch (err) {
       console.log("firebase initialize failed");
     }
   }
   return;
-};
+}
 
 export * from "./FirebaseFirestoreWrapper/index.js";
 export * from "./FirebaseStorageWrapper/index.js";
 export * from "./FirebaseAuthWrapper/index.js";
 export * from "./FirebaseCloudFunctionsWrapper/index.js";
-export default FirebaseWrapper;
+//export default FirebaseWrapper;
