@@ -86,7 +86,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                     * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack) ⇒ <code>Unsubscribe</code>
                     * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit) ⇒ <code>Unsubscribe</code>
                     * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter) ⇒ <code>Unsubscribe</code>
-                    * [.unsubscriber()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscriber)
+                    * [.unsubscribe()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscribe)
             * _Tree Slice_
                 * [.ownerFilter(owner, queryFilter)](#module_FirebaseFirestoreWrapper--module.exports.ownerFilter) ⇒ <code>filterObject</code>
                 * [.listenSlice(owner, collectionName, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.listenSlice) ⇒ <code>Unsubscribe</code>
@@ -767,7 +767,7 @@ Creates an object to allow for paginating a listener for tableread from Firesto
     * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack) ⇒ <code>Unsubscribe</code>
     * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit) ⇒ <code>Unsubscribe</code>
     * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter) ⇒ <code>Unsubscribe</code>
-    * [.unsubscriber()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscriber)
+    * [.unsubscribe()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscribe)
 
 <a name="new_module_FirebaseFirestoreWrapper--module.exports.PaginatedListener_new"></a>
 
@@ -875,9 +875,9 @@ changes the filter on the subscriptionThis has to unsubscribe the current liste
 | --- | --- | --- |
 | [filterArray] | <code>filterObject</code> | an array of filter descriptors |
 
-<a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscriber"></a>
+<a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscribe"></a>
 
-##### paginatedListener.unsubscriber()
+##### paginatedListener.unsubscribe()
 IF unsubscribe function is set, run it.
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
