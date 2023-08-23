@@ -1317,7 +1317,8 @@ export class PaginatedListener {
      * @private
      * @type {QuerySnapshot}
      */
-    this.Snapshot = null;
+    this.snapshot = null;
+    this.unsubscriber = null;
     return this.Query;
   }
 
@@ -1455,7 +1456,7 @@ export class PaginatedListener {
   /**
    * IF unsubscribe function is set, run it.
    */
-  async unsubscriber() {
+  async unsubscribe() {
     //IF unsubscribe function is set, run it.
     this.unsubscriber && this.unsubscriber();
     this.unsubscriber = null;
