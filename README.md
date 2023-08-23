@@ -104,11 +104,9 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 
 * [FirebaseWrapper](#module_FirebaseWrapper)
     * [module.exports(firebase, config, thislogger)](#exp_module_FirebaseWrapper--module.exports) ⇒ ⏏
-        * _static_
-            * [.FirebaseWrapper(config)](#module_FirebaseWrapper--module.exports.FirebaseWrapper) ⇒
-        * _inner_
-            * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
-            * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+        * [~FirebaseWrapper(firebase, config, thislogger)](#module_FirebaseWrapper--module.exports..FirebaseWrapper) ⇒
+        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
 
 <a name="exp_module_FirebaseWrapper--module.exports"></a>
 
@@ -126,15 +124,19 @@ all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a 
 
 **Example**  
 ```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper--module.exports.FirebaseWrapper"></a>
+<a name="module_FirebaseWrapper--module.exports..FirebaseWrapper"></a>
 
-#### module.exports.FirebaseWrapper(config) ⇒
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
+#### module.exports~FirebaseWrapper(firebase, config, thislogger) ⇒
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
+
+**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
 **Returns**: none  
 
 | Param | Type | Description |
 | --- | --- | --- |
+| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
 | config | <code>FirebaseConfigObject</code> | Firebase Admin object |
+| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
 
 **Example**  
 ```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
@@ -674,7 +676,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                     * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack) ⇒ <code>Unsubscribe</code>
                     * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit) ⇒ <code>Unsubscribe</code>
                     * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter) ⇒ <code>Unsubscribe</code>
-                    * [.unsubscriber()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscriber)
+                    * [.unsubscribe()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscribe)
             * _Tree Slice_
                 * [.ownerFilter(owner, queryFilter)](#module_FirebaseFirestoreWrapper--module.exports.ownerFilter) ⇒ <code>filterObject</code>
                 * [.listenSlice(owner, collectionName, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.listenSlice) ⇒ <code>Unsubscribe</code>
@@ -1355,7 +1357,7 @@ Creates an object to allow for paginating a listener for tableread from Firesto
     * [.PageBack()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack) ⇒ <code>Unsubscribe</code>
     * [.ChangeLimit(newLimit)](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeLimit) ⇒ <code>Unsubscribe</code>
     * [.ChangeFilter([filterArray])](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter) ⇒ <code>Unsubscribe</code>
-    * [.unsubscriber()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscriber)
+    * [.unsubscribe()](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscribe)
 
 <a name="new_module_FirebaseFirestoreWrapper--module.exports.PaginatedListener_new"></a>
 
@@ -1463,9 +1465,9 @@ changes the filter on the subscriptionThis has to unsubscribe the current liste
 | --- | --- | --- |
 | [filterArray] | <code>filterObject</code> | an array of filter descriptors |
 
-<a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscriber"></a>
+<a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+unsubscribe"></a>
 
-##### paginatedListener.unsubscriber()
+##### paginatedListener.unsubscribe()
 IF unsubscribe function is set, run it.
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
@@ -2505,11 +2507,9 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 
 * [FirebaseWrapper](#module_FirebaseWrapper)
     * [module.exports(firebase, config, thislogger)](#exp_module_FirebaseWrapper--module.exports) ⇒ ⏏
-        * _static_
-            * [.FirebaseWrapper(config)](#module_FirebaseWrapper--module.exports.FirebaseWrapper) ⇒
-        * _inner_
-            * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
-            * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+        * [~FirebaseWrapper(firebase, config, thislogger)](#module_FirebaseWrapper--module.exports..FirebaseWrapper) ⇒
+        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
 
 <a name="exp_module_FirebaseWrapper--module.exports"></a>
 
@@ -2527,15 +2527,19 @@ all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a 
 
 **Example**  
 ```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper--module.exports.FirebaseWrapper"></a>
+<a name="module_FirebaseWrapper--module.exports..FirebaseWrapper"></a>
 
-#### module.exports.FirebaseWrapper(config) ⇒
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
+#### module.exports~FirebaseWrapper(firebase, config, thislogger) ⇒
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
+
+**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
 **Returns**: none  
 
 | Param | Type | Description |
 | --- | --- | --- |
+| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
 | config | <code>FirebaseConfigObject</code> | Firebase Admin object |
+| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
 
 **Example**  
 ```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
