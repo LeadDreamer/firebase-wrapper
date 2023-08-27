@@ -1,4 +1,3 @@
-import "firebase/firestore";
 import {
   PAGINATE_CHOICES,
   PAGINATE_DEFAULT,
@@ -390,7 +389,6 @@ export async function writeRecord(
       Id: docRef.Id,
       refPath: data.refPath || docRef.path, //short circuit
     };
-
   } catch (err) {
     return Promise.reject(err);
   }
@@ -522,8 +520,7 @@ export async function collectRecordsInGroup(tableName) {
     .get()
     .then((querySnapshot) => {
       // returns a promise
-      if (!querySnapshot.empty)
-        return RecordsFromSnapshot(querySnapshot);
+      if (!querySnapshot.empty) return RecordsFromSnapshot(querySnapshot);
       else
         return Promise.reject("noDocuments:collectRecordsInGroup:" + tableName);
     })
@@ -853,10 +850,10 @@ function limitQuery(query, limit = null) {
  * @callback RecordListener
  * @param {DocumentSnapshot} documentSnapshot
  */
- 
- /**
-  *@typedef {function} Unsubscribe
-  */
+
+/**
+ *@typedef {function} Unsubscribe
+ */
 
 /**
  * @callback CollectionListener
@@ -1302,7 +1299,7 @@ export class PaginatedListener {
    * @returns {Query}
    */
   _setQuery() {
-	const db = this.refPath ? dbReference(this.refPath) : fdb;
+    const db = this.refPath ? dbReference(this.refPath) : fdb;
     /**
      * Query that forms basis for listener query
      * @private
@@ -1714,7 +1711,7 @@ export async function fetchOwner(record) {
  */
 export function recordType(record) {
   return record?.refPath ? penultimate(record.refPath.split(`/`)) : undefined;
-};
+}
 
 /**
  * Returns the Id (documentId) of the passed record derived from the refPath
@@ -1722,9 +1719,9 @@ export function recordType(record) {
  * @param {Record} record
  * @returns {string} the Id
  */
-export function recordId (record) {
+export function recordId(record) {
   return record?.refPath ? last(record.refPath.split(`/`)) : undefined;
-};
+}
 
 /**
  * optionally batched record update - abstracts batch process from specific types
@@ -1744,7 +1741,7 @@ export async function typedWrite(data, parent, type, batch = null) {
     parent?.refPath, //... under parent path reference
     batch
   );
-};
+}
 
 /**
  * optionally batched record update - abstracts batch process from specific types
@@ -1763,7 +1760,7 @@ export async function typedWriteByTree(data, tree, type, batch = null) {
     /*no parent */ null,
     batch
   );
-};
+}
 
 /**
  * optionally batched record update - abstracts batch process from specific types
@@ -1791,7 +1788,7 @@ export async function typedWriteByChild(
     batch,
     mergeOption
   );
-};
+}
 
 /**
  * Creates a new document reference of the indicated type, and writes
@@ -1820,7 +1817,7 @@ export async function typedCreate(data, parent, type, batch = null) {
   };
   //parent data already in created reference
   return typedWrite(newData, parent, type, batch);
-};
+}
 
 /**
  * @private
@@ -1847,7 +1844,7 @@ export function treeFromChild(child) {
     deconstruction.set(type, Id);
   }
   return deconstruction;
-};
+}
 
 /**
  * Builds a refPath *down* to a desired collection/type from an existing
@@ -1877,7 +1874,7 @@ export function typedTablePathFromTree(tree, type, branchType) {
     lastId = `${docId}/`;
   }
   return pathString;
-};
+}
 
 /**
  * Builds a refPath *down* to a desired collection/type from an existing
@@ -1899,7 +1896,7 @@ export function typedRefPathFromTree(tree, type) {
     pathString = `${pathString}/`;
   }
   return pathString;
-};
+}
 
 /**
  * Looks up a "tree" to find the Id of the document at the requested
@@ -1915,7 +1912,7 @@ export function typedIdFromChild(child, type) {
   //(previous/tree/levels/then/type) (Id/whatever/else)
   //(Id) (whatever/else)
   return treeFromChild(child).get(type);
-};
+}
 
 /**
  * Builds a refPath *up* to a desired collection/type from an existing
@@ -1929,7 +1926,7 @@ export function typedIdFromChild(child, type) {
  */
 export function typedTablePathFromChild(child, type, branchType = null) {
   return typedTablePathFromTree(treeFromChild(child), type, branchType);
-};
+}
 
 /**
  * Builds a refPath *up* to a desired collection/type from an existing
@@ -1943,7 +1940,7 @@ export function typedTablePathFromChild(child, type, branchType = null) {
  */
 export function typedRefPathFromChild(child, type) {
   return typedRefPathFromTree(treeFromChild(child), type);
-};
+}
 
 /**
  * function to fetch a document from "up" the collection/document tree of a child document
@@ -1954,7 +1951,7 @@ export function typedRefPathFromChild(child, type) {
  * @param {ChainType} batch - optional batch object to chain
  * @returns {Promise<RecordObject>}
  */
-export async function typedFetchFromChild (
+export async function typedFetchFromChild(
   child,
   type,
   branchType = null,
@@ -1966,7 +1963,7 @@ export async function typedFetchFromChild (
     null, //No parent needed
     batch //optional Batch object
   );
-};
+}
 
 /**
  * function to fetch a document from "up" the collection/document tree of a child document
@@ -1984,7 +1981,7 @@ export async function typedFetchFromTree(tree, type, batch = null) {
     null, //No parent needed
     batch //optional Batch object
   );
-};
+}
 
 /**
  * function to collect documents from "up" the collection/document tree of a child document
@@ -2001,7 +1998,7 @@ export async function typedCollectFromTree(
   batch = null
 ) {
   return collectRecords(typedTablePathFromTree(tree, type, branchType));
-};
+}
 
 /**
  * function to collect documents from "up" the collection/document tree of a child document
@@ -2012,7 +2009,7 @@ export async function typedCollectFromTree(
  */
 export async function typedCollectFromChild(child, type, branchType = null) {
   return collectRecords(typedTablePathFromChild(child, type, branchType));
-};
+}
 
 /**
  * Uses the ownerFilter (above) to establish a listener to "just" the
@@ -2038,7 +2035,7 @@ export async function typedListener(type, parent, dataCallBack, errCallBack) {
   } catch (err) {
     thisLogger(`failed:typedListener setup ${type} err: ${err}`);
   }
-};
+}
 
 /**
  * @class
@@ -2102,6 +2099,6 @@ export class typedPaginatedListener extends PaginatedListener {
 export function localBatchReturn(incomingBatch, internalBatch) {
   //if incoming batch, just pass along, else asynchronously commit local batch
   return incomingBatch ? Promise.resolve(null) : closeWriteBatch(internalBatch);
-};
+}
 
 export * from "./Common.js";

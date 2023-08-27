@@ -1,5 +1,3 @@
-import "firebase/functions";
-
 /**
  * @module FirebaseCloudFunctionsWrapper
  * @description A set of helper-wrapper functions around firebase firestore, storage
