@@ -35,7 +35,7 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 <a name="module_FirebaseCloudFunctionsWrapper--module.exports.CloudFunctions"></a>
 
 #### module.exports.CloudFunctions() ⇒ <code>Promise</code>
-Calls the cloud function named in the passed argument, andasynchronously returns the result
+Creates the FUNCTION refered to by the passed name.  Said function can*then* be called for the desired results. SYNCHRONOUS
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseCloudFunctionsWrapper--module.exports)  
 **Fulfil**: result as returns from call  
