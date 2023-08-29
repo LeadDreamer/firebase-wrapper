@@ -69,7 +69,7 @@ export default async function FirebaseFirestore(firebase, config, thisLogger) {
   thisLogger("fdb? ", !!fdb);
   fdb.settings({ ignoreUndefinedProperties: true, merge: true });
   //doesnt run firestore persistence in Admin/Node environment
-  thisLogger("fdb settings");
+  thisLogger("fdb settings", config);
   config = config.projectId ? config : JSON.parse(config);
   if (!config?.appId) {
     await firebase.firestore().enablePersistence({ synchorizeTabs: true });
