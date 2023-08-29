@@ -66,15 +66,15 @@ export default async function FirebaseCloudFunctions(
   thisLogger
 ) {
   if (config?.appId) {
-    thisLogger("Cloud CLient");
+    thisLogger("Cloud Client");
     functions = await firebase.functions();
     return functions;
   }
 }
 
 /**
- * Calls the cloud function named in the passed argument, and
- * asynchronously returns the result
+ * Creates the FUNCTION refered to by the passed name.  Said function can
+ * *then* be called for the desired results. SYNCHRONOUS
  * @returns {Promise}
  * @fulfil result as returns from call
  * @reject err as returned from call
@@ -83,7 +83,7 @@ export default async function FirebaseCloudFunctions(
  * result = await CloudFunctions("MyGloriousFunction")(argumentToFunction);
  * ```
  */
-export async function CloudFunctions(name) {
+export function CloudFunctions(name) {
   return functions && functions.httpsCallable(name);
 }
 
