@@ -64,13 +64,14 @@ function penultimate(array) {
  * ```
  */
 export default async function FirebaseFirestore(firebase, config, thisLogger) {
-  thisLogger("Starting FirebaseFirestore");
+  thisLogger(`Starting FirebaseFirestore (${config})`, config);
   fdb = firebase.firestore();
   thisLogger("fdb? ", !!fdb);
   fdb.settings({ ignoreUndefinedProperties: true, merge: true });
   //doesnt run firestore persistence in Admin/Node environment
-  thisLogger("fdb settings", config);
+  thisLogger(`fdb settings`);
   config = config.projectId ? config : JSON.parse(config);
+  thisLogger(`fdb settings (${config})`, config);
   if (!config?.appId) {
     await firebase.firestore().enablePersistence({ synchorizeTabs: true });
   }
