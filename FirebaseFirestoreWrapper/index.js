@@ -73,7 +73,7 @@ export default async function FirebaseFirestore(firebase, config, thisLogger) {
   config = config.projectId ? config : JSON.parse(config);
   thisLogger(`fdb settings`, config);
   if (config?.appId) {
-    await fdb.enablePersistence({ synchorizeTabs: true });
+    //await fdb.enablePersistence({ synchorizeTabs: true });
   }
   thisLogger("persistence");
   aFieldValue = firebase.firestore.FieldValue;
