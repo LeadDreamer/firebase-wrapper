@@ -3,7 +3,7 @@
   "engines": {
     "node": "16"
   },
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database.  Also has AdminSDK wrapper",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -38,11 +38,12 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "clean": "rimraf node_modules && $npm_execpath install",
-    "transpile": "babel --root-mode upward *.js --out-dir ../dist/FirebaseStorageWrapper",
+    "prebuild": "rimraf node_modules && $npm_execpath install",
+    "transpile": "babel --root-mode upward *.js --out-dir ../dist/FirebaseFirestoreWrapper",
     "build": "$npm_execpath run transpile",
-    "rebuild": "$npm_execpath run clean && $npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
-    "docs": "jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f index.js > README.md"
+    "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
+    "docs": "jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f index.js > README.md",
+    "postbuild": "rimraf node_modules"
   },
   "peerDependencies": {
     "firebase-admin": "^9.4.1",

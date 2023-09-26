@@ -98,9 +98,10 @@
     }
   },
   "scripts": {
-    "clean": "rimraf node_modules && $npm_execpath install && $npm_execpath shrinkwrap",
     "transpile": "babel *.js --out-dir ./dist",
+    "prebuild": "rimraf node_modules && $npm_execpath install",
     "build": "$npm_execpath run transpile",
+    "postbuild": "rimraf node_modules",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
     "rebuild_beta": "$npm_execpath version prerelease --git-tag-version --preid=beta && $npm_execpath run docs && $npm_execpath run build",
     "rebuild_release": "$npm_execpath version minor --git-tag-version && $npm_execpath run docs && $npm_execpath run build",
