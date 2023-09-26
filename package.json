@@ -99,7 +99,7 @@
   },
   "scripts": {
     "transpile": "babel *.js --out-dir ./dist",
-    "prebuild": "rimraf node_modules && $npm_execpath install",
+    "tprebuild": "rimraf node_modules && $npm_execpath install",
     "build": "$npm_execpath run transpile",
     "postbuild": "rimraf node_modules",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
