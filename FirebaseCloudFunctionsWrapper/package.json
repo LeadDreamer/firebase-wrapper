@@ -25,19 +25,24 @@
   ],
   "main": "index.js",
   "exports": {
-    "import": {
-      ".": "./index.js",
-      "./FirebaseCloudFunctionsWrapper": "./index.js",
-      "./FirebaseCloudFunctionsWrapper/*.js": "./*.js"
+    ".": {
+      "node": {
+        "import": "./index.js",
+        "require": "./dist/index.js"
+      },
+      "default": "./index.js"
     },
-    "require": {
-      ".": "../dist/FirebaseCloudFunctionsWrapper/index.js",
-      "./FirebaseCloudFunctionsWrapper": "../dist/FirebaseCloudFunctionsWrapper/index.js",
-      "./FirebaseCloudFunctionsWrapper/*.js": "../dist/FirebaseCloudFunctionsWrapper/*.js"
-    }
+    "./FirebaseCloudFunctionsWrapper": {
+      "node": {
+        "import": "./index.js",
+        "require": "./dist/index.js"
+      },
+      "default": "./index.js"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
-    "prebuild": "rimraf node_modules && $npm_execpath install",
+    "prebuild": "rm -rf node_modules && $npm_execpath install",
     "transpile": "babel --root-mode upward *.js --out-dir ../dist/FirebaseFirestoreWrapper",
     "build": "$npm_execpath run transpile",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",

@@ -98,6 +98,7 @@
     }
   },
   "scripts": {
+    "prebuild": "rm -rf node_modules && $npm_execpath install",
     "transpile": "babel *.js --out-dir ./dist",
     "build": "$npm_execpath run transpile",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
