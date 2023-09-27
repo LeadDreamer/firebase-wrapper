@@ -98,7 +98,7 @@
     }
   },
   "scripts": {
-    "prebuild": "rm -rf node_modules && $npm_execpath install",
+    "trebuild": "rm -rf node_modules && $npm_execpath install",
     "transpile": "babel *.js --out-dir ./dist",
     "build": "$npm_execpath run transpile",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
@@ -117,6 +117,7 @@
     "FSW_docs": "cd FirebaseStorageWrapper && $npm_execpath run docs && cd ..",
     "rebuild_lower": "$npm_execpath run FAW && $npm_execpath run FCFW && $npm_execpath run FFW && $npm_execpath run FSW",
     "docs_all": "$npm_execpath run FAW_docs && $npm_execpath run FCFW_docs && $npm_execpath run FFW_docs && $npm_execpath run FSW_docs && $npm_execpath run docs",
+    "prepublish": "rm -rf */node_modules",
     "publish_beta": "npm publish --tag=beta",
     "publish_package": "npm publish",
     "publish_dry": "npm publish --dry-run"
