@@ -43,7 +43,7 @@
   },
   "scripts": {
     "prebuild": "rm -rf node_modules && $npm_execpath install",
-    "transpile": "babel --root-mode upward *.js --out-dir ../dist/FirebaseFirestoreWrapper",
+    "transpile": "babel --root-mode upward *.js --out-dir ../dist/FirebaseAuthWrapper",
     "build": "$npm_execpath run transpile",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
     "docs": "jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f index.js > README.md"
