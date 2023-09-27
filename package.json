@@ -142,7 +142,7 @@
     "@babel/plugin-transform-runtime": "7.22.9",
     "@babel/preset-env": "7.22.9",
     "jsdoc-to-markdown": "8.0.0",
-    "rimraf": "5.0.1"
+    "uuid": "^8.3.2"
   },
   "optionalDependencies": {
     "fsevents": "<=2.3.3"
