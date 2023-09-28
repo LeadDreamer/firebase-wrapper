@@ -336,11 +336,10 @@ export const getURLFromFilePath = (filePath) => {
 };
 
 /**
- * @function
  * @param {object} dataURL
  * @returns {Object} {ext: extension, base64: data}
  */
-export const dataURLToBlob = (dataURL) => {
+export function dataURLToBlob(dataURL) {
   var reg = /^data:image\/([\w+]+);base64,([\s\S]+)/;
   var match = dataURL.match(reg);
   var baseType = {
