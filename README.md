@@ -104,9 +104,11 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 
 * [FirebaseWrapper](#module_FirebaseWrapper)
     * [module.exports(firebase, config, thislogger)](#exp_module_FirebaseWrapper--module.exports) ⇒ ⏏
-        * [~FirebaseWrapper(firebase, config, thislogger)](#module_FirebaseWrapper--module.exports..FirebaseWrapper) ⇒
-        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
-        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+        * _static_
+            * [.FirebaseWrapper(config)](#module_FirebaseWrapper--module.exports.FirebaseWrapper) ⇒
+        * _inner_
+            * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+            * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
 
 <a name="exp_module_FirebaseWrapper--module.exports"></a>
 
@@ -124,19 +126,15 @@ all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a 
 
 **Example**  
 ```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper--module.exports..FirebaseWrapper"></a>
+<a name="module_FirebaseWrapper--module.exports.FirebaseWrapper"></a>
 
-#### module.exports~FirebaseWrapper(firebase, config, thislogger) ⇒
-all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
+#### module.exports.FirebaseWrapper(config) ⇒
+**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
 **Returns**: none  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
 | config | <code>FirebaseConfigObject</code> | Firebase Admin object |
-| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
 
 **Example**  
 ```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
@@ -628,7 +626,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.localBatchReturn(incomingBatch, internalBatch)](#module_FirebaseFirestoreWrapper--module.exports.localBatchReturn) ⇒ <code>WriteBatch</code> \| <code>Transaction</code>
             * _Batch_
                 * [.runTransaction(updateFunction)](#module_FirebaseFirestoreWrapper--module.exports.runTransaction) ⇒ <code>Promise.object</code>
-                * [.openWriteBatch()](#module_FirebaseFirestoreWrapper--module.exports.openWriteBatch) ⇒ <code>Promise.WriteBatch</code>
+                * [.openWriteBatch()](#module_FirebaseFirestoreWrapper--module.exports.openWriteBatch) ⇒ <code>WriteBatch</code>
                 * [.closeWriteBatch(batch)](#module_FirebaseFirestoreWrapper--module.exports.closeWriteBatch) ⇒ <code>Promise.&lt;void&gt;</code>
                 * [.openBulkWriter()](#module_FirebaseFirestoreWrapper--module.exports.openBulkWriter) ⇒ <code>BulkWriter</code>
                 * [.closeBulkWriter(bulkWriter)](#module_FirebaseFirestoreWrapper--module.exports.closeBulkWriter) ⇒ <code>Promise.&lt;void&gt;</code>
@@ -1027,11 +1025,11 @@ creates and runs a series of record operations(executed in the param function) 
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.openWriteBatch"></a>
 
-#### module.exports.openWriteBatch() ⇒ <code>Promise.WriteBatch</code>
+#### module.exports.openWriteBatch() ⇒ <code>WriteBatch</code>
 Creates a WriteBatch object to collect actions for Batch writing to backend
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>Promise.WriteBatch</code> - object that operations are added to for a bulkoperation  
+**Returns**: <code>WriteBatch</code> - object that operations are added to for a bulkoperation  
 **Category**: Batch  
 <a name="module_FirebaseFirestoreWrapper--module.exports.closeWriteBatch"></a>
 
@@ -2507,9 +2505,11 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 
 * [FirebaseWrapper](#module_FirebaseWrapper)
     * [module.exports(firebase, config, thislogger)](#exp_module_FirebaseWrapper--module.exports) ⇒ ⏏
-        * [~FirebaseWrapper(firebase, config, thislogger)](#module_FirebaseWrapper--module.exports..FirebaseWrapper) ⇒
-        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
-        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+        * _static_
+            * [.FirebaseWrapper(config)](#module_FirebaseWrapper--module.exports.FirebaseWrapper) ⇒
+        * _inner_
+            * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+            * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
 
 <a name="exp_module_FirebaseWrapper--module.exports"></a>
 
@@ -2527,19 +2527,15 @@ all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a 
 
 **Example**  
 ```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper--module.exports..FirebaseWrapper"></a>
+<a name="module_FirebaseWrapper--module.exports.FirebaseWrapper"></a>
 
-#### module.exports~FirebaseWrapper(firebase, config, thislogger) ⇒
-all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
+#### module.exports.FirebaseWrapper(config) ⇒
+**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
 **Returns**: none  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
 | config | <code>FirebaseConfigObject</code> | Firebase Admin object |
-| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
 
 **Example**  
 ```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
