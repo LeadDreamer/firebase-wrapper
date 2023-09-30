@@ -300,36 +300,25 @@ export const runTransaction = (updateFunction) => {
 
 /**
  * ----------------------------------------------------------------------
- * Creates a WriteBatch object tocollect actions for Batch writing to backend
- * @function
- * @static
+ * Creates a WriteBatch object to collect actions for Batch writing to backend
  * @category Batch
  * @returns {WriteBatch} object that operations are added to for a bulk
  * operation
  */
-export const openWriteBatch = () => {
+export function openWriteBatch() {
   return fdb.batch();
-};
+}
 
 /**
  * ----------------------------------------------------------------------
  * Dispatches an asynchronous Closure to submit Batch
- * @async
- * @function
- * @static
  * @category Batch
  * @param {WriteBatch} batch - WriteBatch to close
  * @returns {Promise<void>}
  */
-export const closeWriteBatch = (
-  /**
-   */
-  batch = null
-) => {
-  return (async (innerBatch) => {
-    return innerBatch.commit();
-  })(batch);
-};
+export async function closeWriteBatch(batch = null) {
+  return batch.commit();
+}
 
 /**
  * ----------------------------------------------------------------------
@@ -362,7 +351,7 @@ export const openBulkWriter = () => {
 export const closeBulkWriter = async (
   /**
    */
-  bulkWriter = null
+  bulkWriter = null,
 ) => {
   if (typeof fdb.bulkWriter !== "function" || !bulkWriter) return null;
 
@@ -423,7 +412,7 @@ export const writeRecord = async (
   data,
   refPath = null,
   batch = null,
-  mergeOption = true
+  mergeOption = true,
 ) => {
   const db = dbReference(refPath);
   const cleanData = DocumentFromRecord(data);
@@ -470,7 +459,7 @@ export const writeRecordByRefPath = (
   data,
   refPath,
   batch = null,
-  mergeOption = true
+  mergeOption = true,
 ) => {
   return writeBack({ ...data, refPath: refPath }, batch, mergeOption);
 };
@@ -556,14 +545,14 @@ export const collectRecordsByFilter = (
   refPath = null,
   filterArray = null,
   sortArray = null,
-  limit = null
+  limit = null,
 ) => {
   const db = dbReference(refPath);
 
   //assumes filterArray is in processing order
   return limitQuery(
     sortQuery(filterQuery(db.collection(tablePath), filterArray), sortArray),
-    limit
+    limit,
   )
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
@@ -624,16 +613,16 @@ export const collectRecordsInGroupByFilter = (
   tableName,
   filterArray = null,
   sortArray = null,
-  limit = null
+  limit = null,
 ) => {
   const db = fdb;
 
   return limitQuery(
     sortQuery(
       filterQuery(db.collectionGroup(tableName), filterArray),
-      sortArray
+      sortArray,
     ),
-    limit
+    limit,
   )
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
@@ -727,12 +716,12 @@ export const fetchRecordByFilter = (
   table,
   filterArray,
   refPath = null,
-  batch = null
+  batch = null,
 ) => {
   return collectRecordsByFilter(table, filterArray, refPath, batch).then(
     (records) => {
       return Promise.resolve(records[0]);
-    }
+    },
   );
 };
 
@@ -755,12 +744,12 @@ export const fetchRecordByFilter = (
 export const fetchRecordInGroupByFilter = (
   table,
   filterArray,
-  batch = null
+  batch = null,
 ) => {
   return collectRecordsInGroupByFilter(table, filterArray, batch).then(
     (records) => {
       return Promise.resolve(records && records?.length ? records[0] : null);
-    }
+    },
   );
 };
 
@@ -865,7 +854,7 @@ export const writeArrayValue = (
   fieldName,
   fieldValue,
   docRefPath,
-  batch = null
+  batch = null,
 ) => {
   const thisRef = createRefFromPath(docRefPath);
 
@@ -875,14 +864,14 @@ export const writeArrayValue = (
       {
         [fieldName]: aFieldValue.arrayUnion(fieldValue),
       },
-      { merge: true }
+      { merge: true },
     );
   else
     return thisRef.set(
       {
         [fieldName]: aFieldValue.arrayUnion(fieldValue),
       },
-      { merge: true }
+      { merge: true },
     );
 };
 
@@ -991,13 +980,13 @@ export const ListenRecords = (
   tablePath,
   refPath = null,
   dataCallback,
-  errCallback
+  errCallback,
 ) => {
   const db = dbReference(refPath);
   return ListenRecordsCommon(
     db.collection(tablePath), //get the resulting filtered query results
     dataCallback,
-    errCallback
+    errCallback,
   );
 };
 
@@ -1023,14 +1012,14 @@ export const ListenQuery = (
   dataCallback,
   errCallback,
   filterArray = null,
-  sortArray = null
+  sortArray = null,
 ) => {
   const db = dbReference(refPath);
 
   return ListenRecordsCommon(
     sortQuery(filterQuery(db.collection(tablePath), filterArray), sortArray), //get the resulting filtered query results
     dataCallback,
-    errCallback
+    errCallback,
   );
 };
 
@@ -1050,7 +1039,7 @@ export const ListenQuery = (
 export const ListenCollectionGroupRecords = (
   tablePath,
   dataCallback,
-  errCallback
+  errCallback,
 ) => {
   const db = fdb;
   //let reference = db.collection(tablePath);
@@ -1058,7 +1047,7 @@ export const ListenCollectionGroupRecords = (
   return ListenRecordsCommon(
     db.collectionGroup(tablePath), //get the resulting filtered query results
     dataCallback,
-    errCallback
+    errCallback,
   );
 };
 
@@ -1081,14 +1070,14 @@ export const ListenCollectionGroupQuery = (
   filterArray,
   sortArray,
   dataCallback,
-  errCallback
+  errCallback,
 ) => {
   const db = fdb;
 
   return ListenRecordsCommon(
     sortQuery(filterQuery(db.collectionGroup(table), filterArray), sortArray), //get the resulting filtered query results
     dataCallback,
-    errCallback
+    errCallback,
   );
 };
 
@@ -1105,7 +1094,7 @@ const ListenRecordsCommon = (reference, dataCallback, errCallback) => {
     },
     (err) => {
       errCallback(`${err} ${reference.path} setup:ListenRecordsCommon`);
-    }
+    },
   );
 };
 
@@ -1129,7 +1118,7 @@ export const ListenRecord = (
   Id,
   refPath = null,
   dataCallback,
-  errCallback
+  errCallback,
 ) => {
   const db = dbReference(refPath);
 
@@ -1143,7 +1132,7 @@ export const ListenRecord = (
     },
     (err) => {
       errCallback(err + " No Document Exists to Listen");
-    }
+    },
   );
 };
 
@@ -1168,7 +1157,7 @@ export class PaginateFetch {
     filterArray = null,
     sortArray = null,
     refPath = null,
-    limit = PAGINATE_DEFAULT
+    limit = PAGINATE_DEFAULT,
   ) {
     const db = dbReference(refPath);
 
@@ -1184,7 +1173,7 @@ export class PaginateFetch {
      */
     this.Query = sortQuery(
       filterQuery(db.collection(table), filterArray),
-      sortArray
+      sortArray,
     );
     /**
      * current status of pagination
@@ -1262,7 +1251,7 @@ export class PaginateGroupFetch {
     group,
     filterArray = null,
     sortArray = null,
-    limit = PAGINATE_DEFAULT
+    limit = PAGINATE_DEFAULT,
   ) {
     const db = fdb;
 
@@ -1278,7 +1267,7 @@ export class PaginateGroupFetch {
      */
     this.Query = sortQuery(
       filterQuery(db.collectionGroup(group), filterArray),
-      sortArray
+      sortArray,
     );
     /**
      * current status of listener
@@ -1364,7 +1353,7 @@ export class PaginatedListener {
     errCallback,
     limit = PAGINATE_DEFAULT,
     filterArray = null,
-    sortArray = [{ fieldRef: "name", dirStr: "asc" }]
+    sortArray = [{ fieldRef: "name", dirStr: "asc" }],
   ) {
     /**
      * table path at base of listener query, relative to original refPath
@@ -1431,7 +1420,7 @@ export class PaginatedListener {
 
     this.Query = sortQuery(
       filterQuery(db.collection(this.tablePath), this.filterArray),
-      this.sortArray
+      this.sortArray,
     );
     /**
      * last QuerySnapshot returned for listener query
@@ -1472,7 +1461,7 @@ export class PaginatedListener {
       },
       (err) => {
         this.errCallback(err);
-      }
+      },
     );
     return this.unsubscriber;
   }
@@ -1511,7 +1500,7 @@ export class PaginatedListener {
       },
       (err) => {
         this.errCallback(err);
-      }
+      },
     );
     return this.unsubscriber;
   }
@@ -1544,7 +1533,7 @@ export class PaginatedListener {
       },
       (err) => {
         this.errCallback(err);
-      }
+      },
     );
     return this.unsubscriber;
   }
@@ -1575,7 +1564,7 @@ export class PaginatedListener {
       },
       (err) => {
         this.errCallback(err);
-      }
+      },
     );
     return this.unsubscriber;
   }
@@ -1669,7 +1658,7 @@ export const listenSlice = (
   owner,
   collectionName,
   dataCallBack,
-  errCallBack
+  errCallBack,
 ) => {
   try {
     return ListenCollectionGroupQuery(
@@ -1677,7 +1666,7 @@ export const listenSlice = (
       ownerFilter(owner),
       null, //no sort query conditions
       dataCallBack,
-      errCallBack
+      errCallBack,
     );
   } catch (err) {
     console.log(`failed:listenSlice setup ${collectionName} err: ${err}`);
@@ -1725,7 +1714,7 @@ export const querySlice = (owner, collectionName, filterArray) => {
   try {
     return collectRecordsInGroupByFilter(
       collectionName,
-      ownerFilter(owner, filterArray)
+      ownerFilter(owner, filterArray),
     );
   } catch (err) {
     console.log(`failed:querySlice ${collectionName} err: ${err}`);
@@ -1757,7 +1746,7 @@ export const listenQuerySlice = (
   collectionName,
   filterArray,
   dataCallBack,
-  errCallBack
+  errCallBack,
 ) => {
   try {
     return ListenCollectionGroupQuery(
@@ -1765,7 +1754,7 @@ export const listenQuerySlice = (
       ownerFilter(owner, filterArray),
       null,
       dataCallBack,
-      errCallBack
+      errCallBack,
     );
   } catch (err) {
     console.log(`failed:listenQuerySlice setup ${collectionName} err: ${err}`);
@@ -1861,7 +1850,7 @@ export const fetchOwner = (record) => {
     ownerType(record), //type/collection
     ownerId(record), //Id of record desired
     null, //no refPath (top-level)
-    null //no batch
+    null, //no batch
   );
 };
 
@@ -1907,7 +1896,7 @@ export const typedWrite = async (data, parent, type, batch = null) => {
     type, //type of sub-collection...
     data,
     parent?.refPath, //... under parent path reference
-    batch
+    batch,
   );
 };
 
@@ -1928,7 +1917,7 @@ export const typedWriteByTree = async (data, tree, type, batch = null) => {
     typedTablePathFromTree(tree, type), //type of sub-collection...
     data,
     /*no parent */ null,
-    batch
+    batch,
   );
 };
 
@@ -1949,7 +1938,7 @@ export const typedWriteByChild = (
   child,
   type,
   batch = null,
-  mergeOption = null
+  mergeOption = null,
 ) => {
   //existing perks will be over-written, new ones created
   return writeBack(
@@ -1959,7 +1948,7 @@ export const typedWriteByChild = (
       refPath: typedRefPathFromChild(child, type), //refPath from child Path
     },
     batch,
-    mergeOption
+    mergeOption,
   );
 };
 
@@ -2148,13 +2137,13 @@ export const typedFetchFromChild = async (
   child,
   type,
   branchType = null,
-  batch = null
+  batch = null,
 ) => {
   return fetchRecord(
     typedTablePathFromChild(child, type, branchType), //Full Path to collection
     typedIdFromChild(child, type), //Id
     null, //No parent needed
-    batch //optional Batch object
+    batch, //optional Batch object
   );
 };
 
@@ -2175,7 +2164,7 @@ export const typedFetchFromTree = async (tree, type, batch = null) => {
     typedTablePathFromTree(tree, type), //Full Path to collection
     tree.get(type), //Id of specific document
     null, //No parent needed
-    batch //optional Batch object
+    batch, //optional Batch object
   );
 };
 
@@ -2194,7 +2183,7 @@ export const typedCollectFromTree = async (
   tree,
   type,
   branchType = null,
-  batch = null
+  batch = null,
 ) => {
   return collectRecords(typedTablePathFromTree(tree, type, branchType));
 };
