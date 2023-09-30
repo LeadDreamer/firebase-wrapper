@@ -261,10 +261,10 @@ export async function runTransaction(updateFunction) {
 /**
  * Creates a WriteBatch object to collect actions for Batch writing to backend
  * @category Batch
- * @returns {Promise.WriteBatch} object that operations are added to for a bulk
+ * @returns {WriteBatch} object that operations are added to for a bulk
  * operation
  */
-export async function openWriteBatch() {
+export function openWriteBatch() {
   return fdb.batch();
 }
 
@@ -279,9 +279,7 @@ export async function closeWriteBatch(
    */
   batch = null
 ) {
-  return (async (innerBatch) => {
-    return innerBatch.commit();
-  })(batch);
+  return batch.commit();
 }
 
 /**
