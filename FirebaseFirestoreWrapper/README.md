@@ -38,7 +38,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.localBatchReturn(incomingBatch, internalBatch)](#module_FirebaseFirestoreWrapper--module.exports.localBatchReturn) ⇒ <code>WriteBatch</code> \| <code>Transaction</code>
             * _Batch_
                 * [.runTransaction(updateFunction)](#module_FirebaseFirestoreWrapper--module.exports.runTransaction) ⇒ <code>Promise.object</code>
-                * [.openWriteBatch()](#module_FirebaseFirestoreWrapper--module.exports.openWriteBatch) ⇒ <code>Promise.WriteBatch</code>
+                * [.openWriteBatch()](#module_FirebaseFirestoreWrapper--module.exports.openWriteBatch) ⇒ <code>WriteBatch</code>
                 * [.closeWriteBatch(batch)](#module_FirebaseFirestoreWrapper--module.exports.closeWriteBatch) ⇒ <code>Promise.&lt;void&gt;</code>
                 * [.openBulkWriter()](#module_FirebaseFirestoreWrapper--module.exports.openBulkWriter) ⇒ <code>BulkWriter</code>
                 * [.closeBulkWriter(bulkWriter)](#module_FirebaseFirestoreWrapper--module.exports.closeBulkWriter) ⇒ <code>Promise.&lt;void&gt;</code>
@@ -437,11 +437,11 @@ creates and runs a series of record operations(executed in the param function) 
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.openWriteBatch"></a>
 
-#### module.exports.openWriteBatch() ⇒ <code>Promise.WriteBatch</code>
+#### module.exports.openWriteBatch() ⇒ <code>WriteBatch</code>
 Creates a WriteBatch object to collect actions for Batch writing to backend
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>Promise.WriteBatch</code> - object that operations are added to for a bulkoperation  
+**Returns**: <code>WriteBatch</code> - object that operations are added to for a bulkoperation  
 **Category**: Batch  
 <a name="module_FirebaseFirestoreWrapper--module.exports.closeWriteBatch"></a>
 
