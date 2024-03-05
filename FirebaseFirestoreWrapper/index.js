@@ -2019,7 +2019,6 @@ export async function typedCollectFromChild(child, type, branchType = null) {
  * @param {!string} type - name of type of object - i.e. the sub-collection name
  * @param {?Record} parent - parent object (if any) this belongs to
  * @param {!string} parent.refPath - full path to parent document
- * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
  * @param {!string} type name of the desired collectionGroup
  * @param {CollectionListener} dataCallback function to be called with changes to record
  * @param {callback} errCallback function to be called when an error
