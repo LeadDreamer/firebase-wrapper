@@ -228,8 +228,8 @@ export function RecordsFromSnapshot(querySnapshot) {
   return querySnapshot.empty
     ? []
     : querySnapshot.docs.map((docSnap) => {
-        return RecordFromSnapshot(docSnap);
-      });
+      return RecordFromSnapshot(docSnap);
+    });
 }
 
 /**
@@ -350,7 +350,7 @@ function dbReference(refPath) {
  * create or update the document in, relative to a document reference
  * passed in
  * @param {!Record} data - Data/Record object to write to database
- * @param {?string} refPath - an optional valid document reference to start the table path
+ * @param {?string} parentRefPath - an optional valid document reference to start the table path
  * @param {?WriteBatch|Transaction} batch - optional chain token to include this
  * operation as part of an Atomic Transaction
  * @param {?boolean} mergeOption - whether to merge into existing data; default TRUE
@@ -361,19 +361,17 @@ function dbReference(refPath) {
 export async function writeRecord(
   tablePath,
   data,
-  refPath = null,
+  parentRefPath = null,
   batch = null,
   mergeOption = true
 ) {
-  const db = dbReference(refPath);
+  const db = dbReference(parentRefPath);
   const cleanData = DocumentFromRecord(data);
 
   try {
-    let docRef = data.Id
-      ? // if existing document, re-create reference
-        db.collection(tablePath).doc(data.Id)
-      : // if new, create a new reference
-        db.collection(tablePath).doc();
+    let docRef = db.collection(tablePath).doc(data?.Id); //missing Id will default to null
+    // if existing document, re-create reference
+    // if new, create a new reference
     //all a transaction/WriteBatch can return is a chained transaction/WriteBatch
     cleanData.Id = docRef.id; //copy the newly generated ID into the record/document
     if (batch) {
@@ -436,6 +434,33 @@ export async function writeBack(data, batch = null, mergeOption = true) {
   }
 }
 
+/**
+ * 
+ * @param {!Record} record - Data/Record object to write to database
+ * @param {Record|null} parent - an optional valid parent document with  reference to start the table path
+ * @param {string|null} parent.refPath
+ * @param {string |null} tablePath - string representing a valid path to a collection to
+ * create or update the document in, relative to a document reference - can only
+ * be null if data is from database.
+ * @param {?WriteBatch|Transaction|null} batch - optional chain token to include this
+ * operation as part of an Atomic Transaction
+ * @param {?boolean|null} mergeOption - whether to merge into existing data; default TRUE
+ * @returns {Promise.Record}
+ * @fulfil document record
+ * @reject error message
+ */
+export async function updateRecord(record, parent = null, tablePath = null, batch = null, mergeOption = true) {
+  if (!record?.Id && !tablePath) return null;
+  return record?.Id
+    ? writeBack(record, batch, mergeOption)
+    : writeRecord(
+      tablePath,
+      record,
+      parent?.refPath,
+      batch,
+      mergeOption
+    );
+}
 /**
  * query for a SET of records
  * @param {!string} tablePath string representing path ro requested
@@ -557,8 +582,8 @@ export async function collectRecordsInGroupByFilter(
       return !querySnapshot.empty
         ? RecordsFromSnapshot(querySnapshot)
         : Promise.reject(
-            "noDocuments:collectRecordsInGroupByFilter:" + tableName
-          );
+          "noDocuments:collectRecordsInGroupByFilter:" + tableName
+        );
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsInGroupByFilter");
@@ -733,13 +758,13 @@ export async function updateRecordByRefPath(docRefPath, data, batch = null) {
 
   return batch
     ? batch.set(thisRef, cleanData, {
-        merge: true,
-      })
+      merge: true,
+    })
     : thisRef
-        .set(cleanData, { merge: true }) //update merges record
-        .then(() => {
-          return data;
-        });
+      .set(cleanData, { merge: true }) //update merges record
+      .then(() => {
+        return data;
+      });
 }
 
 /**
@@ -805,8 +830,8 @@ function createRefFromPath(docPath, refPath = null) {
 function filterQuery(query, filterArray = null) {
   return filterArray
     ? filterArray.reduce((accQuery, filter) => {
-        return accQuery.where(filter.fieldRef, filter.opStr, filter.value);
-      }, query)
+      return accQuery.where(filter.fieldRef, filter.opStr, filter.value);
+    }, query)
     : query;
 }
 
@@ -827,9 +852,9 @@ function filterQuery(query, filterArray = null) {
 function sortQuery(query, sortArray = null) {
   return sortArray
     ? sortArray.reduce((accQuery, sortEntry) => {
-        return accQuery.orderBy(sortEntry.fieldRef, sortEntry.dirStr || "asc");
-        //note "||" - if dirStr is not present(i.e. falsy) default to "asc"
-      }, query)
+      return accQuery.orderBy(sortEntry.fieldRef, sortEntry.dirStr || "asc");
+      //note "||" - if dirStr is not present(i.e. falsy) default to "asc"
+    }, query)
     : query;
 }
 
@@ -1665,9 +1690,9 @@ export const ownerRefPath = (record) => {
 export function ownerByChild(record) {
   return record?.refPath
     ? {
-        Id: `${ownerId(record)}`,
-        refPath: `${ownerType(record)}/${ownerId(record)}`,
-      }
+      Id: `${ownerId(record)}`,
+      refPath: `${ownerType(record)}/${ownerId(record)}`,
+    }
     : undefined;
 }
 
