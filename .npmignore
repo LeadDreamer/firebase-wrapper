@@ -1,3 +1,5 @@
 node_modules
+./node_modules
+./**/node_modules
 .codesandbox
-./*/node_modules
+.devcontainer
