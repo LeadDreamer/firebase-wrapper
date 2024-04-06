@@ -19,9 +19,10 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.RecordFromSnapshot(documentSnapshot)](#module_FirebaseFirestoreWrapper--module.exports.RecordFromSnapshot) ⇒ <code>Record</code>
             * [.RecordsFromSnapshot(querySnapshot)](#module_FirebaseFirestoreWrapper--module.exports.RecordsFromSnapshot) ⇒ <code>Array.Record</code>
             * [.createUniqueReference(tablePath, refPath)](#module_FirebaseFirestoreWrapper--module.exports.createUniqueReference) ⇒ <code>DocumentReference</code>
-            * [.writeRecord(tablePath, data, refPath, batch, mergeOption)](#module_FirebaseFirestoreWrapper--module.exports.writeRecord) ⇒ <code>Promise.Record</code>
+            * [.writeRecord(tablePath, data, parentRefPath, batch, mergeOption)](#module_FirebaseFirestoreWrapper--module.exports.writeRecord) ⇒ <code>Promise.Record</code>
             * [.writeRecordByRefPath(data, refPath, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper--module.exports.writeRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
             * [.writeBack(data, Transaction, mergeOption)](#module_FirebaseFirestoreWrapper--module.exports.writeBack) ⇒ <code>Promise.Record</code>
+            * [.updateRecord(record, parent, tablePath, batch, mergeOption)](#module_FirebaseFirestoreWrapper--module.exports.updateRecord) ⇒ <code>Promise.Record</code>
             * [.collectRecords(tablePath, refPath)](#module_FirebaseFirestoreWrapper--module.exports.collectRecords) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
             * [.collectRecordsByFilter(tablePath, refPath, filterArray, sortArray, limit)](#module_FirebaseFirestoreWrapper--module.exports.collectRecordsByFilter) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
             * [.collectRecordsInGroup(tableName)](#module_FirebaseFirestoreWrapper--module.exports.collectRecordsInGroup) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
@@ -118,7 +119,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
                 * [.typedFetchFromTree(tree, refPath, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedFetchFromTree) ⇒ <code>Promise.&lt;RecordObject&gt;</code>
                 * [.typedCollectFromTree(tree, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedCollectFromTree) ⇒ <code>Promise.&lt;Array.Record&gt;</code>
                 * [.typedCollectFromChild(child, type, batch)](#module_FirebaseFirestoreWrapper--module.exports.typedCollectFromChild)
-                * [.typedListener(type, parent, batch, type, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.typedListener) ⇒ <code>callback</code>
+                * [.typedListener(type, parent, type, dataCallback, errCallback)](#module_FirebaseFirestoreWrapper--module.exports.typedListener) ⇒ <code>callback</code>
         * _inner_
             * [~dbReference(refPath)](#module_FirebaseFirestoreWrapper--module.exports..dbReference) ⇒ <code>DocumentReference</code>
             * [~createRefFromPath(docPath, refPath)](#module_FirebaseFirestoreWrapper--module.exports..createRefFromPath) ⇒ <code>DocumentReference</code>
@@ -197,7 +198,7 @@ Creates a DocumentReference document to the collectionreferenced in parameter t
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.writeRecord"></a>
 
-#### module.exports.writeRecord(tablePath, data, refPath, batch, mergeOption) ⇒ <code>Promise.Record</code>
+#### module.exports.writeRecord(tablePath, data, parentRefPath, batch, mergeOption) ⇒ <code>Promise.Record</code>
 Writes a Firestore record to collection indicated by tablePathrelative to option DocumentReference refPath
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
@@ -208,7 +209,7 @@ Writes a Firestore record to collection indicated by tablePathrelative to optio
 | --- | --- | --- |
 | tablePath | <code>string</code> | string representing a valid path to a collection to create or update the document in, relative to a document reference passed in |
 | data | <code>Record</code> | Data/Record object to write to database |
-| refPath | <code>string</code> | an optional valid document reference to start the table path |
+| parentRefPath | <code>string</code> | an optional valid document reference to start the table path |
 | batch | <code>WriteBatch</code> \| <code>Transaction</code> | optional chain token to include this operation as part of an Atomic Transaction |
 | mergeOption | <code>boolean</code> | whether to merge into existing data; default TRUE |
 
@@ -241,6 +242,22 @@ Writes a local-schema document back to the Firestore.  Assumeobject/map came fr
 | data.refPath | <code>string</code> | required to be present |
 | Transaction | <code>WriteBatch</code> \| <code>Transaction</code> | Optional Transaction to enclose this action in |
 | mergeOption | <code>boolean</code> | whether to merge into existin data; default TRUE |
+
+<a name="module_FirebaseFirestoreWrapper--module.exports.updateRecord"></a>
+
+#### module.exports.updateRecord(record, parent, tablePath, batch, mergeOption) ⇒ <code>Promise.Record</code>
+**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+**Fulfil**: document record  
+**Reject**: error message  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| record | <code>Record</code> | Data/Record object to write to database |
+| parent | <code>Record</code> \| <code>null</code> | an optional valid parent document with  reference to start the table path |
+| parent.refPath | <code>string</code> \| <code>null</code> |  |
+| tablePath | <code>string</code> \| <code>null</code> | string representing a valid path to a collection to create or update the document in, relative to a document reference - can only be null if data is from database. |
+| batch | <code>WriteBatch</code> \| <code>Transaction</code> \| <code>null</code> | optional chain token to include this operation as part of an Atomic Transaction |
+| mergeOption | <code>boolean</code> \| <code>null</code> | whether to merge into existing data; default TRUE |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.collectRecords"></a>
 
@@ -1097,7 +1114,6 @@ optionally batched record update - abstracts batch process from specific types
 | Param | Type | Description |
 | --- | --- | --- |
 | data | <code>Record</code> | the data object/record to update.  This will create a new one if it doesn't exist |
-| data.refPath | <code>string</code> | only part used |
 | parent | <code>Record</code> | parent object (if any) this belongs to |
 | parent.refPath | <code>string</code> | full path to parent document |
 | type | <code>string</code> | name of type of object - i.e. the sub-collection name |
@@ -1298,7 +1314,7 @@ function to collect documents from "up" the collection/document tree of a child 
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedListener"></a>
 
-#### module.exports.typedListener(type, parent, batch, type, dataCallback, errCallback) ⇒ <code>callback</code>
+#### module.exports.typedListener(type, parent, type, dataCallback, errCallback) ⇒ <code>callback</code>
 Uses the ownerFilter (above) to establish a listener to "just" theparts of a collectionGroup that are descendants of the passed "owner"record.
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
@@ -1310,7 +1326,6 @@ Uses the ownerFilter (above) to establish a listener to "just" theparts of a co
 | type | <code>string</code> | name of type of object - i.e. the sub-collection name |
 | parent | <code>Record</code> | parent object (if any) this belongs to |
 | parent.refPath | <code>string</code> | full path to parent document |
-| batch | <code>WriteBatch</code> \| <code>Transaction</code> | batching object.  Transaction will be added to the batch |
 | type | <code>string</code> | name of the desired collectionGroup |
 | dataCallback | <code>CollectionListener</code> | function to be called with changes to record |
 | errCallback | <code>callback</code> | function to be called when an error occurs in listener |
