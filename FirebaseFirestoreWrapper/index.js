@@ -694,22 +694,38 @@ export async function fetchRecordInGroupByFilter(
     }
   );
 }
+/**
+ * deletes a record from the database. Checkis if record is FROM the data (has refPath)
+ * or if if only Id (so supporting parts are needed)
+ * @param {Record} record 
+ * @param {Record|null} table 
+ * @param {string|null} parentRefPath  - optional document reference to base tablePath from
+ * @param {WriteBatch|Transaction|null} batch 
+ * @returns {void}
+ */
+export async function deleteRecord(record, table=null, parentRefPath=null, batch=null) {
+  if (record?.refPath) {
+    return createRefFromPath(record.refPath).delete();
+  } else if (parentRefPath) {
+    return deleteRecordInParts(table, record, parentRefPath, batch);
+  } else return null;
+}
 
 /**
  * deletes a single record from the database
  * @param {!string} table string naming the parent collection of the document
  * @param {Record} record
- * @param {?string} refPath - optional document reference to base tablePath from
+ * @param {?string} parentRefPath - optional document reference to base tablePath from
  * @param {?WriteBatch|Transaction} batch - optional batch reference
  * @returns {Promise<Record|WriteBatch|Transaction>}
  */
-export async function deleteRecord(
+export async function deleteRecordInParts(
   table,
   record,
-  refPath = null,
+  parentRefPath = null,
   batch = null
 ) {
-  const db = dbReference(refPath);
+  const db = dbReference(parentRefPath);
   const docRef = db.collection(table).doc(record.Id);
   //Dangerously assumes collection exists
 
