@@ -369,7 +369,9 @@ export async function writeRecord(
   const cleanData = DocumentFromRecord(data);
 
   try {
-    let docRef = db.collection(tablePath).doc(data?.Id); //missing Id will default to null
+    let docRef = data?.Id
+    ? db.collection(tablePath).doc(data.Id)
+    : db.collection(tablePath).doc(); //
     // if existing document, re-create reference
     // if new, create a new reference
     //all a transaction/WriteBatch can return is a chained transaction/WriteBatch
