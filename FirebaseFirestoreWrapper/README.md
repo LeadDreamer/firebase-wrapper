@@ -31,7 +31,8 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.fetchRecordByRefPath(docRefPath, batch)](#module_FirebaseFirestoreWrapper--module.exports.fetchRecordByRefPath) ⇒ <code>Promise.&lt;Record&gt;</code>
             * [.fetchRecordByFilter(table, [filterArray], refPath, batch)](#module_FirebaseFirestoreWrapper--module.exports.fetchRecordByFilter) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
             * [.fetchRecordInGroupByFilter(table, [filterArray], batch)](#module_FirebaseFirestoreWrapper--module.exports.fetchRecordInGroupByFilter) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-            * [.deleteRecord(table, record, refPath, batch)](#module_FirebaseFirestoreWrapper--module.exports.deleteRecord) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
+            * [.deleteRecord(record, table, parentRefPath, batch)](#module_FirebaseFirestoreWrapper--module.exports.deleteRecord) ⇒ <code>void</code>
+            * [.deleteRecordInParts(table, record, parentRefPath, batch)](#module_FirebaseFirestoreWrapper--module.exports.deleteRecordInParts) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
             * [.deleteRecordByRefPath(docRefPath, batch)](#module_FirebaseFirestoreWrapper--module.exports.deleteRecordByRefPath) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
             * [.updateRecordFields(recordUpdate)](#module_FirebaseFirestoreWrapper--module.exports.updateRecordFields) ⇒ <code>Promise.&lt;Record&gt;</code>
             * [.updateRecordByRefPath(docRefPath, data, batch)](#module_FirebaseFirestoreWrapper--module.exports.updateRecordByRefPath) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
@@ -364,7 +365,21 @@ fetches a SINGLE record from the database, using just afilter to identify the d
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.deleteRecord"></a>
 
-#### module.exports.deleteRecord(table, record, refPath, batch) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
+#### module.exports.deleteRecord(record, table, parentRefPath, batch) ⇒ <code>void</code>
+deletes a record from the database. Checkis if record is FROM the data (has refPath)or if if only Id (so supporting parts are needed)
+
+**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| record | <code>Record</code> |  |
+| table | <code>Record</code> \| <code>null</code> |  |
+| parentRefPath | <code>string</code> \| <code>null</code> | optional document reference to base tablePath from |
+| batch | <code>WriteBatch</code> \| <code>Transaction</code> \| <code>null</code> |  |
+
+<a name="module_FirebaseFirestoreWrapper--module.exports.deleteRecordInParts"></a>
+
+#### module.exports.deleteRecordInParts(table, record, parentRefPath, batch) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
 deletes a single record from the database
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
@@ -373,7 +388,7 @@ deletes a single record from the database
 | --- | --- | --- |
 | table | <code>string</code> | string naming the parent collection of the document |
 | record | <code>Record</code> |  |
-| refPath | <code>string</code> | optional document reference to base tablePath from |
+| parentRefPath | <code>string</code> | optional document reference to base tablePath from |
 | batch | <code>WriteBatch</code> \| <code>Transaction</code> | optional batch reference |
 
 <a name="module_FirebaseFirestoreWrapper--module.exports.deleteRecordByRefPath"></a>
