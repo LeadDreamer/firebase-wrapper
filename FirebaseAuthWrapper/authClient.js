@@ -276,7 +276,7 @@ export async function createAnonymousUser() {
  * @return {function} unsubscribe function
  *
  */
-export async function attachAuthUserListener(next) {
+export function attachAuthUserListener(next) {
   return FirebaseAuth.onIdTokenChanged(next);
 }
 
