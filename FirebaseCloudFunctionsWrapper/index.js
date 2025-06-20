@@ -1,5 +1,3 @@
-import "firebase/functions";
-
 /**
  * @module FirebaseCloudFunctionsWrapper
  * @description A set of helper-wrapper functions around firebase firestore, storage
@@ -17,10 +15,34 @@ let functions;
 // Cloud Functions
 
 /**
- * Initializes the FirebaseCLoud function support
- * @static
- * @function FirebaseCloudFunctions
+ * Initializes the FirebaseCloud function support
  * @param {firebase} firebase
+ * @example
+ * ```
+ * import * as firebase from "firebase/app";
+ * import "firebase/functions";
+ * import FirebaseFunctions from "@leaddreamer/firebase-wrapper/FirebaseCloudFunctionsWrapper";
+ * import {config} from "whereever-you-put-it";
+ *
+ * ((myconfig) {
+ * try {
+ *   firebase.app();
+ * } catch (err) {
+ *   firebase.initializeApp(myconfig);
+ * }
+ * FirebaseFunctions(firebase);
+ * })(config)
+ * ```
+ */
+/**
+ * Initializes the Auth service of the provided
+ * firebase app.  Also instantiates various constants and
+ * helper functions
+ * @param {firebase} firebase provided firebase app (allows use between client & server)
+ * @param {object} config - configuration object to detect client/server use
+ * @param {?string} config.appId - missing parameter indicates server
+ * @param {callback} thisLogger - passed logging function  (allows use between client & server)
+ * @returns {Promise<object|void>}
  * @example
  * ```
  * import * as firebase from "firebase/app";
@@ -44,19 +66,16 @@ export default async function FirebaseCloudFunctions(
   thisLogger
 ) {
   if (config?.appId) {
-    thisLogger("Cloud CLient");
+    thisLogger("Cloud Client");
     functions = await firebase.functions();
     return functions;
   }
 }
 
 /**
- * @async
- * @function CloudFunctions
- * @static
- * Calls the cloud function named in the passed argument, and
- * asynchronously returns the result
- * @returns {external:promise}
+ * Creates the FUNCTION refered to by the passed name.  Said function can
+ * *then* be called for the desired results. SYNCHRONOUS
+ * @returns {Promise}
  * @fulfil result as returns from call
  * @reject err as returned from call
  * @example
@@ -64,18 +83,15 @@ export default async function FirebaseCloudFunctions(
  * result = await CloudFunctions("MyGloriousFunction")(argumentToFunction);
  * ```
  */
-export async function CloudFunctions(name) {
+export function CloudFunctions(name) {
   return functions && functions.httpsCallable(name);
 }
 
 /**
- * @sync
- * @function treeFromParams
- * @static
  * Cloud Function specific - processes a Params list from
  * a firestore function to create a reference/Id "tree"
  * @param {object} Params
- * @returns {RecordTree}
+ * @returns {Map}
  */
 export function treeFromParams(Params) {
   let tree = new Map();

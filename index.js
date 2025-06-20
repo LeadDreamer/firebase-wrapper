@@ -39,14 +39,14 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper/index.js";
  */
 
 /**
- * @function FirebaseWrapper
- * @static
  * all-in-one wrapper for a solid subset of CLIENT-SIDE Firebase
  * functions, with a consistent interface.  There is a parallel set for
  * ADMIN-SIDE functions as well.
  * Call/initialize with Firebase Configuration settings in an object as
  * described below
+ * @param {Firebase} firebase Local (client or server) version of firebase app
  * @param {FirebaseConfigObject} config Firebase Admin object
+ * @param {callback} thislogger Local (client or server) version of a (console) logger
  * @return none
  * @example
  * ```

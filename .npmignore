@@ -1,7 +1,6 @@
 node_modules
-./node_modules
-./*/node_modules
-babel.config.json
-jsdoc.conf.json
-.codesandbox/*
-.npmrc
+/node_modules
+/**/node_modules
+*/node_modules
+.codesandbox
+.devcontainer

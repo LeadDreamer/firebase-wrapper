@@ -3,60 +3,50 @@
   "setupTasks": [
     {
       "name": "Install Dependencies",
-      "command": "yarn install"
+      "command": "npm install"
     }
   ],
 
   // These tasks can be run from CodeSandbox. Running one will open a log in the app.
   "tasks": {
-    "transpile": {
-      "name": "transpile",
-      "command": "yarn transpile",
-      "runAtStart": false
-    },
     "build": {
       "name": "build",
-      "command": "yarn build",
+      "command": "npm run build",
       "runAtStart": true
     },
     "rebuild": {
       "name": "rebuild",
-      "command": "yarn rebuild",
+      "command": "npm run rebuild",
       "runAtStart": false
     },
     "rebuild_release": {
       "name": "rebuild_release",
-      "command": "yarn rebuild_release",
-      "runAtStart": false
-    },
-    "prepublishOnly": {
-      "name": "prepublishOnly",
-      "command": "yarn prepublishOnly",
+      "command": "npm run rebuild_release",
       "runAtStart": false
     },
     "make_docs": {
       "name": "make_docs",
-      "command": "yarn make_docs",
+      "command": "npm run make_docs",
       "runAtStart": false
     },
     "docs": {
       "name": "docs",
-      "command": "yarn docs",
+      "command": "npm run docs",
       "runAtStart": false
     },
     "publish_beta": {
       "name": "publish_beta",
-      "command": "yarn publish_beta",
+      "command": "npm run publish_beta",
       "runAtStart": false
     },
     "publish_package": {
       "name": "publish_package",
-      "command": "yarn publish_package",
+      "command": "npm run publish_package",
       "runAtStart": false
     },
     "publish_dry": {
       "name": "publish_dry",
-      "command": "yarn publish_dry",
+      "command": "npm run publish_dry",
       "runAtStart": false
     }
   }

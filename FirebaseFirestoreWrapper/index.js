@@ -1,5 +1,5 @@
-import "firebase/firestore";
 import {
+  PAGINATE_CHOICES,
   PAGINATE_DEFAULT,
   PAGINATE_INIT,
   PAGINATE_PENDING,
@@ -17,12 +17,10 @@ import {
 // utilities
 /**
  * @private
- * @function last
- * @param {object} [array]
+ * @param {Array.object}
  * @returns {object}
  * @description last entry in the array
  */
-
 function last(array) {
   let length = array == null ? 0 : array.length;
   return length ? array[length - 1] : undefined;
@@ -30,12 +28,10 @@ function last(array) {
 
 /**
  * @private
- * @function penultimate
- * @param {object} [array]
+ * @param {Array.object}
  * @returns {object}
  * @description second-to-last entry in the array
  */
-
 function penultimate(array) {
   let length = array == null ? 0 : array.length;
   return length ? array[length - 1 - 1] : undefined;
@@ -45,9 +41,11 @@ function penultimate(array) {
  * Initializes the Firestore service of the provided
  * firebase app.  Also instantiates various constants and
  * helper functions
- * @static
- * @function FirebaseFirestore
- * @param {firebase} firebase
+ * @param {firebase} firebase provided firebase app (allows use between client & server)
+ * @param {object} config - configuration object to detect client/server use
+ * @param {?string} config.appId - missing parameter indicates server
+ * @param {callback} thisLogger - passed logging function  (allows use between client & server)
+ * @returns {Promise<object|void>}
  * @example
  * ```
  * import * as firebase from "firebase/app";
@@ -66,15 +64,16 @@ function penultimate(array) {
  * ```
  */
 export default async function FirebaseFirestore(firebase, config, thisLogger) {
-  thisLogger("Starting FirebaseFirestore");
+  thisLogger(`Starting FirebaseFirestore (${config})`, config);
   fdb = firebase.firestore();
   thisLogger("fdb? ", !!fdb);
   fdb.settings({ ignoreUndefinedProperties: true, merge: true });
   //doesnt run firestore persistence in Admin/Node environment
-  thisLogger("fdb settings");
+  thisLogger(`fdb settings`);
   config = config.projectId ? config : JSON.parse(config);
-  if (!config?.appId) {
-    await firebase.firestore().enablePersistence({ synchorizeTabs: true });
+  thisLogger(`fdb settings`, config);
+  if (config?.appId) {
+    //await fdb.enablePersistence({ synchorizeTabs: true });
   }
   thisLogger("persistence");
   aFieldValue = firebase.firestore.FieldValue;
@@ -92,11 +91,10 @@ let fdb, aFieldValue, aFieldPath;
 
 /**
  * class for a Firestore timestamp processor
- * @class
  */
-let timestamp;
+export let timestamp;
 
-export { timestamp };
+//export { timestamp };
 
 /**
  * a fieldPath value to represent the document Id - WARNING
@@ -104,50 +102,42 @@ export { timestamp };
  * to the document
  * @constant
  * @type {Object}
- * @static
  * @category FieldPath
  */
-let documentId;
-export { documentId };
+export let documentId;
+//export { documentId };
 
 /**
  * maximum concurrent writes
- * @constant {number} MAX_CONCURRENCY
- * @static
  */
-const MAX_CONCURRENCY = 5;
-export { MAX_CONCURRENCY };
+export const MAX_CONCURRENCY = 5;
+//export { MAX_CONCURRENCY };
 
 //convenient fieldValue constants
 /**
  * a sentinel value used to delete a field during an
  * update operation
  * @constant
- * @static
  * @type {Object}
  * @category FieldValue
  */
-let deleteFieldValue;
-export { deleteFieldValue };
+export let deleteFieldValue;
+//export { deleteFieldValue };
 
 /**
  * a sentinel value to set a field to a
  * server-generated timestamp during set(0 or update())
  * @constant
- * @static
  * @type {Object}
  * @category FieldValue
  */
-let serverTimestampFieldValue;
-export { serverTimestampFieldValue };
+export let serverTimestampFieldValue;
+//export { serverTimestampFieldValue };
 
 /**
- * ----------------------------------------------------------------------
  * return a sentinel to incrment/decrement a field
- * @function
- * @static
  * @category FieldValue
- * @param n If either the operand or the current field value uses
+ * @param {number} n If either the operand or the current field value uses
  *    floating point precision, all arithmetic follows IEEE 754
  *    semantics. If both values are integers, values outside of
  *    JavaScript's safe number range (Number.MIN_SAFE_INTEGER to
@@ -156,19 +146,17 @@ export { serverTimestampFieldValue };
  *    operations are capped between -2^63 and 2^63-1.
  *     If the current field value is not of type number, or if the field
  *     does not yet exist, the transformation sets the field to the given value.
- * @returns a sentinel value
- **********************************************************************/
-export const incrementFieldValue = (n) => {
+ * @returns {sentinelValue} a sentinel value
+ */
+export function incrementFieldValue(n) {
   return aFieldValue.increment(n);
-};
+}
 
 /**
  * ----------------------------------------------------------------------
  * return a sentinel to decrment/decrement a field
  * NOT REALLY A FIREBASE FUNCTION
  * Fire base has only increment; we implement this for legibility
- * @function
- * @static
  * @category FieldValue
  * @param n If either the operand or the current field value uses
  *    floating point precision, all arithmetic follows IEEE 754
@@ -181,40 +169,33 @@ export const incrementFieldValue = (n) => {
  *     does not yet exist, the transformation sets the field to the given value.
  * @returns a sentinel value
  **********************************************************************/
-export const decrementFieldValue = (n) => {
+export function decrementFieldValue(n) {
   return aFieldValue.increment(-n);
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * returns a sentinel to remove elements from array field
- * @function
- * @static
  * @category FieldValue
- * @param elements REST expanded list of elements to remove
+ * @param {any} arrayElements REST expanded list of elements to remove
  * @returns {sentinelValue} a sentinel value
- **********************************************************************/
-export const arrayRemoveFieldValue = (elements) => {
-  return aFieldValue.arrayRemove(...elements);
-};
+ */
+export function arrayRemoveFieldValue(arrayElements) {
+  return aFieldValue.arrayRemove(...arrayElements);
+}
 
 /**
- * ----------------------------------------------------------------------
  * return a sentinel to add/join elements to array field
- * @function arrayUnionFieldValue
- * @static
  * @category FieldValue
- * @param elements REST expanded list of elements to add
- * @returns a sentinel value
- **********************************************************************/
-export const arrayUnionFieldValue = (elements) => {
-  return aFieldValue.arrayUnion(...elements);
-};
+ * @param {any} arrayElements REST expanded list of elements to add
+ * @returns {sentinelValue} a sentinel value
+ */
+export function arrayUnionFieldValue(arrayElements) {
+  return aFieldValue.arrayUnion(...arrayElements);
+}
 
 /* Firebase APIs */
 
 /**
- * @private
  * @typedef {object} Record
  * common properties of our database records
  * @property {?string} Id - Id of the document as stored in Firestore May
@@ -224,133 +205,99 @@ export const arrayUnionFieldValue = (elements) => {
  */
 
 /**
- * @private
- * @typedef {Record} [RecordArray]
- * an array of database records
- */
-
-/**
- * ----------------------------------------------------------------------
  * returns an internal record structure from a firestore
  * Document snapshot
- * @private
- * @function
- * @static
- * @param {DocumentSnapshot} DocumentSnapshot
+ * @param {DocumentSnapshot} documentSnapshot
  * @returns {Record}
  */
-export const RecordFromSnapshot = (DocumentSnapshot) => {
+export function RecordFromSnapshot(documentSnapshot) {
   return {
-    ...DocumentSnapshot.data(),
-    Id: DocumentSnapshot.id,
-    refPath: DocumentSnapshot.ref.path,
+    ...documentSnapshot.data(),
+    Id: documentSnapshot.id,
+    refPath: documentSnapshot.ref.path,
   };
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * returns an array of internal record structures from a
  * firestore Query snapshot
- * @private
- * @function
- * @static
- * @param {QuerySnapshot} QuerySnapshot
- * @returns {RecordArray}
+ * @param {QuerySnapshot} querySnapshot
+ * @returns {Array.Record}
  */
-export const RecordsFromSnapshot = (QuerySnapshot) => {
-  return QuerySnapshot.empty
+export function RecordsFromSnapshot(querySnapshot) {
+  return querySnapshot.empty
     ? []
-    : QuerySnapshot.docs.map((docSnap) => {
-        return RecordFromSnapshot(docSnap);
-      });
-};
+    : querySnapshot.docs.map((docSnap) => {
+      return RecordFromSnapshot(docSnap);
+    });
+}
 
 /**
- * ----------------------------------------------------------------------
  * returns a Firestore document structure from an internal Record
  * @private
- * @function
- * @static
- * @param {object} Record - cleans up internal document representation
- * @returns {object}
+ * @param {Record} record - cleans up internal document representation
+ * @returns {Record}
  */
-const DocumentFromRecord = (Record) => {
-  const cleanData = { ...Record };
+function DocumentFromRecord(record) {
+  const cleanData = { ...record };
   delete cleanData.refPath; //we leave the redundant Id for query optimization
   return cleanData;
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * creates and runs a series of record operations
  * (executed in the param function) as an atomic operation.
  * A transation object is passed to the callback parameter
- * @async
- * @function
- * @static
  * @category Batch
  * @param {callback} updateFunction callback function that expects a Transaction
  * token as it's sole argument.  either all the included/chained
  * record operations will succeed, or none
- * @returns {Promise<object>} a promise with the result of updateFunction
+ * @returns {Promise.object} a promise with the result of updateFunction
  */
-export const runTransaction = (updateFunction) => {
+export async function runTransaction(updateFunction) {
   return fdb.runTransaction(updateFunction);
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * Creates a WriteBatch object tocollect actions for Batch writing to backend
- * @function
- * @static
+ * Creates a WriteBatch object to collect actions for Batch writing to backend
  * @category Batch
  * @returns {WriteBatch} object that operations are added to for a bulk
  * operation
  */
-export const openWriteBatch = () => {
+export function openWriteBatch() {
   return fdb.batch();
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * Dispatches an asynchronous Closure to submit Batch
- * @async
- * @function
- * @static
  * @category Batch
  * @param {WriteBatch} batch - WriteBatch to close
  * @returns {Promise<void>}
  */
-export const closeWriteBatch = (
+export async function closeWriteBatch(
   /**
    */
   batch = null
-) => {
-  return (async (innerBatch) => {
-    return innerBatch.commit();
-  })(batch);
-};
+) {
+  return batch.commit();
+}
 
 /**
- * ----------------------------------------------------------------------
  * Creates a bulkWriter object to collect actions for Bulk writing to backend
  * offers parallel operations, writes only, does NOT check for contentions,
  * admin/Node-side only.
- * @function
- * @static
  * @category Batch
  * @returns {BulkWriter} object that operations are added to for a bulk
  * operation
  */
-export const openBulkWriter = () => {
+export function openBulkWriter() {
   if (typeof fdb.bulkWriter !== "function") {
     return null;
   }
   return fdb.bulkWriter();
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * Dispatches an asynchronous Closure to complete BulkWriter
  * @async
  * @function
@@ -359,81 +306,74 @@ export const openBulkWriter = () => {
  * @param {BulkWriter} bulkWriter - bulkWriter to close
  * @returns {Promise<void>}
  */
-export const closeBulkWriter = async (
+export async function closeBulkWriter(
   /**
    */
   bulkWriter = null
-) => {
-  if (typeof fdb.bulkWriter !== "function" || !bulkWriter) return null;
+) {
+  if (!bulkWriter || typeof fdb.bulkWriter !== "function") return null;
 
   return bulkWriter.close();
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * Creates a DocumentReference document to the collection
  * referenced in parameter tablePath (relative to optional refPath).
  * This is can be useful for Transactions and Batches, which
  * can only get(), set() or update() existing documents. Tricksie!
- * @function
- * @static
  * @param {!string} tablePath string representing a valid path to a collection to
  * create the new document in, relative to a document reference
  * passed in
  * @param {?string} refPath an optional valid document reference to start the table path
  * @returns {DocumentReference} Firestore Document Reference
  */
-export const createUniqueReference = (tablePath, refPath = null) => {
+export function createUniqueReference(tablePath, refPath = null) {
   const db = dbReference(refPath);
   const docRef = db.collection(tablePath).doc(); // just
   return { Id: docRef.id, refPath: docRef.path };
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * generates a document reference from a path
  * if passed; else returns the db base reference
- * @private
- * @function
- * @static
  * @param {string} refPath Path to base actions from. May be null
+ * @returns {DocumentReference}
  */
-const dbReference = (refPath) => {
+function dbReference(refPath) {
   return refPath ? fdb.doc(refPath) : fdb;
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * Writes a Firestore record to collection indicated by tablePath
  * relative to option DocumentReference refPath
- * @async
- * @function
  * @param {!string} tablePath - string representing a valid path to a collection to
  * create or update the document in, relative to a document reference
  * passed in
  * @param {!Record} data - Data/Record object to write to database
- * @param {?string} refPath - an optional valid document reference to start the table path
+ * @param {?string} parentRefPath - an optional valid document reference to start the table path
  * @param {?WriteBatch|Transaction} batch - optional chain token to include this
  * operation as part of an Atomic Transaction
  * @param {?boolean} mergeOption - whether to merge into existing data; default TRUE
- * @returns {Promise<Record>} - a copy of the written record
+ * @returns {Promise.Record}
+ * @fulfil document record
+ * @reject error message
  */
-export const writeRecord = async (
+export async function writeRecord(
   tablePath,
   data,
-  refPath = null,
+  parentRefPath = null,
   batch = null,
   mergeOption = true
-) => {
-  const db = dbReference(refPath);
+) {
+  const db = dbReference(parentRefPath);
   const cleanData = DocumentFromRecord(data);
 
   try {
-    let docRef = data.Id
-      ? // if existing document, re-create reference
-        db.collection(tablePath).doc(data.Id)
-      : // if new, create a new reference
-        db.collection(tablePath).doc();
+    let docRef = data?.Id
+    ? db.collection(tablePath).doc(data.Id)
+    : db.collection(tablePath).doc(); //
+    // if existing document, re-create reference
+    // if new, create a new reference
     //all a transaction/WriteBatch can return is a chained transaction/WriteBatch
     cleanData.Id = docRef.id; //copy the newly generated ID into the record/document
     if (batch) {
@@ -443,52 +383,43 @@ export const writeRecord = async (
       //not a transaction
       await docRef.set(cleanData, { merge: mergeOption });
     }
-
-    return Promise.resolve({
+    return {
       ...data,
       Id: docRef.Id,
       refPath: data.refPath || docRef.path, //short circuit
-    });
+    };
   } catch (err) {
     return Promise.reject(err);
   }
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @description Writes given data object (or map) to the given documentReference
- * @async
- * @function
- * @static
+ * Writes given data object (or map) to the given documentReference
  * @param {!Record} data Object/Map to be written back to the Firestore
  * @param {!string} refPath DocumentReference to write document to
  * @param {?WriteBatch|Transaction} Transaction Optional Transaction to enclose this action in
  * @param {?boolean} mergeOption - whether to merge into existin data; default TRUE
  * @returns {Promise<Record>} data record as written
  */
-export const writeRecordByRefPath = (
+export async function writeRecordByRefPath(
   data,
   refPath,
   batch = null,
   mergeOption = true
-) => {
+) {
   return writeBack({ ...data, refPath: refPath }, batch, mergeOption);
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * Writes a local-schema document back to the Firestore.  Assume
  * object/map came from the firestore
- * @async
- * @function
- * @static
  * @param {!Record} data Object/Map to be written back to the Firestore
  * @param {!string} data.refPath required to be present
  * @param {?WriteBatch|Transaction} Transaction Optional Transaction to enclose this action in
  * @param {?boolean} mergeOption - whether to merge into existin data; default TRUE
- * @returns {Promise<Record>} record as written.
+ * @returns {Promise.Record} record as written.
  */
-export const writeBack = (data, batch = null, mergeOption = true) => {
+export async function writeBack(data, batch = null, mergeOption = true) {
   const cleanData = DocumentFromRecord(data);
 
   if (batch) {
@@ -503,21 +434,44 @@ export const writeBack = (data, batch = null, mergeOption = true) => {
         return Promise.resolve(data);
       });
   }
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function
- * @static
- * @description query for a SET of records
+ * 
+ * @param {!Record} record - Data/Record object to write to database
+ * @param {Record|null} parent - an optional valid parent document with  reference to start the table path
+ * @param {string|null} parent.refPath
+ * @param {string |null} tablePath - string representing a valid path to a collection to
+ * create or update the document in, relative to a document reference - can only
+ * be null if data is from database.
+ * @param {?WriteBatch|Transaction|null} batch - optional chain token to include this
+ * operation as part of an Atomic Transaction
+ * @param {?boolean|null} mergeOption - whether to merge into existing data; default TRUE
+ * @returns {Promise.Record}
+ * @fulfil document record
+ * @reject error message
+ */
+export async function updateRecord(record, parent = null, tablePath = null, batch = null, mergeOption = true) {
+  if (!record?.Id && !tablePath) return null;
+  return record?.Id
+    ? writeBack(record, batch, mergeOption)
+    : writeRecord(
+      tablePath,
+      record,
+      parent?.refPath,
+      batch,
+      mergeOption
+    );
+}
+/**
+ * query for a SET of records
  * @param {!string} tablePath string representing path ro requested
  * collection
  * @param {?string} refPath string representing a path to the relative PARENT
  * of the requested collection
  * @returns {Promise<Array<Record>>}
  */
-export const collectRecords = (tablePath, refPath = null) => {
+export async function collectRecords(tablePath, refPath = null) {
   const db = dbReference(refPath);
 
   return db
@@ -525,39 +479,37 @@ export const collectRecords = (tablePath, refPath = null) => {
     .get()
     .then((querySnapshot) => {
       // returns a promise
-      return RecordsFromSnapshot(querySnapshot);
+      return !querySnapshot.empty
+        ? RecordsFromSnapshot(querySnapshot)
+        : Promise.reject("noDocuments:collectRecords:" + tablePath);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecords:" + tablePath);
     });
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function collectRecordsByFilter
- * @static
- * @descriptions returns an array of documents from Firestore
+ * returns an array of documents from Firestore
  * @param {!string} tablePath a properly formatted string representing the requested collection
  * - always an ODD number of elements
  * @param {?string} refPath (optional) allows "table" parameter to reference a sub-collection
  * of an existing document reference (I use a LOT of structured collections)
- * @param {?filterObject} [filterArray] an array of filterObjects
+ * @param {?Array.filterObject} filterArray an array of filterObjects
  * The array is assumed to be sorted in the correct order -
  * i.e. filterArray[0] is added first; filterArray[length-1] last
  * returns data as an array of objects (not dissimilar to Redux State objects)
  * with both the documentID and documentReference added as fields.
- * @param {?sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
+ * @param {Arrayt.sortObject} sortArray a 2xn array of sort (i.e. "orderBy") conditions
  * @param {?number} limit limit result to this number (if at all)
  * @returns {Promise<Array<Record>>}
  */
-export const collectRecordsByFilter = (
+export async function collectRecordsByFilter(
   tablePath,
   refPath = null,
   filterArray = null,
   sortArray = null,
   limit = null
-) => {
+) {
   const db = dbReference(refPath);
 
   //assumes filterArray is in processing order
@@ -568,19 +520,17 @@ export const collectRecordsByFilter = (
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
       // returns a promise
-      return RecordsFromSnapshot(querySnapshot);
+      return !querySnapshot.empty
+        ? RecordsFromSnapshot(querySnapshot)
+        : Promise.reject("noDocuments:collectRecordsByFilter:" + tablePath);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsByFilter");
     });
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function collectRecordsInGroup
- * @static
- * @description query for a SET of records from a COLLECTIONGROUP - all
+ * query for a SET of records from a COLLECTIONGROUP - all
  * collections of a similar name, regardless of parents.  It is up to the
  * User to ensure these are at a similar level/structure - Firestore just
  * matches the name
@@ -588,7 +538,7 @@ export const collectRecordsByFilter = (
  * group desired
  * @returns {Promise<Array<Record>>}
  */
-export const collectRecordsInGroup = (tableName) => {
+export async function collectRecordsInGroup(tableName) {
   const db = fdb;
 
   return db
@@ -596,36 +546,29 @@ export const collectRecordsInGroup = (tableName) => {
     .get()
     .then((querySnapshot) => {
       // returns a promise
-      return RecordsFromSnapshot(querySnapshot);
+      if (!querySnapshot.empty) return RecordsFromSnapshot(querySnapshot);
+      else
+        return Promise.reject("noDocuments:collectRecordsInGroup:" + tableName);
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsInGroup:" + tableName);
     });
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function
- * @static
- * @description queries for Records from a CollectionGroup, filtered by
+ * queries for Records from a CollectionGroup, filtered by
  * the passed array of filterObjects
  * @param {!string} tableName string describing the Name of the collectiongroup
- * @param {?filterObject} [filterArray] an array of filterObjects
- * The array is assumed to be sorted in the correct order -
- * i.e. filterArray[0] is added first; filterArray[length-1] last
- * returns data as an array of objects (not dissimilar to Redux State objects)
- * with both the documentID and documentReference added as fields.
- * @param {?sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
- * @param {?number} limit limit result to this number (if at all)
+ * @param {Array.filterObject} filterArray array of objects describing filter
+ * operations
  * @returns {Promise<Array<Record>>}
  **/
-export const collectRecordsInGroupByFilter = (
+export async function collectRecordsInGroupByFilter(
   tableName,
   filterArray = null,
   sortArray = null,
   limit = null
-) => {
+) {
   const db = fdb;
 
   return limitQuery(
@@ -638,19 +581,19 @@ export const collectRecordsInGroupByFilter = (
     .get() //get the resulting filtered query results
     .then((querySnapshot) => {
       // returns a promise
-      return RecordsFromSnapshot(querySnapshot);
+      return !querySnapshot.empty
+        ? RecordsFromSnapshot(querySnapshot)
+        : Promise.reject(
+          "noDocuments:collectRecordsInGroupByFilter:" + tableName
+        );
     })
     .catch((err) => {
       return Promise.reject(err + ":collectRecordsInGroupByFilter");
     });
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function
- * @static
- * @description retrieve a record from the Firestore.  If a Batch object is passed,
+ * retrieve a record from the Firestore.  If a Batch object is passed,
  * returns a chained Btahc object
  * @param {string} tablePath - path to the enclosing collection
  * @param {string} Id - Id of the specific document requested
@@ -659,7 +602,7 @@ export const collectRecordsInGroupByFilter = (
  *
  * @returns {Promise<Record|WriteBatch|Transaction>}
  */
-export const fetchRecord = (tablePath, Id, refPath = null, batch = null) => {
+export async function fetchRecord(tablePath, Id, refPath = null, batch = null) {
   const db = dbReference(refPath);
 
   const docRef = db.collection(tablePath).doc(Id);
@@ -675,14 +618,10 @@ export const fetchRecord = (tablePath, Id, refPath = null, batch = null) => {
       return Promise.reject("no document");
     }
   });
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function fetchRecordByRefPath
- * @static
- * @description fetches a single record from the database, using just a
+ * fetches a single record from the database, using just a
  * refPath to identify the document
  * @param {!string} docRefPath string identifying the full path to the
  * requested document
@@ -690,7 +629,7 @@ export const fetchRecord = (tablePath, Id, refPath = null, batch = null) => {
  * operations
  * @returns {Promise<Record>}
  */
-export const fetchRecordByRefPath = (docRefPath, batch = null) => {
+export async function fetchRecordByRefPath(docRefPath, batch = null) {
   //Dangerously assumes refPath  exists
 
   const thisRef = createRefFromPath(docRefPath);
@@ -704,14 +643,10 @@ export const fetchRecordByRefPath = (docRefPath, batch = null) => {
       return Promise.reject("no document");
     }
   });
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function fetchRecordByFilter
- * @static
- * @description fetches a SINGLE record from the database, using just a
+ * fetches a SINGLE record from the database, using just a
  * filter to identify the document. DANGEROUSLY assumes the filter
  * identifies a SINGLE document, even if the query always returns an array
  * @param {!string} table a properly formatted string representing the requested collection
@@ -723,25 +658,21 @@ export const fetchRecordByRefPath = (docRefPath, batch = null) => {
  *
  * @returns {Promise<Record|WriteBatch|Transaction>}
  */
-export const fetchRecordByFilter = (
+export async function fetchRecordByFilter(
   table,
   filterArray,
   refPath = null,
   batch = null
-) => {
+) {
   return collectRecordsByFilter(table, filterArray, refPath, batch).then(
     (records) => {
       return Promise.resolve(records[0]);
     }
   );
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function fetchRecordInGroupByFilter
- * @static
- * @description fetches a SINGLE record from the database, using just a
+ * fetches a SINGLE record from the database, using just a
  * filter to identify the document. DANGEROUSLY assumes the filter
  * identifies a SINGLE document, even if the query always returns an array
  * @param {!string} table a properly formatted string representing the requested collection
@@ -752,59 +683,69 @@ export const fetchRecordByFilter = (
  *
  * @returns {Promise<Record|WriteBatch|Transaction>}
  */
-export const fetchRecordInGroupByFilter = (
+export async function fetchRecordInGroupByFilter(
   table,
   filterArray,
   batch = null
-) => {
+) {
   return collectRecordsInGroupByFilter(table, filterArray, batch).then(
     (records) => {
       return Promise.resolve(records && records?.length ? records[0] : null);
     }
   );
-};
+}
+/**
+ * deletes a record from the database. Checkis if record is FROM the data (has refPath)
+ * or if if only Id (so supporting parts are needed)
+ * @param {Record} record 
+ * @param {Record|null} table 
+ * @param {string|null} parentRefPath  - optional document reference to base tablePath from
+ * @param {WriteBatch|Transaction|null} batch 
+ * @returns {void}
+ */
+export async function deleteRecord(record, table=null, parentRefPath=null, batch=null) {
+  if (record?.refPath) {
+    return createRefFromPath(record.refPath).delete();
+  } else if (parentRefPath) {
+    return deleteRecordInParts(table, record, parentRefPath, batch);
+  } else return null;
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function deleteRecord
- * @static
- * @description deletes a single record from the database
+ * deletes a single record from the database
  * @param {!string} table string naming the parent collection of the document
  * @param {Record} record
- * @param {?string} refPath - optional document reference to base tablePath from
+ * @param {?string} parentRefPath - optional document reference to base tablePath from
  * @param {?WriteBatch|Transaction} batch - optional batch reference
  * @returns {Promise<Record|WriteBatch|Transaction>}
  */
-export const deleteRecord = (table, record, refPath = null, batch = null) => {
-  const db = dbReference(refPath);
-  const docRef = db.collection(table).doc(record.Id); //Dangerously assumes collection exists
+export async function deleteRecordInParts(
+  table,
+  record,
+  parentRefPath = null,
+  batch = null
+) {
+  const db = dbReference(parentRefPath);
+  const docRef = db.collection(table).doc(record.Id);
+  //Dangerously assumes collection exists
 
   return batch ? batch.delete(docRef) : docRef.delete();
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function deleteRecordByRefPath
- * @static
- * @description deletes a single record from the database
+ * deletes a single record from the database
  * @param {!string} docRefPath string identifying the full path to the
  * requested document
  * @param {?WriteBatch|Transaction} batch - optional batch reference
  * @returns {Promise<Record|WriteBatch|Transaction>}
- **********************************************************************/
-export const deleteRecordByRefPath = (docRefPath, batch = null) => {
+ */
+export async function deleteRecordByRefPath(docRefPath, batch = null) {
   const thisRef = createRefFromPath(docRefPath);
 
   return batch ? batch.delete(thisRef) : thisRef.delete();
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function updateRecordFields
- * @static
  * @param {Record} recordUpdate object of field:value entries to update.
  * @param {!string} recordUpdate.refPath - full path to document/record
  * @description  update record by fields - Allows use of FieldPath options
@@ -812,7 +753,7 @@ export const deleteRecordByRefPath = (docRefPath, batch = null) => {
  * affected. Assumes the originating docRef is passed as refPath: field
  * @returns {Promise<Record>}
  */
-export const updateRecordFields = async (recordUpdate) => {
+export async function updateRecordFields(recordUpdate) {
   const cleanData = DocumentFromRecord(recordUpdate);
 
   try {
@@ -820,53 +761,44 @@ export const updateRecordFields = async (recordUpdate) => {
   } catch (err) {
     return Promise.reject(err + ":updateRecordFields");
   }
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function updateRecordByRefPath
- * @static
  * @param {!string} docRefPath - full path to document to update
  * @param {!Record} data - Record of values to update
  * @param {?string} data.Id - document Id of record
  * @param {?WriteBatch|Transaction} batch - batching object
  * @returns {Promise<Record|WriteBatch|Transaction>}
  */
-export const updateRecordByRefPath = (docRefPath, data, batch = null) => {
+export async function updateRecordByRefPath(docRefPath, data, batch = null) {
   const cleanData = DocumentFromRecord(data);
-  //  delete cleanData.Id;
   const thisRef = createRefFromPath(docRefPath);
 
   return batch
     ? batch.set(thisRef, cleanData, {
-        merge: true,
-      })
+      merge: true,
+    })
     : thisRef
-        .set(cleanData, { merge: true }) //update merges record
-        .then(() => {
-          return data;
-        });
-};
+      .set(cleanData, { merge: true }) //update merges record
+      .then(() => {
+        return data;
+      });
+}
 
 /**
- * ----------------------------------------------------------------------
- * @async
- * @function writeArrayValue
- * @static
- * @description adds a new value to a firestore record array entry
+ * adds a new value to a firestore record array entry
  * @param {!string} fieldName  the string name of the array to be updated
  * @param {any} fieldValue the value to add to the array
  * @param {!string} docRefPath the reference path for the document to be updated
  * @param {WriteBatch|Transaction} batch optional - used to chain transactions
  * @returns {Promise<Record|WriteBatch|Transaction>}
  */
-export const writeArrayValue = (
+export async function writeArrayValue(
   fieldName,
   fieldValue,
   docRefPath,
   batch = null
-) => {
+) {
   const thisRef = createRefFromPath(docRefPath);
 
   if (batch)
@@ -884,40 +816,42 @@ export const writeArrayValue = (
       },
       { merge: true }
     );
-};
+}
 
-/** @private */
-const createRefFromPath = (docPath, refPath = null) => {
+/**
+ * Creates a DocumentReference from *relative* docPath
+ * and an (optional) absolute refPath
+ * @param {!string} docPath
+ * @param {?refPath} refPath
+ * @returns {DocumentReference}
+ */
+function createRefFromPath(docPath, refPath = null) {
   const db = dbReference(refPath);
 
   return db.doc(docPath);
-};
+}
 
 /**
- * @private
  * @typedef {Object} filterObject
- * @property {!String} fieldRef
- * @property {!String} opStr
+ * @property {!string} fieldRef
+ * @property {!string} opStr
  * @property {any} value
  */
 
 /**
- * ----------------------------------------------------------------------
- * @private
- * @function
  * builds and returns a query built from an array of filter (i.e. "where")
  * conditions
  * @param {Query} query collectionReference or Query to build filter upong
- * @param {?filterObject} [filterArray] an (optional) 3xn array of filter(i.e. "where") conditions
+ * @param {?Array.filterObject} filterArray an (optional) 3xn array of filter(i.e. "where") conditions
  * @returns {Query} Firestore Query object
  */
-const filterQuery = (query, filterArray = null) => {
+function filterQuery(query, filterArray = null) {
   return filterArray
     ? filterArray.reduce((accQuery, filter) => {
-        return accQuery.where(filter.fieldRef, filter.opStr, filter.value);
-      }, query)
+      return accQuery.where(filter.fieldRef, filter.opStr, filter.value);
+    }, query)
     : query;
-};
+}
 
 /**
  * @private
@@ -927,104 +861,92 @@ const filterQuery = (query, filterArray = null) => {
  */
 
 /**
- * ----------------------------------------------------------------------
- * @private
- * @function
  * builds and returns a query built from an array of filter (i.e. "where")
  * conditions
  * @param {Query} query collectionReference or Query to build filter upong
- * @param {?sortObject} [sortArray] an (optional) 2xn array of sort (i.e. "orderBy") conditions
+ * @param {?Array.sortObject} sortArray an (optional) 2xn array of sort (i.e. "orderBy") conditions
  * @returns Firestore Query object
  */
-const sortQuery = (query, sortArray = null) => {
+function sortQuery(query, sortArray = null) {
   return sortArray
     ? sortArray.reduce((accQuery, sortEntry) => {
-        return accQuery.orderBy(sortEntry.fieldRef, sortEntry.dirStr || "asc");
-        //note "||" - if dirStr is not present(i.e. falsy) default to "asc"
-      }, query)
+      return accQuery.orderBy(sortEntry.fieldRef, sortEntry.dirStr || "asc");
+      //note "||" - if dirStr is not present(i.e. falsy) default to "asc"
+    }, query)
     : query;
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @private
- * @function
  * builds and returns a query built from an array of filter (i.e. "where")
  * conditions
  * @param {Query} query - collectionReference or Query to build filter upong
  * @param {?number} limit - an (optional) 2xn array of sort (i.e. "orderBy") conditions
- * @returns Firestore Query object
+ * @returns {Query} Firestore Query object
  */
-const limitQuery = (query, limit = null) => {
+function limitQuery(query, limit = null) {
   return limit ? query.limit(limit) : query;
-};
+}
 
 //Listener Support
 /**
- * @private
  * @callback RecordListener
- * @static
  * @param {DocumentSnapshot} documentSnapshot
  */
 
 /**
- * @private
+ *@typedef {function} Unsubscribe
+ */
+
+/**
  * @callback CollectionListener
- * @static
  * @param {QuerySnapshot} querySnapshot
  */
 
 /**
- * ----------------------------------------------------------------------
  * sets up a listener for changes to a single record
- * @function
- * @static
  * @category Listeners
  * @param {!string} tablePath string describing relative path to document
  * @param {?string} refPath string describing path to parent document
  * @param {CollectionListener}  dataCallback function to be called with changes to record
  * @param {callback} errCallback function to be called when an error
  * occurs in listener
- * @returns {unsubscribe} function to be called to release subscription
+ * @returns {Unsubscribe} function to be called to release subscription
  */
-export const ListenRecords = (
+export function ListenRecords(
   tablePath,
   refPath = null,
   dataCallback,
   errCallback
-) => {
+) {
   const db = dbReference(refPath);
   return ListenRecordsCommon(
     db.collection(tablePath), //get the resulting filtered query results
     dataCallback,
     errCallback
   );
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * Sets up a listener to a query
- * @function
- * @static
  * @category Listeners
- * @param {!string} tablePath Name of table to query too - may be sub-collection of
+ * @param {!string} tablePath Name (or pathname) of table to query too - may be sub-collection of
  * optional reference
  * @param {?string} refPath An optional Firestore DocumentReference. If present, the
  * "table" parameter above is relative to this reference
  * @param {CollectionListener} dataCallback callback function with query results
  * @param {callback} errCallback callback function with error results
- * @param {?filterObject} [filterArray] a 3xn array of filter(i.e. "where") conditions
- * @param {?sortObject} [sortArray] an (optional) 2xn array of sort (i.e. "orderBy") conditions
- * @returns {unsubscribe} function to be called to release subscription
+ * @param {?Array.filterObject} filterArray a 3xn array of filter(i.e. "where") conditions
+ * @param {?Array.sortObject} sortArray an (optional) 2xn array of sort (i.e. "orderBy") conditions
+ * @returns {Unsubscribe} function to be called to release subscription
  */
-export const ListenQuery = (
+export function ListenQuery(
   tablePath,
   refPath = null,
   dataCallback,
   errCallback,
   filterArray = null,
   sortArray = null
-) => {
+) {
   const db = dbReference(refPath);
 
   return ListenRecordsCommon(
@@ -1032,26 +954,23 @@ export const ListenQuery = (
     dataCallback,
     errCallback
   );
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * sets up a listener for changes to a collectionGroup
- * @function
- * @static
  * @category Listeners
  * @param {!string} tablePath string describing relative path to document
  * @param {?string} refPath string describing path to parent document
  * @param {CollectionListener} dataCallback function to be called with changes to record
  * @param {callback} errCallback function to be called when an error
  * occurs in listener
- * @returns {callback} function to be called to release subscription
+ * @returns {Unsubscribe} function to be called to release subscription
  */
-export const ListenCollectionGroupRecords = (
+export function ListenCollectionGroupRecords(
   tablePath,
   dataCallback,
   errCallback
-) => {
+) {
   const db = fdb;
   //let reference = db.collection(tablePath);
 
@@ -1060,29 +979,26 @@ export const ListenCollectionGroupRecords = (
     dataCallback,
     errCallback
   );
-};
+}
 
 /**
- * ----------------------------------------------------------------------
  * sets up a listener for changes to a collectionGroup by query
- * @function
- * @static
  * @category Listeners
  * @param {!string} table string describing the name of a collectionGroup
- * @param {?filterObject} [filterArray] a 3xn array of filter(i.e. "where") conditions
- * @param {?sortObject} [sortArray] an (optional) 2xn array of sort (i.e. "orderBy") conditions
  * @param {CollectionListener} dataCallback function to be called with changes to record
  * @param {callback} errCallback function to be called when an error
  * occurs in listener
- * @returns {unsubscribe} function to be called to release subscription
+ * @param {?Array.filterObject} filterArray a 3xn array of filter(i.e. "where") conditions
+ * @param {?Array.sortObject} sortArray an (optional) 2xn array of sort (i.e. "orderBy") conditions
+ * @returns {Unsubscribe} function to be called to release subscription
  */
-export const ListenCollectionGroupQuery = (
+export function ListenCollectionGroupQuery(
   table,
-  filterArray,
-  sortArray,
   dataCallback,
-  errCallback
-) => {
+  errCallback,
+  filterArray,
+  sortArray
+) {
   const db = fdb;
 
   return ListenRecordsCommon(
@@ -1090,14 +1006,16 @@ export const ListenCollectionGroupQuery = (
     dataCallback,
     errCallback
   );
-};
+}
 
 /**
- * ----------------------------------------------------------------------
- * @private
- * @function ListenRecordsCommon
+ * @param {DocumentReference} reference
+ * @param {RecordListener} dataCallback
+ * @param {callback} errCallback function to be called when an error
+ * occurs in listener
+ * @returns {function} function to be called to release subscription
  */
-const ListenRecordsCommon = (reference, dataCallback, errCallback) => {
+function ListenRecordsCommon(reference, dataCallback, errCallback) {
   //returns an unsubscribe function
   return reference.onSnapshot(
     (querySnapshot) => {
@@ -1107,12 +1025,10 @@ const ListenRecordsCommon = (reference, dataCallback, errCallback) => {
       errCallback(`${err} ${reference.path} setup:ListenRecordsCommon`);
     }
   );
-};
+}
 
 /**
  * Listen to changes to a single record
- * @function
- * @static
  * @category Listeners
  * @param {!string} tablePath string describing relative path to requested
  * record
@@ -1122,15 +1038,15 @@ const ListenRecordsCommon = (reference, dataCallback, errCallback) => {
  * requested document
  * @param {callback} errCallback callback to handle error reporting and
  * operations
- * @returns {unsubscribe} function to be called to release subscription
+ * @returns {Unsubscribe} function to be called to release subscription
  */
-export const ListenRecord = (
+export function ListenRecord(
   tablePath,
   Id,
   refPath = null,
   dataCallback,
   errCallback
-) => {
+) {
   const db = dbReference(refPath);
 
   const docRef = db.collection(tablePath).doc(Id);
@@ -1145,11 +1061,11 @@ export const ListenRecord = (
       errCallback(err + " No Document Exists to Listen");
     }
   );
-};
+}
 
 export class PaginateFetch {
   /**
-   * constructs an object to paginate through large Firestore Tables
+   * @classdesc constructs an object to paginate through large Firestore Tables
    * @param {string} table a properly formatted string representing the requested collection
    * - always an ODD number of elements
    * @param {array} filterArray an (optional) 3xn array of filter(i.e. "where") conditions
@@ -1179,7 +1095,6 @@ export class PaginateFetch {
     this.limit = limit;
     /**
      * underlying query for fetch
-     * @private
      * @type {Query}
      */
     this.Query = sortQuery(
@@ -1197,11 +1112,9 @@ export class PaginateFetch {
 
   /**
    * executes the query again to fetch the next set of records
-   * @async
-   * @method
-   * @returns {Promise<RecordArray>} returns an array of record - the next page
+   * @returns {Promise<Array.Record>} returns an array of records - the next page
    */
-  PageForward() {
+  async PageForward() {
     const runQuery = this.snapshot
       ? this.Query.startAfter(last(this.snapshot.docs))
       : this.Query;
@@ -1220,11 +1133,9 @@ export class PaginateFetch {
 
   /**
    * executes the query again to fetch the previous set of records
-   * @async
-   * @method
-   * @returns {Promise<RecordArray>} returns an array of record - the next page
+   * @returns {Promise<Array.Record>} returns an array of records - the next page
    */
-  PageBack() {
+  async PageBack() {
     const runQuery = this.snapshot
       ? this.Query.endBefore(this.snapshot.docs[0])
       : this.Query;
@@ -1236,7 +1147,11 @@ export class PaginateFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        this.snapshot = QuerySnapshot;
+        //*IF* documents (i.e. haven't gone back ebfore start)
+        if (!QuerySnapshot.empty) {
+          //then update document set, and execute callback
+          this.snapshot = QuerySnapshot;
+        }
         return RecordsFromSnapshot(this.snapshot);
       });
   }
@@ -1244,18 +1159,14 @@ export class PaginateFetch {
 
 export class PaginateGroupFetch {
   /**
-   * constructs an object to paginate through large
-   * Firestore Tables
+   * @classdesc constructs an object to paginate through large Firestore Tables
    * @param {!string} group a properly formatted string representing the requested collection
    * - always an ODD number of elements
    * @param {?filterObject} [filterArray] an (optional) 3xn array of filter(i.e. "where") conditions
-   * @param {!sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
-   *
-   * The array(s) are assumed to be sorted in the correct order -
+   * The array is assumed to be sorted in the correct order -
    * i.e. filterArray[0] is added first; filterArray[length-1] last
-   * returns data as an array of objects (not dissimilar to Redux State objects)
-   * with both the documentID and documentReference added as fields.
-   * @param {?number} limit (optional)
+   * @param {!sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
+   * @param {?number} limit (optional) page size
    * @category Paginator
    */
   constructor(
@@ -1290,11 +1201,11 @@ export class PaginateGroupFetch {
 
   /**
    * executes the query again to fetch the next set of records
-   * @async
-   * @method
-   * @returns {Promise<RecordArray>} returns an array of record - the next page
+   * @returns {Promise<Array.Record>}
+   * returns data as an array of objects (not dissimilar to Redux State objects)
+   * with both the documentID and documentReference added as fields.
    */
-  PageForward() {
+  async PageForward() {
     const runQuery = this.snapshot
       ? this.Query.startAfter(last(this.snapshot.docs))
       : this.Query;
@@ -1306,18 +1217,23 @@ export class PaginateGroupFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        this.snapshot = QuerySnapshot;
+        //*IF* documents (i.e. haven't gone beyond start)
+        if (!QuerySnapshot.empty) {
+          //then update document set, and execute callback
+          //return Promise.resolve(QuerySnapshot);
+          this.snapshot = QuerySnapshot;
+        }
         return RecordsFromSnapshot(this.snapshot);
       });
   }
 
   /**
    * executes the query again to fetch the previous set of records
-   * @async
-   * @method
-   * @returns {Promise<RecordArray>} returns an array of record - the next page
+   * @returns {Promise<Array.Record>}
+   * returns data as an array of objects (not dissimilar to Redux State objects)
+   * with both the documentID and documentReference added as fields.
    */
-  PageBack() {
+  async PageBack() {
     const runQuery = this.snapshot
       ? this.Query.endBefore(this.snapshot.docs[0])
       : this.Query;
@@ -1329,7 +1245,11 @@ export class PaginateGroupFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        this.snapshot = QuerySnapshot;
+        //*IF* documents (i.e. haven't gone back before start)
+        if (!QuerySnapshot.empty) {
+          //then update document set, and execute callback
+          this.snapshot = QuerySnapshot;
+        }
         return RecordsFromSnapshot(this.snapshot);
       });
   }
@@ -1337,56 +1257,50 @@ export class PaginateGroupFetch {
 
 export class PaginatedListener {
   /**
-   * Creates an object to allow for paginating a listener for table
+   * @classdesc Creates an object to allow for paginating a listener for table
    * read from Firestore. REQUIRES a sorting choice; masks some
    * subscribe/unsubscribe action for paging forward/backward
    * @param {!string} tablePath a properly formatted string representing the requested collection
    * - always an ODD number of elements
    * @param {?refPath} refPath (optional) allows "table" parameter to reference a sub-collection
    * of an existing document reference (I use a LOT of structured collections)
-   * @param {!callback} dataCallback
-   * @param {!callback} errCallback
-   * @param {?number} limit (optional)
-   * @param {filterObject} [filterArray] an (optional) 3xn array of filter(i.e. "where") conditions
-   * @param {!sortObject} [sortArray] a 2xn array of sort (i.e. "orderBy") conditions
-   * defaults to [{ fieldRef: "name", dirStr: "asc" }] as pagination *requires* a sort
-   *
-   * The array is assumed to be sorted in the correct order -
-   * i.e. filterArray[0] is added first; filterArray[length-1] last
+   * @param {!RecordListener} dataCallback
    * returns data as an array of objects (not dissimilar to Redux State objects)
    * with both the documentID and documentReference added as fields.
+   * @param {!RecordListener} errCallback
+   * @param {?number} limit (optional) pagesize
+   * @param {?Array.filterObject} filterArray an (optional) 3xn array of filter(i.e. "where") conditions
+   * The array is assumed to be sorted in the correct order -
+   * i.e. filterArray[0] is added first; filterArray[length-1] last
+   * @param {!Array.sortObject} sortArray a 2xn array of sort (i.e. "orderBy") conditions
    * @category Paginator
    */
   constructor(
     tablePath,
     refPath = null,
-    dataCallback,
-    errCallback,
+    dataCallback = null,
+    errCallback = null,
     limit = PAGINATE_DEFAULT,
     filterArray = null,
     sortArray = [{ fieldRef: "name", dirStr: "asc" }]
   ) {
     /**
      * table path at base of listener query, relative to original refPath
-     * @private
      * @type {string}
      */
     this.tablePath = tablePath;
     /**
      * array of filter objects for listener query
-     * @private
      * @type {filterObject}
      */
     this.filterArray = filterArray;
     /**
      * array of sort objects for listener query
-     * @private
      * @type {sortObject}
      */
     this.sortArray = sortArray;
     /**
      * refPath as basis for listener query
-     * @private
      * @type {string}
      */
     this.refPath = refPath;
@@ -1398,13 +1312,11 @@ export class PaginatedListener {
     this._setQuery();
     /**
      * current dataCallback of listener query
-     * @private
      * @type {RecordListener}
      */
     this.dataCallback = dataCallback;
     /**
      * current errCallback of listener query
-     * @private
      * @type {callback}
      */
     this.errCallback = errCallback;
@@ -1417,8 +1329,6 @@ export class PaginatedListener {
 
   /**
    * reconstructs the basis query
-   * @private
-   * @method _setQuery
    * @returns {Query}
    */
   _setQuery() {
@@ -1438,7 +1348,8 @@ export class PaginatedListener {
      * @private
      * @type {QuerySnapshot}
      */
-    this.Snapshot = null;
+    this.snapshot = null;
+    this.unsubscriber = null;
     return this.Query;
   }
 
@@ -1446,11 +1357,9 @@ export class PaginatedListener {
    * resets the listener query to the next page of results.
    * Unsubscribes from the current listener, constructs a new query, and sets it
    * as the new listener
-   * @async
-   * @method
-   * @returns {unsubscribe} returns the unsubscriber function (for lifecycle events)
+   * @returns {Unsubscribe} returns the unsubscriber function (for lifecycle events)
    */
-  PageForward() {
+  async PageForward() {
     const runQuery =
       this.unsubscriber && !this.snapshot.empty
         ? this.Query.startAfter(last(this.snapshot.docs))
@@ -1481,11 +1390,9 @@ export class PaginatedListener {
    * resets the listener query to the next page of results.
    * Unsubscribes from the current listener, constructs a new query, and sets it\
    * as the new listener
-   * @async
-   * @method
-   * @returns {unsubscribe} returns the unsubscriber function (for lifecycle events)
+   * @returns {Unsubscribe} returns the unsubscriber function (for lifecycle events)
    */
-  PageBack() {
+  async PageBack() {
     const runQuery =
       this.unsubscriber && !this.snapshot.empty
         ? this.Query.endBefore(this.snapshot.docs[0])
@@ -1518,12 +1425,10 @@ export class PaginatedListener {
 
   /**
    * sets page size limit to new value, and restarts the paged listener
-   * @async
-   * @method
    * @param {number} newLimit
-   * @returns {unsubscribe} returns the unsubscriber function (for lifecycle events)
+   * @returns {Unsubscribe} returns the unsubscriber function (for lifecycle events)
    */
-  ChangeLimit(newLimit) {
+  async ChangeLimit(newLimit) {
     const runQuery = this.Query;
 
     //IF unsubscribe function is set, run it.
@@ -1553,12 +1458,10 @@ export class PaginatedListener {
    * changes the filter on the subscription
    * This has to unsubscribe the current listener,
    * create a new query, then apply it as the listener
-   * @async
-   * @method
    * @param {filterObject} [filterArray] an array of filter descriptors
-   * @returns {unsubscribe} returns the unsubscriber function (for lifecycle events)
+   * @returns {Unsubscribe} returns the unsubscriber function (for lifecycle events)
    */
-  ChangeFilter(filterArray) {
+  async ChangeFilter(filterArray) {
     //IF unsubscribe function is set, run it (and clear it)
     this.unsubscriber && this.unsubscriber();
 
@@ -1582,10 +1485,8 @@ export class PaginatedListener {
 
   /**
    * IF unsubscribe function is set, run it.
-   * @async
-   * @method
    */
-  unsubscribe() {
+  async unsubscribe() {
     //IF unsubscribe function is set, run it.
     this.unsubscriber && this.unsubscriber();
     this.unsubscriber = null;
@@ -1614,15 +1515,13 @@ export class PaginatedListener {
  * IMPORTANT NOTE:
  * Because this filter uses an INEQUALITY, .sortBy() conditions
  * are not supported
- * @function
- * @static
  * @category Tree Slice
  * @param {!Record} owner
  * @param {?filterObject} queryFilter additional filter parameters
  *
  * @returns {filterObject}
  */
-export const ownerFilter = (owner, queryFilter = null) => {
+export function ownerFilter(owner, queryFilter = null) {
   const ownerPath = owner.refPath;
   let nextPath = ownerPath.slice();
   const nextLength = nextPath.length;
@@ -1644,33 +1543,24 @@ export const ownerFilter = (owner, queryFilter = null) => {
     },
   ];
   return queryFilter ? ownerParts.concat(queryFilter) : ownerParts;
-};
+}
 
 /**
  * Uses the ownerFilter (above) to establish a listener to "just" the
  * parts of a collectionGroup that are descendants of the passed "owner"
  * record.
- * @function
- * @static
- * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} owner.refPath - string representing the full path to the
  * Firestore document.
  * @param {!string} collectionName name of the desired collectionGroup
- * @param {callback}  dataCallback function to be called with changes to record
- * @param {QuerySnapshot} response
- * @param {callback} errCallback function to be called when an error
+ * @param {RecordListener}  dataCallback function to be called with changes to record
+ * @param {RecordListener} errCallback function to be called when an error
  * occurs in listener
- * @param {string}  response
- * @returns {callback} function to be called to release subscription
+ * @returns {Unsubscribe} function to be called to release subscription
+ * @category Tree Slice
  *
  */
-export const listenSlice = (
-  owner,
-  collectionName,
-  dataCallBack,
-  errCallBack
-) => {
+export function listenSlice(owner, collectionName, dataCallBack, errCallBack) {
   try {
     return ListenCollectionGroupQuery(
       collectionName,
@@ -1682,46 +1572,40 @@ export const listenSlice = (
   } catch (err) {
     console.log(`failed:listenSlice setup ${collectionName} err: ${err}`);
   }
-};
+}
 
 /**
  * Wrapper around database fetch, using ownerFilter above to
  * select/fetch just an "owner" parent document's descendants from a
  * collectionGroup
- * @async
- * @function
- * @static
- * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} owner.refPath - string representing the full path to the
  * Firestore document.
  * @param {!string} collectionName name of the desired collectionGroup
- * @returns {QuerySnapshot} response
+ * @returns {Promise.Array.Record} response
+ * @category Tree Slice
  */
-export const fetchSlice = (owner, collectionName) => {
+export async function fetchSlice(owner, collectionName) {
   try {
     return collectRecordsInGroupByFilter(collectionName, ownerFilter(owner));
   } catch (err) {
     console.log(`failed:fetchSlice setup ${collectionName} err: ${err}`);
   }
-};
+}
 
 /**
  * Wrapper around database fetch, using ownerFilter above to
  * select/fetch just an "owner" parent document's descendants from a
  * collectionGroup
- * @async
- * @function
- * @static
- * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} owner.refPath - string representing the full path to the
  * Firestore document.
  * @param {!string} collectionName name of the desired collectionGroup
- * @param {?filterObject} queryFilter filter parameters
- * @returns {QuerySnapshot} response
+ * @param {Array.filterObject} filterArray filter parameters
+ * @returns {Promise.Array.Record} response
+ * @category Tree Slice
  */
-export const querySlice = (owner, collectionName, filterArray) => {
+export async function querySlice(owner, collectionName, filterArray) {
   try {
     return collectRecordsInGroupByFilter(
       collectionName,
@@ -1730,35 +1614,31 @@ export const querySlice = (owner, collectionName, filterArray) => {
   } catch (err) {
     console.log(`failed:querySlice ${collectionName} err: ${err}`);
   }
-};
+}
 
 /**
  * Uses the ownerFilter (above) to establish a listener to "just" the
  * parts of a collectionGroup that are descendants of the passed "owner"
  * record.
- * @function
- * @static
  * @category Tree Slice
  * @param {!Record} owner
  * @param {!string} owner.refPath - string representing the full path to the
  * Firestore document.
  * @param {!string} collectionName name of the desired collectionGroup
- * @param {?filterObject} filterArray filter parameters
- * @param {!callback}  dataCallback function to be called with changes to record
- * @param {QuerySnapshot} response
+ * @param {Array.filterObject} filterArray filter parameters
+ * @param {RecordListener}  dataCallback function to be called with changes to record
  * @param {!callback} errCallback function to be called when an error
  * occurs in listener
- * @param {string}  response
  * @returns {callback} function to be called to release subscription
  *
  */
-export const listenQuerySlice = (
+export function listenQuerySlice(
   owner,
   collectionName,
   filterArray,
   dataCallBack,
   errCallBack
-) => {
+) {
   try {
     return ListenCollectionGroupQuery(
       collectionName,
@@ -1770,33 +1650,29 @@ export const listenQuerySlice = (
   } catch (err) {
     console.log(`failed:listenQuerySlice setup ${collectionName} err: ${err}`);
   }
-};
+}
 
 /**
  * Returns the "type" (collection name) of the top-most parent of a
  * record, derived from the refPath
- * @function
- * @static
  * @category Tree Slice
  * @param {Record} record
  * @returns {string} the collection name
  */
-export const ownerType = (record) => {
+export function ownerType(record) {
   return record?.refPath.split(`/`)[0];
-};
+}
 
 /**
  * Returns the Id (documentId) of the top-most parent of a
  * record, derived from the refPath
- * @function
- * @static
  * @category Tree Slice
  * @param {Record} record
  * @returns {string} the Id
  */
-export const ownerId = (record) => {
+export function ownerId(record) {
   return record?.refPath.split(`/`)[1];
-};
+}
 
 /**
  * Returns the Id (documentId) of the top-most parent of a
@@ -1816,113 +1692,99 @@ export const ownerRefPath = (record) => {
 /**
  * Returns the bare owner record reference to the parent (root) of a
  * provided child
- * @function
- * @static
  * @category Tree Slice
  * @param {Record} record child record
  * @returns {Record} reference to the parent (root) record
  */
-export const ownerByChild = (record) => {
+export function ownerByChild(record) {
   return record?.refPath
     ? {
-        Id: `${ownerId(record)}`,
-        refPath: `${ownerType(record)}/${ownerId(record)}`,
-      }
+      Id: `${ownerId(record)}`,
+      refPath: `${ownerType(record)}/${ownerId(record)}`,
+    }
     : undefined;
-};
+}
 
 /**
- * @static
- * @function
+ * returns the minimal reference record from an Id and "type"
  * @category Tree Slice
- * @param {!string} ownerId - Document ID of owner account
- * @param {!string} ownerType - "type" (top-level collection) of owner account
+ * @param {!string} ownerId
+ * @param {!string} ownerType
  * @returns {Record} reference to the parent (root) record
  */
-export const ownerByOwnerType = (ownerId, ownerType) => {
+export function ownerByOwnerType(ownerId, ownerType) {
   return {
     Id: ownerId,
     refPath: `${ownerType}/${ownerId}`,
   };
-};
+}
 
 /**
  * returns the record for the top-most parent of a record,
  * derived from the refPath
- * @async
- * @function
- * @static
  * @category Tree Slice
  * @param {Record} record
  * @returns {Document}
  */
-export const fetchOwner = (record) => {
+export async function fetchOwner(record) {
   return fetchRecord(
     ownerType(record), //type/collection
     ownerId(record), //Id of record desired
     null, //no refPath (top-level)
     null //no batch
   );
-};
+}
 
 /**
  * Returns the "type" (collection name) the passed record is
  * stored in, derived from the refPath
- * @function recordType
- * @static
  * @category Typed
  * @param {Record} record
  * @returns {string} the collection name
  */
-export const recordType = (record) => {
+export function recordType(record) {
   return record?.refPath ? penultimate(record.refPath.split(`/`)) : undefined;
-};
+}
 
 /**
  * Returns the Id (documentId) of the passed record derived from the refPath
- * @function
- * @static
  * @category Typed
+ * @param {Record} record
  * @returns {string} the Id
  */
-export const recordId = (record) => {
+export function recordId(record) {
   return record?.refPath ? last(record.refPath.split(`/`)) : undefined;
-};
+}
 
 /**
  * optionally batched record update - abstracts batch process from specific types
- * @async
- * @function
  * @category Typed
  * @param {Record} data - the data object/record to update.  This will create a new one if it doesn't exist
- * @param {!string} data.refPath - only part used
  * @param {?Record} parent - parent object (if any) this belongs to
  * @param {!string} parent.refPath - full path to parent document
  * @param {!string} type - name of type of object - i.e. the sub-collection name
  * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
- * @return {Promise<Record>} record, with Id & refpath
+ * @return {Promise.ChainType} WriteBatch, Transaction or Void
  */
-export const typedWrite = async (data, parent, type, batch = null) => {
+export async function typedWrite(data, parent, type, batch = null) {
   return writeRecord(
     type, //type of sub-collection...
     data,
     parent?.refPath, //... under parent path reference
     batch
   );
-};
+}
 
 /**
  * optionally batched record update - abstracts batch process from specific types
- * @async
- * @function
  * @category Typed
  * @param {Record} data - the data object/record to update.  This will create a new one if it doesn't exist
  * @param {ArtistTree} tree - Object with properties of refPath segments
  * @param {string} type - name of type of object - i.e. the sub-collection name
  * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
- * @return {Promise} record, with Id & refpath
+ * @return {Promise.ChainType} WriteBatch, Transaction or Void
  */
-export const typedWriteByTree = async (data, tree, type, batch = null) => {
+export async function typedWriteByTree(data, tree, type, batch = null) {
   //existing perks will be over-written, new ones created
   return writeRecord(
     typedTablePathFromTree(tree, type), //type of sub-collection...
@@ -1930,27 +1792,24 @@ export const typedWriteByTree = async (data, tree, type, batch = null) => {
     /*no parent */ null,
     batch
   );
-};
+}
 
 /**
  * optionally batched record update - abstracts batch process from specific types
- * @async
- * @function
- * @static
  * @category Typed
  * @param {Record} data - the data object/record to update.  This will create a new one if it doesn't exist
  * @param {ArtistTree} tree - Object with properties of refPath segments
  * @param {string} type - name of type of object - i.e. the sub-collection name
  * @param {?WriteBatch|Transaction} batch - batching object.  Transaction will be added to the batch
- * @return {Promise} WriteBatch, Transaction or Void
+ * @return {Promise.ChainType} WriteBatch, Transaction or Void
  */
-export const typedWriteByChild = (
+export async function typedWriteByChild(
   data,
   child,
   type,
   batch = null,
   mergeOption = null
-) => {
+) {
   //existing perks will be over-written, new ones created
   return writeBack(
     {
@@ -1961,7 +1820,7 @@ export const typedWriteByChild = (
     batch,
     mergeOption
   );
-};
+}
 
 /**
  * Creates a new document reference of the indicated type, and writes
@@ -1969,9 +1828,6 @@ export const typedWriteByChild = (
  * pre-specified, or shared outside this function. Normal writing
  * action will silently create a new document, which has to then be
  * found by query
- * @async
- * @function
- * @static
  * @category Typed
  * @param {Record} data - the data object/record to create.  This
  * will create a new one if it doesn't exist
@@ -1982,10 +1838,10 @@ export const typedWriteByChild = (
  * sub-collection name
  * @param {?WriteBatch|Transaction} batch - batching object.
  * Transaction will be added to the batch
- * @return {Promise} WriteBatch, Transaction or Void
+ * @return {Promise.ChainType} WriteBatch, Transaction or Void
  *
  */
-export const typedCreate = (data, parent, type, batch = null) => {
+export async function typedCreate(data, parent, type, batch = null) {
   //merge the supplied data into the new data object
   let newData = {
     ...data,
@@ -1993,7 +1849,7 @@ export const typedCreate = (data, parent, type, batch = null) => {
   };
   //parent data already in created reference
   return typedWrite(newData, parent, type, batch);
-};
+}
 
 /**
  * @private
@@ -2003,15 +1859,13 @@ export const typedCreate = (data, parent, type, batch = null) => {
 
 /**
  * Extracts a tree of document ID's from a child document (assumes is a child)
- * @function
- * @static
  * @category Typed
  * @param {Record} child document (regardless of depth)
  *  of a tree
  * @param {!string} child.refPath
  * @returns {RecordTree}
  */
-export const treeFromChild = (child) => {
+export function treeFromChild(child) {
   let deconstruction = new Map();
   const refPath = child.refPath.slice();
   let parts = refPath.split(`/`);
@@ -2022,13 +1876,11 @@ export const treeFromChild = (child) => {
     deconstruction.set(type, Id);
   }
   return deconstruction;
-};
+}
 
 /**
  * Builds a refPath *down* to a desired collection/type from an existing
  * RecordTree Map.
- * @function
- * @static
  * @category Typed
  * @param {RecordTree} tree
  * @param {!string} type
@@ -2036,7 +1888,7 @@ export const treeFromChild = (child) => {
  * This is in case tree was built from a sister collection/document
  * @return {string} constructed TablePath (collection)
  */
-export const typedTablePathFromTree = (tree, type, branchType) => {
+export function typedTablePathFromTree(tree, type, branchType) {
   let pathString = "";
   let lastId = "";
   for (let [collection, docId] of tree) {
@@ -2054,19 +1906,17 @@ export const typedTablePathFromTree = (tree, type, branchType) => {
     lastId = `${docId}/`;
   }
   return pathString;
-};
+}
 
 /**
  * Builds a refPath *down* to a desired collection/type from an existing
  * RecordTree Map.
- * @function
- * @static
  * @category Typed
  * @param {RecordTree} tree
  * @param {!string} type
  * @return {string} constructed refPath (document)
  */
-export const typedRefPathFromTree = (tree, type) => {
+export function typedRefPathFromTree(tree, type) {
   let pathString = "";
   for (let [collection, docId] of tree) {
     pathString = `${pathString}${collection}/${docId}`;
@@ -2078,31 +1928,27 @@ export const typedRefPathFromTree = (tree, type) => {
     pathString = `${pathString}/`;
   }
   return pathString;
-};
+}
 
 /**
  * Looks up a "tree" to find the Id of the document at the requested
  * collection level ("type")
- * @function
- * @static
  * @category Typed
  * @param {Record} child document (regardless of depth)
  *  of a tree
  * @param {!string} child.refPath
  * @param {!string} type name of desired type/collection level in tree
  */
-export const typedIdFromChild = (child, type) => {
+export function typedIdFromChild(child, type) {
   //previous/tree/levels/then/type/Id/whatever/else
   //(previous/tree/levels/then/type) (Id/whatever/else)
   //(Id) (whatever/else)
   return treeFromChild(child).get(type);
-};
+}
 
 /**
  * Builds a refPath *up* to a desired collection/type from an existing
  * child in a tree
- * @function
- * @static
  * @category Typed
  * @param {Record} child document (regardless of depth)
  *  of a tree
@@ -2110,15 +1956,13 @@ export const typedIdFromChild = (child, type) => {
  * @param {!string} type
  * @return {string} constructed refPath (collection)
  */
-export const typedTablePathFromChild = (child, type, branchType = null) => {
+export function typedTablePathFromChild(child, type, branchType = null) {
   return typedTablePathFromTree(treeFromChild(child), type, branchType);
-};
+}
 
 /**
  * Builds a refPath *up* to a desired collection/type from an existing
  * child in a tree
- * @function
- * @static
  * @category Typed
  * @param {Record} child document (regardless of depth)
  *  of a tree
@@ -2126,41 +1970,35 @@ export const typedTablePathFromChild = (child, type, branchType = null) => {
  * @param {!string} type
  * @return {string} constructed refPath (document)
  */
-export const typedRefPathFromChild = (child, type) => {
+export function typedRefPathFromChild(child, type) {
   return typedRefPathFromTree(treeFromChild(child), type);
-};
+}
 
 /**
  * function to fetch a document from "up" the collection/document tree of a child document
- * @async
- * @function
- * @static
  * @category Typed
  * @param {Record} child - assumed to be an object in a collection/document Tree
  * @param {!string} refPath
  * @param {string} type - type/collection to fetch parent document from
- * @param {?WriteBatch|Transaction} batch - optional batch object to chain
+ * @param {ChainType} batch - optional batch object to chain
  * @returns {Promise<RecordObject>}
  */
-export const typedFetchFromChild = async (
+export async function typedFetchFromChild(
   child,
   type,
   branchType = null,
   batch = null
-) => {
+) {
   return fetchRecord(
     typedTablePathFromChild(child, type, branchType), //Full Path to collection
     typedIdFromChild(child, type), //Id
     null, //No parent needed
     batch //optional Batch object
   );
-};
+}
 
 /**
  * function to fetch a document from "up" the collection/document tree of a child document
- * @async
- * @function
- * @static
  * @category Typed
  * @param {RecordTree} tree - assumed to be an object in a collection/document Tree
  * @param {!string} refPath
@@ -2168,48 +2006,103 @@ export const typedFetchFromChild = async (
  * @param {?WriteBatch|Transaction} batch - optional batch object to chain
  * @returns {Promise<RecordObject>}
  */
-export const typedFetchFromTree = async (tree, type, batch = null) => {
+export async function typedFetchFromTree(tree, type, batch = null) {
   return fetchRecord(
     typedTablePathFromTree(tree, type), //Full Path to collection
     tree.get(type), //Id of specific document
     null, //No parent needed
     batch //optional Batch object
   );
-};
+}
 
 /**
  * function to collect documents from "up" the collection/document tree of a child document
- * @async
- * @function
- * @static
  * @category Typed
  * @param {RecordTree} tree - assumed to be an object in a collection/document Tree
  * @param {string} type - type/collection to fetch parent document from
  * @param {?WriteBatch|Transaction} batch - optional batch object to chain
- * @returns {Promise<RecordArray>}
+ * @returns {Promise<Array.Record>}
  */
-export const typedCollectFromTree = async (
+export async function typedCollectFromTree(
   tree,
   type,
   branchType = null,
   batch = null
-) => {
+) {
   return collectRecords(typedTablePathFromTree(tree, type, branchType));
-};
+}
 
 /**
  * function to collect documents from "up" the collection/document tree of a child document
- * @async
- * @function
- * @static
  * @category Typed
  * @param {Record} child - assumed to be an object in a collection/document Tree
  * @param {string} type - type/collection to fetch parent document from
  * @param {?WriteBatch|Transaction} batch - optional batch object to chain
  */
-export const typedCollectFromChild = async (child, type, branchType = null) => {
+export async function typedCollectFromChild(child, type, branchType = null) {
   return collectRecords(typedTablePathFromChild(child, type, branchType));
-};
+}
+
+/**
+ * Uses the ownerFilter (above) to establish a listener to "just" the
+ * parts of a collectionGroup that are descendants of the passed "owner"
+ * record.
+ * @function
+ * @static
+ * @category Typed
+ * @param {!string} type - name of type of object - i.e. the sub-collection name
+ * @param {?Record} parent - parent object (if any) this belongs to
+ * @param {!string} parent.refPath - full path to parent document
+ * @param {!string} type name of the desired collectionGroup
+ * @param {CollectionListener} dataCallback function to be called with changes to record
+ * @param {callback} errCallback function to be called when an error
+ * occurs in listener
+ * @returns {callback} function to be called to release subscription
+ *
+ */
+export async function typedListener(type, parent, dataCallBack, errCallBack) {
+  try {
+    return ListenRecords(type, parent?.refPath, dataCallBack, errCallBack);
+  } catch (err) {
+    thisLogger(`failed:typedListener setup ${type} err: ${err}`);
+  }
+}
+
+/**
+ * @class
+ * @extends PaginatedListener
+ */
+export class typedPaginatedListener extends PaginatedListener {
+  /**
+   * Implements a PaginatedListener using type syntax
+   * @category Typed
+   * @param {!string} type - the "type" (CollectionName) for this record
+   * @param {?RecordObject} parent - the (optional) parent for this
+   * record (i.e. a sub-type)
+   * @param {!string} parent.refPath - the only required part of a
+   * parent record
+   * @param {number} pageSize - the page size requested
+   * @param {CollectionListener} dataCallback - the callback where data is returned
+   * @param {callback} errCallback - callback for errors
+   */
+  constructor(
+    type,
+    parent,
+    dataCallback,
+    errCallback,
+    pageSize = PAGINATE_DEFAULT
+  ) {
+    super(
+      type,
+      null, //filter
+      [{ fieldRef: "name", dirStr: "asc" }], //sort, required
+      parent?.refPath, //refPath
+      pageSize,
+      dataCallback,
+      errCallback
+    );
+  }
+}
 
 /**
  * @function localBatchReturn
@@ -2234,9 +2127,9 @@ export const typedCollectFromChild = async (child, type, branchType = null) => {
  * }
  * ```
  */
-export const localBatchReturn = (incomingBatch, internalBatch) => {
+export function localBatchReturn(incomingBatch, internalBatch) {
   //if incoming batch, just pass along, else asynchronously commit local batch
   return incomingBatch ? Promise.resolve(null) : closeWriteBatch(internalBatch);
-};
+}
 
 export * from "./Common.js";

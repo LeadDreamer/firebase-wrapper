@@ -1,4 +1,3 @@
-import "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 
 import {
@@ -8,8 +7,6 @@ import {
   PAGINATE_PENDING,
   PAGINATE_UPDATED,
 } from "../FirebaseFirestoreWrapper/Common.js";
-
-//const uuidv4 = v4;
 
 /**
  * @module FirebaseStorageWrapper
@@ -22,7 +19,6 @@ import {
 
 /**
  * @function FirebaseStorageWrapper
- * @static
  * @description Initializes the Auth service of the provided
  * firebase app.  Also instantiates various constants and
  * helper functions
@@ -87,9 +83,7 @@ function getPrivateURLHack() {
  */
 
 /**
- * @function
- * @static
- * THis function is part of a storage scheme that uses parallel structures
+ * This function is part of a storage scheme that uses parallel structures
  * between Firestore collection/documents and Storage paths.  The concept
  * here is all Storage items are part of/belong to Firestore documents.
  * The function takes a document record, and combines it with optional key and
@@ -98,16 +92,12 @@ function getPrivateURLHack() {
  * Note this simply makes the Storage Ref - it does not carry out *any* operations
  * @param {string} record A firestore document Record - the '/' separated collection/
  * document path is used as the path to the stored item.
- * @param {string} key An optional string identifying the specific field an stored
+ * @param {string} key An optional string identifying the specific field stored
  * item is associated with
  * @param {string} filename an optional name to be associated with the stored item.
  * @returns {StorageReference} a Firestore Storage Reference
  */
-export const makeStorageRefFromRecord = (
-  record,
-  key = null,
-  filename = null
-) => {
+export function makeStorageRefFromRecord(record, key = null, filename = null) {
   let ref = record.refPath
     ? FirebaseStorage.ref(
         `${record.refPath}${key ? "/" + key : ""}${
@@ -120,23 +110,52 @@ export const makeStorageRefFromRecord = (
     ref.getPrivateURL = getPrivateURLHack;
   }
   return ref;
-};
+}
 
 /**
- * @async
- * @function
+ * @typedef {object} ListOptions
+ * @property {?number} maxResults If set, limits the total number of
+ * prefixes and items to return. The default and maximum maxResults is 1000.
+ * @property {?string} pageToken The nextPageToken from a previous call to list().
+ * If provided, listing is resumed from the previous position.
+ */
+
+/**
+ * @typedef {object} ListResult
+ * @property {Array.StorageReference} items
+ * @property {Array.StorageReference} prefixes
+ * @property {string} nextPageToken
+ */
+
+/**
  * @param {StorageReference} storageReference a storage reference to a
  * "directory", not a file. More accurate to state that it is *treated*
  * as a directory, since such niceties are a Firestore convention, not
  * a physical reality
  * @param {ListOptions} optionsObject
- * @returns {ListResult}
+ * @returns {Promise<ListResult>}
  */
-export const listReference = async (storageReference, optionsObject) => {
+export async function listReference(storageReference, optionsObject) {
   return storageReference.list(optionsObject);
-};
+}
 
+/**
+ * @typedef {object} PaginateList
+ * @property {StorageReference} storageReference
+ * @property {number} status
+ * @property {number} limit
+ * @property {ListOptions} listOptions
+ */
+/**
+ * A class to manage paging through a listing of storage references
+ */
 export class paginateListing {
+  /**
+   * constructs an object to paginate through large Firestore Tables
+   * @param {StorageReference} storageReference
+   * @param {number} limit
+   * @returns {PaginateList}
+   */
   constructor(storageReference, limit = PAGINATE_DEFAULT) {
     this.storageReference = storageReference;
     this.status = PAGINATE_INIT;
@@ -149,31 +168,27 @@ export class paginateListing {
 
   /**
    * executes the query again to fetch the next set of records
-   * @async
-   * @method
-   * @returns {Promise<StorageReference>} returns an array of record - the next page
+   * @returns {Promise<Array.StorageReference>} returns an array of records - the next page
    */
   async PageForward() {
     if (this.status === PAGINATE_END) return [];
     this.status = PAGINATE_PENDING;
     const result = await listReference(this.storageReference, this.listOptions);
     this.status = PAGINATE_UPDATED;
-    if (!result.newPageToken) {
+    if (!result.nextPageToken) {
       // if no more results
       this.status = PAGINATE_END;
     }
 
     this.listOptions = {
       ...this.listOptions,
-      pageToken: result.newPageToken,
+      pageToken: result.nextPageToken,
     };
     return result.items;
   }
 }
 
 /**
- * @function
- * @static
  * This function is part of a storage scheme that uses parallel structures
  * between Firestore collection/documents and Storage paths.  The concept
  * here is all Storage items are part of/belong to Firestore documents.
@@ -186,17 +201,15 @@ export class paginateListing {
  * @param {string} key An optional string identifying the specific field an stored
  * item is associated with
  * @param {string} filename an optional name to be associated with the stored item.
- * @returns {external:promise}
+ * @returns {Promise<string>}
  * @fulfil {string}  a "long-lived" URL to access the file.
  * @reject {string}
  */
-export const makeFileURLFromRecord = (record, key = null, filename = null) => {
+export function makeFileURLFromRecord(record, key = null, filename = null) {
   return makeStorageRefFromRecord(record, key, filename).getDownloadURL();
-};
+}
 
 /**
- * @function
- * @static
  * This function is part of a storage scheme that uses parallel structures
  * between Firestore collection/documents and Storage paths.  The concept
  * here is all Storage items are part of/belong to Firestore documents.
@@ -210,18 +223,16 @@ export const makeFileURLFromRecord = (record, key = null, filename = null) => {
  * item is associated with
  * @returns {string} The resulting Security-Rule-compliant URL
  */
-export const makePrivateURLFromRecord = (record, key = null) => {
+export function makePrivateURLFromRecord(record, key = null) {
   //build the full path from the record structure, key name and key value
   let fullPath = `${record.refPath}${key ? "/" + key : ""}${
     record[key] ? "/" + record[key] : ""
   }`;
   //turn that path into a privateURL
   return makePrivateURLFromPath(fullPath);
-};
+}
 
 /**
- * @function
- * @static
  * This function is part of a storage scheme that uses parallel structures
  * between Firestore collection/documents and Storage paths.  The concept
  * here is all Storage items are part of/belong to Firestore documents.
@@ -235,12 +246,12 @@ export const makePrivateURLFromRecord = (record, key = null) => {
  * item is associated with
  * @returns {string} The resulting Security-Rule-compliant URL
  */
-export const makePrivateURLFromReference = (reference) => {
+export function makePrivateURLFromReference(reference) {
   //build the full path from the record structure, key name and key value
   let fullPath = reference.fullPath;
   //turn that path into a privateURL
   return makePrivateURLFromPath(fullPath);
-};
+}
 
 /**
  * This function is part of a storage scheme that uses parallel structures
@@ -250,23 +261,20 @@ export const makePrivateURLFromReference = (reference) => {
  * URL.  If "type"is not included, the URL will return the metadata, not
  * the contents.
  * Note this simply makes the URL - it does not carry out *any* operations
- * @static
- * @function
  * @param {!string} fullPath required path to the stored item.
  * @returns {string} constructed Security-Rule-compliant URL
  */
-export const makePrivateURLFromPath = (fullPath) => {
+export function makePrivateURLFromPath(fullPath) {
   // note?alt-media paramter is just top return the FILE, no
   // the meta-data object
   let newPath = fullPath.replace(/\//g, "%2F");
   const privateURL = `${bucket_domain}${bucket_name}${bucket_head}${newPath}?alt=media`;
   return privateURL;
-};
+}
 
 /**
  * Firestore's document sizes can be limited - 1MB - so our system stores
  * larger digital "blobs" in a parallel Firestore Storage.
- * @static
  * @function storeBlobByRecord
  * @param {blob} blob A data blob in DataURI format to store in Storage
  * @param {RecordObject} record A firestore document Record - the '/' separated collection/
@@ -287,7 +295,6 @@ export const storeBlobByRecord = (blob, record, key, filename) => {
 /**
  * Firestore's document sizes can be limited - 1MB - so our system stores
  * larger digital "blobs" in a parallel Firestore Storage.
- * @static
  * @async
  * @function storeDataURLByRecord
  * @param {dataURL} dataURL A data blob in DataURI format to store in Storage
@@ -296,7 +303,7 @@ export const storeBlobByRecord = (blob, record, key, filename) => {
  * @param {?string} key An optional string identifying the specific field an stored
  * item is associated with
  * @param {!string} filename an optional name to be associated with the stored item.
- * @returns Firestore Storage UploadTask Object
+ * @returns {UploadTask} Firestore Storage UploadTask Object
  */
 export const storeDataURLByRecord = (dataURL, record, key, filename) => {
   return storeBlobByRecord(
@@ -309,7 +316,6 @@ export const storeDataURLByRecord = (dataURL, record, key, filename) => {
 
 /**
  * @function
- * @static
  * @param {!string} key name/key of default image file
  * @returns {string}
  */
@@ -322,7 +328,6 @@ export async function getDefaultImageURL(key) {
 
 /**
  * @function
- * @static
  * @param {!string} filePath
  * @returns {string}
  */
@@ -331,12 +336,10 @@ export const getURLFromFilePath = (filePath) => {
 };
 
 /**
- * @async
- * @function
  * @param {object} dataURL
  * @returns {Object} {ext: extension, base64: data}
  */
-export const dataURLToBlob = (dataURL) => {
+export function dataURLToBlob(dataURL) {
   var reg = /^data:image\/([\w+]+);base64,([\s\S]+)/;
   var match = dataURL.match(reg);
   var baseType = {
@@ -431,7 +434,6 @@ export const dataURLToBlob = (dataURL) => {
  * interchangeable.  Do not mix client & admin code (not actually possible
  * in this wrapper)
  * @function FirebaseStorageAdminEmulator
- * @static
  * @param {firebase} firebase
  */
 const FirebaseStorageAdminEmulator = (firebase) => {
@@ -472,20 +474,17 @@ class adminRef {
     this.fileRef = bucket.file(path);
     /**
      * Full path, including file name
-     * @static
      * @type {string}
      */
     this.fullPath = this.fileRef.name;
     let split = this.fileRef.name.split("/");
     /**
      * filename portion only
-     * @static
      * @type {string}
      */
     this.name = split[split.length - 1];
     /**
      * name of containing bucket
-     * @static
      * @type {string}
      */
     this.bucket = this.fileRef.bucket;
@@ -518,21 +517,18 @@ class adminRef {
   }
 
   /**
-   * @method child
    * creates and returns a new adminRef object from existin path
    * @param {string} path
    * a relative path *from* the existing storageRef to create child
-   * @returns {StorageRefEmulation}
+   * @returns {Promise<StorageRefEmulation>}
    */
   child(path) {
     return new adminRef(this.fullPath + "/" + path);
   }
 
   /**
-   * @async
-   * @method delete
    * Deletes the referenced storage item
-   * @returns {Promise}
+   * @returns {Promise<void>}
    */
 
   async delete() {
@@ -540,12 +536,10 @@ class adminRef {
   }
 
   /**
-   * @async
-   * @method getDownloadURL
    * Generates a long-lived (essentially permanent until revoked)
    * Public-Access URL for a storage item in FIREBASE (not Cloud Storage)
    * format
-   * @returns {string}
+   * @returns {Promise<string>}
    */
   async getDownloadURL() {
     let url = getPrivateURL(this);
@@ -556,8 +550,6 @@ class adminRef {
   }
 
   /**
-   * @async
-   * @method getToken
    * Fetches (or creates as needed) a unique token for a storage object
    * @returns {Promise<string>}
    */
@@ -577,11 +569,9 @@ class adminRef {
   }
 
   /**
-   * @async
-   * @method getMetadata
    * Fetches the FileMetadata for the storage object. Custom/Client metadata
    * is located in FileMetadata.metadata
-   * @returns {FileMetadata}
+   * @returns {Promise<FileMetadata>}
    */
   async getMetadata() {
     return this.fileRef.getMetadata();
@@ -590,8 +580,6 @@ class adminRef {
   /**
    * puts a block of data (and optional metadata) into storage at
    * location specified by adminRef
-   * @async
-   * @method put
    * @param {blob} data
    * @param {?object} metadata
    * @returns {Promise<object>}
@@ -612,8 +600,6 @@ class adminRef {
   /**
    * puts a string (possibly encoded data) into a storage file
    * described by the provided reference.
-   * @async
-   * @method putString
    * @param {string} dataString
    * @param {string} stringFormat
    * @param {FileMetadata} metadata
