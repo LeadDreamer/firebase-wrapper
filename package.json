@@ -149,23 +149,5 @@
   "optionalDependencies": {
     "fsevents": "<=2.3.3"
   },
-  "keywords": [
-    "firebase",
-    "firestore",
-    "firebase firestore",
-    "auth",
-    "firebase auth",
-    "functions",
-    "firebase functions",
-    "cloud functions",
-    "firebase cloud functions",
-    "Cloud Functions",
-    "Firebase Cloud Functions",
-    "CloudFunctions",
-    "Firebase CloudFunctions",
-    "storage",
-    "firebase storage",
-    "firebase wrapper",
-    "firestore wrapper"
-  ]
+  "keywords": []
 }

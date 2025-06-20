@@ -319,12 +319,12 @@ export const storeDataURLByRecord = (dataURL, record, key, filename) => {
  * @param {!string} key name/key of default image file
  * @returns {string}
  */
-export const getDefaultImageURL = (key) => {
+export async function getDefaultImageURL(key) {
   let filename = key + ".jpg";
   return Promise.resolve(
     FirebaseStorage.ref("/defaultImages").child(filename).getDownloadURL()
   );
-};
+}
 
 /**
  * @function

@@ -1019,10 +1019,7 @@ function ListenRecordsCommon(reference, dataCallback, errCallback) {
   //returns an unsubscribe function
   return reference.onSnapshot(
     (querySnapshot) => {
-      if (!querySnapshot.empty) {
-        let dataArray = RecordsFromSnapshot(querySnapshot);
-        dataCallback(dataArray);
-      } else errCallback("noDocuments:ListenRecordsCommon");
+      dataCallback(RecordsFromSnapshot(querySnapshot));
     },
     (err) => {
       errCallback(`${err} ${reference.path} setup:ListenRecordsCommon`);
@@ -1110,6 +1107,7 @@ export class PaginateFetch {
      * @type {PagingStatus}
      */
     this.status = PAGINATE_INIT;
+    this.empty = true;
   }
 
   /**
@@ -1128,15 +1126,8 @@ export class PaginateFetch {
       .get()
       .then((QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone beyond start)
-        if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
-          //return Promise.resolve(QuerySnapshot);
-          this.snapshot = QuerySnapshot;
-        }
-        return this.snapshot
-          ? Promise.resolve(RecordsFromSnapshot(this.snapshot))
-          : Promise.resolve(null);
+        this.snapshot = QuerySnapshot;
+        return RecordsFromSnapshot(this.snapshot);
       });
   }
 
@@ -1347,6 +1338,7 @@ export class PaginatedListener {
      * @private
      * @type {Query}
      */
+
     this.Query = sortQuery(
       filterQuery(db.collection(this.tablePath), this.filterArray),
       this.sortArray
@@ -1381,9 +1373,8 @@ export class PaginatedListener {
     this.unsubscriber = runQuery.limit(Number(this.limit)).onSnapshot(
       (QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
+        //only change local snapshot if result is NOT empty
         if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
           this.snapshot = QuerySnapshot;
         }
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
@@ -1416,11 +1407,13 @@ export class PaginatedListener {
       (QuerySnapshot) => {
         //acknowledge complete
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
+        //only change local snapshot if result is NOT empty
         if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
           this.snapshot = QuerySnapshot;
         }
+        //if it comes back empty, re-issue the queryFilter
+        //the now-empty snapshot will remove the endBefore
+        //if THAT query comes back empty, there are no document
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },
       (err) => {
@@ -1448,9 +1441,8 @@ export class PaginatedListener {
     this.unsubscriber = runQuery.limit(Number(this.limit)).onSnapshot(
       (QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
+        //only change local snapshot if result is NOT empty
         if (!QuerySnapshot.empty) {
-          //then update document set, and execute callback
           this.snapshot = QuerySnapshot;
         }
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
@@ -1481,7 +1473,6 @@ export class PaginatedListener {
     this.unsubscriber = runQuery.limit(Number(this.limit)).onSnapshot(
       (QuerySnapshot) => {
         this.status = PAGINATE_UPDATED;
-        //*IF* documents (i.e. haven't gone back ebfore start)
         this.snapshot = QuerySnapshot;
         this.dataCallback(RecordsFromSnapshot(this.snapshot));
       },

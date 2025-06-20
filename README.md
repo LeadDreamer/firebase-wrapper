@@ -85,7 +85,18 @@ originally conceived to port from one database to another.</p>
 <a name="module_FirebaseWrapper"></a>
 
 ## FirebaseWrapper
-A set of helper-wrapper functions around firebase firestore, storageand auth.all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.NOTE:Most helpers return PROMISE.REJECT if no documents are returned.it is assumed projects using this library *might* want to have anexplicitly error trap for such events.
+A set of helper-wrapper functions around firebase firestore, storage
+and auth.
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebase
+functions, with a consistent interface.  There is a parallel set for
+ADMIN-SIDE functions as well.
+Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.
+NOTE:
+Most helpers return PROMISE.REJECT if no documents are returned.
+it is assumed projects using this library *might* want to have an
+explicitly error trap for such events.
 
 
 * [FirebaseWrapper](#module_FirebaseWrapper)
@@ -95,7 +106,11 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 <a name="exp_module_FirebaseWrapper--module.exports"></a>
 
 ### module.exports(firebase, config, thislogger) ⇒ ⏏
-all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebase
+functions, with a consistent interface.  There is a parallel set for
+ADMIN-SIDE functions as well.
+Call/initialize with Firebase Configuration settings in an object as
+described below
 
 **Kind**: Exported function  
 **Returns**: none  
@@ -107,11 +122,19 @@ all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a 
 | thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
 
 **Example**  
-```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
+```
+//this specifically loads ALL the subsections, specifically for
+//the Browser.  See later (tbd) notes for NodeJS
+
+import FirebaseWrapper from "@leaddreamer/firebase-wrapper";
+FirebaseWrapper(config); //see below
+export * from "@leaddreamer/firebase-wrapper";
+```
 <a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
 
 #### module.exports~FirebaseConfigObject : <code>Object</code>
-only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
+only authDomain, databaseURL and storageBucket are present when
+called from a cloud environment
 
 **Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
 **Properties**
@@ -131,7 +154,8 @@ only authDomain, databaseURL and storageBucket are present whencalled from a cl
 <a name="module_FirebaseAuthWrapper/authAdmin"></a>
 
 ## FirebaseAuthWrapper/authAdmin
-A set of helpers around Firebase admin SDK auth.Specific to use in Cloud Functions
+A set of helpers around Firebase admin SDK auth.
+Specific to use in Cloud Functions
 
 
 * [FirebaseAuthWrapper/authAdmin](#module_FirebaseAuthWrapper/authAdmin)
@@ -146,7 +170,8 @@ A set of helpers around Firebase admin SDK auth.Specific to use in Cloud Functi
 <a name="exp_module_FirebaseAuthWrapper/authAdmin--module.exports"></a>
 
 ### module.exports(firebase) ⏏
-Initializes the administrative Auth service of the providedfirebase app.  Also instantiates various constants and helper functions
+Initializes the administrative Auth service of the provided
+firebase app.  Also instantiates various constants and helper functions
 
 **Kind**: Exported function  
 
@@ -226,10 +251,29 @@ pages through the full list of users. Woefully inefficient.
 <a name="module_FirebaseAuthWrapper/authClient"></a>
 
 ## FirebaseAuthWrapper/authClient
-A set of helper-wrapper functions around firebase firestore, storageand auth. Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.
+A set of helper-wrapper functions around firebase firestore, storage
+and auth. Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.
 
 **Example**  
-```import * as firebase from "firebase/app";import "firebase/auth";import FirebaseAuth from "@leaddreamer/firebase-wrapper/FirebaseAuthWrapper";//the next is optional - if you want the React componentimport StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";import {config} from "wherever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseAuth(firebase, StyledFirebaseAuth);})(config)```
+```
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import FirebaseAuth from "@leaddreamer/firebase-wrapper/FirebaseAuthWrapper";
+//the next is optional - if you want the React component
+import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import {config} from "wherever-you-put-it";
+
+((myconfig) {
+try {
+  firebase.app();
+} catch (err) {
+  firebase.initializeApp(myconfig);
+}
+FirebaseAuth(firebase, StyledFirebaseAuth);
+})(config)
+```
 
 * [FirebaseAuthWrapper/authClient](#module_FirebaseAuthWrapper/authClient)
     * [module.exports(firebase, thisLogger)](#exp_module_FirebaseAuthWrapper/authClient--module.exports) ⏏
@@ -263,7 +307,9 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 <a name="exp_module_FirebaseAuthWrapper/authClient--module.exports"></a>
 
 ### module.exports(firebase, thisLogger) ⏏
-Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
+Initializes the Auth service of the provided
+firebase app.  Also instantiates various constants and
+helper functions
 
 **Kind**: Exported function  
 
@@ -307,13 +353,21 @@ Fetch a JWT token for authenticated signed requests
 <a name="module_FirebaseAuthWrapper/authClient--module.exports.refreshAuthUser"></a>
 
 #### module.exports.refreshAuthUser() ⇒ <code>Promise.void</code>
-triggers an update of the Firebase Auth user object.  A listenercan be set to monitor these changes
+triggers an update of the Firebase Auth user object.  A listener
+can be set to monitor these changes
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
 <a name="module_FirebaseAuthWrapper/authClient--module.exports.doCreateUserWithEmailAndPassword"></a>
 
 #### module.exports.doCreateUserWithEmailAndPassword(email, password) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-Creates AND SIGNS IN an authenticated user with the provided email and passwordCreates a new user account associated with the specified emailaddress and password.On successful creation of the user account, this user will also besigned in to your application.User account creation can fail if the account already exists or thepassword is invalid.Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
+Creates AND SIGNS IN an authenticated user with the provided email and password
+Creates a new user account associated with the specified email
+address and password.
+On successful creation of the user account, this user will also be
+signed in to your application.
+User account creation can fail if the account already exists or the
+password is invalid.
+Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
 
@@ -325,7 +379,14 @@ Creates AND SIGNS IN an authenticated user with the provided email and password
 <a name="module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithEmailAndPassword"></a>
 
 #### module.exports.doSignInWithEmailAndPassword(email, password) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
-SIGNS IN an existing authenticated user with the provided email and passwordCreates a new user account associated with the specified emailaddress and password.On successful creation of the user account, this user will also besigned in to your application.User account creation can fail if the account already exists or thepassword is invalid.Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
+SIGNS IN an existing authenticated user with the provided email and password
+Creates a new user account associated with the specified email
+address and password.
+On successful creation of the user account, this user will also be
+signed in to your application.
+User account creation can fail if the account already exists or the
+password is invalid.
+Note: The email address acts as a unique identifier for the user and enables an email-based password reset. This function will create a new user account and set the initial user password.
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
 
@@ -435,7 +496,8 @@ codes for 3rd party Auth providers
 <a name="module_FirebaseAuthWrapper/authClient--module.exports..GetIdToken"></a>
 
 #### module.exports~GetIdToken ⇒ <code>Promise.&lt;string&gt;</code>
-Returns a JSON Web Token (JWT) used to identify the user to a Firebase service.Returns the current token if it has not expired. Otherwise, this will refresh the token and return a new one.
+Returns a JSON Web Token (JWT) used to identify the user to a Firebase service.
+Returns the current token if it has not expired. Otherwise, this will refresh the token and return a new one.
 
 **Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
 
@@ -498,7 +560,10 @@ See https://firebase.google.com/docs/reference/js/v8/firebase.User
 <a name="module_FirebaseCloudFunctionsWrapper"></a>
 
 ## FirebaseCloudFunctionsWrapper
-A set of helper-wrapper functions around firebase firestore, storageand auth. Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.
+A set of helper-wrapper functions around firebase firestore, storage
+and auth. Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.
 
 
 * [FirebaseCloudFunctionsWrapper](#module_FirebaseCloudFunctionsWrapper)
@@ -509,7 +574,9 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 <a name="exp_module_FirebaseCloudFunctionsWrapper--module.exports"></a>
 
 ### module.exports(firebase, config, thisLogger) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
-Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
+Initializes the Auth service of the provided
+firebase app.  Also instantiates various constants and
+helper functions
 
 **Kind**: Exported function  
 
@@ -521,21 +588,39 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
 
 **Example**  
-```import * as firebase from "firebase/app";import "firebase/functions";import FirebaseFunctions from "@leaddreamer/firebase-wrapper/FirebaseCloudFunctionsWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFunctions(firebase);})(config)```
+```
+import * as firebase from "firebase/app";
+import "firebase/functions";
+import FirebaseFunctions from "@leaddreamer/firebase-wrapper/FirebaseCloudFunctionsWrapper";
+import {config} from "whereever-you-put-it";
+
+((myconfig) {
+try {
+  firebase.app();
+} catch (err) {
+  firebase.initializeApp(myconfig);
+}
+FirebaseFunctions(firebase);
+})(config)
+```
 <a name="module_FirebaseCloudFunctionsWrapper--module.exports.CloudFunctions"></a>
 
 #### module.exports.CloudFunctions() ⇒ <code>Promise</code>
-Creates the FUNCTION refered to by the passed name.  Said function can*then* be called for the desired results. SYNCHRONOUS
+Creates the FUNCTION refered to by the passed name.  Said function can
+*then* be called for the desired results. SYNCHRONOUS
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseCloudFunctionsWrapper--module.exports)  
 **Fulfil**: result as returns from call  
 **Reject**: err as returned from call  
 **Example**  
-```result = await CloudFunctions("MyGloriousFunction")(argumentToFunction);```
+```
+result = await CloudFunctions("MyGloriousFunction")(argumentToFunction);
+```
 <a name="module_FirebaseCloudFunctionsWrapper--module.exports.treeFromParams"></a>
 
 #### module.exports.treeFromParams(Params) ⇒ <code>Map</code>
-Cloud Function specific - processes a Params list froma firestore function to create a reference/Id "tree"
+Cloud Function specific - processes a Params list from
+a firestore function to create a reference/Id "tree"
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseCloudFunctionsWrapper--module.exports)  
 
@@ -546,7 +631,10 @@ Cloud Function specific - processes a Params list froma firestore function to c
 <a name="module_FirebaseFirestoreWrapper"></a>
 
 ## FirebaseFirestoreWrapper
-A set of helper-wrapper functions around firebase firestore, storageand auth. Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.
+A set of helper-wrapper functions around firebase firestore, storage
+and auth. Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.
 
 
 * [FirebaseFirestoreWrapper](#module_FirebaseFirestoreWrapper)
@@ -675,7 +763,9 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 <a name="exp_module_FirebaseFirestoreWrapper--module.exports"></a>
 
 ### module.exports(firebase, config, thisLogger) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
-Initializes the Firestore service of the providedfirebase app.  Also instantiates various constants andhelper functions
+Initializes the Firestore service of the provided
+firebase app.  Also instantiates various constants and
+helper functions
 
 **Kind**: Exported function  
 
@@ -687,7 +777,21 @@ Initializes the Firestore service of the providedfirebase app.  Also instantiat
 | thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
 
 **Example**  
-```import * as firebase from "firebase/app";import "firebase/firestore";import FirebaseFirestore from "@leaddreamer/firebase-wrapper/FirebaseFirestoreWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFirestore(firebase);})(config)```
+```
+import * as firebase from "firebase/app";
+import "firebase/firestore";
+import FirebaseFirestore from "@leaddreamer/firebase-wrapper/FirebaseFirestoreWrapper";
+import {config} from "whereever-you-put-it";
+
+((myconfig) {
+try {
+  firebase.app();
+} catch (err) {
+  firebase.initializeApp(myconfig);
+}
+FirebaseFirestore(firebase);
+})(config)
+```
 <a name="module_FirebaseFirestoreWrapper--module.exports.timestamp"></a>
 
 #### module.exports.timestamp
@@ -703,7 +807,8 @@ maximum concurrent writes
 <a name="module_FirebaseFirestoreWrapper--module.exports.RecordFromSnapshot"></a>
 
 #### module.exports.RecordFromSnapshot(documentSnapshot) ⇒ <code>Record</code>
-returns an internal record structure from a firestoreDocument snapshot
+returns an internal record structure from a firestore
+Document snapshot
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
@@ -714,7 +819,8 @@ returns an internal record structure from a firestoreDocument snapshot
 <a name="module_FirebaseFirestoreWrapper--module.exports.RecordsFromSnapshot"></a>
 
 #### module.exports.RecordsFromSnapshot(querySnapshot) ⇒ <code>Array.Record</code>
-returns an array of internal record structures from afirestore Query snapshot
+returns an array of internal record structures from a
+firestore Query snapshot
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
@@ -725,7 +831,10 @@ returns an array of internal record structures from afirestore Query snapshot
 <a name="module_FirebaseFirestoreWrapper--module.exports.createUniqueReference"></a>
 
 #### module.exports.createUniqueReference(tablePath, refPath) ⇒ <code>DocumentReference</code>
-Creates a DocumentReference document to the collectionreferenced in parameter tablePath (relative to optional refPath).This is can be useful for Transactions and Batches, whichcan only get(), set() or update() existing documents. Tricksie!
+Creates a DocumentReference document to the collection
+referenced in parameter tablePath (relative to optional refPath).
+This is can be useful for Transactions and Batches, which
+can only get(), set() or update() existing documents. Tricksie!
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>DocumentReference</code> - Firestore Document Reference  
@@ -738,7 +847,8 @@ Creates a DocumentReference document to the collectionreferenced in parameter t
 <a name="module_FirebaseFirestoreWrapper--module.exports.writeRecord"></a>
 
 #### module.exports.writeRecord(tablePath, data, parentRefPath, batch, mergeOption) ⇒ <code>Promise.Record</code>
-Writes a Firestore record to collection indicated by tablePathrelative to option DocumentReference refPath
+Writes a Firestore record to collection indicated by tablePath
+relative to option DocumentReference refPath
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Fulfil**: document record  
@@ -770,7 +880,8 @@ Writes given data object (or map) to the given documentReference
 <a name="module_FirebaseFirestoreWrapper--module.exports.writeBack"></a>
 
 #### module.exports.writeBack(data, Transaction, mergeOption) ⇒ <code>Promise.Record</code>
-Writes a local-schema document back to the Firestore.  Assumeobject/map came from the firestore
+Writes a local-schema document back to the Firestore.  Assume
+object/map came from the firestore
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>Promise.Record</code> - record as written.  
@@ -828,7 +939,10 @@ returns an array of documents from Firestore
 <a name="module_FirebaseFirestoreWrapper--module.exports.collectRecordsInGroup"></a>
 
 #### module.exports.collectRecordsInGroup(tableName) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-query for a SET of records from a COLLECTIONGROUP - allcollections of a similar name, regardless of parents.  It is up to theUser to ensure these are at a similar level/structure - Firestore justmatches the name
+query for a SET of records from a COLLECTIONGROUP - all
+collections of a similar name, regardless of parents.  It is up to the
+User to ensure these are at a similar level/structure - Firestore just
+matches the name
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
@@ -839,7 +953,8 @@ query for a SET of records from a COLLECTIONGROUP - allcollections of a similar
 <a name="module_FirebaseFirestoreWrapper--module.exports.collectRecordsInGroupByFilter"></a>
 
 #### module.exports.collectRecordsInGroupByFilter(tableName, filterArray) ⇒ <code>Promise.&lt;Array.&lt;Record&gt;&gt;</code>
-queries for Records from a CollectionGroup, filtered bythe passed array of filterObjects
+queries for Records from a CollectionGroup, filtered by
+the passed array of filterObjects
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
@@ -851,7 +966,8 @@ queries for Records from a CollectionGroup, filtered bythe passed array of filt
 <a name="module_FirebaseFirestoreWrapper--module.exports.fetchRecord"></a>
 
 #### module.exports.fetchRecord(tablePath, Id, refPath, batch) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-retrieve a record from the Firestore.  If a Batch object is passed,returns a chained Btahc object
+retrieve a record from the Firestore.  If a Batch object is passed,
+returns a chained Btahc object
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
@@ -865,7 +981,8 @@ retrieve a record from the Firestore.  If a Batch object is passed,returns a ch
 <a name="module_FirebaseFirestoreWrapper--module.exports.fetchRecordByRefPath"></a>
 
 #### module.exports.fetchRecordByRefPath(docRefPath, batch) ⇒ <code>Promise.&lt;Record&gt;</code>
-fetches a single record from the database, using just arefPath to identify the document
+fetches a single record from the database, using just a
+refPath to identify the document
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
@@ -877,7 +994,9 @@ fetches a single record from the database, using just arefPath to identify the 
 <a name="module_FirebaseFirestoreWrapper--module.exports.fetchRecordByFilter"></a>
 
 #### module.exports.fetchRecordByFilter(table, [filterArray], refPath, batch) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-fetches a SINGLE record from the database, using just afilter to identify the document. DANGEROUSLY assumes the filteridentifies a SINGLE document, even if the query always returns an array
+fetches a SINGLE record from the database, using just a
+filter to identify the document. DANGEROUSLY assumes the filter
+identifies a SINGLE document, even if the query always returns an array
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
@@ -891,7 +1010,9 @@ fetches a SINGLE record from the database, using just afilter to identify the d
 <a name="module_FirebaseFirestoreWrapper--module.exports.fetchRecordInGroupByFilter"></a>
 
 #### module.exports.fetchRecordInGroupByFilter(table, [filterArray], batch) ⇒ <code>Promise.&lt;(Record\|WriteBatch\|Transaction)&gt;</code>
-fetches a SINGLE record from the database, using just afilter to identify the document. DANGEROUSLY assumes the filteridentifies a SINGLE document, even if the query always returns an array
+fetches a SINGLE record from the database, using just a
+filter to identify the document. DANGEROUSLY assumes the filter
+identifies a SINGLE document, even if the query always returns an array
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
@@ -904,7 +1025,8 @@ fetches a SINGLE record from the database, using just afilter to identify the d
 <a name="module_FirebaseFirestoreWrapper--module.exports.deleteRecord"></a>
 
 #### module.exports.deleteRecord(record, table, parentRefPath, batch) ⇒ <code>void</code>
-deletes a record from the database. Checkis if record is FROM the data (has refPath)or if if only Id (so supporting parts are needed)
+deletes a record from the database. Checkis if record is FROM the data (has refPath)
+or if if only Id (so supporting parts are needed)
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
@@ -944,7 +1066,9 @@ deletes a single record from the database
 <a name="module_FirebaseFirestoreWrapper--module.exports.updateRecordFields"></a>
 
 #### module.exports.updateRecordFields(recordUpdate) ⇒ <code>Promise.&lt;Record&gt;</code>
-update record by fields - Allows use of FieldPath optionssuch as .delete(). Only specifically referenced fields will beaffected. Assumes the originating docRef is passed as refPath: field
+update record by fields - Allows use of FieldPath options
+such as .delete(). Only specifically referenced fields will be
+affected. Assumes the originating docRef is passed as refPath: field
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
@@ -991,11 +1115,21 @@ adds a new value to a firestore record array entry
 | internalBatch | <code>WriteBatch</code> \| <code>Transaction</code> | a batching object as built *in* the routine, built on the incomingBatch if it exists |
 
 **Example**  
-```export const suboperation = (data, batch = null) => { let myBatch = batch || openWriteBatch(); //note short circuit //stuff that happens in the routine writeRecord(table, data, parent, myBatch); writeRecord(otherTable, otherData, otherParent, myBatch); return localBatchReturn(batch, myBatch);}```
+```
+export const suboperation = (data, batch = null) => {
+ let myBatch = batch || openWriteBatch(); //note short circuit
+ //stuff that happens in the routine
+ writeRecord(table, data, parent, myBatch);
+ writeRecord(otherTable, otherData, otherParent, myBatch);
+ return localBatchReturn(batch, myBatch);
+}
+```
 <a name="module_FirebaseFirestoreWrapper--module.exports.runTransaction"></a>
 
 #### module.exports.runTransaction(updateFunction) ⇒ <code>Promise.object</code>
-creates and runs a series of record operations(executed in the param function) as an atomic operation.A transation object is passed to the callback parameter
+creates and runs a series of record operations
+(executed in the param function) as an atomic operation.
+A transation object is passed to the callback parameter
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>Promise.object</code> - a promise with the result of updateFunction  
@@ -1011,7 +1145,8 @@ creates and runs a series of record operations(executed in the param function) 
 Creates a WriteBatch object to collect actions for Batch writing to backend
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>WriteBatch</code> - object that operations are added to for a bulkoperation  
+**Returns**: <code>WriteBatch</code> - object that operations are added to for a bulk
+operation  
 **Category**: Batch  
 <a name="module_FirebaseFirestoreWrapper--module.exports.closeWriteBatch"></a>
 
@@ -1028,10 +1163,13 @@ Dispatches an asynchronous Closure to submit Batch
 <a name="module_FirebaseFirestoreWrapper--module.exports.openBulkWriter"></a>
 
 #### module.exports.openBulkWriter() ⇒ <code>BulkWriter</code>
-Creates a bulkWriter object to collect actions for Bulk writing to backendoffers parallel operations, writes only, does NOT check for contentions,admin/Node-side only.
+Creates a bulkWriter object to collect actions for Bulk writing to backend
+offers parallel operations, writes only, does NOT check for contentions,
+admin/Node-side only.
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
-**Returns**: <code>BulkWriter</code> - object that operations are added to for a bulkoperation  
+**Returns**: <code>BulkWriter</code> - object that operations are added to for a bulk
+operation  
 **Category**: Batch  
 <a name="module_FirebaseFirestoreWrapper--module.exports.closeBulkWriter"></a>
 
@@ -1048,21 +1186,25 @@ Dispatches an asynchronous Closure to complete BulkWriter
 <a name="module_FirebaseFirestoreWrapper--module.exports.documentId"></a>
 
 #### module.exports.documentId : <code>Object</code>
-a fieldPath value to represent the document Id - WARNINGGoogle Firestore has a bug, and this actually represents the FULL PATHto the document
+a fieldPath value to represent the document Id - WARNING
+Google Firestore has a bug, and this actually represents the FULL PATH
+to the document
 
 **Kind**: static constant of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Category**: FieldPath  
 <a name="module_FirebaseFirestoreWrapper--module.exports.deleteFieldValue"></a>
 
 #### module.exports.deleteFieldValue : <code>Object</code>
-a sentinel value used to delete a field during anupdate operation
+a sentinel value used to delete a field during an
+update operation
 
 **Kind**: static constant of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Category**: FieldValue  
 <a name="module_FirebaseFirestoreWrapper--module.exports.serverTimestampFieldValue"></a>
 
 #### module.exports.serverTimestampFieldValue : <code>Object</code>
-a sentinel value to set a field to aserver-generated timestamp during set(0 or update())
+a sentinel value to set a field to a
+server-generated timestamp during set(0 or update())
 
 **Kind**: static constant of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Category**: FieldValue  
@@ -1082,7 +1224,10 @@ return a sentinel to incrment/decrement a field
 <a name="module_FirebaseFirestoreWrapper--module.exports.decrementFieldValue"></a>
 
 #### module.exports.decrementFieldValue(n) ⇒
-----------------------------------------------------------------------return a sentinel to decrment/decrement a fieldNOT REALLY A FIREBASE FUNCTIONFire base has only increment; we implement this for legibility
+----------------------------------------------------------------------
+return a sentinel to decrment/decrement a field
+NOT REALLY A FIREBASE FUNCTION
+Fire base has only increment; we implement this for legibility
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: a sentinel value  
@@ -1245,7 +1390,8 @@ underlying query for fetch
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginateFetch+status"></a>
 
 ##### paginateFetch.status : [<code>PagingStatus</code>](#PagingStatus)
-current status of pagination-1 pending; 0 uninitialized; 1 updated;
+current status of pagination
+-1 pending; 0 uninitialized; 1 updated;
 
 **Kind**: instance property of [<code>PaginateFetch</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginateFetch)  
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginateFetch+PageForward"></a>
@@ -1297,7 +1443,8 @@ current limit basis for listener query
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginateGroupFetch+status"></a>
 
 ##### paginateGroupFetch.status : [<code>PagingStatus</code>](#PagingStatus)
-current status of listener -1 pending; 0 uninitialized; 1 updated;
+current status of listener
+ -1 pending; 0 uninitialized; 1 updated;
 
 **Kind**: instance property of [<code>PaginateGroupFetch</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginateGroupFetch)  
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginateGroupFetch+PageForward"></a>
@@ -1306,18 +1453,22 @@ current status of listener -1 pending; 0 uninitialized; 1 updated;
 executes the query again to fetch the next set of records
 
 **Kind**: instance method of [<code>PaginateGroupFetch</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginateGroupFetch)  
-**Returns**: <code>Promise.&lt;Array.Record&gt;</code> - returns data as an array of objects (not dissimilar to Redux State objects)with both the documentID and documentReference added as fields.  
+**Returns**: <code>Promise.&lt;Array.Record&gt;</code> - returns data as an array of objects (not dissimilar to Redux State objects)
+with both the documentID and documentReference added as fields.  
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginateGroupFetch+PageBack"></a>
 
 ##### paginateGroupFetch.PageBack() ⇒ <code>Promise.&lt;Array.Record&gt;</code>
 executes the query again to fetch the previous set of records
 
 **Kind**: instance method of [<code>PaginateGroupFetch</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginateGroupFetch)  
-**Returns**: <code>Promise.&lt;Array.Record&gt;</code> - returns data as an array of objects (not dissimilar to Redux State objects)with both the documentID and documentReference added as fields.  
+**Returns**: <code>Promise.&lt;Array.Record&gt;</code> - returns data as an array of objects (not dissimilar to Redux State objects)
+with both the documentID and documentReference added as fields.  
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener"></a>
 
 #### module.exports.PaginatedListener
-Creates an object to allow for paginating a listener for tableread from Firestore. REQUIRES a sorting choice; masks somesubscribe/unsubscribe action for paging forward/backward
+Creates an object to allow for paginating a listener for table
+read from Firestore. REQUIRES a sorting choice; masks some
+subscribe/unsubscribe action for paging forward/backward
 
 **Kind**: static class of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Category**: Paginator  
@@ -1410,14 +1561,18 @@ reconstructs the basis query
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageForward"></a>
 
 ##### paginatedListener.PageForward() ⇒ <code>Unsubscribe</code>
-resets the listener query to the next page of results.Unsubscribes from the current listener, constructs a new query, and sets itas the new listener
+resets the listener query to the next page of results.
+Unsubscribes from the current listener, constructs a new query, and sets it
+as the new listener
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
 **Returns**: <code>Unsubscribe</code> - returns the unsubscriber function (for lifecycle events)  
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+PageBack"></a>
 
 ##### paginatedListener.PageBack() ⇒ <code>Unsubscribe</code>
-resets the listener query to the next page of results.Unsubscribes from the current listener, constructs a new query, and sets it\as the new listener
+resets the listener query to the next page of results.
+Unsubscribes from the current listener, constructs a new query, and sets it\
+as the new listener
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
 **Returns**: <code>Unsubscribe</code> - returns the unsubscriber function (for lifecycle events)  
@@ -1436,7 +1591,9 @@ sets page size limit to new value, and restarts the paged listener
 <a name="module_FirebaseFirestoreWrapper--module.exports.PaginatedListener+ChangeFilter"></a>
 
 ##### paginatedListener.ChangeFilter([filterArray]) ⇒ <code>Unsubscribe</code>
-changes the filter on the subscriptionThis has to unsubscribe the current listener,create a new query, then apply it as the listener
+changes the filter on the subscription
+This has to unsubscribe the current listener,
+create a new query, then apply it as the listener
 
 **Kind**: instance method of [<code>PaginatedListener</code>](#module_FirebaseFirestoreWrapper--module.exports.PaginatedListener)  
 **Returns**: <code>Unsubscribe</code> - returns the unsubscriber function (for lifecycle events)  
@@ -1454,7 +1611,25 @@ IF unsubscribe function is set, run it.
 <a name="module_FirebaseFirestoreWrapper--module.exports.ownerFilter"></a>
 
 #### module.exports.ownerFilter(owner, queryFilter) ⇒ <code>filterObject</code>
-Contructs a filter that selects only the "owner" section of acollectionGroup query - in other words, descendents of a particulartop=level document.  This takes advantage of Firestore's indexing,which "names"/indexes all documents using the FULL PATH to thedocument, starting from the top-most, i.e.:TOP_COLLECTION/{dociId}/NEXT_COLLECTION/{docId}/NEXT_NEXT_COLLECTION/{etc}This functions knowns NOTHING about the actual schema; it simply usesthe path of the indicated "owner" as starting portion of ALL the"child" documents of the owner. It also takes advantage of thestrictly alpha-numeric nature of the path string.As such, ALL children paths strings MUST be "greater than" the ownerbare path, and MUST be LESS THAN the alpha-numerically "next" value:e.g. if the "owner" path is TOP_COLLECTION/abcdefg, then/TOP_COLLECTION/abcdefh > __name__ > //TOP_COLLECTION/abcdefg(assuming LEXICAL SORT)IMPORTANT NOTE:Because this filter uses an INEQUALITY, .sortBy() conditionsare not supported
+Contructs a filter that selects only the "owner" section of a
+collectionGroup query - in other words, descendents of a particular
+top=level document.  This takes advantage of Firestore's indexing,
+which "names"/indexes all documents using the FULL PATH to the
+document, starting from the top-most, i.e.:
+TOP_COLLECTION/{dociId}/NEXT_COLLECTION/{docId}/NEXT_NEXT_COLLECTION/{etc}
+This functions knowns NOTHING about the actual schema; it simply uses
+the path of the indicated "owner" as starting portion of ALL the
+"child" documents of the owner. It also takes advantage of the
+strictly alpha-numeric nature of the path string.
+As such, ALL children paths strings MUST be "greater than" the owner
+bare path, and MUST be LESS THAN the alpha-numerically "next" value:
+e.g. if the "owner" path is TOP_COLLECTION/abcdefg, then
+
+/TOP_COLLECTION/abcdefh > __name__ > //TOP_COLLECTION/abcdefg
+(assuming LEXICAL SORT)
+IMPORTANT NOTE:
+Because this filter uses an INEQUALITY, .sortBy() conditions
+are not supported
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Category**: Tree Slice  
@@ -1467,7 +1642,9 @@ Contructs a filter that selects only the "owner" section of acollectionGroup qu
 <a name="module_FirebaseFirestoreWrapper--module.exports.listenSlice"></a>
 
 #### module.exports.listenSlice(owner, collectionName, dataCallback, errCallback) ⇒ <code>Unsubscribe</code>
-Uses the ownerFilter (above) to establish a listener to "just" theparts of a collectionGroup that are descendants of the passed "owner"record.
+Uses the ownerFilter (above) to establish a listener to "just" the
+parts of a collectionGroup that are descendants of the passed "owner"
+record.
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>Unsubscribe</code> - function to be called to release subscription  
@@ -1484,7 +1661,9 @@ Uses the ownerFilter (above) to establish a listener to "just" theparts of a co
 <a name="module_FirebaseFirestoreWrapper--module.exports.fetchSlice"></a>
 
 #### module.exports.fetchSlice(owner, collectionName) ⇒ <code>Promise.Array.Record</code>
-Wrapper around database fetch, using ownerFilter above toselect/fetch just an "owner" parent document's descendants from acollectionGroup
+Wrapper around database fetch, using ownerFilter above to
+select/fetch just an "owner" parent document's descendants from a
+collectionGroup
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>Promise.Array.Record</code> - response  
@@ -1499,7 +1678,9 @@ Wrapper around database fetch, using ownerFilter above toselect/fetch just an "
 <a name="module_FirebaseFirestoreWrapper--module.exports.querySlice"></a>
 
 #### module.exports.querySlice(owner, collectionName, filterArray) ⇒ <code>Promise.Array.Record</code>
-Wrapper around database fetch, using ownerFilter above toselect/fetch just an "owner" parent document's descendants from acollectionGroup
+Wrapper around database fetch, using ownerFilter above to
+select/fetch just an "owner" parent document's descendants from a
+collectionGroup
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>Promise.Array.Record</code> - response  
@@ -1515,7 +1696,9 @@ Wrapper around database fetch, using ownerFilter above toselect/fetch just an "
 <a name="module_FirebaseFirestoreWrapper--module.exports.listenQuerySlice"></a>
 
 #### module.exports.listenQuerySlice(owner, collectionName, filterArray, dataCallback, errCallback) ⇒ <code>callback</code>
-Uses the ownerFilter (above) to establish a listener to "just" theparts of a collectionGroup that are descendants of the passed "owner"record.
+Uses the ownerFilter (above) to establish a listener to "just" the
+parts of a collectionGroup that are descendants of the passed "owner"
+record.
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>callback</code> - function to be called to release subscription  
@@ -1533,7 +1716,8 @@ Uses the ownerFilter (above) to establish a listener to "just" theparts of a co
 <a name="module_FirebaseFirestoreWrapper--module.exports.ownerType"></a>
 
 #### module.exports.ownerType(record) ⇒ <code>string</code>
-Returns the "type" (collection name) of the top-most parent of arecord, derived from the refPath
+Returns the "type" (collection name) of the top-most parent of a
+record, derived from the refPath
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>string</code> - the collection name  
@@ -1546,7 +1730,8 @@ Returns the "type" (collection name) of the top-most parent of arecord, derived
 <a name="module_FirebaseFirestoreWrapper--module.exports.ownerId"></a>
 
 #### module.exports.ownerId(record) ⇒ <code>string</code>
-Returns the Id (documentId) of the top-most parent of arecord, derived from the refPath
+Returns the Id (documentId) of the top-most parent of a
+record, derived from the refPath
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>string</code> - the Id  
@@ -1559,7 +1744,8 @@ Returns the Id (documentId) of the top-most parent of arecord, derived from the
 <a name="module_FirebaseFirestoreWrapper--module.exports.ownerRefPath"></a>
 
 #### module.exports.ownerRefPath(record) ⇒ <code>string</code>
-Returns the Id (documentId) of the top-most parent of arecord, derived from the refPath
+Returns the Id (documentId) of the top-most parent of a
+record, derived from the refPath
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>string</code> - the Id  
@@ -1572,7 +1758,8 @@ Returns the Id (documentId) of the top-most parent of arecord, derived from the
 <a name="module_FirebaseFirestoreWrapper--module.exports.ownerByChild"></a>
 
 #### module.exports.ownerByChild(record) ⇒ <code>Record</code>
-Returns the bare owner record reference to the parent (root) of aprovided child
+Returns the bare owner record reference to the parent (root) of a
+provided child
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>Record</code> - reference to the parent (root) record  
@@ -1599,7 +1786,8 @@ returns the minimal reference record from an Id and "type"
 <a name="module_FirebaseFirestoreWrapper--module.exports.fetchOwner"></a>
 
 #### module.exports.fetchOwner(record) ⇒ <code>Document</code>
-returns the record for the top-most parent of a record,derived from the refPath
+returns the record for the top-most parent of a record,
+derived from the refPath
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Category**: Tree Slice  
@@ -1632,7 +1820,8 @@ Implements a PaginatedListener using type syntax
 <a name="module_FirebaseFirestoreWrapper--module.exports.recordType"></a>
 
 #### module.exports.recordType(record) ⇒ <code>string</code>
-Returns the "type" (collection name) the passed record isstored in, derived from the refPath
+Returns the "type" (collection name) the passed record is
+stored in, derived from the refPath
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>string</code> - the collection name  
@@ -1707,7 +1896,11 @@ optionally batched record update - abstracts batch process from specific types
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedCreate"></a>
 
 #### module.exports.typedCreate(data, parent, type, batch) ⇒ <code>Promise.ChainType</code>
-Creates a new document reference of the indicated type, and writesit to the backend. Specific intent is when the Id needs to bepre-specified, or shared outside this function. Normal writingaction will silently create a new document, which has to then befound by query
+Creates a new document reference of the indicated type, and writes
+it to the backend. Specific intent is when the Id needs to be
+pre-specified, or shared outside this function. Normal writing
+action will silently create a new document, which has to then be
+found by query
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>Promise.ChainType</code> - WriteBatch, Transaction or Void  
@@ -1737,7 +1930,8 @@ Extracts a tree of document ID's from a child document (assumes is a child)
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedTablePathFromTree"></a>
 
 #### module.exports.typedTablePathFromTree(tree, type, branchType) ⇒ <code>string</code>
-Builds a refPath *down* to a desired collection/type from an existingRecordTree Map.
+Builds a refPath *down* to a desired collection/type from an existing
+RecordTree Map.
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>string</code> - constructed TablePath (collection)  
@@ -1752,7 +1946,8 @@ Builds a refPath *down* to a desired collection/type from an existingRecordTree
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedRefPathFromTree"></a>
 
 #### module.exports.typedRefPathFromTree(tree, type) ⇒ <code>string</code>
-Builds a refPath *down* to a desired collection/type from an existingRecordTree Map.
+Builds a refPath *down* to a desired collection/type from an existing
+RecordTree Map.
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>string</code> - constructed refPath (document)  
@@ -1766,7 +1961,8 @@ Builds a refPath *down* to a desired collection/type from an existingRecordTree
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedIdFromChild"></a>
 
 #### module.exports.typedIdFromChild(child, type)
-Looks up a "tree" to find the Id of the document at the requestedcollection level ("type")
+Looks up a "tree" to find the Id of the document at the requested
+collection level ("type")
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Category**: Typed  
@@ -1780,7 +1976,8 @@ Looks up a "tree" to find the Id of the document at the requestedcollection lev
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedTablePathFromChild"></a>
 
 #### module.exports.typedTablePathFromChild(child, type) ⇒ <code>string</code>
-Builds a refPath *up* to a desired collection/type from an existingchild in a tree
+Builds a refPath *up* to a desired collection/type from an existing
+child in a tree
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>string</code> - constructed refPath (collection)  
@@ -1795,7 +1992,8 @@ Builds a refPath *up* to a desired collection/type from an existingchild in a t
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedRefPathFromChild"></a>
 
 #### module.exports.typedRefPathFromChild(child, type) ⇒ <code>string</code>
-Builds a refPath *up* to a desired collection/type from an existingchild in a tree
+Builds a refPath *up* to a desired collection/type from an existing
+child in a tree
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>string</code> - constructed refPath (document)  
@@ -1868,7 +2066,9 @@ function to collect documents from "up" the collection/document tree of a child 
 <a name="module_FirebaseFirestoreWrapper--module.exports.typedListener"></a>
 
 #### module.exports.typedListener(type, parent, type, dataCallback, errCallback) ⇒ <code>callback</code>
-Uses the ownerFilter (above) to establish a listener to "just" theparts of a collectionGroup that are descendants of the passed "owner"record.
+Uses the ownerFilter (above) to establish a listener to "just" the
+parts of a collectionGroup that are descendants of the passed "owner"
+record.
 
 **Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>callback</code> - function to be called to release subscription  
@@ -1886,7 +2086,8 @@ Uses the ownerFilter (above) to establish a listener to "just" theparts of a co
 <a name="module_FirebaseFirestoreWrapper--module.exports..dbReference"></a>
 
 #### module.exports~dbReference(refPath) ⇒ <code>DocumentReference</code>
-generates a document reference from a pathif passed; else returns the db base reference
+generates a document reference from a path
+if passed; else returns the db base reference
 
 **Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
@@ -1897,7 +2098,8 @@ generates a document reference from a pathif passed; else returns the db base r
 <a name="module_FirebaseFirestoreWrapper--module.exports..createRefFromPath"></a>
 
 #### module.exports~createRefFromPath(docPath, refPath) ⇒ <code>DocumentReference</code>
-Creates a DocumentReference from *relative* docPathand an (optional) absolute refPath
+Creates a DocumentReference from *relative* docPath
+and an (optional) absolute refPath
 
 **Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 
@@ -1909,7 +2111,8 @@ Creates a DocumentReference from *relative* docPathand an (optional) absolute r
 <a name="module_FirebaseFirestoreWrapper--module.exports..filterQuery"></a>
 
 #### module.exports~filterQuery(query, filterArray) ⇒ <code>Query</code>
-builds and returns a query built from an array of filter (i.e. "where")conditions
+builds and returns a query built from an array of filter (i.e. "where")
+conditions
 
 **Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>Query</code> - Firestore Query object  
@@ -1922,7 +2125,8 @@ builds and returns a query built from an array of filter (i.e. "where")conditio
 <a name="module_FirebaseFirestoreWrapper--module.exports..sortQuery"></a>
 
 #### module.exports~sortQuery(query, sortArray) ⇒
-builds and returns a query built from an array of filter (i.e. "where")conditions
+builds and returns a query built from an array of filter (i.e. "where")
+conditions
 
 **Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: Firestore Query object  
@@ -1935,7 +2139,8 @@ builds and returns a query built from an array of filter (i.e. "where")conditio
 <a name="module_FirebaseFirestoreWrapper--module.exports..limitQuery"></a>
 
 #### module.exports~limitQuery(query, limit) ⇒ <code>Query</code>
-builds and returns a query built from an array of filter (i.e. "where")conditions
+builds and returns a query built from an array of filter (i.e. "where")
+conditions
 
 **Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseFirestoreWrapper--module.exports)  
 **Returns**: <code>Query</code> - Firestore Query object  
@@ -2007,7 +2212,10 @@ common properties of our database records
 <a name="module_FirebaseStorageWrapper"></a>
 
 ## FirebaseStorageWrapper
-A set of helper-wrapper functions around firebase firestore, storageand auth. Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.
+A set of helper-wrapper functions around firebase firestore, storage
+and auth. Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.
 
 
 * [FirebaseStorageWrapper](#module_FirebaseStorageWrapper)
@@ -2066,7 +2274,13 @@ executes the query again to fetch the next set of records
 <a name="module_FirebaseStorageWrapper.makeStorageRefFromRecord"></a>
 
 ### FirebaseStorageWrapper.makeStorageRefFromRecord(record, key, filename) ⇒ <code>StorageReference</code>
-This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.The function takes a document record, and combines it with optional key andfilename to construct a '/' separated path to a stored item, , and returns aStorage reference to that item.Note this simply makes the Storage Ref - it does not carry out *any* operations
+This function is part of a storage scheme that uses parallel structures
+between Firestore collection/documents and Storage paths.  The concept
+here is all Storage items are part of/belong to Firestore documents.
+The function takes a document record, and combines it with optional key and
+filename to construct a '/' separated path to a stored item, , and returns a
+Storage reference to that item.
+Note this simply makes the Storage Ref - it does not carry out *any* operations
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 **Returns**: <code>StorageReference</code> - a Firestore Storage Reference  
@@ -2090,7 +2304,13 @@ This function is part of a storage scheme that uses parallel structuresbetween 
 <a name="module_FirebaseStorageWrapper.makeFileURLFromRecord"></a>
 
 ### FirebaseStorageWrapper.makeFileURLFromRecord(record, key, filename) ⇒ <code>Promise.&lt;string&gt;</code>
-This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a document record, and combines it with optional key andfilename to construct a '/' separated path to a stored item, , and returns aURL that can be used to access that item.Note this simply makes the URL - it does not carry out *any* operations
+This function is part of a storage scheme that uses parallel structures
+between Firestore collection/documents and Storage paths.  The concept
+here is all Storage items are part of/belong to Firestore documents.
+This function takes a document record, and combines it with optional key and
+filename to construct a '/' separated path to a stored item, , and returns a
+URL that can be used to access that item.
+Note this simply makes the URL - it does not carry out *any* operations
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 **Fulfil**: <code>string</code>  a "long-lived" URL to access the file.  
@@ -2105,7 +2325,13 @@ This function is part of a storage scheme that uses parallel structuresbetween 
 <a name="module_FirebaseStorageWrapper.makePrivateURLFromRecord"></a>
 
 ### FirebaseStorageWrapper.makePrivateURLFromRecord(record, key) ⇒ <code>string</code>
-This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a document record, and combines it with optional key,to construct a '/' separated path to a stored item, , and returns aURL that can be used to access that item.Note this simply makes the URL - it does not carry out *any* operations
+This function is part of a storage scheme that uses parallel structures
+between Firestore collection/documents and Storage paths.  The concept
+here is all Storage items are part of/belong to Firestore documents.
+This function takes a document record, and combines it with optional key,
+to construct a '/' separated path to a stored item, , and returns a
+URL that can be used to access that item.
+Note this simply makes the URL - it does not carry out *any* operations
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 **Returns**: <code>string</code> - The resulting Security-Rule-compliant URL  
@@ -2118,7 +2344,13 @@ This function is part of a storage scheme that uses parallel structuresbetween 
 <a name="module_FirebaseStorageWrapper.makePrivateURLFromReference"></a>
 
 ### FirebaseStorageWrapper.makePrivateURLFromReference(reference, key) ⇒ <code>string</code>
-This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a document record, and combines it with optional key,to construct a '/' separated path to a stored item, , and returns aURL that can be used to access that item.Note this simply makes the URL - it does not carry out *any* operations
+This function is part of a storage scheme that uses parallel structures
+between Firestore collection/documents and Storage paths.  The concept
+here is all Storage items are part of/belong to Firestore documents.
+This function takes a document record, and combines it with optional key,
+to construct a '/' separated path to a stored item, , and returns a
+URL that can be used to access that item.
+Note this simply makes the URL - it does not carry out *any* operations
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 **Returns**: <code>string</code> - The resulting Security-Rule-compliant URL  
@@ -2131,7 +2363,13 @@ This function is part of a storage scheme that uses parallel structuresbetween 
 <a name="module_FirebaseStorageWrapper.makePrivateURLFromPath"></a>
 
 ### FirebaseStorageWrapper.makePrivateURLFromPath(fullPath) ⇒ <code>string</code>
-This function is part of a storage scheme that uses parallel structuresbetween Firestore collection/documents and Storage paths.  The concepthere is all Storage items are part of/belong to Firestore documents.This function takes a full path to a Storage object and turns it intoURL.  If "type"is not included, the URL will return the metadata, notthe contents.Note this simply makes the URL - it does not carry out *any* operations
+This function is part of a storage scheme that uses parallel structures
+between Firestore collection/documents and Storage paths.  The concept
+here is all Storage items are part of/belong to Firestore documents.
+This function takes a full path to a Storage object and turns it into
+URL.  If "type"is not included, the URL will return the metadata, not
+the contents.
+Note this simply makes the URL - it does not carry out *any* operations
 
 **Kind**: static method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 **Returns**: <code>string</code> - constructed Security-Rule-compliant URL  
@@ -2171,7 +2409,9 @@ This function is part of a storage scheme that uses parallel structuresbetween 
 <a name="module_FirebaseStorageWrapper..FirebaseStorageWrapper"></a>
 
 ### FirebaseStorageWrapper~FirebaseStorageWrapper(firebase)
-Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
+Initializes the Auth service of the provided
+firebase app.  Also instantiates various constants and
+helper functions
 
 **Kind**: inner method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 
@@ -2180,11 +2420,26 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | firebase | <code>firebase</code> | 
 
 **Example**  
-```import * as firebase from "firebase/app";import "firebase/storage";import FirebaseStorage from "@leaddreamer/firebase-wrapper/FirebaseStorageWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseStorage(firebase);})(config);```
+```
+import * as firebase from "firebase/app";
+import "firebase/storage";
+import FirebaseStorage from "@leaddreamer/firebase-wrapper/FirebaseStorageWrapper";
+import {config} from "whereever-you-put-it";
+
+((myconfig) {
+try {
+  firebase.app();
+} catch (err) {
+  firebase.initializeApp(myconfig);
+}
+FirebaseStorage(firebase);
+})(config);
+```
 <a name="module_FirebaseStorageWrapper..storeBlobByRecord"></a>
 
 ### FirebaseStorageWrapper~storeBlobByRecord(blob, record, key, filename) ⇒ <code>UploadTask</code>
-Firestore's document sizes can be limited - 1MB - so our system storeslarger digital "blobs" in a parallel Firestore Storage.
+Firestore's document sizes can be limited - 1MB - so our system stores
+larger digital "blobs" in a parallel Firestore Storage.
 
 **Kind**: inner method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 **Returns**: <code>UploadTask</code> - Firestore Storage UploadTask Object  
@@ -2199,7 +2454,8 @@ Firestore's document sizes can be limited - 1MB - so our system storeslarger di
 <a name="module_FirebaseStorageWrapper..storeDataURLByRecord"></a>
 
 ### FirebaseStorageWrapper~storeDataURLByRecord(dataURL, record, key, filename) ⇒ <code>UploadTask</code>
-Firestore's document sizes can be limited - 1MB - so our system storeslarger digital "blobs" in a parallel Firestore Storage.
+Firestore's document sizes can be limited - 1MB - so our system stores
+larger digital "blobs" in a parallel Firestore Storage.
 
 **Kind**: inner method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 **Returns**: <code>UploadTask</code> - Firestore Storage UploadTask Object  
@@ -2309,7 +2565,10 @@ Firestore's document sizes can be limited - 1MB - so our system storeslarger di
 <a name="module_FirebaseStorageAdminEmulator"></a>
 
 ## FirebaseStorageAdminEmulator
-A set of helper-wrapper functions around firebase storageIntent is to treat Firestore as a hierarchicalrecord-oriented database and Storage as a parallel structureoriginally conceived to port from one database to another.
+A set of helper-wrapper functions around firebase storage
+Intent is to treat Firestore as a hierarchical
+record-oriented database and Storage as a parallel structure
+originally conceived to port from one database to another.
 
 
 * [FirebaseStorageAdminEmulator](#module_FirebaseStorageAdminEmulator)
@@ -2356,7 +2615,14 @@ A set of helper-wrapper functions around firebase storageIntent is to treat Fir
 <a name="new_module_FirebaseStorageAdminEmulator..adminRef_new"></a>
 
 #### new adminRef(bucket, path)
-Create a class that emulates a Firebase Storage storageRefusing Firebase Admin Cloud Storage Functions.  This is notan exact replica, but one with similar static members andmethods.  Intended for use with a higher-level Wrapper libraryThis returns an object that has many of the same members andmethods as a Firebase storageRef, but only in conjunction withthe methods here, and likely only with the "wrapper" it is definedfor.
+Create a class that emulates a Firebase Storage storageRef
+using Firebase Admin Cloud Storage Functions.  This is not
+an exact replica, but one with similar static members and
+methods.  Intended for use with a higher-level Wrapper library
+This returns an object that has many of the same members and
+methods as a Firebase storageRef, but only in conjunction with
+the methods here, and likely only with the "wrapper" it is defined
+for.
 
 
 | Param | Type | Description |
@@ -2426,7 +2692,9 @@ Deletes the referenced storage item
 <a name="module_FirebaseStorageAdminEmulator..adminRef+getDownloadURL"></a>
 
 #### adminRef.getDownloadURL() ⇒ <code>Promise.&lt;string&gt;</code>
-Generates a long-lived (essentially permanent until revoked)Public-Access URL for a storage item in FIREBASE (not Cloud Storage)format
+Generates a long-lived (essentially permanent until revoked)
+Public-Access URL for a storage item in FIREBASE (not Cloud Storage)
+format
 
 **Kind**: instance method of [<code>adminRef</code>](#module_FirebaseStorageAdminEmulator..adminRef)  
 <a name="module_FirebaseStorageAdminEmulator..adminRef+getToken"></a>
@@ -2438,13 +2706,15 @@ Fetches (or creates as needed) a unique token for a storage object
 <a name="module_FirebaseStorageAdminEmulator..adminRef+getMetadata"></a>
 
 #### adminRef.getMetadata() ⇒ <code>Promise.&lt;FileMetadata&gt;</code>
-Fetches the FileMetadata for the storage object. Custom/Client metadatais located in FileMetadata.metadata
+Fetches the FileMetadata for the storage object. Custom/Client metadata
+is located in FileMetadata.metadata
 
 **Kind**: instance method of [<code>adminRef</code>](#module_FirebaseStorageAdminEmulator..adminRef)  
 <a name="module_FirebaseStorageAdminEmulator..adminRef+put"></a>
 
 #### adminRef.put(data, metadata) ⇒ <code>Promise.&lt;object&gt;</code>
-puts a block of data (and optional metadata) into storage atlocation specified by adminRef
+puts a block of data (and optional metadata) into storage at
+location specified by adminRef
 
 **Kind**: instance method of [<code>adminRef</code>](#module_FirebaseStorageAdminEmulator..adminRef)  
 
@@ -2456,7 +2726,8 @@ puts a block of data (and optional metadata) into storage atlocation specified 
 <a name="module_FirebaseStorageAdminEmulator..adminRef+putString"></a>
 
 #### adminRef.putString(dataString, stringFormat, metadata) ⇒ <code>Promise.&lt;object&gt;</code>
-puts a string (possibly encoded data) into a storage filedescribed by the provided reference.
+puts a string (possibly encoded data) into a storage file
+described by the provided reference.
 
 **Kind**: instance method of [<code>adminRef</code>](#module_FirebaseStorageAdminEmulator..adminRef)  
 
@@ -2469,7 +2740,14 @@ puts a string (possibly encoded data) into a storage filedescribed by the provi
 <a name="module_FirebaseStorageAdminEmulator..FirebaseStorageAdminEmulator"></a>
 
 ### FirebaseStorageAdminEmulator~FirebaseStorageAdminEmulator(firebase)
-Initializes the Storage service of the provided firebase app.  Alsoinstantiates various constants and helper functions.This is a WRAPPER around CLOUD STORAGE (admin) functionsto emulate FIREBASE functionality, keeping a similar APIbetween client & cloud code.NOTE: admin "references" ARE NOT the same as client references, and are NOTinterchangeable.  Do not mix client & admin code (not actually possiblein this wrapper)
+Initializes the Storage service of the provided firebase app.  Also
+instantiates various constants and helper functions.
+This is a WRAPPER around CLOUD STORAGE (admin) functions
+to emulate FIREBASE functionality, keeping a similar API
+between client & cloud code.
+NOTE: admin "references" ARE NOT the same as client references, and are NOT
+interchangeable.  Do not mix client & admin code (not actually possible
+in this wrapper)
 
 **Kind**: inner method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
 
