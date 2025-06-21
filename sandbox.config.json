@@ -3,7 +3,7 @@
   "hardReloadOnChange": false,
   "view": "browser",
   "container": {
-    "node": "16"
+    "node": ">=18"
   },
   "template": "node"
 }
