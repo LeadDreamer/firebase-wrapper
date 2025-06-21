@@ -149,7 +149,7 @@ Initializes the Firestore service of the providedfirebase app.  Also instantiat
 | thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
 
 **Example**  
-```import * as firebase from "firebase/app";import "firebase/firestore";import FirebaseFirestore from "@leaddreamer/firebase-wrapper/FirebaseFirestoreWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFirestore(firebase);})(config)```
+```import * as firebase from "firebase/compat/app";import "firebase/firestore";import FirebaseFirestore from "@leaddreamer/firebase-wrapper/FirebaseFirestoreWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFirestore(firebase);})(config)```
 <a name="module_FirebaseFirestoreWrapper--module.exports.timestamp"></a>
 
 #### module.exports.timestamp

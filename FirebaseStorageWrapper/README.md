@@ -198,7 +198,7 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | firebase | <code>firebase</code> | 
 
 **Example**  
-```import * as firebase from "firebase/app";import "firebase/storage";import FirebaseStorage from "@leaddreamer/firebase-wrapper/FirebaseStorageWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseStorage(firebase);})(config);```
+```import * as firebase from "firebase/compat/app";import "firebase/storage";import FirebaseStorage from "@leaddreamer/firebase-wrapper/FirebaseStorageWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseStorage(firebase);})(config);```
 <a name="module_FirebaseStorageWrapper..storeBlobByRecord"></a>
 
 ### FirebaseStorageWrapper~storeBlobByRecord(blob, record, key, filename) ⇒ <code>UploadTask</code>

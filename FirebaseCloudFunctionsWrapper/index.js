@@ -19,7 +19,7 @@ let functions;
  * @param {firebase} firebase
  * @example
  * ```
- * import * as firebase from "firebase/app";
+ * import * as firebase from "firebase/compat/app";
  * import "firebase/functions";
  * import FirebaseFunctions from "@leaddreamer/firebase-wrapper/FirebaseCloudFunctionsWrapper";
  * import {config} from "whereever-you-put-it";
@@ -45,7 +45,7 @@ let functions;
  * @returns {Promise<object|void>}
  * @example
  * ```
- * import * as firebase from "firebase/app";
+ * import * as firebase from "firebase/compat/app";
  * import "firebase/functions";
  * import FirebaseFunctions from "@leaddreamer/firebase-wrapper/FirebaseCloudFunctionsWrapper";
  * import {config} from "whereever-you-put-it";

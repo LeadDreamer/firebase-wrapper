@@ -6,7 +6,7 @@
  * database to another.
  * @example
  * ```
- * import * as firebase from "firebase/app";
+ * import * as firebase from "firebase/compat/app";
  * import "firebase/auth";
  * import FirebaseAuth from "@leaddreamer/firebase-wrapper/FirebaseAuthWrapper";
  * //the next is optional - if you want the React component

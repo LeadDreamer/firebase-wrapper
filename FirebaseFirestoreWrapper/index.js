@@ -48,7 +48,7 @@ function penultimate(array) {
  * @returns {Promise<object|void>}
  * @example
  * ```
- * import * as firebase from "firebase/app";
+ * import * as firebase from "firebase/compat/app";
  * import "firebase/firestore";
  * import FirebaseFirestore from "@leaddreamer/firebase-wrapper/FirebaseFirestoreWrapper";
  * import {config} from "whereever-you-put-it";

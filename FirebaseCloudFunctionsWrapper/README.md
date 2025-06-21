@@ -31,7 +31,7 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
 
 **Example**  
-```import * as firebase from "firebase/app";import "firebase/functions";import FirebaseFunctions from "@leaddreamer/firebase-wrapper/FirebaseCloudFunctionsWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFunctions(firebase);})(config)```
+```import * as firebase from "firebase/compat/app";import "firebase/functions";import FirebaseFunctions from "@leaddreamer/firebase-wrapper/FirebaseCloudFunctionsWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFunctions(firebase);})(config)```
 <a name="module_FirebaseCloudFunctionsWrapper--module.exports.CloudFunctions"></a>
 
 #### module.exports.CloudFunctions() ⇒ <code>Promise</code>

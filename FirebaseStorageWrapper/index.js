@@ -25,7 +25,7 @@ import {
  * @param {firebase} firebase
  * @example
  * ```
- * import * as firebase from "firebase/app";
+ * import * as firebase from "firebase/compat/app";
  * import "firebase/storage";
  * import FirebaseStorage from "@leaddreamer/firebase-wrapper/FirebaseStorageWrapper";
  * import {config} from "whereever-you-put-it";
