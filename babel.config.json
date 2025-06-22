@@ -12,5 +12,6 @@
     "./**/node_modules/",
     "./**/node_modules/*"
   ],
+  "targets": "> 0.25%, not dead",
   "plugins": [["@babel/plugin-transform-runtime"]]
 }
