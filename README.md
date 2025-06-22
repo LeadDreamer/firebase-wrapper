@@ -8,20 +8,6 @@ hierarchical record-oriented database; originally conceived to port from one dat
 ## Modules
 
 <dl>
-<dt><a href="#module_FirebaseWrapper">FirebaseWrapper</a></dt>
-<dd><p>A set of helper-wrapper functions around firebase firestore, storage
-and auth.
-all-in-one wrapper for a solid subset of CLIENT-SIDE Firebase
-functions, with a consistent interface.  There is a parallel set for
-ADMIN-SIDE functions as well.
-Intent is to treat Firestore as a hierarchical
-record-oriented database; originally conceived to port from one
-database to another.
-NOTE:
-Most helpers return PROMISE.REJECT if no documents are returned.
-it is assumed projects using this library <em>might</em> want to have an
-explicitly error trap for such events.</p>
-</dd>
 <dt><a href="#module_FirebaseAuthWrapper/authAdmin">FirebaseAuthWrapper/authAdmin</a></dt>
 <dd><p>A set of helpers around Firebase admin SDK auth.
 Specific to use in Cloud Functions</p>
@@ -95,90 +81,6 @@ explicitly error trap for such events.</p>
 <dt><a href="#PagingStatus">PagingStatus</a> : <code><a href="#PAGINATE_INIT">PAGINATE_INIT</a></code> | <code><a href="#PAGINATE_PENDING">PAGINATE_PENDING</a></code> | <code><a href="#PAGINATE_UPDATED">PAGINATE_UPDATED</a></code> | <code><a href="#PAGINATE_DEFAULT">PAGINATE_DEFAULT</a></code></dt>
 <dd></dd>
 </dl>
-
-<a name="module_FirebaseWrapper"></a>
-
-## FirebaseWrapper
-A set of helper-wrapper functions around firebase firestore, storageand auth.all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.NOTE:Most helpers return PROMISE.REJECT if no documents are returned.it is assumed projects using this library *might* want to have anexplicitly error trap for such events.
-
-
-* [FirebaseWrapper](#module_FirebaseWrapper)
-    * [module.exports(firebase, config, thislogger)](#exp_module_FirebaseWrapper--module.exports) ⇒ ⏏
-        * [~FirebaseWrapper(firebase, config, thislogger)](#module_FirebaseWrapper--module.exports..FirebaseWrapper) ⇒
-        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
-        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
-
-<a name="exp_module_FirebaseWrapper--module.exports"></a>
-
-### module.exports(firebase, config, thislogger) ⇒ ⏏
-all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
-
-**Kind**: Exported function  
-**Returns**: none  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
-| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
-| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
-
-**Example**  
-```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper--module.exports..FirebaseWrapper"></a>
-
-#### module.exports~FirebaseWrapper(firebase, config, thislogger) ⇒
-all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
-**Returns**: none  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
-| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
-| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
-
-**Example**  
-```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
-
-#### module.exports~FirebaseConfigObject : <code>Object</code>
-only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
-
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| apiKey | <code>string</code> | required api Key from Firebase Console, |
-| appId | <code>string</code> | required app ID from Firebase Console |
-| projectId | <code>string</code> | required Firebase projectID from Firebase console |
-| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
-| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
-| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
-| messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
-| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
-| mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
-
-<a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
-
-#### module.exports~FirebaseConfigObject : <code>Object</code>
-only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
-
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| apiKey | <code>string</code> | required api Key from Firebase Console, |
-| appId | <code>string</code> | required app ID from Firebase Console |
-| projectId | <code>string</code> | required Firebase projectID from Firebase console |
-| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
-| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
-| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
-| messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
-| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
-| mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
 
 <a name="module_FirebaseAuthWrapper/authAdmin"></a>
 
@@ -2537,8 +2439,6 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 
 * [FirebaseWrapper](#module_FirebaseWrapper)
     * [module.exports(firebase, config, thislogger)](#exp_module_FirebaseWrapper--module.exports) ⇒ ⏏
-        * [~FirebaseWrapper(firebase, config, thislogger)](#module_FirebaseWrapper--module.exports..FirebaseWrapper) ⇒
-        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
         * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
 
 <a name="exp_module_FirebaseWrapper--module.exports"></a>
@@ -2557,42 +2457,6 @@ all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a 
 
 **Example**  
 ```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper--module.exports..FirebaseWrapper"></a>
-
-#### module.exports~FirebaseWrapper(firebase, config, thislogger) ⇒
-all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
-
-**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
-**Returns**: none  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
-| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
-| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
-
-**Example**  
-```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
-
-#### module.exports~FirebaseConfigObject : <code>Object</code>
-only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
-
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| apiKey | <code>string</code> | required api Key from Firebase Console, |
-| appId | <code>string</code> | required app ID from Firebase Console |
-| projectId | <code>string</code> | required Firebase projectID from Firebase console |
-| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
-| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
-| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
-| messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
-| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
-| mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
-
 <a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
 
 #### module.exports~FirebaseConfigObject : <code>Object</code>

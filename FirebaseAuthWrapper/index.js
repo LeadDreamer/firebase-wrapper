@@ -1,3 +1,6 @@
+/**
+* @module FirebaseAuthWrapper/authAdmin
+*/
 import FirebaseAuthAdminWrapper from "./authAdmin.js";
 import FirebaseAuthClientWrapper from "./authClient.js";
 
