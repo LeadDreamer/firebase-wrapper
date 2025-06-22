@@ -8,6 +8,20 @@ hierarchical record-oriented database; originally conceived to port from one dat
 ## Modules
 
 <dl>
+<dt><a href="#module_FirebaseWrapper">FirebaseWrapper</a></dt>
+<dd><p>A set of helper-wrapper functions around firebase firestore, storage
+and auth.
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebase
+functions, with a consistent interface.  There is a parallel set for
+ADMIN-SIDE functions as well.
+Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.
+NOTE:
+Most helpers return PROMISE.REJECT if no documents are returned.
+it is assumed projects using this library <em>might</em> want to have an
+explicitly error trap for such events.</p>
+</dd>
 <dt><a href="#module_FirebaseAuthWrapper/authAdmin">FirebaseAuthWrapper/authAdmin</a></dt>
 <dd><p>A set of helpers around Firebase admin SDK auth.
 Specific to use in Cloud Functions</p>
@@ -18,6 +32,8 @@ and auth. Intent is to treat Firestore as a hierarchical
 record-oriented database; originally conceived to port from one
 database to another.</p>
 </dd>
+<dt><a href="#module_FirebaseAuthWrapper/authAdmin">FirebaseAuthWrapper/authAdmin</a></dt>
+<dd></dd>
 <dt><a href="#module_FirebaseCloudFunctionsWrapper">FirebaseCloudFunctionsWrapper</a></dt>
 <dd><p>A set of helper-wrapper functions around firebase firestore, storage
 and auth. Intent is to treat Firestore as a hierarchical
@@ -82,6 +98,90 @@ explicitly error trap for such events.</p>
 <dd></dd>
 </dl>
 
+<a name="module_FirebaseWrapper"></a>
+
+## FirebaseWrapper
+A set of helper-wrapper functions around firebase firestore, storageand auth.all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.NOTE:Most helpers return PROMISE.REJECT if no documents are returned.it is assumed projects using this library *might* want to have anexplicitly error trap for such events.
+
+
+* [FirebaseWrapper](#module_FirebaseWrapper)
+    * [module.exports(firebase, config, thislogger)](#exp_module_FirebaseWrapper--module.exports) ⇒ ⏏
+        * [~FirebaseWrapper(firebase, config, thislogger)](#module_FirebaseWrapper--module.exports..FirebaseWrapper) ⇒
+        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+
+<a name="exp_module_FirebaseWrapper--module.exports"></a>
+
+### module.exports(firebase, config, thislogger) ⇒ ⏏
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
+
+**Kind**: Exported function  
+**Returns**: none  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
+| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
+| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
+
+**Example**  
+```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
+<a name="module_FirebaseWrapper--module.exports..FirebaseWrapper"></a>
+
+#### module.exports~FirebaseWrapper(firebase, config, thislogger) ⇒
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
+
+**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
+**Returns**: none  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
+| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
+| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
+
+**Example**  
+```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
+<a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
+
+#### module.exports~FirebaseConfigObject : <code>Object</code>
+only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
+
+**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| apiKey | <code>string</code> | required api Key from Firebase Console, |
+| appId | <code>string</code> | required app ID from Firebase Console |
+| projectId | <code>string</code> | required Firebase projectID from Firebase console |
+| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
+| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
+| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
+| messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
+| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
+| mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
+
+<a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
+
+#### module.exports~FirebaseConfigObject : <code>Object</code>
+only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
+
+**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| apiKey | <code>string</code> | required api Key from Firebase Console, |
+| appId | <code>string</code> | required app ID from Firebase Console |
+| projectId | <code>string</code> | required Firebase projectID from Firebase console |
+| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
+| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
+| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
+| messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
+| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
+| mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
+
 <a name="module_FirebaseAuthWrapper/authAdmin"></a>
 
 ## FirebaseAuthWrapper/authAdmin
@@ -90,12 +190,7 @@ A set of helpers around Firebase admin SDK auth.Specific to use in Cloud Functi
 
 * [FirebaseAuthWrapper/authAdmin](#module_FirebaseAuthWrapper/authAdmin)
     * [module.exports(firebase)](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports) ⏏
-        * [.getUser(userID)](#module_FirebaseAuthWrapper/authAdmin--module.exports.getUser) ⇒ <code>Promise.userData</code>
-        * [.DeleteUser(userID)](#module_FirebaseAuthWrapper/authAdmin--module.exports.DeleteUser) ⇒ <code>Promise.void</code>
-        * [.setCustomClaims(uid, customClaim)](#module_FirebaseAuthWrapper/authAdmin--module.exports.setCustomClaims) ⇒ <code>Promise.object</code>
-        * [.addCustomClaims(uid, customClaim)](#module_FirebaseAuthWrapper/authAdmin--module.exports.addCustomClaims) ⇒ <code>Promise.object</code>
-        * [.clearCustomClaims(uid)](#module_FirebaseAuthWrapper/authAdmin--module.exports.clearCustomClaims) ⇒ <code>Promise.void</code>
-        * [.PageUsers(pageSize, pageToken)](#module_FirebaseAuthWrapper/authAdmin--module.exports.PageUsers) ⇒ <code>Promise.Array.object</code>
+    * [module.exports(firebase, config, thisLogger)](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports) ⏏
 
 <a name="exp_module_FirebaseAuthWrapper/authAdmin--module.exports"></a>
 
@@ -108,74 +203,19 @@ Initializes the administrative Auth service of the providedfirebase app.  Also 
 | --- | --- |
 | firebase | <code>firebase</code> | 
 
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.getUser"></a>
+<a name="exp_module_FirebaseAuthWrapper/authAdmin--module.exports"></a>
 
-#### module.exports.getUser(userID) ⇒ <code>Promise.userData</code>
-asynchronously fetches user data from Firestore Authentication
+### module.exports(firebase, config, thisLogger) ⏏
+Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| userID | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.DeleteUser"></a>
-
-#### module.exports.DeleteUser(userID) ⇒ <code>Promise.void</code>
-deletes a single user from the authentication system, identified by user ID
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type |
-| --- | --- |
-| userID | <code>string</code> | 
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.setCustomClaims"></a>
-
-#### module.exports.setCustomClaims(uid, customClaim) ⇒ <code>Promise.object</code>
-sets custom claims on user object - overwrites other needed settings
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
+**Kind**: Exported function  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| uid | <code>string</code> | user ID |
-| customClaim | <code>Object</code> | claims object, less than 1000 Bytes. null clears |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.addCustomClaims"></a>
-
-#### module.exports.addCustomClaims(uid, customClaim) ⇒ <code>Promise.object</code>
-adds/merges to new claims to user customClaims
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| uid | <code>string</code> | user ID |
-| customClaim | <code>Object</code> | claims object to be merged with existing claims |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.clearCustomClaims"></a>
-
-#### module.exports.clearCustomClaims(uid) ⇒ <code>Promise.void</code>
-removes all current customClaims on user (sets to null)
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| uid | <code>string</code> | user ID |
-
-<a name="module_FirebaseAuthWrapper/authAdmin--module.exports.PageUsers"></a>
-
-#### module.exports.PageUsers(pageSize, pageToken) ⇒ <code>Promise.Array.object</code>
-pages through the full list of users. Woefully inefficient.
-
-**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| pageSize | <code>number</code> | default 1000 |
-| pageToken | <code>object</code> | default null |
+| firebase | <code>firebase</code> | provided firebase app (allows use between client & server) |
+| config | <code>object</code> | configuration object to detect client/server use |
+| config.appId | <code>string</code> | missing parameter indicates server |
+| thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
 
 <a name="module_FirebaseAuthWrapper/authClient"></a>
 
@@ -448,6 +488,39 @@ See https://firebase.google.com/docs/reference/js/v8/firebase.User
 | Param | Type |
 | --- | --- |
 | user | <code>User</code> | 
+
+<a name="module_FirebaseAuthWrapper/authAdmin"></a>
+
+## FirebaseAuthWrapper/authAdmin
+
+* [FirebaseAuthWrapper/authAdmin](#module_FirebaseAuthWrapper/authAdmin)
+    * [module.exports(firebase)](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports) ⏏
+    * [module.exports(firebase, config, thisLogger)](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports) ⏏
+
+<a name="exp_module_FirebaseAuthWrapper/authAdmin--module.exports"></a>
+
+### module.exports(firebase) ⏏
+Initializes the administrative Auth service of the providedfirebase app.  Also instantiates various constants and helper functions
+
+**Kind**: Exported function  
+
+| Param | Type |
+| --- | --- |
+| firebase | <code>firebase</code> | 
+
+<a name="exp_module_FirebaseAuthWrapper/authAdmin--module.exports"></a>
+
+### module.exports(firebase, config, thisLogger) ⏏
+Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
+
+**Kind**: Exported function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>firebase</code> | provided firebase app (allows use between client & server) |
+| config | <code>object</code> | configuration object to detect client/server use |
+| config.appId | <code>string</code> | missing parameter indicates server |
+| thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
 
 <a name="module_FirebaseCloudFunctionsWrapper"></a>
 
@@ -2439,6 +2512,8 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 
 * [FirebaseWrapper](#module_FirebaseWrapper)
     * [module.exports(firebase, config, thislogger)](#exp_module_FirebaseWrapper--module.exports) ⇒ ⏏
+        * [~FirebaseWrapper(firebase, config, thislogger)](#module_FirebaseWrapper--module.exports..FirebaseWrapper) ⇒
+        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
         * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
 
 <a name="exp_module_FirebaseWrapper--module.exports"></a>
@@ -2457,6 +2532,42 @@ all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a 
 
 **Example**  
 ```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
+<a name="module_FirebaseWrapper--module.exports..FirebaseWrapper"></a>
+
+#### module.exports~FirebaseWrapper(firebase, config, thislogger) ⇒
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
+
+**Kind**: inner method of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
+**Returns**: none  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
+| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
+| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
+
+**Example**  
+```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
+<a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
+
+#### module.exports~FirebaseConfigObject : <code>Object</code>
+only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
+
+**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| apiKey | <code>string</code> | required api Key from Firebase Console, |
+| appId | <code>string</code> | required app ID from Firebase Console |
+| projectId | <code>string</code> | required Firebase projectID from Firebase console |
+| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
+| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
+| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
+| messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
+| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
+| mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
+
 <a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
 
 #### module.exports~FirebaseConfigObject : <code>Object</code>
