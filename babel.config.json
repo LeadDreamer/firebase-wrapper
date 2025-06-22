@@ -1,6 +1,8 @@
 {
   "sourceType": "module",
-  "presets": ["@babel/preset-env"],
+  "presets": [
+    ["@babel/preset-env", {"bugfixes": true}]
+  ],
   "ignore": [
     "node_modules",
     "node_modules/",
