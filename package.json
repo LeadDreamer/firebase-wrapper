@@ -108,7 +108,7 @@
     "prepublishOnly": "$npm_execpath run build",
     "make_docs": "jsdoc2md -c jsdoc.conf.json --template README.hbs --files *.js ./*/*.js > README.md",
     "docs": "$npm_execpath run make_docs",
-    "FAW": "cd FirebaseAuthWrapper && $npm_execpath run reinstall && $npm_execpath run rebuild && cd ..",
+    "FAW": "cd FirebaseAuthWrapper && $npm_execpath run rebuild && cd ..",
     "FCFW": "cd FirebaseCloudFunctionsWrapper && $npm_execpath run rebuild && cd ..",
     "FFW": "cd FirebaseFirestoreWrapper && $npm_execpath run rebuild && cd ..",
     "FSW": "cd FirebaseStorageWrapper && $npm_execpath run rebuild && cd ..",

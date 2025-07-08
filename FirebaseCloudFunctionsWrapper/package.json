@@ -3,7 +3,7 @@
   "engines": {
     "node": ">=22"
   },
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another. now up to Modular Compatible mode",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -49,7 +49,7 @@
     "docs": "jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f index.js > README.md"
   },
   "peerDependencies": {
-    "firebase-admin": "9.4.1"
+    "firebase-admin": "13.4.0"
   },
   "peerDependenciesMeta": {
     "firebase-admin": {
@@ -66,8 +66,7 @@
     "@babel/preset-env": "7.27.2",
     "jsdoc-to-markdown": "9.1.1",
     "@babel/plugin-proposal-class-properties": "7.18.6",
-    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
-    "rimraf": "5.0.1"
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11"
   },
   "keywords": [
     "firebase",
