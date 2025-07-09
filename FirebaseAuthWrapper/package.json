@@ -3,7 +3,7 @@
   "engines": {
     "node": ">=22"
   },
-  "version": "2.0.7",
+  "version": "2.0.9",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another. now up to Modular Compatible mode",
   "repository": "LeadDreamer/firebase-wrappers",
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
@@ -23,28 +23,12 @@
     "**/dist/*.js",
     "*.md"
   ],
-  "main": "index.js",
-  "exports": {
-    ".": {
-      "node": {
-        "import": "./index.js",
-        "require": "./dist/index.js"
-      },
-      "default": "./index.js"
-    },
-    "./FirebaseAuthWrapper": {
-      "node": {
-        "import": "./index.js",
-        "require": "./dist/index.js"
-      },
-      "default": "./index.js"
-    },
-    "./package.json": "./package.json"
-  },
+  "source": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/module.js",
   "scripts": {
     "prebuild": "rm -rf node_modules && $npm_execpath install",
-    "transpile": "babel --root-mode upward *.js --out-dir ../dist/FirebaseAuthWrapper",
-    "build": "$npm_execpath run transpile",
+    "build": "parcel build",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
     "docs": "jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f index.js > README.md"
   },
@@ -61,10 +45,7 @@
     }
   },
   "devDependencies": {
-    "@babel/cli": "7.27.2",
-    "@babel/core": "7.27.4",
-    "@babel/plugin-transform-runtime": "7.27.4",
-    "@babel/preset-env": "7.27.2",
+    "parcel": "latest",
     "jsdoc-to-markdown": "9.1.1"
   },
   "keywords": [
