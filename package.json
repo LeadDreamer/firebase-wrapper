@@ -5,7 +5,10 @@
   },
   "version": "2.0.1-beta.6",
   "description": "A set of helper-wrapper functions around firebase firestore.  Includes support for various forms of Pagination.  Intent is to treat Firestore as a hierarchical records-oriented database. Originally conceived to port from one database to another. now up to Modular Compatible mode",
-  "repository": "LeadDreamer/firebase-wrapper",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeadDreamer/firebase-wrapper.git"
+  },
   "homepage": "https://github.com/LeadDreamer/firebase-wrapper#readme",
   "bugs": {
     "url": "https://github.com/LeadDreamer/firebase-wrapper/issues",
@@ -24,7 +27,8 @@
     "*.md",
     "/*/*.md"
   ],
-  "main": "./index.js",
+  "source": "index.js",
+  "main": "dist/index.js",
   "exports": {
     ".": {
       "node": {
@@ -99,9 +103,7 @@
   },
   "scripts": {
     "reinstall": "rm -rf node_modules && $npm_execpath install",
-    "trebuild": "rm -rf node_modules && $npm_execpath install",
-    "transpile": "babel *.js --out-dir ./dist",
-    "build": "$npm_execpath run transpile",
+    "build": "parcel build",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
     "rebuild_beta": "$npm_execpath version prerelease --git-tag-version --preid=beta && $npm_execpath run docs && $npm_execpath run build",
     "rebuild_release": "$npm_execpath version minor --git-tag-version && $npm_execpath run docs && $npm_execpath run build",
@@ -127,8 +129,8 @@
     "access": "public"
   },
   "peerDependencies": {
-    "firebase-admin": "13.4.0",
-    "firebase": "11.10.0"
+    "firebase": "11.10.0",
+    "firebase-admin": "13.4.0"
   },
   "peerDependenciesMeta": {
     "firebase-admin": {
@@ -139,11 +141,8 @@
     }
   },
   "devDependencies": {
-    "@babel/cli": "7.27.2",
-    "@babel/core": "7.27.4",
-    "@babel/plugin-transform-runtime": "7.27.4",
-    "@babel/preset-env": "7.27.2",
-    "jsdoc-to-markdown": "9.1.1",
+    "@babel/core": "^7.28.0",
+    "parcel": "latest",
     "uuid": "^8.3.2"
   },
   "optionalDependencies": {
