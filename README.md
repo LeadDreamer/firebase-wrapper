@@ -2804,6 +2804,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.refreshAuthUser()](#module_FirebaseAuthWrapper/authClient--module.exports.refreshAuthUser) ⇒ <code>Promise.void</code>
             * [.doCreateUserWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.doCreateUserWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
             * [.doSignInWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
+            * [.getGoogleAuthProvider()](#module_FirebaseAuthWrapper/authClient--module.exports.getGoogleAuthProvider) ⇒ <code>GoogleProvider</code>
             * [.doSignInWithGoogle(googleProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithGoogle) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
             * [.doSignInWithFacebook(facebookProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithFacebook) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
             * [.doSignInWithTwitter(twitterProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithTwitter) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
@@ -2899,6 +2900,12 @@ SIGNS IN an existing authenticated user with the provided email and passwordCre
 | email | <code>string</code> | 
 | password | <code>string</code> | 
 
+<a name="module_FirebaseAuthWrapper/authClient--module.exports.getGoogleAuthProvider"></a>
+
+#### module.exports.getGoogleAuthProvider() ⇒ <code>GoogleProvider</code>
+Create a standalone Google Provider instance
+
+**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
 <a name="module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithGoogle"></a>
 
 #### module.exports.doSignInWithGoogle(googleProvider) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
@@ -3166,6 +3173,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
             * [.refreshAuthUser()](#module_FirebaseAuthWrapper/authClient--module.exports.refreshAuthUser) ⇒ <code>Promise.void</code>
             * [.doCreateUserWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.doCreateUserWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
             * [.doSignInWithEmailAndPassword(email, password)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithEmailAndPassword) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
+            * [.getGoogleAuthProvider()](#module_FirebaseAuthWrapper/authClient--module.exports.getGoogleAuthProvider) ⇒ <code>GoogleProvider</code>
             * [.doSignInWithGoogle(googleProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithGoogle) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
             * [.doSignInWithFacebook(facebookProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithFacebook) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
             * [.doSignInWithTwitter(twitterProvider)](#module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithTwitter) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
@@ -3261,6 +3269,12 @@ SIGNS IN an existing authenticated user with the provided email and passwordCre
 | email | <code>string</code> | 
 | password | <code>string</code> | 
 
+<a name="module_FirebaseAuthWrapper/authClient--module.exports.getGoogleAuthProvider"></a>
+
+#### module.exports.getGoogleAuthProvider() ⇒ <code>GoogleProvider</code>
+Create a standalone Google Provider instance
+
+**Kind**: static method of [<code>module.exports</code>](#exp_module_FirebaseAuthWrapper/authClient--module.exports)  
 <a name="module_FirebaseAuthWrapper/authClient--module.exports.doSignInWithGoogle"></a>
 
 #### module.exports.doSignInWithGoogle(googleProvider) ⇒ <code>Promise.&lt;UserCredential&gt;</code>
