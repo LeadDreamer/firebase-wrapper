@@ -49,7 +49,6 @@ export let FirebaseAuthSignInOptions;
  * @param {callback} thisLogger - passed logging function  (allows use between client & server)
  */
 export default async function FirebaseAuthClient(firebase, thisLogger) {
-  thisLogger("FirebaseAuthClient");
   try {
     FirebaseAuth = firebase.auth();
   } catch (err) {
@@ -62,7 +61,6 @@ export default async function FirebaseAuthClient(firebase, thisLogger) {
     //firebase.auth.TwitterAuthProvider.PROVIDER_ID
   ];
   FirebaseAuthPersistence = firebase.auth.Auth.Persistence.LOCAL;
-  thisLogger("After Persistence");
   return null;
 }
 
@@ -201,6 +199,17 @@ export async function doCreateUserWithEmailAndPassword(email, password) {
 export async function doSignInWithEmailAndPassword(email, password) {
   return FirebaseAuth.signInWithEmailAndPassword(email, password);
 }
+
+/**
+ * Create a standalone Google Provider instance
+ * @returns {GoogleProvider}
+ */
+export async function getGoogleAuthProvider() {
+var provider = new FirebaseAuth.GoogleAuthProvider();
+provider.addScope('profile');
+provider.addScope('email');
+return provider;
+};
 
 /**
  * @param {GoogleProvider} googleProvider
