@@ -31,61 +31,61 @@
   "exports": {
     ".": {
       "node": {
-        "import": "./index.js",
+        "import": "./index.js"
       },
       "default": "./index.js"
     },
     "./firebase-wrapper": {
       "node": {
-        "import": "./index.js",
+        "import": "./index.js"
       },
       "default": "./index.js"
     },
     "./FirebaseAuthWrapper": {
       "node": {
-        "import": "./FirebaseAuthWrapper/index.js",
+        "import": "./FirebaseAuthWrapper/index.js"
       },
       "default": "./FirebaseAuthWrapper/index.js"
     },
     "./FirebaseAuthWrapper/*.js": {
       "node": {
-        "import": "./FirebaseAuthWrapper/*.js",
+        "import": "./FirebaseAuthWrapper/*.js"
       },
       "default": "./FirebaseAuthWrapper/*.js"
     },
     "./FirebaseCloudFunctionsWrapper": {
       "node": {
-        "import": "./FirebaseCloudFunctionsWrapper/index.js",
+        "import": "./FirebaseCloudFunctionsWrapper/index.js"
       },
       "default": "./FirebaseCloudFunctionsWrapper/index.js"
     },
     "./FirebaseCloudFunctionsWrapper/*.js": {
       "node": {
-        "import": "./FirebaseCloudFunctionsWrapper/*.js",
+        "import": "./FirebaseCloudFunctionsWrapper/*.js"
       },
       "default": "./FirebaseCloudFunctionsWrapper/*.js"
     },
     "./FirebaseFirestoreWrapper": {
       "node": {
-        "import": "./FirebaseFirestoreWrapper/index.js",
+        "import": "./FirebaseFirestoreWrapper/index.js"
       },
       "default": "./FirebaseFirestoreWrapper/index.js"
     },
     "./FirebaseFirestoreWrapper/*.js": {
       "node": {
-        "import": "./FirebaseFirestoreWrapper/*.js",
+        "import": "./FirebaseFirestoreWrapper/*.js"
       },
       "default": "./FirebaseFirestoreWrapper/*.js"
     },
     "./FirebaseStorageWrapper": {
       "node": {
-        "import": "./FirebaseStorageWrapper/index.js",
+        "import": "./FirebaseStorageWrapper/index.js"
       },
       "default": "./FirebaseStorageWrapper/index.js"
     },
     "./FirebaseStorageWrapper/*.js": {
       "node": {
-        "import": "./FirebaseStorageWrapper/*.js",
+        "import": "./FirebaseStorageWrapper/*.js"
       },
       "default": "./FirebaseStorageWrapper/*.js"
     }
