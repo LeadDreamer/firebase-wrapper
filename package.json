@@ -28,76 +28,64 @@
     "/*/*.md"
   ],
   "source": "index.js",
-  "main": "dist/index.js",
-  "module": "dist/module.js",
   "exports": {
     ".": {
       "node": {
         "import": "./index.js",
-        "require": "./dist/index.js"
       },
       "default": "./index.js"
     },
     "./firebase-wrapper": {
       "node": {
         "import": "./index.js",
-        "require": "./dist/index.js"
       },
       "default": "./index.js"
     },
     "./FirebaseAuthWrapper": {
       "node": {
         "import": "./FirebaseAuthWrapper/index.js",
-        "require": "./dist/FirebaseAuthWrapper/index.js"
       },
       "default": "./FirebaseAuthWrapper/index.js"
     },
     "./FirebaseAuthWrapper/*.js": {
       "node": {
         "import": "./FirebaseAuthWrapper/*.js",
-        "require": "./dist/FirebaseAuthWrapper/*.js"
       },
       "default": "./FirebaseAuthWrapper/*.js"
     },
     "./FirebaseCloudFunctionsWrapper": {
       "node": {
         "import": "./FirebaseCloudFunctionsWrapper/index.js",
-        "require": "./dist/FirebaseCloudFunctionsWrapper/index.js"
       },
       "default": "./FirebaseCloudFunctionsWrapper/index.js"
     },
     "./FirebaseCloudFunctionsWrapper/*.js": {
       "node": {
         "import": "./FirebaseCloudFunctionsWrapper/*.js",
-        "require": "./dist/FirebaseCloudFunctionsWrapper/*.js"
       },
       "default": "./FirebaseCloudFunctionsWrapper/*.js"
     },
     "./FirebaseFirestoreWrapper": {
       "node": {
         "import": "./FirebaseFirestoreWrapper/index.js",
-        "require": "./dist/FirebaseFirestoreWrapper/index.js"
       },
       "default": "./FirebaseFirestoreWrapper/index.js"
     },
     "./FirebaseFirestoreWrapper/*.js": {
       "node": {
         "import": "./FirebaseFirestoreWrapper/*.js",
-        "require": "./dist/FirebaseFirestoreWrapper/*.js"
       },
       "default": "./FirebaseFirestoreWrapper/*.js"
     },
     "./FirebaseStorageWrapper": {
       "node": {
         "import": "./FirebaseStorageWrapper/index.js",
-        "require": "./dist/FirebaseStorageWrapper/index.js"
       },
       "default": "./FirebaseStorageWrapper/index.js"
     },
     "./FirebaseStorageWrapper/*.js": {
       "node": {
         "import": "./FirebaseStorageWrapper/*.js",
-        "require": "./dist/FirebaseStorageWrapper/*.js"
       },
       "default": "./FirebaseStorageWrapper/*.js"
     }
@@ -105,10 +93,10 @@
   "scripts": {
     "reinstall": "rm -rf node_modules && $npm_execpath install",
     "build": "parcel build",
-    "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
-    "rebuild_beta": "$npm_execpath version prerelease --git-tag-version --preid=beta && $npm_execpath run docs && $npm_execpath run build",
-    "rebuild_release": "$npm_execpath version minor --git-tag-version && $npm_execpath run docs && $npm_execpath run build",
-    "prepublishOnly": "$npm_execpath run build",
+    "rebuild": "$npm_execpath version patch && $npm_execpath run docs",
+    "rebuild_beta": "$npm_execpath version prerelease --git-tag-version --preid=beta && $npm_execpath run docs",
+    "rebuild_release": "$npm_execpath version minor --git-tag-version && $npm_execpath run docs",
+    "myprepublishOnly": "$npm_execpath run build",
     "make_docs": "jsdoc2md -c jsdoc.conf.json --template README.hbs --files *.js ./*/*.js > README.md",
     "docs": "$npm_execpath run make_docs",
     "FAW": "cd FirebaseAuthWrapper && $npm_execpath run rebuild && cd ..",

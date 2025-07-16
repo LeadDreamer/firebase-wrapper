@@ -29,7 +29,7 @@
   "scripts": {
     "prebuild": "rm -rf node_modules && $npm_execpath install",
     "build": "parcel build",
-    "rebuild": "$npm_execpath version patch && $npm_execpath run docs && $npm_execpath run build",
+    "rebuild": "$npm_execpath version patch && $npm_execpath run docs",
     "docs": "jsdoc2md -c ../jsdoc.conf.json --template ../README.hbs -f index.js > README.md"
   },
   "peerDependencies": {
