@@ -54,17 +54,19 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper/index.js";
  * //the Browser.  See later (tbd) notes for NodeJS
  *
  * import FirebaseWrapper from "@leaddreamer/firebase-wrapper";
- * FirebaseWrapper(config); //see below
+ * FirebaseWrapper(firebase, config, logger); //see below
  * export * from "@leaddreamer/firebase-wrapper";
  * ```
  */
+let app = null;
+
 export default async function FirebaseWrapper(firebase, config, thisLogger) {
   const localLogger = thisLogger || (() => {});
   try {
-    await firebase.app();
+    app = await firebase.app();
   } catch (err) {
     try {
-      await (config?.appId
+      app = await (config?.appId
         ? firebase.initializeApp(config)
         : firebase.initializeApp());
 
@@ -83,11 +85,12 @@ export default async function FirebaseWrapper(firebase, config, thisLogger) {
       console.log("firebase initialize failed");
     }
   }
-  return;
+  return app;
 }
+
+export {app};
 
 export * from "./FirebaseFirestoreWrapper/index.js";
 export * from "./FirebaseStorageWrapper/index.js";
 export * from "./FirebaseAuthWrapper/index.js";
 export * from "./FirebaseCloudFunctionsWrapper/index.js";
-//export default FirebaseWrapper;
