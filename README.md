@@ -2420,15 +2420,15 @@ A set of helper-wrapper functions around firebase firestore, storageand auth.a
 
 
 * [FirebaseWrapper](#module_FirebaseWrapper)
-    * [module.exports(firebase, config, thislogger)](#exp_module_FirebaseWrapper--module.exports) ⇒ ⏏
-        * [~FirebaseConfigObject](#module_FirebaseWrapper--module.exports..FirebaseConfigObject) : <code>Object</code>
+    * [~app](#module_FirebaseWrapper..app) ⇒
+    * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
 
-<a name="exp_module_FirebaseWrapper--module.exports"></a>
+<a name="module_FirebaseWrapper..app"></a>
 
-### module.exports(firebase, config, thislogger) ⇒ ⏏
+### FirebaseWrapper~app ⇒
 all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
 
-**Kind**: Exported function  
+**Kind**: inner property of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
 **Returns**: none  
 
 | Param | Type | Description |
@@ -2438,13 +2438,13 @@ all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a 
 | thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
 
 **Example**  
-```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(config); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper--module.exports..FirebaseConfigObject"></a>
+```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(firebase, config, logger); //see belowexport * from "@leaddreamer/firebase-wrapper";```
+<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
 
-#### module.exports~FirebaseConfigObject : <code>Object</code>
+### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
 only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
 
-**Kind**: inner typedef of [<code>module.exports</code>](#exp_module_FirebaseWrapper--module.exports)  
+**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
 **Properties**
 
 | Name | Type | Description |
