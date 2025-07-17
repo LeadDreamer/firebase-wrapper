@@ -70,9 +70,7 @@ export default async function FirebaseWrapper(firebase, config, thisLogger) {
         ? firebase.initializeApp(config)
         : firebase.initializeApp());
 
-      const happ = await firebase.app();
-
-      localLogger("after init", !!happ);
+      localLogger("after init", !!app);
 
       await FirebaseAuthWrapper(firebase, config, localLogger);
       localLogger("After Auth");
