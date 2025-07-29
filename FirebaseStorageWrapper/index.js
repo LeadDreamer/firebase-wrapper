@@ -42,7 +42,7 @@ import {
  */
 let bucket_name;
 
-export default async function FirebaseStorageWrapper(
+export default function FirebaseStorageWrapper(
   firebase,
   config,
   thisLogger

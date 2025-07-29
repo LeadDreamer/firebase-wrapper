@@ -63,7 +63,7 @@ function penultimate(array) {
  * })(config)
  * ```
  */
-export default async function FirebaseFirestore(firebase, config, thisLogger) {
+export default function FirebaseFirestore(firebase, config, thisLogger) {
   thisLogger(`Starting FirebaseFirestore (${config})`, config);
   fdb = firebase.firestore();
   thisLogger("fdb? ", !!fdb);

@@ -31,6 +31,10 @@
  */
 export let FirebaseAuth;
 
+export function getAuth() {
+  return FirebaseAuth;
+}
+
 /** @private */
 let FirebaseAuthPersistence;
 
@@ -48,7 +52,7 @@ export let FirebaseAuthSignInOptions;
  * @param {firebase} firebase provided firebase app (allows use between client & server)
  * @param {callback} thisLogger - passed logging function  (allows use between client & server)
  */
-export default async function FirebaseAuthClient(firebase, thisLogger) {
+export default function FirebaseAuthClient(firebase, thisLogger, firebaseApp) {
   try {
     FirebaseAuth = firebase.auth();
   } catch (err) {
@@ -60,7 +64,7 @@ export default async function FirebaseAuthClient(firebase, thisLogger) {
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
     //firebase.auth.TwitterAuthProvider.PROVIDER_ID
   ];
-  FirebaseAuthPersistence = firebase.auth.Auth.Persistence.LOCAL;
+  FirebaseAuthPersistence = FirebaseAuth.Auth.Persistence.LOCAL;
   return null;
 }
 

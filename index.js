@@ -60,25 +60,25 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper/index.js";
  */
 let app = null;
 
-export default async function FirebaseWrapper(firebase, config, thisLogger) {
+export default function FirebaseWrapper(firebase, config, thisLogger) {
   const localLogger = thisLogger || (() => {});
   try {
-    app = await firebase.app();
+    app = firebase.app();
   } catch (err) {
     try {
-      app = await (config?.appId
+      app = (config?.appId
         ? firebase.initializeApp(config)
         : firebase.initializeApp());
 
       localLogger("after init", !!app);
 
-      await FirebaseAuthWrapper(firebase, config, localLogger);
+      FirebaseAuthWrapper(firebase, config, localLogger);
       localLogger("After Auth");
-      await FirebaseFirestore(firebase, config, localLogger);
+      FirebaseFirestore(firebase, config, localLogger);
       localLogger("After Firestore");
-      await FirebaseStorage(firebase, config, localLogger);
+      FirebaseStorage(firebase, config, localLogger);
       localLogger("After Storage");
-      return FirebaseCloudFunctions(firebase, config, localLogger);
+      FirebaseCloudFunctions(firebase, config, localLogger);
     } catch (err) {
       console.log("firebase initialize failed");
     }

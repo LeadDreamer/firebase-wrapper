@@ -60,14 +60,14 @@ let functions;
  * })(config)
  * ```
  */
-export default async function FirebaseCloudFunctions(
+export default function FirebaseCloudFunctions(
   firebase,
   config,
   thisLogger
 ) {
   if (config?.appId) {
     thisLogger("Cloud Client");
-    functions = await firebase.functions();
+    functions = firebase.functions();
     return functions;
   }
 }
