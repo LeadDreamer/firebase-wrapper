@@ -94,8 +94,8 @@
     "reinstall": "rm -rf node_modules && $npm_execpath install",
     "build": "parcel build",
     "rebuild": "$npm_execpath version patch && $npm_execpath run docs",
-    "rebuild_beta": "$npm_execpath version prerelease --git-tag-version --preid=beta && $npm_execpath run docs",
-    "rebuild_release": "$npm_execpath version minor --git-tag-version && $npm_execpath run docs",
+    "beta:rebuild": "$npm_execpath version prerelease --git-tag-version --preid=beta && $npm_execpath run docs",
+    "release:rebuild": "$npm_execpath version minor --git-tag-version && $npm_execpath run docs",
     "myprepublishOnly": "$npm_execpath run build",
     "make_docs": "jsdoc2md -c jsdoc.conf.json --template README.hbs --files *.js ./*/*.js > README.md",
     "docs": "$npm_execpath run make_docs",
@@ -107,12 +107,12 @@
     "FCFW_docs": "cd FirebaseCloudFunctionsWrapper && $npm_execpath run docs && cd ..",
     "FFW_docs": "cd FirebaseFirestoreWrapper && $npm_execpath run docs && cd ..",
     "FSW_docs": "cd FirebaseStorageWrapper && $npm_execpath run docs && cd ..",
-    "rebuild_lower": "$npm_execpath run FAW && $npm_execpath run FCFW && $npm_execpath run FFW && $npm_execpath run FSW",
-    "docs_all": "$npm_execpath run FAW_docs && $npm_execpath run FCFW_docs && $npm_execpath run FFW_docs && $npm_execpath run FSW_docs && $npm_execpath run docs",
+    "lower:rebuild": "$npm_execpath run FAW && $npm_execpath run FCFW && $npm_execpath run FFW && $npm_execpath run FSW",
+    "all:docs": "$npm_execpath run FAW_docs && $npm_execpath run FCFW_docs && $npm_execpath run FFW_docs && $npm_execpath run FSW_docs && $npm_execpath run docs",
     "prepublish": "rm -rf */node_modules",
-    "publish_beta": "npm publish --tag=beta",
-    "publish_package": "npm publish",
-    "publish_dry": "npm publish --dry-run"
+    "beta:publish": "npm publish --tag=beta",
+    "package:publish": "npm publish",
+    "dry:publish": "npm publish --dry-run"
   },
   "publishConfig": {
     "access": "public"
