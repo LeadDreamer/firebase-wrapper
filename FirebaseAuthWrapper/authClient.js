@@ -64,7 +64,7 @@ export default function FirebaseAuthClient(firebase, thisLogger, firebaseApp) {
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
     //firebase.auth.TwitterAuthProvider.PROVIDER_ID
   ];
-  FirebaseAuthPersistence = FirebaseAuth.Persistence.LOCAL;
+  FirebaseAuthPersistence = firebase.auth.Persistence.LOCAL;
   return null;
 }
 
