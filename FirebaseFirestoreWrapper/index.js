@@ -2060,7 +2060,7 @@ export async function typedCollectFromChild(child, type, branchType = null) {
  * @returns {callback} function to be called to release subscription
  *
  */
-export async function typedListener(type, parent, dataCallBack, errCallBack) {
+export function typedListener(type, parent, dataCallBack, errCallBack) {
   try {
     return ListenRecords(type, parent?.refPath, dataCallBack, errCallBack);
   } catch (err) {

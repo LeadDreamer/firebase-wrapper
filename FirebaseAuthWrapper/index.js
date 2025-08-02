@@ -13,7 +13,7 @@ import FirebaseAuthClientWrapper from "./authClient.js";
  * @param {?string} config.appId - missing parameter indicates server
  * @param {callback} thisLogger - passed logging function  (allows use between client & server)
  */
-export default async function FirebaseAuthWrapper(
+export default function FirebaseAuthWrapper(
   firebase,
   config,
   thisLogger
