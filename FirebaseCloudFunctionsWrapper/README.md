@@ -56,4 +56,4 @@ Cloud Function specific - processes a Params list froma firestore function to c
 
 * * *
 
-&copy; 2020-2021 Tracy Hall
+&copy; 2020-2026 Tracy Hall

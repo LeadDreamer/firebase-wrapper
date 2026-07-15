@@ -2497,4 +2497,4 @@ only authDomain, databaseURL and storageBucket are present whencalled from a cl
 
 * * *
 
-&copy; 2020-2021 Tracy Hall
+&copy; 2020-2026 Tracy Hall

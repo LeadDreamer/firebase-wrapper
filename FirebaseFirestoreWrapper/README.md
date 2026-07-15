@@ -1469,4 +1469,4 @@ common properties of our database records
 
 * * *
 
-&copy; 2020-2021 Tracy Hall
+&copy; 2020-2026 Tracy Hall
