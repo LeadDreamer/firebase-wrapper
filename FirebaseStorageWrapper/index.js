@@ -23,6 +23,13 @@ import {
  * firebase app.  Also instantiates various constants and
  * helper functions
  * @param {firebase} firebase
+ * @param {FirebaseConfigObject} config Firebase Admin object
+ * @param {callback} thislogger Local (client or server) version of a (console) logger
+ * @param {object} services
+ * @param {object} services.firebase
+ * @param {object} services.firestore
+ * @param {object} services.auth
+ * @param {object} services.storage
  * @example
  * ```
  * import * as firebase from "firebase/compat/app";
@@ -45,14 +52,20 @@ let bucket_name;
 export default function FirebaseStorageWrapper(
   firebase,
   config,
-  thisLogger
+  thisLogger,
+  services
 ) {
   if (config && config.appId) {
     thisLogger("Storage client");
-    FirebaseStorage = firebase.storage();
+    FirebaseStorage = services.storage.getStorage();
   } else {
     thisLogger("Storage admin");
-    FirebaseStorage = FirebaseStorageAdminEmulator(firebase);
+    FirebaseStorage = FirebaseStorageAdminEmulator(
+      firebase,
+      config,
+      thisLogger,
+      services
+    );
   }
 
   config = config.projectId ? config : JSON.parse(config);
@@ -100,10 +113,9 @@ function getPrivateURLHack() {
 export function makeStorageRefFromRecord(record, key = null, filename = null) {
   let ref = record.refPath
     ? FirebaseStorage.ref(
-        `${record.refPath}${key ? "/" + key : ""}${
-          filename ? "/" + filename : ""
-        }`
-      )
+      `${record.refPath}${key ? "/" + key : ""}${filename ? "/" + filename : ""
+      }`
+    )
     : null;
 
   if (ref) {
@@ -225,9 +237,8 @@ export function makeFileURLFromRecord(record, key = null, filename = null) {
  */
 export function makePrivateURLFromRecord(record, key = null) {
   //build the full path from the record structure, key name and key value
-  let fullPath = `${record.refPath}${key ? "/" + key : ""}${
-    record[key] ? "/" + record[key] : ""
-  }`;
+  let fullPath = `${record.refPath}${key ? "/" + key : ""}${record[key] ? "/" + record[key] : ""
+    }`;
   //turn that path into a privateURL
   return makePrivateURLFromPath(fullPath);
 }
@@ -435,9 +446,21 @@ export function dataURLToBlob(dataURL) {
  * in this wrapper)
  * @function FirebaseStorageAdminEmulator
  * @param {firebase} firebase
+ * @param {FirebaseConfigObject} config Firebase Admin object
+ * @param {callback} thislogger Local (client or server) version of a (console) logger
+ * @param {object} services
+ * @param {object} services.firebase
+ * @param {object} services.firestore
+ * @param {object} services.auth
+ * @param {object} services.storage
  */
-const FirebaseStorageAdminEmulator = (firebase) => {
-  FirebaseBucket = firebase.storage().bucket();
+const FirebaseStorageAdminEmulator = (
+  firebase,
+  config,
+  thisLogger,
+  services
+) => {
+  FirebaseBucket = services.storage.getStorage().bucket();
 
   let firebaseStorage = {};
 

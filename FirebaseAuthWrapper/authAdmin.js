@@ -9,8 +9,13 @@
  * firebase app.  Also instantiates various constants and helper functions
  * @param {firebase} firebase
  */
-export default function FirebaseAuthAdminWrapper(firebase) {
-  FirebaseAuth = firebase.auth();
+export default function FirebaseAuthAdminWrapper(
+  firebase,
+  config,
+  thisLogger,
+  services
+) {
+  FirebaseAuth = services.auth.getAuth();
 }
 
 /** @private */

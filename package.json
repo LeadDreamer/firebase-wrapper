@@ -131,7 +131,7 @@
   },
   "devDependencies": {
     "parcel": "latest",
-    "uuid": "^14.0.1",
+    "uuid": "latest",
     "jsdoc-to-markdown": "9.1.1"
   },
   "optionalDependencies": {

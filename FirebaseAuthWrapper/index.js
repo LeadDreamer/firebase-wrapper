@@ -12,18 +12,35 @@ import FirebaseAuthClientWrapper from "./authClient.js";
  * @param {object} config - configuration object to detect client/server use
  * @param {?string} config.appId - missing parameter indicates server
  * @param {callback} thisLogger - passed logging function  (allows use between client & server)
+* @param {object} services
+ * @param {object} services.firebase
+ * @param {object} services.firestore
+ * @param {object} services.auth
+ * @param {object} services.storage
+ * @param {object} services.functions
  */
 export default function FirebaseAuthWrapper(
   firebase,
   config,
-  thisLogger
+  thisLogger,
+  services
 ) {
   if (!config?.appId) {
     thisLogger("Auth Admin");
-    return FirebaseAuthAdminWrapper(firebase, thisLogger);
+    return FirebaseAuthAdminWrapper(
+      firebase,
+      config,
+      thisLogger,
+      services
+    );
   } else {
     thisLogger("Auth Client");
-    return FirebaseAuthClientWrapper(firebase, thisLogger);
+    return FirebaseAuthClientWrapper(
+      firebase,
+      config,
+      thisLogger,
+      services
+    );
   }
 }
 

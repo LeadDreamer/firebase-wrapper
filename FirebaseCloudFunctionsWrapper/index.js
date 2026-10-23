@@ -42,6 +42,12 @@ let functions;
  * @param {object} config - configuration object to detect client/server use
  * @param {?string} config.appId - missing parameter indicates server
  * @param {callback} thisLogger - passed logging function  (allows use between client & server)
+ * @param {object} services
+ * @param {object} services.firebase
+ * @param {object} services.firestore
+ * @param {object} services.auth
+ * @param {object} services.storage
+ * @param {object} services.functions
  * @returns {Promise<object|void>}
  * @example
  * ```
@@ -63,11 +69,12 @@ let functions;
 export default function FirebaseCloudFunctions(
   firebase,
   config,
-  thisLogger
+  thisLogger,
+  services
 ) {
   if (config?.appId) {
     thisLogger("Cloud Client");
-    functions = firebase.functions();
+    functions = services.functions.getFunctions();
     return functions;
   }
 }

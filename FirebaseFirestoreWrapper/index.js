@@ -1,11 +1,3 @@
-import {
-  PAGINATE_CHOICES,
-  PAGINATE_DEFAULT,
-  PAGINATE_INIT,
-  PAGINATE_PENDING,
-  PAGINATE_UPDATED,
-} from "./Common.js";
-
 /**
  * @module FirebaseFirestoreWrapper
  * @description A set of helper-wrapper functions around firebase firestore, storage
@@ -13,6 +5,14 @@ import {
  * record-oriented database; originally conceived to port from one
  * database to another.
  */
+
+import {
+  PAGINATE_CHOICES,
+  PAGINATE_DEFAULT,
+  PAGINATE_INIT,
+  PAGINATE_PENDING,
+  PAGINATE_UPDATED,
+} from "./Common.js";
 
 // utilities
 /**
@@ -45,6 +45,12 @@ function penultimate(array) {
  * @param {object} config - configuration object to detect client/server use
  * @param {?string} config.appId - missing parameter indicates server
  * @param {callback} thisLogger - passed logging function  (allows use between client & server)
+ * @param {object} services
+ * @param {object} services.firebase
+ * @param {object} services.firestore
+ * @param {object} services.auth
+ * @param {object} services.storage
+ * @param {object} services.functions
  * @returns {Promise<object|void>}
  * @example
  * ```
@@ -63,27 +69,25 @@ function penultimate(array) {
  * })(config)
  * ```
  */
-export default function FirebaseFirestore(firebase, config, thisLogger) {
-  thisLogger(`Starting FirebaseFirestore (${config})`, config);
-  fdb = firebase.firestore();
-  thisLogger("fdb? ", !!fdb);
+export default function FirebaseFirestore(firebase, config, thisLogger, services) {
+  fdb = !config?.appId
+    ? new services.firestore.Firestore() //Compat initialization
+    : firebase.firestore(); 
+
   fdb.settings({ ignoreUndefinedProperties: true, merge: true });
   //doesnt run firestore persistence in Admin/Node environment
-  thisLogger(`fdb settings`);
   config = config.projectId ? config : JSON.parse(config);
-  thisLogger(`fdb settings`, config);
   if (config?.appId) {
     //await fdb.enablePersistence({ synchorizeTabs: true });
   }
-  thisLogger("persistence");
-  aFieldValue = firebase.firestore.FieldValue;
-  aFieldPath = firebase.firestore.FieldPath;
+  aFieldValue = services.firestore.FieldValue;
+  aFieldPath = services.firestore.FieldPath;
 
-  timestamp = firebase.firestore.Timestamp;
+  timestamp = services.firestore.Timestamp;
+
   documentId = aFieldPath.documentId();
   deleteFieldValue = aFieldValue.delete();
   serverTimestampFieldValue = aFieldValue.serverTimestamp();
-  thisLogger("Firestore");
 }
 
 /** @private */
@@ -370,8 +374,8 @@ export async function writeRecord(
 
   try {
     let docRef = data?.Id
-    ? db.collection(tablePath).doc(data.Id)
-    : db.collection(tablePath).doc(); //
+      ? db.collection(tablePath).doc(data.Id)
+      : db.collection(tablePath).doc(); //
     // if existing document, re-create reference
     // if new, create a new reference
     //all a transaction/WriteBatch can return is a chained transaction/WriteBatch
@@ -703,7 +707,7 @@ export async function fetchRecordInGroupByFilter(
  * @param {WriteBatch|Transaction|null} batch 
  * @returns {void}
  */
-export async function deleteRecord(record, table=null, parentRefPath=null, batch=null) {
+export async function deleteRecord(record, table = null, parentRefPath = null, batch = null) {
   if (record?.refPath) {
     return createRefFromPath(record.refPath).delete();
   } else if (parentRefPath) {

@@ -47,6 +47,9 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper/index.js";
  * @param {Firebase} firebase Local (client or server) version of firebase app
  * @param {FirebaseConfigObject} config Firebase Admin object
  * @param {callback} thislogger Local (client or server) version of a (console) logger
+ * @param {object} services
+ * @param {object} services.app
+ * @param {object} services.firestore
  * @return none
  * @example
  * ```
@@ -60,10 +63,10 @@ import FirebaseCloudFunctions from "./FirebaseCloudFunctionsWrapper/index.js";
  */
 let app = null;
 
-export default function FirebaseWrapper(firebase, config, thisLogger) {
+export default function FirebaseWrapper(firebase, config, thisLogger, services) {
   const localLogger = thisLogger || (() => {});
   try {
-    app = firebase.app();
+    app = firebase.getApp();
   } catch (err) {
     try {
       app = (config?.appId
@@ -72,13 +75,13 @@ export default function FirebaseWrapper(firebase, config, thisLogger) {
 
       localLogger("after init", !!app);
 
-      FirebaseAuthWrapper(firebase, config, localLogger);
-      localLogger("After Auth");
-      FirebaseFirestore(firebase, config, localLogger);
+      FirebaseFirestore(firebase, config, localLogger, services);
       localLogger("After Firestore");
-      FirebaseStorage(firebase, config, localLogger);
+      FirebaseAuthWrapper(firebase, config, localLogger, services);
+      localLogger("After Auth");
+      FirebaseStorage(firebase, config, localLogger, services);
       localLogger("After Storage");
-      FirebaseCloudFunctions(firebase, config, localLogger);
+      FirebaseCloudFunctions(firebase, config, localLogger, services);
     } catch (err) {
       console.log("firebase initialize failed");
     }
