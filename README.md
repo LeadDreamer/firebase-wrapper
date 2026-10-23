@@ -8,6 +8,20 @@ hierarchical record-oriented database; originally conceived to port from one dat
 ## Modules
 
 <dl>
+<dt><a href="#module_FirebaseWrapper">FirebaseWrapper</a></dt>
+<dd><p>A set of helper-wrapper functions around firebase firestore, storage
+and auth.
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebase
+functions, with a consistent interface.  There is a parallel set for
+ADMIN-SIDE functions as well.
+Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.
+NOTE:
+Most helpers return PROMISE.REJECT if no documents are returned.
+it is assumed projects using this library <em>might</em> want to have an
+explicitly error trap for such events.</p>
+</dd>
 <dt><a href="#module_FirebaseAuthWrapper/authAdmin">FirebaseAuthWrapper/authAdmin</a></dt>
 <dd><p>A set of helpers around Firebase admin SDK auth.
 Specific to use in Cloud Functions</p>
@@ -21,6 +35,18 @@ database to another.</p>
 <dt><a href="#module_FirebaseAuthWrapper/authAdmin">FirebaseAuthWrapper/authAdmin</a></dt>
 <dd></dd>
 <dt><a href="#module_FirebaseCloudFunctionsWrapper">FirebaseCloudFunctionsWrapper</a></dt>
+<dd><p>A set of helper-wrapper functions around firebase firestore, storage
+and auth. Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.</p>
+</dd>
+<dt><a href="#module_FirebaseFirestoreWrapperAdmin">FirebaseFirestoreWrapperAdmin</a></dt>
+<dd><p>A set of helper-wrapper functions around firebase firestore, storage
+and auth. Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.</p>
+</dd>
+<dt><a href="#module_FirebaseFirestoreWrapperClient">FirebaseFirestoreWrapperClient</a></dt>
 <dd><p>A set of helper-wrapper functions around firebase firestore, storage
 and auth. Intent is to treat Firestore as a hierarchical
 record-oriented database; originally conceived to port from one
@@ -43,20 +69,6 @@ database to another.</p>
 Intent is to treat Firestore as a hierarchical
 record-oriented database and Storage as a parallel structure
 originally conceived to port from one database to another.</p>
-</dd>
-<dt><a href="#module_FirebaseWrapper">FirebaseWrapper</a></dt>
-<dd><p>A set of helper-wrapper functions around firebase firestore, storage
-and auth.
-all-in-one wrapper for a solid subset of CLIENT-SIDE Firebase
-functions, with a consistent interface.  There is a parallel set for
-ADMIN-SIDE functions as well.
-Intent is to treat Firestore as a hierarchical
-record-oriented database; originally conceived to port from one
-database to another.
-NOTE:
-Most helpers return PROMISE.REJECT if no documents are returned.
-it is assumed projects using this library <em>might</em> want to have an
-explicitly error trap for such events.</p>
 </dd>
 </dl>
 
@@ -84,6 +96,55 @@ explicitly error trap for such events.</p>
 <dd></dd>
 </dl>
 
+<a name="module_FirebaseWrapper"></a>
+
+## FirebaseWrapper
+A set of helper-wrapper functions around firebase firestore, storageand auth.all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.NOTE:Most helpers return PROMISE.REJECT if no documents are returned.it is assumed projects using this library *might* want to have anexplicitly error trap for such events.
+
+
+* [FirebaseWrapper](#module_FirebaseWrapper)
+    * [~app](#module_FirebaseWrapper..app) ⇒
+    * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
+
+<a name="module_FirebaseWrapper..app"></a>
+
+### FirebaseWrapper~app ⇒
+all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
+
+**Kind**: inner property of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
+**Returns**: none  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
+| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
+| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
+| services | <code>object</code> |  |
+| services.app | <code>object</code> |  |
+| services.firestore | <code>object</code> |  |
+
+**Example**  
+```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(firebase, config, logger); //see belowexport * from "@leaddreamer/firebase-wrapper";```
+<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
+
+### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
+only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
+
+**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| apiKey | <code>string</code> | required api Key from Firebase Console, |
+| appId | <code>string</code> | required app ID from Firebase Console |
+| projectId | <code>string</code> | required Firebase projectID from Firebase console |
+| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
+| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
+| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
+| messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
+| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
+| mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
+
 <a name="module_FirebaseAuthWrapper/authAdmin"></a>
 
 ## FirebaseAuthWrapper/authAdmin
@@ -92,7 +153,7 @@ A set of helpers around Firebase admin SDK auth.Specific to use in Cloud Functi
 
 * [FirebaseAuthWrapper/authAdmin](#module_FirebaseAuthWrapper/authAdmin)
     * [module.exports(firebase)](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports) ⏏
-    * [module.exports(firebase, config, thisLogger)](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports) ⏏
+    * [module.exports(firebase, config, thisLogger, services)](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports) ⏏
 
 <a name="exp_module_FirebaseAuthWrapper/authAdmin--module.exports"></a>
 
@@ -107,7 +168,7 @@ Initializes the administrative Auth service of the providedfirebase app.  Also 
 
 <a name="exp_module_FirebaseAuthWrapper/authAdmin--module.exports"></a>
 
-### module.exports(firebase, config, thisLogger) ⏏
+### module.exports(firebase, config, thisLogger, services) ⏏
 Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: Exported function  
@@ -118,6 +179,12 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | config | <code>object</code> | configuration object to detect client/server use |
 | config.appId | <code>string</code> | missing parameter indicates server |
 | thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
+| services | <code>object</code> |  |
+| services.firebase | <code>object</code> |  |
+| services.firestore | <code>object</code> |  |
+| services.auth | <code>object</code> |  |
+| services.storage | <code>object</code> |  |
+| services.functions | <code>object</code> |  |
 
 <a name="module_FirebaseAuthWrapper/authClient"></a>
 
@@ -404,7 +471,7 @@ See https://firebase.google.com/docs/reference/js/v8/firebase.User
 
 * [FirebaseAuthWrapper/authAdmin](#module_FirebaseAuthWrapper/authAdmin)
     * [module.exports(firebase)](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports) ⏏
-    * [module.exports(firebase, config, thisLogger)](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports) ⏏
+    * [module.exports(firebase, config, thisLogger, services)](#exp_module_FirebaseAuthWrapper/authAdmin--module.exports) ⏏
 
 <a name="exp_module_FirebaseAuthWrapper/authAdmin--module.exports"></a>
 
@@ -419,7 +486,7 @@ Initializes the administrative Auth service of the providedfirebase app.  Also 
 
 <a name="exp_module_FirebaseAuthWrapper/authAdmin--module.exports"></a>
 
-### module.exports(firebase, config, thisLogger) ⏏
+### module.exports(firebase, config, thisLogger, services) ⏏
 Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: Exported function  
@@ -430,6 +497,12 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | config | <code>object</code> | configuration object to detect client/server use |
 | config.appId | <code>string</code> | missing parameter indicates server |
 | thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
+| services | <code>object</code> |  |
+| services.firebase | <code>object</code> |  |
+| services.firestore | <code>object</code> |  |
+| services.auth | <code>object</code> |  |
+| services.storage | <code>object</code> |  |
+| services.functions | <code>object</code> |  |
 
 <a name="module_FirebaseCloudFunctionsWrapper"></a>
 
@@ -438,13 +511,13 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 
 * [FirebaseCloudFunctionsWrapper](#module_FirebaseCloudFunctionsWrapper)
-    * [module.exports(firebase, config, thisLogger)](#exp_module_FirebaseCloudFunctionsWrapper--module.exports) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
+    * [module.exports(firebase, config, thisLogger, services)](#exp_module_FirebaseCloudFunctionsWrapper--module.exports) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
         * [.CloudFunctions()](#module_FirebaseCloudFunctionsWrapper--module.exports.CloudFunctions) ⇒ <code>Promise</code>
         * [.treeFromParams(Params)](#module_FirebaseCloudFunctionsWrapper--module.exports.treeFromParams) ⇒ <code>Map</code>
 
 <a name="exp_module_FirebaseCloudFunctionsWrapper--module.exports"></a>
 
-### module.exports(firebase, config, thisLogger) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
+### module.exports(firebase, config, thisLogger, services) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
 Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: Exported function  
@@ -455,6 +528,12 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | config | <code>object</code> | configuration object to detect client/server use |
 | config.appId | <code>string</code> | missing parameter indicates server |
 | thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
+| services | <code>object</code> |  |
+| services.firebase | <code>object</code> |  |
+| services.firestore | <code>object</code> |  |
+| services.auth | <code>object</code> |  |
+| services.storage | <code>object</code> |  |
+| services.functions | <code>object</code> |  |
 
 **Example**  
 ```import * as firebase from "firebase/compat/app";import "firebase/functions";import FirebaseFunctions from "@leaddreamer/firebase-wrapper/FirebaseCloudFunctionsWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFunctions(firebase);})(config)```
@@ -479,6 +558,86 @@ Cloud Function specific - processes a Params list froma firestore function to c
 | --- | --- |
 | Params | <code>object</code> | 
 
+<a name="module_FirebaseFirestoreWrapperAdmin"></a>
+
+## FirebaseFirestoreWrapperAdmin
+A set of helper-wrapper functions around firebase firestore, storage
+and auth. Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.
+
+<a name="exp_module_FirebaseFirestoreWrapperAdmin--module.exports"></a>
+
+### module.exports(firebase, config, thisLogger) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
+Initializes the Firestore service of the provided
+firebase app.  Also instantiates various constants and
+helper functions
+
+**Kind**: Exported function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>firebase</code> | provided firebase app (allows use between client & server) |
+| config | <code>object</code> | configuration object to detect client/server use |
+| config.appId | <code>string</code> | missing parameter indicates server |
+| thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
+
+**Example**  
+```
+import * as firebase from "firebase/compat/app";
+import "firebase/firestore";
+import FirebaseFirestore from "@leaddreamer/firebase-wrapper/FirebaseFirestoreWrapper";
+import {config} from "whereever-you-put-it";
+
+((myconfig) {
+try {
+  firebase.app();
+} catch (err) {
+  firebase.initializeApp(myconfig);
+}
+FirebaseFirestore(firebase);
+})(config)
+```
+<a name="module_FirebaseFirestoreWrapperClient"></a>
+
+## FirebaseFirestoreWrapperClient
+A set of helper-wrapper functions around firebase firestore, storage
+and auth. Intent is to treat Firestore as a hierarchical
+record-oriented database; originally conceived to port from one
+database to another.
+
+<a name="exp_module_FirebaseFirestoreWrapperClient--module.exports"></a>
+
+### module.exports(firebase, config, thisLogger) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
+Initializes the Firestore service of the provided
+firebase app.  Also instantiates various constants and
+helper functions
+
+**Kind**: Exported function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>firebase</code> | provided firebase app (allows use between client & server) |
+| config | <code>object</code> | configuration object to detect client/server use |
+| config.appId | <code>string</code> | missing parameter indicates server |
+| thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
+
+**Example**  
+```
+import * as firebase from "firebase/compat/app";
+import "firebase/firestore";
+import FirebaseFirestore from "@leaddreamer/firebase-wrapper/FirebaseFirestoreWrapper";
+import {config} from "whereever-you-put-it";
+
+((myconfig) {
+try {
+  firebase.app();
+} catch (err) {
+  firebase.initializeApp(myconfig);
+}
+FirebaseFirestore(firebase);
+})(config)
+```
 <a name="module_FirebaseFirestoreWrapper"></a>
 
 ## FirebaseFirestoreWrapper
@@ -486,7 +645,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 
 * [FirebaseFirestoreWrapper](#module_FirebaseFirestoreWrapper)
-    * [module.exports(firebase, config, thisLogger)](#exp_module_FirebaseFirestoreWrapper--module.exports) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
+    * [module.exports(firebase, config, thisLogger, services)](#exp_module_FirebaseFirestoreWrapper--module.exports) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
         * _static_
             * [.timestamp](#module_FirebaseFirestoreWrapper--module.exports.timestamp)
             * [.MAX_CONCURRENCY](#module_FirebaseFirestoreWrapper--module.exports.MAX_CONCURRENCY)
@@ -610,7 +769,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 <a name="exp_module_FirebaseFirestoreWrapper--module.exports"></a>
 
-### module.exports(firebase, config, thisLogger) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
+### module.exports(firebase, config, thisLogger, services) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
 Initializes the Firestore service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: Exported function  
@@ -621,6 +780,12 @@ Initializes the Firestore service of the providedfirebase app.  Also instantiat
 | config | <code>object</code> | configuration object to detect client/server use |
 | config.appId | <code>string</code> | missing parameter indicates server |
 | thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
+| services | <code>object</code> |  |
+| services.firebase | <code>object</code> |  |
+| services.firestore | <code>object</code> |  |
+| services.auth | <code>object</code> |  |
+| services.storage | <code>object</code> |  |
+| services.functions | <code>object</code> |  |
 
 **Example**  
 ```import * as firebase from "firebase/compat/app";import "firebase/firestore";import FirebaseFirestore from "@leaddreamer/firebase-wrapper/FirebaseFirestoreWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFirestore(firebase);})(config)```
@@ -1961,7 +2126,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.getURLFromFilePath(filePath)](#module_FirebaseStorageWrapper.getURLFromFilePath) ⇒ <code>string</code>
         * [.dataURLToBlob(dataURL)](#module_FirebaseStorageWrapper.dataURLToBlob) ⇒ <code>Object</code>
     * _inner_
-        * [~FirebaseStorageWrapper(firebase)](#module_FirebaseStorageWrapper..FirebaseStorageWrapper)
+        * [~FirebaseStorageWrapper(firebase, config, thislogger, services)](#module_FirebaseStorageWrapper..FirebaseStorageWrapper)
         * [~storeBlobByRecord(blob, record, key, filename)](#module_FirebaseStorageWrapper..storeBlobByRecord) ⇒ <code>UploadTask</code>
         * [~storeDataURLByRecord(dataURL, record, key, filename)](#module_FirebaseStorageWrapper..storeDataURLByRecord) ⇒ <code>UploadTask</code>
         * [~ListOptions](#module_FirebaseStorageWrapper..ListOptions) : <code>object</code>
@@ -2106,14 +2271,21 @@ This function is part of a storage scheme that uses parallel structuresbetween 
 
 <a name="module_FirebaseStorageWrapper..FirebaseStorageWrapper"></a>
 
-### FirebaseStorageWrapper~FirebaseStorageWrapper(firebase)
+### FirebaseStorageWrapper~FirebaseStorageWrapper(firebase, config, thislogger, services)
 Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: inner method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>firebase</code> |  |
+| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
+| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
+| services | <code>object</code> |  |
+| services.firebase | <code>object</code> |  |
+| services.firestore | <code>object</code> |  |
+| services.auth | <code>object</code> |  |
+| services.storage | <code>object</code> |  |
 
 **Example**  
 ```import * as firebase from "firebase/compat/app";import "firebase/storage";import FirebaseStorage from "@leaddreamer/firebase-wrapper/FirebaseStorageWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseStorage(firebase);})(config);```
@@ -2265,7 +2437,7 @@ A set of helper-wrapper functions around firebase storageIntent is to treat Fir
         * [.getMetadata()](#module_FirebaseStorageAdminEmulator..adminRef+getMetadata) ⇒ <code>Promise.&lt;FileMetadata&gt;</code>
         * [.put(data, metadata)](#module_FirebaseStorageAdminEmulator..adminRef+put) ⇒ <code>Promise.&lt;object&gt;</code>
         * [.putString(dataString, stringFormat, metadata)](#module_FirebaseStorageAdminEmulator..adminRef+putString) ⇒ <code>Promise.&lt;object&gt;</code>
-    * [~FirebaseStorageAdminEmulator(firebase)](#module_FirebaseStorageAdminEmulator..FirebaseStorageAdminEmulator)
+    * [~FirebaseStorageAdminEmulator(firebase, config, thislogger, services)](#module_FirebaseStorageAdminEmulator..FirebaseStorageAdminEmulator)
 
 <a name="module_FirebaseStorageAdminEmulator..adminRef"></a>
 
@@ -2404,60 +2576,21 @@ puts a string (possibly encoded data) into a storage filedescribed by the provi
 
 <a name="module_FirebaseStorageAdminEmulator..FirebaseStorageAdminEmulator"></a>
 
-### FirebaseStorageAdminEmulator~FirebaseStorageAdminEmulator(firebase)
+### FirebaseStorageAdminEmulator~FirebaseStorageAdminEmulator(firebase, config, thislogger, services)
 Initializes the Storage service of the provided firebase app.  Alsoinstantiates various constants and helper functions.This is a WRAPPER around CLOUD STORAGE (admin) functionsto emulate FIREBASE functionality, keeping a similar APIbetween client & cloud code.NOTE: admin "references" ARE NOT the same as client references, and are NOTinterchangeable.  Do not mix client & admin code (not actually possiblein this wrapper)
 
 **Kind**: inner method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
 
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
-
-<a name="module_FirebaseWrapper"></a>
-
-## FirebaseWrapper
-A set of helper-wrapper functions around firebase firestore, storageand auth.all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Intent is to treat Firestore as a hierarchicalrecord-oriented database; originally conceived to port from onedatabase to another.NOTE:Most helpers return PROMISE.REJECT if no documents are returned.it is assumed projects using this library *might* want to have anexplicitly error trap for such events.
-
-
-* [FirebaseWrapper](#module_FirebaseWrapper)
-    * [~app](#module_FirebaseWrapper..app) ⇒
-    * [~FirebaseConfigObject](#module_FirebaseWrapper..FirebaseConfigObject) : <code>Object</code>
-
-<a name="module_FirebaseWrapper..app"></a>
-
-### FirebaseWrapper~app ⇒
-all-in-one wrapper for a solid subset of CLIENT-SIDE Firebasefunctions, with a consistent interface.  There is a parallel set forADMIN-SIDE functions as well.Call/initialize with Firebase Configuration settings in an object asdescribed below
-
-**Kind**: inner property of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
-**Returns**: none  
-
 | Param | Type | Description |
 | --- | --- | --- |
-| firebase | <code>Firebase</code> | Local (client or server) version of firebase app |
+| firebase | <code>firebase</code> |  |
 | config | <code>FirebaseConfigObject</code> | Firebase Admin object |
 | thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
-
-**Example**  
-```//this specifically loads ALL the subsections, specifically for//the Browser.  See later (tbd) notes for NodeJSimport FirebaseWrapper from "@leaddreamer/firebase-wrapper";FirebaseWrapper(firebase, config, logger); //see belowexport * from "@leaddreamer/firebase-wrapper";```
-<a name="module_FirebaseWrapper..FirebaseConfigObject"></a>
-
-### FirebaseWrapper~FirebaseConfigObject : <code>Object</code>
-only authDomain, databaseURL and storageBucket are present whencalled from a cloud environment
-
-**Kind**: inner typedef of [<code>FirebaseWrapper</code>](#module_FirebaseWrapper)  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| apiKey | <code>string</code> | required api Key from Firebase Console, |
-| appId | <code>string</code> | required app ID from Firebase Console |
-| projectId | <code>string</code> | required Firebase projectID from Firebase console |
-| authDomain | <code>string</code> | (optional) auth domain from Firebase Console |
-| databaseURL | <code>string</code> | (optional) Firestore database URL from Firebase console |
-| storageBucket: | <code>string</code> | (optional) URL of Firestore Storage Bucket |
-| messagingSenderId: | <code>string</code> | (optional) ID for Messaing service from Firebase Console |
-| measurementId: | <code>string</code> | (optional) Analytics/Measurement ID from Firebase Console |
-| mapsAPIKey | <code>string</code> | (optional) App ID for Google Maps API, from Google |
+| services | <code>object</code> |  |
+| services.firebase | <code>object</code> |  |
+| services.firestore | <code>object</code> |  |
+| services.auth | <code>object</code> |  |
+| services.storage | <code>object</code> |  |
 
 <a name="PAGINATE_INIT"></a>
 

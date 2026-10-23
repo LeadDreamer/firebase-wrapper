@@ -12,7 +12,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 
 * [FirebaseFirestoreWrapper](#module_FirebaseFirestoreWrapper)
-    * [module.exports(firebase, config, thisLogger)](#exp_module_FirebaseFirestoreWrapper--module.exports) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
+    * [module.exports(firebase, config, thisLogger, services)](#exp_module_FirebaseFirestoreWrapper--module.exports) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
         * _static_
             * [.timestamp](#module_FirebaseFirestoreWrapper--module.exports.timestamp)
             * [.MAX_CONCURRENCY](#module_FirebaseFirestoreWrapper--module.exports.MAX_CONCURRENCY)
@@ -136,7 +136,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
 
 <a name="exp_module_FirebaseFirestoreWrapper--module.exports"></a>
 
-### module.exports(firebase, config, thisLogger) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
+### module.exports(firebase, config, thisLogger, services) ⇒ <code>Promise.&lt;(object\|void)&gt;</code> ⏏
 Initializes the Firestore service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: Exported function  
@@ -147,6 +147,12 @@ Initializes the Firestore service of the providedfirebase app.  Also instantiat
 | config | <code>object</code> | configuration object to detect client/server use |
 | config.appId | <code>string</code> | missing parameter indicates server |
 | thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
+| services | <code>object</code> |  |
+| services.firebase | <code>object</code> |  |
+| services.firestore | <code>object</code> |  |
+| services.auth | <code>object</code> |  |
+| services.storage | <code>object</code> |  |
+| services.functions | <code>object</code> |  |
 
 **Example**  
 ```import * as firebase from "firebase/compat/app";import "firebase/firestore";import FirebaseFirestore from "@leaddreamer/firebase-wrapper/FirebaseFirestoreWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseFirestore(firebase);})(config)```

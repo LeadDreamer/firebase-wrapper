@@ -43,7 +43,7 @@ A set of helper-wrapper functions around firebase firestore, storageand auth. I
         * [.getURLFromFilePath(filePath)](#module_FirebaseStorageWrapper.getURLFromFilePath) ⇒ <code>string</code>
         * [.dataURLToBlob(dataURL)](#module_FirebaseStorageWrapper.dataURLToBlob) ⇒ <code>Object</code>
     * _inner_
-        * [~FirebaseStorageWrapper(firebase)](#module_FirebaseStorageWrapper..FirebaseStorageWrapper)
+        * [~FirebaseStorageWrapper(firebase, config, thislogger, services)](#module_FirebaseStorageWrapper..FirebaseStorageWrapper)
         * [~storeBlobByRecord(blob, record, key, filename)](#module_FirebaseStorageWrapper..storeBlobByRecord) ⇒ <code>UploadTask</code>
         * [~storeDataURLByRecord(dataURL, record, key, filename)](#module_FirebaseStorageWrapper..storeDataURLByRecord) ⇒ <code>UploadTask</code>
         * [~ListOptions](#module_FirebaseStorageWrapper..ListOptions) : <code>object</code>
@@ -188,14 +188,21 @@ This function is part of a storage scheme that uses parallel structuresbetween 
 
 <a name="module_FirebaseStorageWrapper..FirebaseStorageWrapper"></a>
 
-### FirebaseStorageWrapper~FirebaseStorageWrapper(firebase)
+### FirebaseStorageWrapper~FirebaseStorageWrapper(firebase, config, thislogger, services)
 Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: inner method of [<code>FirebaseStorageWrapper</code>](#module_FirebaseStorageWrapper)  
 
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>firebase</code> |  |
+| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
+| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
+| services | <code>object</code> |  |
+| services.firebase | <code>object</code> |  |
+| services.firestore | <code>object</code> |  |
+| services.auth | <code>object</code> |  |
+| services.storage | <code>object</code> |  |
 
 **Example**  
 ```import * as firebase from "firebase/compat/app";import "firebase/storage";import FirebaseStorage from "@leaddreamer/firebase-wrapper/FirebaseStorageWrapper";import {config} from "whereever-you-put-it";((myconfig) {try {  firebase.app();} catch (err) {  firebase.initializeApp(myconfig);}FirebaseStorage(firebase);})(config);```
@@ -347,7 +354,7 @@ A set of helper-wrapper functions around firebase storageIntent is to treat Fir
         * [.getMetadata()](#module_FirebaseStorageAdminEmulator..adminRef+getMetadata) ⇒ <code>Promise.&lt;FileMetadata&gt;</code>
         * [.put(data, metadata)](#module_FirebaseStorageAdminEmulator..adminRef+put) ⇒ <code>Promise.&lt;object&gt;</code>
         * [.putString(dataString, stringFormat, metadata)](#module_FirebaseStorageAdminEmulator..adminRef+putString) ⇒ <code>Promise.&lt;object&gt;</code>
-    * [~FirebaseStorageAdminEmulator(firebase)](#module_FirebaseStorageAdminEmulator..FirebaseStorageAdminEmulator)
+    * [~FirebaseStorageAdminEmulator(firebase, config, thislogger, services)](#module_FirebaseStorageAdminEmulator..FirebaseStorageAdminEmulator)
 
 <a name="module_FirebaseStorageAdminEmulator..adminRef"></a>
 
@@ -486,14 +493,21 @@ puts a string (possibly encoded data) into a storage filedescribed by the provi
 
 <a name="module_FirebaseStorageAdminEmulator..FirebaseStorageAdminEmulator"></a>
 
-### FirebaseStorageAdminEmulator~FirebaseStorageAdminEmulator(firebase)
+### FirebaseStorageAdminEmulator~FirebaseStorageAdminEmulator(firebase, config, thislogger, services)
 Initializes the Storage service of the provided firebase app.  Alsoinstantiates various constants and helper functions.This is a WRAPPER around CLOUD STORAGE (admin) functionsto emulate FIREBASE functionality, keeping a similar APIbetween client & cloud code.NOTE: admin "references" ARE NOT the same as client references, and are NOTinterchangeable.  Do not mix client & admin code (not actually possiblein this wrapper)
 
 **Kind**: inner method of [<code>FirebaseStorageAdminEmulator</code>](#module_FirebaseStorageAdminEmulator)  
 
-| Param | Type |
-| --- | --- |
-| firebase | <code>firebase</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| firebase | <code>firebase</code> |  |
+| config | <code>FirebaseConfigObject</code> | Firebase Admin object |
+| thislogger | <code>callback</code> | Local (client or server) version of a (console) logger |
+| services | <code>object</code> |  |
+| services.firebase | <code>object</code> |  |
+| services.firestore | <code>object</code> |  |
+| services.auth | <code>object</code> |  |
+| services.storage | <code>object</code> |  |
 
 
 * * *

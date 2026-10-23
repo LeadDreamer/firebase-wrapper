@@ -10,7 +10,7 @@ hierarchical record-oriented database; originally conceived to port from one dat
 ## FirebaseAuthWrapper/authAdmin
 <a name="exp_module_FirebaseAuthWrapper/authAdmin--module.exports"></a>
 
-### module.exports(firebase, config, thisLogger) ⏏
+### module.exports(firebase, config, thisLogger, services) ⏏
 Initializes the Auth service of the providedfirebase app.  Also instantiates various constants andhelper functions
 
 **Kind**: Exported function  
@@ -21,6 +21,12 @@ Initializes the Auth service of the providedfirebase app.  Also instantiates va
 | config | <code>object</code> | configuration object to detect client/server use |
 | config.appId | <code>string</code> | missing parameter indicates server |
 | thisLogger | <code>callback</code> | passed logging function  (allows use between client & server) |
+| services | <code>object</code> |  |
+| services.firebase | <code>object</code> |  |
+| services.firestore | <code>object</code> |  |
+| services.auth | <code>object</code> |  |
+| services.storage | <code>object</code> |  |
+| services.functions | <code>object</code> |  |
 
 
 * * *
